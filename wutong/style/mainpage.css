@@ -1,0 +1,155 @@
+.clear{
+	clear: both;
+}
+
+.con1{
+	width: 1253px;
+	margin: 0 auto;
+}
+
+.landscape{
+	position:relative;    
+	left:50%;  
+	margin-left:-300px ; 
+	width: 600px;
+	height: 350px;
+	/*margin: 0 auto;*/
+	margin-top: 15px;
+	margin-bottom: 20px;
+	border-radius: 15px;
+	border:solid 1px DarkGreen;
+	overflow: hidden;
+	box-shadow:0 2px 2px rgba(0, 0, 0, 0.55);
+}
+
+.functions{
+	height: 190px;
+}
+
+.myButton {
+    margin-top: 15px;
+    margin-left: 10px;
+    margin-right: 10px;  
+    background-color:white;
+    width: 80px;
+    text-align:center;
+    -moz-border-radius:8px;
+    border-radius:8px;    
+    border:4px solid ForestGreen;   
+    display:inline-block;
+    color:ForestGreen;
+    font-family:Arial;
+    font-size:15px;
+    padding:20px 21px 20px 20px; 
+}
+
+.myButton:hover {
+	color: white;
+	background-color:#007400;
+	font-weight:bold;
+	border:4px solid #007400; 
+}
+
+.funitem{
+	width: 1080;
+	height:80px;
+	margin-left: 85px;
+	border-top: 1px solid #e5e5e5;
+}
+
+.fundis{
+	width: 600px;
+	margin: 0 auto;
+	text-align:center;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.fundis p{
+	color: #606811;
+}
+
+.con2{
+	border-top: 1px solid #e5e5e5;
+	margin-top: 55px;
+	height: 400px;
+	background-color: khaki;
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.55);
+}
+
+.con2container{
+	width: 1253px;
+	height: 400px;
+	margin:0 auto;
+	background-color: khaki;
+}
+
+.introwords{
+	float: left;
+	position: relative;
+	width: 400px;
+	height: 210px;
+	padding-top: 50px;
+	margin-top: 50px;
+	margin-left: 150px;
+	font-size: 40;
+	font-weight: 900;
+	border-right: 5px solid DarkGreen;
+}
+
+.queandans{
+	float: left;
+	width: 680px;
+	height:400px;
+	overflow: hidden;
+}
+
+.questions{
+	float: left;
+	position: relative;
+	width: 150px;
+	margin-top: 35px;
+	margin-left: 100px;
+	color: #606811;
+	font-size: 16;
+	font-weight: 500;
+	letter-spacing: 1px;
+}
+
+.question{
+	margin-top: 10px;
+}
+
+.ansbackcon{
+	float: left;
+	position: relative;
+	width: 32px;
+	height: 400px;
+}
+
+.ansback{
+	float:left;
+	position: relative;
+	margin-top: 150px;
+}
+
+.answers{
+	float: left;
+	position: relative;
+	margin-top: 20px;
+	width: 390px;
+	line-height: 30px;
+}
+.answer{
+
+}
+
+.con3{
+	border-top: 1px solid #e5e5e5;
+	height: 400px;
+	background-color: #FFFFFA;
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.55);
+}
+
+
+
+

@@ -1,0 +1,100 @@
+﻿<html>
+	<head>
+		<title>梧桐</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Language" content="zh-CN" />
+		<meta name="Keywords" content="梧桐 文章 编辑 浏览 小组 发布 日记 推荐 零碎" />
+		<meta name="Description" content="一个安静的分享想法的地方" />
+		<link rel="stylesheet" href="style/base.css" type="text/css" />
+		<link rel="stylesheet" href="style/mainpage.css" type="text/css" />	
+		<script type="text/javascript" src="js/jquery-1.2.6.min.js"></script>
+		<script type="text/javascript" src="js/mainpage.js"></script>
+		
+	</head>
+	<body class="body" onload="loadfunitem()">
+	<div class="header">
+		<div class="navcontainer">
+			<div class="navigation" id="navigation">
+				<div id="nav1">
+					<a href="#">Logo空缺中...</a>
+				</div>
+				<!--<div class="navrighton">
+					
+						<a href="#" onmousedown="showpart('02')" ><div class="nav" id="nav3">设置</div></a>
+					
+					
+						<a href="#" onmousedown="showpart('01')" ><div class="nav" id="nav2">与我相关</div></a>
+					
+				</div>
+				-->
+				<div class="navrightoff">
+					
+						<a href="#" onmousedown="showpart('02')" ><div class="nav" id="nav3">登入</div></a>
+					
+					
+						<a href="#" onmousedown="showpart('01')" ><div class="nav" id="nav2">注册</div></a>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="con1">
+		<div class="landscape">
+			<img src="image/landscape.jpg" width="600px" height="350px" />
+		</div>
+		<div class="functions">
+			<div class="funitem">
+				<a href="#" class="myButton" id="myButton1" onmouseover="showfundis(1)" onmouseout="fadefundis(1)">Explore</a>
+				<a href="#" class="myButton" id="myButton2" onmouseover="showfundis(2)" onmouseout="fadefundis(2)">Artical</a>
+				<a href="#" class="myButton" id="myButton3" onmouseover="showfundis(3)" onmouseout="fadefundis(3)">Diary</a>
+				<a href="#" class="myButton" id="myButton4" onmouseover="showfundis(4)" onmouseout="fadefundis(4)">Fragment</a>
+				<a href="#" class="myButton" id="myButton5" onmouseover="showfundis(5)" onmouseout="fadefundis(5)">Group</a>
+				<a href="#" class="myButton" id="myButton6" onmouseover="showfundis(6)" onmouseout="fadefundis(6)">Recommend</a>
+				<a href="#" class="myButton" id="myButton7" onmouseover="showfundis(7)" onmouseout="fadefundis(7)">Release</a>
+				
+			</div>
+			<div class="fundis">
+				<p id="fundis">欢迎来到梧桐</p>
+			</div>
+		</div>
+	</div>
+	<div class="con2">
+		<div class="con2container">
+			<div class="introwords">这里是梧桐<br/>一个安静的<br/>展现你想法的地方</div>
+			<div class="queandans">
+				<div class="questions">
+					<div class="question"><a href="javascript:void(0)" onclick="showans(1)">什么是梧桐</a></div>
+					<div class="question"><a href="javascript:void(0)" onclick="showans(2)">在梧桐可以做什么</a></div>
+					<div class="question"><a href="javascript:void(0)" onclick="showans(3)">梧桐的特色</a></div>
+					<div class="question"><a href="javascript:void(0)" onclick="showans(4)">文章的价值</a></div>
+					<div class="question"><a href="javascript:void(0)" onclick="showans(5)">如何保证文章质量</a></div>
+					<div class="question"><a href="javascript:void(0)" onclick="showans(6)">如何处理无效文章</a></div>
+					<div class="question"><a href="javascript:void(0)" onclick="showans(7)">隐私与著作权</a></div>
+					<div class="question"><a href="javascript:void(0)" onclick="showans(8)">寻求帮助文档</a></div>
+					<div class="question"><a href="#">更多常见问题</a></div>
+				</div>
+				<div class="ansbackcon"><div class="ansback"><a href="javascript:void(0)" onclick="ansback()"><img src="image/ansback.png"/></a></div></div>
+				<div class="answers">
+					<div class="answer" id="answer1"><br/><br/><br/>一个以高质量文章编辑与分享为主要内容的多平台网站<br/>一个高效传递，自由分享思想，同时保证品质的平台<br/>一个与志同道合的朋友交流想法的社区<br/>一个舒适的的网络阅读环境<br/>目前由华中科技大学思存工作室管理和维护</div>
+					<div class="answer" id="answer2"><br/>梧桐主要以编辑、浏览与评论文章为主<br/>当然，在这里，你可以用日记记录下每天的心情<br/>放进你不经意间的琐碎想法<br/>与相同兴趣爱好者交流<br/>向他人推荐作品<br/>甚至将你最得意的作品发布出来<br/><br/>想了解更多，请参考我们的<a href="#">【梧桐指南】</a></div>
+					<div class="answer" id="answer3"><br/><br/><br/>梧桐最大的特色在于在线评注式读书笔记，可以有针对性的对原文章的某些段落进行评论，用户的评论将会出现在该段落右边，读者可以方便地隐藏与显示这些评论，同时也可以自己编辑评论<br/></div>
+					<div class="answer" id="answer4"><br/>梧桐想表现的更多的是人的思想而非知识。我们不希望看到有人只是在文章中罗列一些事实但不解释他们<br/><br/>梧桐讲求思想传播的效率，如果你可以用100个字解释希尔排序就不要让读者看到第101个字<br/><br/>梧桐希望它的每一篇文章都能让人产生想法，或得到启发，或引人深思，或博人会心一笑</div>
+					<div class="answer" id="answer5">梧桐不允许用户抄袭其他来源的文章。可以对其他公开来源的文章进行部分引用，并在“引用”栏处注明引用来源。对于本站引用来源，可直接在“引用”栏处输入其ART号进行引用<br/>每一篇文章，我们将从用户浏览数，用户评价以及被引用率给出一个加权平均值。同时因为其价值可能会获得额外加分<br/>最终得分高的文章将会分时间段按分数高低进行排名产生Top10榜单。
+Top10中的文章会被保留在梧桐的History页面中<br/>
+我们保留作者将其文章发表，出版，决定是否被引用等各项权利</div>
+					<div class="answer" id="answer6">梧桐不会对任何文章在发布之初进行审查，也就是说，任何注册成员都可以发布他们编辑的任何内容。但对于无效文章在发布之后可能会遭到删除<br/><br/>无效文章定义参考<a href="#">【梧桐指南】</a><br/><br/>对于无效内容文章，任何用户可以向其提出警告，警告数超过5个即会被提交至后台进行人工审核。人工审核确认后即会删除该文章，同时对该用户提出一次“Warning”。若该用户文章遭删数超过3个即会被删除账号</div>
+					<div class="answer" id="answer7"><br/><br/>任何人都可设置自己作品的公开性<br/>以保障自己的作品被合理地利用<br/><br/>作者将其作品发布之时即获得该作品的著作权<br/>梧桐保留作者作品不被他人不合理使用的权力<br/><br/>更多详细内容请参考我们的<a href="#">【梧桐免责声明】</a></div>
+					<div class="answer" id="answer8"><br/><br/>梧桐认为好的帮助文档应该出现在用户真正需要它的地方<br/>所以当你遇到问题的时候，可以随时在该处（或附近）寻找到一份简短的说明<br/>如果问题没有得到解决，还可以参考<a href="#">【梧桐指南】</a>或在<a href="#">【梧桐反馈】</a>处将问题提交给我们</div>
+					<!--<div class="answer" id="answer9">aaaaaaaaaaaa<br/></div>-->
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="con3">
+		aaaa
+	</div>
+	<div class="footer" id="footer">
+				<p class="f1">&nbsp;&nbsp;&nbsp;&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
+	</div>
+	</body>
+</html>

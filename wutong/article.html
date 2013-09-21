@@ -1,0 +1,56 @@
+﻿<html>
+	<head>
+		<title>写文章-梧桐</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Language" content="zh-CN" />
+		<meta name="Keywords" content="梧桐 文章 编辑 浏览 小组 发布 日记 推荐 零碎" />
+		<meta name="Description" content="梧桐文章编写平台" />
+		<link rel="stylesheet" href="style/base.css" type="text/css" />
+		<link rel="stylesheet" href="style/writeart.css" type="text/css" />	
+		<script type="text/javascript" src="js/jquery-1.2.6.min.js"></script>
+		<script type="text/javascript" src="js/writeart.js"></script>
+		<script type="text/javascript"  src="ckeditor/ckeditor.js"></script>
+	</head>
+	<body class="body" onload="loadfunitem()">
+	<div class="header">
+		<div class="navcontainer">
+			<div class="navigation" id="navigation">
+				<div id="nav1">
+					<a href="#">Logo空缺中...</a>
+				</div>
+				<!--<div class="navrighton">
+					
+						<a href="#" onmousedown="showpart('02')" ><div class="nav" id="nav3">设置</div></a>
+					
+					
+						<a href="#" onmousedown="showpart('01')" ><div class="nav" id="nav2">与我相关</div></a>
+					
+				</div>
+				-->
+				<div class="navrightoff">
+					
+						<a href="#" onmousedown="showpart('02')" ><div class="nav" id="nav3">登入</div></a>
+					
+					
+						<a href="#" onmousedown="showpart('01')" ><div class="nav" id="nav2">注册</div></a>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="wrap">
+		<div class="write">
+			<form name="input" action="" method="get">
+				标题：<input type="text" name="title" value="这里是描述" /><br/>
+				描述：<input type="text" name="describe" value="这里是描述" /><br/>
+				<textarea id="Text" name="Text" width="500px">随便写的一点东西</textarea>
+     			<script type="text/javascript">  var editor = CKEDITOR.replace('Text');  </script> 
+				<input type="submit" value="Submit" />
+			</form>
+		</div>
+	</div>
+	<div class="footer" id="footer">
+				<p class="f1">&nbsp;&nbsp;&nbsp;&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
+	</div>
+	</body>
+</html>
