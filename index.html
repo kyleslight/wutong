@@ -7,7 +7,7 @@
 		<meta name="Description" content="梧桐文章编写平台" />
 		<link rel="stylesheet" href="base.css" type="text/css" />
 		<link rel="stylesheet" href="writeart.css" type="text/css" />	
-		<script type="text/javascript" src="js/jquery-1.2.6.min.js"></script>
+		<script type="text/javascript" src="{{ static_url("js/jquery-1.2.6.min.js") }}"></script>
 		<script type="text/javascript" src="writeart.js"></script>
 		<script type="text/javascript" src="shCore.js"></script>
 		<script type="text/javascript" src="shBrushJScript.js"></script>
@@ -56,7 +56,7 @@
 	</div>
 	<h2>Wutong write</h2>
 	<div class="write">
-		<form id="textdata" name="textdata" action="wutongshow.php" method="post">
+		<form id="textdata" name="textdata" action="" method="post">
 			标题  <input class="input" type="text" name="title" value="这里是标题" /><br/>
 			描述  <input class="input" type="text" name="describe" value="这里是描述" /><br/>
 			<div id="writeButton">
