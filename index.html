@@ -5,27 +5,14 @@
 		<meta http-equiv="Content-Language" content="zh-CN" />
 		<meta name="Keywords" content="梧桐 文章 编辑 浏览 小组 发布 日记 推荐 零碎" />
 		<meta name="Description" content="梧桐文章编写平台" />
-		<link rel="stylesheet" href="base.css" type="text/css" />
-		<link rel="stylesheet" href="writeart.css" type="text/css" />	
-		<script type="text/javascript" src="js/jquery-1.2.6.min.js"></script>
-		<script type="text/javascript" src="writeart.js"></script>
-		<script type="text/javascript" src="shCore.js"></script>
-		<script type="text/javascript" src="shBrushJScript.js"></script>
-		<link type="text/css" rel="stylesheet" href="shCoreDefault.css"/>
-		<script language="javascript" type="text/javascript" src="tinymce/tinymce.min.js"></script> 
-		<script language="javascript" type="text/javascript"> 
-    		tinyMCE.init({ 
-       			mode : "textareas" 
-    		}); 
-		</script> 
+
+		<link rel="stylesheet" href="css/base.css" type="text/css" />
+		<link rel="stylesheet" href="css/writeart.css" type="text/css" />	
+		<script type="text/javascript" src="scripts/jquery-1.2.6.min.js"></script>
+		<script type="text/javascript" src="scripts/writeart.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/shCoreDefault.css"/> 
 		<script type="text/javascript" src="ueditor/ueditor.config.js"></script>
 		<script type="text/javascript" src="ueditor/ueditor.all.min.js"></script>
-		<script type="text/javascript" src="ueditor/third-party/SyntaxHighlighter/shCore.js"></script>
-		<link rel="stylesheet" href="ueditor/third-party/SyntaxHighlighter/shCoreDefault.css" type="text/css" />
-		<script>
-		SyntaxHighlighter.all() //执行代码高亮
-</script>
-		<script type="text/javascript">SyntaxHighlighter.all();</script>
 	</head>
 	<body class="body">
 	<div class="header">
@@ -59,28 +46,15 @@
 		<form id="textdata" name="textdata" action="wutongshow.php" method="post">
 			标题  <input class="input" type="text" name="title" value="这里是标题" /><br/>
 			描述  <input class="input" type="text" name="describe" value="这里是描述" /><br/>
-			<div id="writeButton">
-				<input class="writeButton" type="button" onclick="iBold();" value="B">
-				<input class="writeButton" type="button" onclick="iUnderLine();" value="U">
-				<input class="writeButton" type="button" onclick="iItalic();" value="I">
-				<input class="writeButton" type="button" onclick="iFontSize();" value="Text Size">
-				<input class="writeButton" type="button" onclick="iFontColor();" value="Text Color">
-				<input class="writeButton" type="button" onclick="iMR();" value="MR">
-				<input class="writeButton" type="button" onclick="iUnorderedList();" value="UL">
-				<input class="writeButton" type="button" onclick="iOrderedList();" value="OL">
-				<input class="writeButton" type="button" onclick="iLink();" value="Link">
-				<input class="writeButton" type="button" onclick="iCode();" value="Code">
-				<input class="writeButton" type="button" onclick="iImage();" value="Image">
-			</div>
 			<textarea id="textArea" name="textArea" cols="100" rows="14">随便写的一点东西</textarea>
 			<input name="submitButton" type="button" value="Submit" onclick="javascript:submit_form();" />
 		</form>
 	</div>
 	<script type="text/javascript">
-var editor = new UE.ui.Editor();
-textarea:'textArea'; //与textarea的name值保持一致
-editor.render('textArea');
-</script>
+		var editor = new UE.ui.Editor();
+		textarea:'textArea'; 
+		editor.render('textArea');
+	</script>
 
 	<div class="footer" id="footer">
 				<p class="f1">&nbsp;&nbsp;&nbsp;&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
