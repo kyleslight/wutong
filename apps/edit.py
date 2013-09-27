@@ -28,15 +28,16 @@ class IndexHandler(BaseHandler):
         msgs = []
         title = self.get_argument("title", None)
         describe = self.get_argument("describe", None)
-        context = self.get_argument("context", None)
+        context = self.get_argument("textArea", None)
 
         if title is None: msgs.append(u'请输入标题')
         if describe is None: msgs.append(u'描述不能为空')
         if context is None: msgs.append(u'正文不能为空')
 
+        print(str(msgs))
         if not msgs:
             cursor = yield momoko.Op(self.db.execute,
-                                     'INSERT INTO article (title, describe, contenxt) VALUES (%s, %s, %s) RETURNING id;',
+                                     'INSERT INTO article (title, describe, content) VALUES (%s, %s, %s) RETURNING id;',
                                      (title, describe, context)
             )
             result = cursor.fetchone()
@@ -47,5 +48,13 @@ class IndexHandler(BaseHandler):
         self.render("index.html", msgs=msgs)
 
 class ShowHandler(BaseHandler):
+    @asynchronous
+    @gen.engine
     def get(self, id):
-        return self.render("show.html")
+        cursor = yield momoko.Op(self.db.execute,
+                                 'SELECT title,describe,content FROM article WHERE id = %s;',
+                                 (id, )
+        )
+        result = cursor.fetchone()
+        print result
+        self.render("show.html", result=result)

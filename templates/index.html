@@ -6,13 +6,13 @@
 		<meta name="Keywords" content="梧桐 文章 编辑 浏览 小组 发布 日记 推荐 零碎" />
 		<meta name="Description" content="梧桐文章编写平台" />
 
-		<link rel="stylesheet" href="css/base.css" type="text/css" />
-		<link rel="stylesheet" href="css/writeart.css" type="text/css" />	
-		<script type="text/javascript" src="scripts/jquery-1.2.6.min.js"></script>
-		<script type="text/javascript" src="scripts/writeart.js"></script>
-		<link type="text/css" rel="stylesheet" href="css/shCoreDefault.css"/> 
-		<script type="text/javascript" src="ueditor/ueditor.config.js"></script>
-		<script type="text/javascript" src="ueditor/ueditor.all.min.js"></script>
+        <link rel="stylesheet" href='{{ static_url("css/base.css") }}' type="text/css" />
+		<link rel="stylesheet" href='{{ static_url("css/writeart.css") }}' type="text/css" />
+		<script type="text/javascript" src='{{ static_url("scripts/jquery-1.2.6.min.js") }}'></script>
+		<script type="text/javascript" src='{{ static_url("scripts/writeart.js") }}'></script>
+		<link type="text/css" rel="stylesheet" href='{{ static_url("css/shCoreDefault.css") }}'/>
+		<script type="text/javascript" src='{{ static_url("ueditor/ueditor.config.js") }}'></script>
+		<script type="text/javascript" src='{{ static_url("ueditor/ueditor.all.min.js") }}'></script>
 	</head>
 	<body class="body">
 	<div class="header">
@@ -43,7 +43,8 @@
 	</div>
 	<h2>Wutong write</h2>
 	<div class="write">
-		<form id="textdata" name="textdata" action="wutongshow.php" method="post">
+		<form id="textdata" name="textdata" action="" method="post">
+            {{ xsrf_form_html() }}
 			标题  <input class="input" type="text" name="title" value="这里是标题" /><br/>
 			描述  <input class="input" type="text" name="describe" value="这里是描述" /><br/>
 			<textarea id="textArea" name="textArea" cols="100" rows="14">随便写的一点东西</textarea>

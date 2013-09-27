@@ -4,4 +4,4 @@
 from apps import edit
 
 urls = [(r"/", edit.IndexHandler),
-        (r"/show", edit.ShowHandler)]
+        (r"/show/(\d+)", edit.ShowHandler)]
