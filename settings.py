@@ -26,4 +26,3 @@ settings = dict(
     login_url="/login",
     autoescape=None,
 )
-
