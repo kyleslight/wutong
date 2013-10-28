@@ -131,7 +131,8 @@ div.edui-box {
 }
 /*UI工具栏、编辑区域、底部*/
 .edui-default .edui-editor {
-    border: 1px solid #d4d4d4;
+    border: 1px solid #680;
+    border-top: 0px;
     background-color: white;
     position: relative;
     overflow: visible;
@@ -140,7 +141,7 @@ div.edui-box {
     border-radius: 4px;
 }
 
-.edui-default .edui-editor-toolbarbox {
+/*.edui-default .edui-editor-toolbarbox {
     position: relative;
     zoom: 1;
     -webkit-box-shadow:0 1px 4px rgba(204, 204, 204, 0.6);
@@ -148,26 +149,36 @@ div.edui-box {
     box-shadow:0 1px 4px rgba(204, 204, 204, 0.6);
     border-top-left-radius:2px;
     border-top-right-radius:2px;
-}
+}*/
 
 .edui-default .edui-editor-toolbarboxouter {
-    border-bottom: 1px solid #d4d4d4;
-    background-color: #fafafa;
-    background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
-    background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
-    background-repeat: repeat-x;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    /*border-top: 1px solid #680;*/
+    border-bottom: 1px solid #680;
+    /*#d4d4d4;*/
+    background-color: white;
+    /*#fafafa;*/
+    background-image: white;
+    /*-moz-linear-gradient(top, #ffffff, #f2f2f2);*/
+    background-image: white;
+    /*-webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));*/
+    background-image: white;
+    /*-webkit-linear-gradient(top, #ffffff, #f2f2f2);*/
+    background-image: white;
+    /*-o-linear-gradient(top, #ffffff, #f2f2f2);*/
+    background-image: white;
+    /*linear-gradient(to bottom, #ffffff, #f2f2f2);*/
+   /* background-repeat: repeat-x;*/
     /*border: 1px solid #d4d4d4;*/
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
-    *zoom: 1;
-    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    /*-webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;*/
+    /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);*/
+    /**zoom: 1;*/
+    /*-webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
     -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);*/
 }
 
 .edui-default .edui-editor-toolbarboxinner {
@@ -206,8 +217,11 @@ div.edui-box {
 }
 
 .edui-default .edui-editor-bottomContainer td {
+    display: none;
     white-space: nowrap;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #680;
+
+    /*border-top: 1px solid #ccc;*/
     line-height: 20px;
     font-size: 12px;
     font-family: Arial, Helvetica, Tahoma, Verdana, Sans-Serif;

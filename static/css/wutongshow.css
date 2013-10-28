@@ -1,0 +1,81 @@
+td,tbody,table{
+	border: 2px solid darkgray;
+	border-collapse:collapse;
+}
+
+.wrap{
+	clear: both;
+	width: 1160px;
+	margin: 0 auto;
+}
+
+.writeComment{
+	float: left;
+	width: 180px;
+	height: 150px;
+}
+
+.content{
+	float: left;
+	width: 800px;
+	margin: 0 auto;
+	left: 50%;
+}
+
+.content p{
+	font-family: "Microsoft YaHei";
+	font-size: 15px;
+	display: block;
+	line-height: 40px;
+	margin-top: 0px;
+	margin-bottom: 5px;
+}
+
+.content img{
+	margin: 0px;
+	padding: 0px;
+	border: 0.5em solid rgb(255, 255, 255);
+	font-family: inherit;
+	font-style: inherit;
+	font-variant: inherit;
+	line-height: inherit;
+	vertical-align: baseline;
+	max-width: 100%;
+	height: auto;
+	border-top-left-radius: 0.3em;
+	border-top-right-radius: 0.3em;
+	border-bottom-right-radius: 0.3em;
+	border-bottom-left-radius: 0.3em;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 4px;
+	box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 4px;
+	box-sizing: border-box;
+}
+
+
+.turnToBlue{
+	color: darkblue !important;
+}
+
+.turnToBlue span{
+	color: darkblue !important;
+}
+
+.turnToBlue a{
+	color: darkblue;
+}
+
+.turnToBlue a:hover{
+	color: lightblue;
+}
+
+.readComment{
+	float: left;
+	width: 180px;
+	height: 150px;
+}
+
+a{
+	color: #1863a1;
+	text-decoration: none;
+}
+

@@ -180,7 +180,7 @@
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
         
-        , toolbars: [["fullscreen","link","insertimage","horizontal","insertcode","bold","italic","underline","strikethrough"]]
+        , toolbars: [["fullscreen","undo","redo","link","insertimage","blockquote","insertcode","bold","italic","forecolor","inserttable","fontsize"]]
         //当鼠标放在工具栏上时显示的tooltip提示,留空支持自动多语言配置，否则以配置值为准
 //        ,labelMap:{
 //            'anchor':'', 'undo':''
@@ -197,25 +197,25 @@
         //主题配置项,默认是default。有需要的话也可以使用如下这样的方式来自动多主题切换，当然，前提条件是themes文件夹下存在对应的主题文件：
         //现有如下皮肤:default
         //,theme:'default'
-        //,themePath:URL +"themes/"
+        ,themePath:URL +"themes/"
 
         //若实例化编辑器的页面手动修改的domain，此处需要设置为true
         //,customDomain:false
 
         //针对getAllHtml方法，会在对应的head标签中增加该编码设置。
-        //,charset:"utf-8"
+        ,charset:"utf-8"
 
         //常用配置项目
         //,isShow : true    //默认显示编辑器
 
         //,initialContent:'欢迎使用ueditor!'    //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
 
-        //,initialFrameWidth:1000  //初始化编辑器宽度,默认1000
-        ,initialFrameHeight:600  //初始化编辑器高度,默认320
+        ,initialFrameWidth:957  //初始化编辑器宽度,默认1000
+        ,initialFrameHeight:250 //初始化编辑器高度,默认320
 
         //,autoClearinitialContent:true //是否自动清除编辑器初始内容，注意：如果focus属性设置为true,这个也为真，那么编辑器一上来就会触发导致初始化的内容看不到了
 
-        //,iframeCssUrl: URL + '/themes/iframe.css' //给编辑器内部引入一个css文件
+        ,iframeCssUrl: URL + '/themes/iframe.css' //给编辑器内部引入一个css文件
 
         //,textarea:'editorValue' // 提交表单时，服务器获取编辑器提交内容的所用的参数，多实例时可以给容器name属性，会将name给定的值最为每个实例的键值，不用每次实例化的时候都设置这个值
 
@@ -370,7 +370,7 @@
 //           ]
 
         //快捷菜单
-        //,shortcutMenu:["bold","italic","underline"]
+        //,shortcutMenu:["fontsize","bold","italic","forecolor"]
 
         //wordCount
         //,wordCount:true          //是否开启字数统计
@@ -380,10 +380,10 @@
         //超出字数限制提示  留空支持多语言自动切换，否则按此配置显示
         //,wordOverFlowMsg:''    //<span style="color:red;">你输入的字符个数已经超出最大允许值，服务器可能会拒绝保存！</span>
 
-        //highlightcode
-         //代码高亮时需要加载的第三方插件的路径
-        ,highlightJsUrl:URL + "third-party/SyntaxHighlighter/shCore.js"
-        ,highlightCssUrl:URL + "third-party/SyntaxHighlighter/shCoreDefault.css"
+        // highlightcode
+        // 代码高亮时需要加载的第三方插件的路径
+         ,highlightJsUrl:URL + "third-party/SyntaxHighlighter/shCore.js"
+         ,highlightCssUrl:URL + "third-party/SyntaxHighlighter/shCoreDefault.css"
 
         //tab
         //点击tab键时移动的距离,tabSize倍数，tabNode什么字符做为单位

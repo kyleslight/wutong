@@ -478,7 +478,7 @@ var imageUploader = {},
         //处理图片资源地址的编码，补全等问题
         for (var i in i18n) {
             if (!(i in {"lang":1, "uploadingTF":1, "imageTF":1, "textEncoding":1}) && i18n[i]) {
-                i18n[i] = encodeURIComponent(editor.options.langPath + editor.options.lang + "/image/" + i18n[i]);
+                i18n[i] = encodeURIComponent(editor.options.langPath + editor.options.lang + "/images/" + i18n[i]);
             }
         }
         opt = utils.extend(opt, i18n, false);
@@ -532,7 +532,7 @@ var imageUploader = {},
                 div.setAttribute("name", j);
                 if (j == "none") div.className = "focus";
 
-                div.style.cssText = "background:url(image/" + j + "_focus.jpg);";
+                div.style.cssText = "background:url(images/" + j + "_focus.jpg);";
                 div.setAttribute("title", nameMaps[j]);
                 floatContainer.appendChild(div);
             }

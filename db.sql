@@ -1,11 +1,9 @@
-BEGIN;
+DROP TABLE IF EXISTS test;
 
-DROP TABLE IF EXISTS "article";
-CREATE TABLE "article" (
+CREATE TABLE test (
   "id" serial NOT NULL PRIMARY KEY,
-  "title" text,
-  "describe" text,
-  "content" text
+  "ip" varchar(200) NOT NULL,
+  "submit_time" timestamp NOT NULL DEFAULT now(),
+  "content" text NOT NULL
 );
 
-COMMIT;

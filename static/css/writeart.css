@@ -1,16 +1,98 @@
-textarea{
-	background: #777;
-}
+
+
 .write{
-	float: left;
-	margin-top: 30px;
-	margin-left: 100px;
 	width: 900px;
+	margin: 0 auto;
+	margin-top: 30px;	
+	text-align: left;
 }
 
-#cke_Text{
-	margin-top: 30px;
+.write p{
+	line-height: 100px;
+	font-size: 14;
 }
+
+.maindata{
+	float: left;
+	border: 1px solid #CCC;
+}
+
+.formlist{
+	display: block;
+	float: left;
+	width: 900px;
+	background: white;
+	padding-bottom: 15px;
+	border-bottom: 1px dashed #CCC;
+}
+
+.offborformlist{
+	display: block;
+	float: left;
+	width: 900px;
+	background: white;
+	padding-bottom: 15px;
+}
+
+.formlisttip{
+	clear: both;
+	color: white;
+	background: #680;
+	width: 870px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	border-bottom: 1px solid #CCC;
+	line-height: 30px;
+	font-size: 0.8em;
+	display: none;
+}
+
+.formlisttip a{
+	color: lightgray;
+	font-weight: 400;
+}
+
+.formlisttip a:hover{
+	color: darkred;
+	font-weight: 400;
+}
+
+#speformlist{
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border: 0;
+}
+
+#speinputtip{
+	height: 25px;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border: 0;
+}
+
+#formlisttip5{
+	border: 0;
+}
+
+#formlistlast{
+	border-bottom: 0;
+}
+
+#artsubmitButton{
+	float: right;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+#describe,#reference{
+	height: 60px;
+	resize:vertical;
+}
+
 
 #textArea{
 	display: none;
@@ -25,3 +107,94 @@ textarea{
 .writeButton{
 	width: 70px;
 }
+
+/*.loadbox{
+	display: none;
+	position: absolute;
+	width: 400px;
+	top: 200px;
+	left: 50%;
+	margin-left: -200px;
+	background:white;
+	z-index: 10000;
+	border-radius: 15px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.loadbox input{
+	width: 200px;
+}
+
+.loadlist{
+	float: left;
+	margin-left: 30px;
+	display: block;
+	padding-top: 10px;
+	margin-bottom: 10px;
+}
+
+#loadlistlast{
+	float: left;
+	margin-bottom: 10px;
+	padding-bottom: 20px;
+}
+
+#loadsubmitButton{
+	height: 30px;
+	float: left;
+	background: #680;
+	color: white;
+	font-weight: 600;
+	padding-bottom: 10px;
+}
+
+#loadback{
+	float: left;
+	margin-top: 3px;
+	margin-left: 40px;
+}*/
+
+
+
+
+/*.graybg{
+	display: none;
+	position:absolute;
+	filter:alpha(opacity=50);
+	background: black;
+	opacity: 0.5;	
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 5000;
+}
+*/
+#return_top{
+	width: 73px;
+	height: 73px;
+	position:absolute;
+	right: 20px;
+	z-index: 999;
+	background: url('image/top.png') 0px 0px no-repeat;
+	_position:absolute;
+	/*transition: 2s;
+	-moz-transition:2s;
+	-webkit-transition:2s;
+	-o-transition:2s;*/
+	/*-moz-opacity: 0.1;
+	opacity: 0.1;
+	filter: alpha(opacity=10);*/
+}
+
+#return_top:hover{
+	/*-moz-opacity: 1;
+	opacity: 1;
+	filter: alpha(opacity=100);*/
+	background: url('image/top.png') 0px -74px no-repeat;
+}
+
+.none{
+	display: none;
+}
+

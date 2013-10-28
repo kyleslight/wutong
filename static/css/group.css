@@ -1,0 +1,672 @@
+/*basic setting*/
+li img{
+	width: 50px;
+	height: 50px;
+	border-radius: 7px;
+	margin-left: 7px;
+	margin-right: 20px;
+	float: left;
+	opacity: 0.9;
+}
+
+td,tbody,table{
+	border: 1px solid #999;
+	padding: 3px;
+	border-collapse:collapse;
+}
+
+textarea,input{
+	font-family: "Microsoft YaHei";
+	color: #333;
+}
+
+.forumImage img{
+	width: 50px;
+	height: 50px;
+	border-radius: 7px;
+	margin-top: 15px;
+	margin-left: 7px;
+	margin-right: 20px;
+	float: left;
+}
+
+.formButton{
+	border:0;
+}
+
+/*states of block show*/
+.prepare{
+	position: relative;
+}
+
+.active{
+	position: relative;
+}
+
+.outOfView{
+	position: relative;
+}
+
+.none{
+	display: none;
+}
+
+
+/*group infomation*/
+.groupInfo{
+	width: 960px;
+	height: 80px;
+	margin: 0 auto;
+	margin-top: 20px;
+	position: relative;
+}
+
+.groupImage{
+	float: left;
+	width: 55px;
+	height: 55px;
+	border-radius: 7px;
+	margin-top: 10px;
+	margin-right: 20px;
+}
+
+.groupInfoCon{
+	float: left;
+}
+
+.groupTitle{
+	float: left;
+	font-size: 50px;
+}
+
+.groupTitle a{
+	color: #BBB;
+	transition: 2s;
+	-moz-transition:2s;
+	-webkit-transition:2s;
+	-o-transition:2s;
+}
+
+.groupTitle a:hover{
+	color: black;
+}
+
+#groupMotto{
+	width: 200px;
+	font-size: 25px;
+}
+
+.groupItem{
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+	/*margin-bottom: 30px;*/
+}
+
+.optionBack{
+	float: right;
+}
+
+/*Bulletin*/
+
+.bulletin{
+	width: 930px;
+	margin: 0 auto;
+	float: left;
+	display: none;
+	background: white;
+	border: 1px solid #DDD;
+	border-radius: 7px;
+	padding: 14px;
+	/*margin-left: 95px;*/
+}
+
+.bulletinList{
+	list-style: none;
+	padding: 5px;
+	padding-left: 5px;
+}
+
+.bulletinInline{
+	width: 900px;
+	float: left;
+	padding: 5px;
+	border-radius: 2px;
+	transition: 0.3s;
+	-moz-transition:0.3s;
+	-webkit-transition:0.3s;
+	-o-transition:0.3s;
+}
+
+.bulletinInline:hover{
+	color: white;
+	background: #680;
+}
+
+.bulletinUserImage{
+	width: 20px;
+	height: 20px;
+	border-radius: 3px;
+	float: left;
+}
+
+.bulletinTitle{
+	float: left;
+}
+
+.bulletinUserName{
+	float: right;
+	margin-right: 5px;
+}
+
+.bulletinTime{
+	float: right;
+	margin-right: 30px;
+}
+
+.bulletinCon{
+	float: left;
+	margin-top: 15px;
+	display: none;
+	margin-bottom: 15px;
+	border-radius: 2px;
+	border: 2px dashed #680;
+	padding: 5px;
+	font-size: 14px;
+	width: 890px;
+}
+
+#bulletinConActive{
+	display: block;
+}
+
+#bulletinOption{
+	margin-top: 15px;
+	float: right;
+	margin-right: 15px;
+}
+
+#bulletinBack{
+	float: none;
+}
+
+/*Infomation Card*/
+
+.infoCard{
+	float: left;
+	border-radius: 7px;
+	background: white;
+	border: 1px solid #CCC;
+	padding:15px;
+	display: none;
+}
+
+.infoCard p{
+	display: inline;
+}
+
+#groupName{
+	float: left;
+	width: 910px;
+	padding: 5px;
+	padding-bottom: 10px;
+	font-weight: 400;
+	font-style: normal;
+	color: #030;
+}
+
+#groupCardImage{
+	float: left;
+	width: 180px;
+	height: 180px;
+	border-radius: 7px;
+	border: 2px solid #777;
+	margin-left: 5px;
+	margin-right: 40px;
+}
+
+/*Member*/
+.member{
+	float: left;
+	border-radius: 7px;
+	padding:10px;
+	font-size: 13px;
+	width: 960px;
+	display: none;
+}
+
+.member img{
+	width: 50px;
+	height: 50px;
+	border-radius: 4px;
+	float: left;
+	margin-top: 5px;
+}
+
+.memberCard{
+	position: relative;
+	padding: 10px;
+	float: left;
+	border-radius: 7px;
+	background: rgba(255,255,255,0.5);
+	width: 284px;
+	height: 59px;
+	border: 1px solid #777;
+	margin-right: 12px;
+	margin-top: 10px;
+	color: #777;
+	/*position: relative;*/
+	transition: 1s;
+	-moz-transition:1s;
+	-webkit-transition:1s;
+	-o-transition:1s;
+}
+
+.memberCard:hover{
+	color: white;
+	background: #680;
+}
+
+.memberBasic{
+	float: left;
+	margin-left: 10px;
+}
+
+.memberHonour{
+	margin-left: 10px;
+	color: darkred;
+}
+
+.memberInfo span{
+	margin-right: 20px;
+}
+
+.memberDetail{
+	padding: 10px;
+	width: 286px;
+	margin-left: -11px;
+	float: left;
+	display: none;
+	background: #680;
+	color: white;
+	border-bottom-left-radius: 7px;
+	border-bottom-right-radius: 7px;
+}
+
+#memOption{
+	font-size: 15px;
+	clear: both;
+	margin-top: 70px;
+	margin-right: 90px;
+	float: right;
+}
+
+#memOption a{
+	margin-right: 20px;
+}
+
+/*Works*/
+.works{
+	float: left;
+	width: 938px;
+	margin: 0 auto;
+	/*margin-left: 100px;*/
+	background: white;
+	border-radius: 7px;
+	border: 1px solid #CCC;
+	padding: 10px;
+	display: none;
+}
+
+#worksOption{
+	float: left;
+	width: 930px;
+	text-align: center;
+}
+
+#worksOption a{
+	margin-right: 30px;
+	color: #777;
+	padding: 10px 20px;
+	border-radius: 4px;
+	transition: 0.5s;
+	-moz-transition:0.5s;
+	-webkit-transition:0.5s;
+	-o-transition:0.5s;
+}
+
+#worksOption a:hover{
+	color: white;
+	background: #680;
+}
+
+.worksMainOption{
+	padding: 10px 20px;
+	float: left;
+}
+
+#worksFliter{
+	float: right;
+}
+
+#worksArticals{
+	float: left;
+}
+
+.worksArticalShow{
+	list-style: none;
+	float: left;
+	width: 930px;
+	border-top:2px dashed #777; 
+	padding-top: 10px;
+	margin-top: 10px;
+}
+
+.artical{
+	float: left;
+	width: 930px;
+}
+
+.articalBasicInfo{
+	float: left;
+	width: 930px;
+}
+
+.articalTitle{
+	float: left;
+	font-size: 27px;
+	font-weight: 500;
+	margin-left: 10px;
+	transition: 1s;
+	-moz-transition:1s;
+	-webkit-transition:1s;
+	-o-transition:1s;
+}
+
+.articAluthorImage{
+	margin-top: 3px;
+	width: 30px;
+	height: 30px;
+	border-radius: 2px;
+}
+
+.articalTitle{
+	color: black;
+}
+
+.articalTitle:hover{
+	color: #c1d739;
+}
+
+.articalAuthor{
+	float: right;
+	margin-top: 5px;
+	margin-right: 10px;
+}
+
+.articalTag{
+	float: left;
+	margin-top: 10px;
+	margin-left: 5px;
+}
+
+.articalTag a{
+	margin-right: 10px;
+}
+
+.articaltime{
+	margin-top: 10px;
+	margin-right: 10px;
+	float: right;
+}
+
+.articalDirectionOption{
+	margin-top: 20px;
+	margin-bottom: 10px;
+	width: 240px;
+	float: right;
+}
+
+.articalDirectionOption a{
+	margin-right: 20px;
+}
+
+/*Latest Topic*/
+.latestTopic{
+	width: 938px;
+	margin: 0 auto;
+	float: left;
+	/*margin-left: 100px;*/
+	padding: 10px;
+	background: white;
+	border-radius: 7px;
+	border: 1px solid #CCC;
+	display: none;
+}
+
+.latestTopic li{
+	float: left;
+	list-style: none;
+	width: 910px;
+	padding: 5px 10px;
+	border-radius: 3px;
+	transition: 0.25s;
+	-moz-transition:0.25s;
+	-webkit-transition:0.25s;
+	-o-transition:0.25s;
+}
+
+.latestTopic li:hover{
+	background: #680;
+	color: white;
+	cursor: pointer;
+}
+
+.latestTopic img{
+	float: left;
+	width: 20px;
+	height: 20px;
+	border-radius: 2px;
+}
+
+.latestTopicTitle{
+	float: left;
+}
+
+.latestTopicBasic{
+	float: right;
+	display: inline;
+}
+
+.latestTopicAuthor{
+	margin-right: 10px;
+}
+
+#latestTopicOption{
+	width: 150px;
+	margin-right: 20px;
+	margin-top: 10px;
+	float: right;
+}
+/*Group Options*/
+.groupOptions{
+	clear: both;
+	width: 960px;
+	margin: 0 auto;
+	height: 30px;
+	font-size: 12px;
+	margin-top: 15px;
+	font-size: 18px;
+	color: white;
+	margin-bottom: 10px;
+	border-bottom: 1px dashed #AAA;
+}
+
+.groupOptionItem{
+	float: left;
+	margin-right: 30px;
+	opacity: 0.5;
+	padding: 3px 12px;
+	border-radius: 7px;
+	transition: 2s;
+	-moz-transition:2s;
+	-webkit-transition:2s;
+	-o-transition:2s;
+}
+
+.groupOptionItem:hover{
+	opacity: 1.0;
+}
+
+/*Communication Wrap*/
+#communicationWrap{
+	width: 1060px;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+#communicationBackgroud{
+	background: rgba(255,255,255,0.9);
+	float: left;
+	border-radius: 7px;
+	border: 1px solid #CCC;
+	border-top-left-radius: 9px;
+	border-top-right-radius: 9px;
+}
+
+/*Communication Submit*/
+#changeSendState{
+	color: #CCC;
+	transition: 1s;
+	-moz-transition:1s;
+	-webkit-transition:1s;
+	-o-transition:1s;
+}
+
+#changeSendState:hover{
+	color: #680;
+}
+
+#communicationData{
+	float: left;
+	padding: 10px 50px 20px 50px;
+	border-top-left-radius: 9px;
+	border-top-right-radius: 9px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom: 1px solid #CCC;
+	/*background: rgba(0,0,0,0.9);*/
+	background: rgba(0,0,0,0.7);
+
+}
+
+.chatSend{
+	width: 960px;
+}
+
+#chatData{
+	float: left;
+	height: 30px;
+	resize:vertical;
+	border: 1px solid #680;
+	border-radius: 4px;
+	width: 760px;
+	margin-left: 0;
+}
+
+#chatData:focus{
+	border:1px solid darkred;
+}
+
+
+#chatSubmitButton{
+	border-radius: 5px;
+	margin-left: 27px;
+	margin-top: 15px;
+	float: left;
+}
+
+.topicSend{
+	display: none;
+}
+
+#topicTitle{
+	float: left;
+	height: 30px;
+	border: 1px solid #680;
+	border-radius: 4px;
+	width: 760px;
+	margin-left: 0px;
+}
+
+div.input.edui-default{
+	margin: 0;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+#topicSubmitButton{
+	border-radius: 5px;
+	margin-left: 27px;
+	margin-top: 15px;
+	float: left;
+}
+
+/*Communication*/
+.username{
+	font-size: 0.8em;
+	margin-bottom: 2px;
+}
+
+#communicationConWrap{
+	float: left;
+	background: rgba(255,255,255,0.05);
+	padding: 10px 50px;
+	border-bottom-left-radius: 7px;
+	border-bottom-right-radius: 7px;
+}
+
+.communication{
+	float: left;
+	width: 960px;
+	margin: 0 auto;
+}
+
+.communication li{
+	list-style: none;
+	float: left;
+	width: 960px;
+	padding-top: 5px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid #CCC;
+}
+
+.talkmain{
+	float: left;
+	width: 700px;
+}
+
+.talkcontent{
+	word-break:break-all;
+}
+
+.talkcontent a{
+	display: block;
+}
+
+.talkcontent p{
+	margin: 0;
+}
+
+.timeshow{
+	float: right;
+	font-size: 0.8em;
+}
+
+#topiccondata{
+	margin-top: 15px;
+	width: 740px;
+	border-radius: 2px;
+	resize:none;
+}
+

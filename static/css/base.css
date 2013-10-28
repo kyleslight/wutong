@@ -1,17 +1,17 @@
 body{
 	font-family: "Microsoft YaHei";
   	margin: 0;
-  	background: #FFFFFA;
+  	background: url('image/bg.png');
 }
 
 a{
-	color:black;
+	color:#444;
 	text-decoration:none;
 }
 	
 
 a:hover{
-	color:#606811;
+	color:#c1d739;
 	text-decoration:none;
 } 
 
@@ -24,41 +24,222 @@ img{
 }
 
 input{
-	margin-top: 10px;
-	padding-left: 5px;
-	width: 750px;
-	height: 30px;
-	color: gray;
+	border: 2px solid #680;
+	background: white !important;
 }
 
 textarea{
+	border: 1px solid #680;
 	margin-top: 20px;
+}
+
+#logo{
+	width: 30px;
+	height: 30px;
+}
+.input{
+	float: left;
+	margin-left: 10px;
+	margin-top: 15px;
+	margin-bottom: 10px;
+	padding-left: 5px;
+	padding-top: 7px;
+	padding-bottom: 7px;
+	width: 700px;
+}
+
+.inputTip{
+	float: left;
+	margin-left: 10px;
+	margin-top: 13px;
+	margin-bottom: 10px;
+	padding-left: 5px;
+	padding-top: 7px;
+	padding-bottom: 7px;
+	width: 70px;
+	font-weight: 600;
+	display: block;
+}
+
+#lrBoxWrap{
+	width: 100%;
+	height: 0px;
+	background:rgba(102,136,0,0.1);
+	/*border-top: 1px solid #CCC;*/
+	border-bottom: 1px solid #CCC;
+	margin-bottom: 40px;
+	display: none;
+}
+
+#lrBoxWrap .input{
+	width: 300px;
+}
+
+
+#lrBoxWrap span{
+	width: 100px;
+}
+
+.lrBox{
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+}
+
+/*loginBox*/
+#loginBox{
+	width: 600px;
+	margin: 0 auto;
+	display: block;
+	height: 200px;
+	background: white;
+	display: none;
+}
+
+.loginList{
+	float: left;
+	background: white;
+	margin-left: 60px;
+}
+
+#loginBox .inputTip{
+	position: relative;
+}
+
+#loginListLast{
+	margin-top: 20px;
+	width: 500px;
+	float: left;
+}
+
+#loginSubmitButton{
+	margin-top: 10px;
+	margin-left: 150px;
+	margin-right: 95px;
+}
+
+#loginBack{
+	font-size: 0.8em;
+	float: right;
+	display: block;
+	margin-top: 20px;
+	margin-right: 65px;
+}
+
+/*registerBox*/
+#registerBox{
+	width: 600px;
+	margin: 0 auto;
+	display: block;
+	height: 330px;
+	background: white;
+	display: none;
+}
+
+.registerList{
+	float: left;
+	background: white;
+	margin-left: 60px;
+}
+
+#registerBox .inputTip{
+	position: relative;
+}
+
+#registerListLast{
+	margin-top: 30px;
+	width: 500px;
+	float: left;
+}
+
+#registerSubmitButton{
+	margin-left: 150px;
+	margin-right: 95px;
+}
+
+#registerBack{
+	font-size: 0.8em;
+	float: right;
+	display: block;
+	margin-top: 20px;
+	margin-right: 65px;
+}
+
+.formButton{
+	background: #680;
+	color: #DDD;
+	float: left;
+	height: 35px;
+	display: block;
+	padding-top: 10px;
+	padding-left: 65px;
+	padding-right: 65px;
+	border: 1px solid #CCC;
+	border-radius: 4px;
+	transition: 2s;
+	-moz-transition:2s;
+	-webkit-transition:2s;
+	-o-transition:2s;
+}
+
+.formButton:hover{
+	color: white;
+	background: #c1d739;
 }
 
 /*Navigation*/
 .header{
-	height: 77px;
+	height: 72px;
 	margin: 0 auto;
+	background: rgba(102,136,0,0.9);
+	border-bottom: 1px solid #CCC;
+	color: white;
+	/*margin-bottom: 30px;*/
+	/*margin-bottom: 20px;*/
 }
+
+.header li{
+	display: inline-block;
+	list-style: none;
+	padding-top: 25px;
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 47px;
+	margin-right: 10px;
+	display: inline-block;
+	transition: 0.5s;
+	-moz-transition:0.5s;
+	-webkit-transition:0.5s;
+	-o-transition:0.5s;
+}
+
+.header li:hover{
+	background: white;
+	color: #680;
+	/*border: 2px solid black;*/
+	/*color: white;*/
+}
+
+.header a{
+	color: white;
+}
+
+.header li a:hover{
+	color: #680;
+}
+
 .navcontainer{
 	height:71px;
-	background-color:khaki;
+	background: transparent;
 	margin:0 auto;
-	border-bottom-left-radius: 15px;
-	border-bottom-right-radius: 15px;
-	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.55);
 }
 .navigation{
 	height:71px;
-	background-color:khaki;
+	background-color:transparent;
 	width:1253px;
 	margin:0 auto;
 }
 .navigation h1{
 	color: white;
-}
-.navigation a{
-	color:ForestGreen;
 }
 
 .nav{
@@ -69,32 +250,56 @@ textarea{
 	padding-top: 25px;
 	text-align:center;
 }
-.nav:hover{	
+
+/*.nav:hover{	
 	color: white;
 	background-color:#007400;
 	border-bottom: solid 5px black;
 	border-bottom-left-radius: 7px;
 	border-bottom-right-radius: 7px;
-}
+}*/
 #nav1{
 	position: absolute;
 	margin-left: 47px;
-	margin-top: 7px;
+	margin-top: 17px;
 	width: 292px;
 	font-size: 40;
 	font-weight: 900;
 }
 
-.navrightoff{
-
+#navLogo{
+	margin-top: 20px;
+	margin-left: 20px;
+	float: left;
 }
 
+.navLeft{
+	margin-left: 50px;
+	float: left;
+}
 
+.navrighton{
+	float: right;
+	display: none;
+}
+
+.navrightoff{
+	float: right;
+	/*margin-top: 25px;*/
+}
+
+.navLeft a,.navrightoff a,.navrighton a{
+	/*margin-right: 20px;*/
+}
+
+.none{
+	display: none;
+}
 
 .footer
 {
 	clear:both;
-	background:khaki;
+	background:transparent;
 	margin:0 auto;
 	margin-top: 2px;
 	line-height:30px;

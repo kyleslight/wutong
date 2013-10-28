@@ -40,7 +40,7 @@
 
     domUtils.on(window,'load',function () {
 
-        var langImgPath = editor.options.langPath + editor.options.lang + "/image/";
+        var langImgPath = editor.options.langPath + editor.options.lang + "/images/";
         //针对静态资源
         for ( var i in lang["static"] ) {
             var dom = $G( i );
