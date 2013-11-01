@@ -1,28 +1,35 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from tornado.options import define, options
+from os import path, environ
+from uuid import uuid5, NAMESPACE_OID
 
-import os.path
+def get_settings(settings={}):
+    if settings: return settings
 
-_dbname = os.environ.get('WUTONG_DB', 'wutong')
-_user = os.environ.get('WUTONG_USER', 'fz')
-_password = os.environ.get('WUTONG_PASSWORD', 'fz')
-_host = os.environ.get('WUTONG_HOST', 'localhost')
-_port = os.environ.get('WUTONG_PORT', 5432)
-dsn = 'dbname=%s user=%s password=%s host=%s port=%s' % (
-    _dbname, _user, _password, _host, _port)
+    define("host", default="localhost", type=str)
+    define("port", default=8888, type=int)
+    define("debug", default=True, type=bool)
+    define("dbname", default=environ.get("WUTONG_DB", "wutong"), type=str)
+    define("dbhost", default=environ.get("WUTONG_HOST", "localhost"), type=str)
+    define("dbport", default=environ.get("WUTONG_PORT", 5432), type=str)
+    define("dbuser", default=environ.get("WUTONG_USER", "fz"), type=str)
+    define("dbpasswd", default=environ.get("WUTONG_PASSWD", "fz"), type=str)
+    options.parse_command_line()
 
-assert (_dbname or _user or _password or _host or _port) is not None, (
-    'Environment variables for the examples are not set. Please set the following '
-    'variables: WUTONG_DB, WUTONG_USER, WUTONG_PASSWORD, '
-    'WUTONG_HOST, WUTONG_PORT')
+    settings = dict(
+            sitename=u"梧桐".encode("utf8"),
+            template_path=path.join(path.dirname(__file__), "templates"),
+            static_path=path.join(path.dirname(__file__), "static"),
+            xsrf_cookies=True,
+            login_url="/login",
+            host=options.host,
+            port=options.port,
+            debug=options.debug,
+            dsn="dbname=%s user=%s password=%s host=%s port=%s" % (
+                options.dbname, options.dbuser, options.dbpasswd,
+                options.dbhost, options.dbport),
+        )
+    settings["cookie_secret"] = uuid5(NAMESPACE_OID, settings["sitename"])
 
-
-settings = dict(
-    sitename=u"梧桐",
-    template_path=os.path.join(os.path.dirname(__file__), "templates"),
-    static_path=os.path.join(os.path.dirname(__file__), "static"),
-    xsrf_cookies=True,
-    cookie_secret="k8+GFndWTsGzTXQBDzz4+reCX/K07E6hlh6cx3MJtow=",
-    login_url="/login",
-    autoescape=None,
-)
+    return settings
