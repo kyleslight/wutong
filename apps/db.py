@@ -69,6 +69,21 @@ class db_backend:
                 )
         return result
 
+    def do_join_group(self, user_id=None, group_id=None):
+        if user_id and group_id:
+            return self.execute("""
+                        INSERT INTO \"group_user\"
+                               (group_id,user_id)
+                        VALUES (%s,%s)
+                    """,
+                    group_id, user_id)
+        return False
+
+    def get_user_group(self, user_id):
+        self.execute("""
+             SELECT id FROM \"group_user\"
+              WHERE """)
+
 
 class Pool:
 

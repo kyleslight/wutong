@@ -5,12 +5,10 @@ from uuid import uuid5, NAMESPACE_OID
 from tornado.options import define, options
 
 _settings = None
-def get_settings(key=None):
+def settings(key=None):
     global _settings
-    if key:
-        return _settings[key]
-    elif _settings:
-        return _settings
+    if _settings:
+        return _settings[key] if key else _settings
 
     define("host", default="localhost", type=str)
     define("port", default=8888, type=int)
@@ -37,4 +35,4 @@ def get_settings(key=None):
         )
     _settings["cookie_secret"] = str(uuid5(NAMESPACE_OID, _settings["sitename"]))
 
-    return _settings
+    return _settings[key] if key else _settings

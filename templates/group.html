@@ -463,7 +463,9 @@
 					</form>
 					<div id="communicationConWrap">
 						<div class="communication" id="communication">
-							诶，多了一行
+							{% for msg in messages %}
+								{{ msg }}
+							{% end %}
 						</div>
 					</div>
 				</div>
@@ -473,8 +475,8 @@
 		<!--<script type="text/javascript" charset="utf-8">window.UEDITOR_HOME_URL = "{{ static_url("ueditor/")}}";</script>-->
 		<script type="text/javascript" src="{{ static_url("js/jquery.js") }}"></script>
 		<script type="text/javascript" src="{{ static_url("js/group.js") }}"></script>
-		<script type="text/javascript" src="{{ static_url("js/shCore.js")}}"></script>
-		<script type="text/javascript" src="{{ static_url("js/allhl.js")}}"></script>
+		<script type="text/javascript" src="{{ static_url("js/shCore.js") }}"></script>
+		<script type="text/javascript" src="{{ static_url("js/allhl.js") }}"></script>
 		<script type="text/javascript" src="{{ static_url("ueditor/ueditor.config.js")}}"></script>
 		<script type="text/javascript" src="{{ static_url("ueditor/ueditor.all.min.js")}}"></script>
 		<script type="text/javascript">SyntaxHighlighter.all();</script>

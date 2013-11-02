@@ -331,6 +331,14 @@ function submitChatData(){
     //         $("#communication").children("li").eq(i).remove();
     //     }
     // }
+    /*
+    var socket = new WebSocket("ws://" + location.host + "/message");
+
+    socket.send(chatCon);
+    socket.onmessage = function(e) {
+        $("#inbox").append("<div>" + e.data + "</div>");
+    }
+    */
     $.ajax({
         type:"POST",
         dataType:"json",

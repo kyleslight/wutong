@@ -1,0 +1,11 @@
+<li id='topic_{{ message[id] }}'>
+    <a href='#'>
+        <img src='{{ static_url("css/image/test.png") }}' />
+    </a>
+    <div class='talkmain'>
+        <div class='username'><a href='#'>{{ message[username] }}</a>
+        </div>
+        <div class='talkcontent'>{{ message[content] }}</div>
+    </div>
+    <div class='timeshow'>{{ message[submit_time] }}</div>
+</li>

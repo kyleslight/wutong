@@ -14,6 +14,7 @@ class LoginHandler(BaseHandler):
             if user_id:
                 self.set_secure_cookie("user_id", user_id, 5, httponly=True)
                 self.write("success")
+                return
         self.write("failed")
 
 
