@@ -16,8 +16,8 @@ def settings(key=None):
     define("dbname", default=environ.get("WUTONG_DB", "wutong"), type=str)
     define("dbhost", default=environ.get("WUTONG_HOST", "localhost"), type=str)
     define("dbport", default=environ.get("WUTONG_PORT", 5432), type=str)
-    define("dbuser", default=environ.get("WUTONG_USER", "fz"), type=str)
-    define("dbpasswd", default=environ.get("WUTONG_PASSWD", "fz"), type=str)
+    define("dbuser", default=environ.get("WUTONG_USER", "postgres"), type=str)
+    define("dbpasswd", default=environ.get("WUTONG_PASSWD", "135450218989"), type=str)
     options.parse_command_line()
 
     _settings = dict(

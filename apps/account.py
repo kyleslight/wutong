@@ -29,6 +29,7 @@ class RegisterHandler(BaseHandler):
         username = self.get_argument("username", None)
         password = self.get_argument("password", None)
         email = self.get_argument("email", None)
+        self.echo(username, password, email)
         if username and password and email:
             if self.db.is_user_exists(email=email, name=username):
                 self.write("user_exists")
@@ -37,6 +38,7 @@ class RegisterHandler(BaseHandler):
             if self.db.do_user_register(email=email, password=password,
                                         name=username):
                 user_id = self.db.do_user_login(account=email, password=password)
+
                 self.set_secure_cookie("user_id", user_id, 5, httponly=True)
                 self.write("success")
                 return
