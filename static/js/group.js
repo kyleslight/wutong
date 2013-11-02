@@ -18,12 +18,12 @@ $(document).ready(function(){
     $("#username").mouseover(function(){
         $(this).css("background","white");
         $(this).children("#usernameHover").css("color","#680");
-        $(".userExpand").fadeIn(1000);
+        $(".userExpand").show();
     });
     $("#username").mouseleave(function(){
         $(this).css("background","transparent");
         $(this).children("#usernameHover").css("color","white");
-        $(".userExpand").fadeOut(10);
+        $(".userExpand").hide();
     })
 
     // login and register
@@ -39,10 +39,11 @@ $(document).ready(function(){
                 alert(username);
             });
             if (response == "success") {
-                $(".navrightoff").hide();
-                $(".navrighton").show();
-                $("#username").children().val(username);
-                loginBoxFade();
+                $(".navrightoff").fadeOut(function(){
+                    $(".navrighton").fadeIn();
+                    $("#username").children().val(username);
+                    loginBoxFade();
+                });
             } else if (response == "failed") {
                 alert("loginfailed");
             }
@@ -58,17 +59,23 @@ $(document).ready(function(){
             alert("password and repassword must be the same vaule");
             return;
         };
+        alert(registerEmail);
         $.post("/register",{
             username:registerUsername,
             password:registerPassword,
             email:registerEmail
         },function(){
-            alert("registersuccess");
+            registerBoxFade();
         });
     });
     // logout
     $("#logout").click(function(){
         // logout function
+        $.post("/logout");
+        $(".navrighton").fadeOut(function(){
+            $(".navrightoff").fadeIn();
+        });
+        // $("#username").children().val(username);
     })
 
     // loginBox and registerBox
