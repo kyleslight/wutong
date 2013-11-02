@@ -13,10 +13,10 @@
 \#运行梧桐，默认url为：127.0.0.1:8888  
 `python main.py`  
 
-group需要post的东西01
-	chat 用户名 内容 （后台记录时间，头像暂不post）
-	topic 用户名 标题 内容 （后台记录时间，头像暂不post）
-group需要get的东西01
-	login 用户名
-	chat 用户名 内容 时间
-	topic 用户名 标题 内容 时间
+\group需要post的东西01
+\	chat 用户名 内容 （后台记录时间，头像暂不post）
+\	topic 用户名 标题 内容 （后台记录时间，头像暂不post）
+\group需要get的东西01
+\	login 用户名
+\	chat 用户名 内容 时间
+\	topic 用户名 标题 内容 时间
