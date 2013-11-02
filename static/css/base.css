@@ -36,6 +36,7 @@ textarea{
 #logo{
 	width: 30px;
 	height: 30px;
+	border:0;
 }
 .input{
 	float: left;
@@ -46,6 +47,7 @@ textarea{
 	padding-top: 7px;
 	padding-bottom: 7px;
 	width: 700px;
+	border-radius: 3px;
 }
 
 .inputTip{
@@ -62,13 +64,16 @@ textarea{
 }
 
 #lrBoxWrap{
+	/*position: relative;*/
+	/*float: left;*/
+	clear: both;
 	width: 100%;
 	height: 0px;
 	background:rgba(102,136,0,0.1);
 	/*border-top: 1px solid #CCC;*/
 	border-bottom: 1px solid #CCC;
-	margin-bottom: 40px;
-	display: none;
+	margin-bottom: 20px;
+	/*display: none;*/
 }
 
 #lrBoxWrap .input{
@@ -87,6 +92,7 @@ textarea{
 
 /*loginBox*/
 #loginBox{
+	position: relative;
 	width: 600px;
 	margin: 0 auto;
 	display: block;
@@ -278,13 +284,57 @@ textarea{
 	float: left;
 }
 
+#username{
+	float: left;
+	text-align: center;
+	padding-left: 0;
+	padding-right: 0;
+	margin-right: 15px;
+}
+
+#username:hover{
+	background: white;
+	color: #680;
+}
+
+#usernameHover{
+	padding: 0 15px;
+}
+
+.userExpand{
+	position: relative;
+	margin: 0 auto;
+	display: none;
+	margin-top: 26px;
+	/*padding: 0 10px;*/
+	background:white;
+	z-index: 100;
+}
+
+.userExpand div{
+	padding: 10px;
+	text-align: center;
+	border-top: 2px solid rgba(102,136,0,0.9);
+	color: #680;
+}
+
+.userExpand div:hover{
+	background: #680;
+	color: white;
+}
+
+.navrightonOption{
+	float: left;
+}
+
 .navrighton{
 	float: right;
-	display: none;
+	/*display: none;*/
 }
 
 .navrightoff{
 	float: right;
+	display: none;
 	/*margin-top: 25px;*/
 }
 

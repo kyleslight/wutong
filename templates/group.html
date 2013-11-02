@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
-		<title>小组-梧桐</title>
+		<title>小组 - 梧桐</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="Content-Language" content="zh-CN" />
 		<meta name="Keywords" content="梧桐 文章 编辑 浏览 小组 发布 推荐" />
@@ -25,10 +25,20 @@
 						<a id="fragment" href="#"><li>小品</li></a>
 					</div>
 					<div class="navrighton">
-						<a id="username" href="#"><li>kyleslight</li></a>
-						<a id="group" href="#"><li>小组</li></a>
-						<a id="message" href="#"><li>消息</li></a>
-						<a id="setting" href="#"><li>设置</li></a>
+						<!-- <div class="usernameOuter"> -->
+							<a href="#"><li id="username">
+								<span id="usernameHover" href="#">Kyleslight</span>
+								<div class="userExpand">
+									<div id="myHomepage">我的主页</div>
+									<div id="logout">登出</div>
+								</div>
+							</li></a>
+						<!-- </div> -->
+						<div class="navrightonOption">
+							<a id="group" href="#"><li>小组</li></a>
+							<a id="message" href="#"><li>消息</li></a>
+							<a id="setting" href="#"><li>设置</li></a>
+						</div>
 					</div>
 					<div class="navrightoff">
 
@@ -53,417 +63,466 @@
 			<div class="lrBox" id="registerBox">
 				<form id="registerForm" name="registerForm" action="#" method="post">
 					<div class="registerList"><span class="inputTip">用户名</span> <input class="input" id="registerUsername" type="text" name="username" placeholder="用户名" /></div>
-					<div class="registerList"><span class="inputTip">邮箱</span> <input class="input" id="registerEmail" type="text" name="email" placeholder="邮箱" /></div>
+					<div class="registerList"><span class="inputTip">邮箱</span> <input class="input" id="registerEamil" type="text" name="email" placeholder="邮箱" /></div>
 					<div class="registerList"><span class="inputTip">密码</span> <input class="input" id="registerPassword" type="password" name="password" placeholder="密码" /></div>
 					<div class="registerList"><span class="inputTip">重复密码</span> <input class="input" id="registerRepassword" type="password" name="repassword" placeholder="重复密码" /></div>
 					<div id="registerListLast" class="registerList"><a href="#" id="registerSubmitButton" class="formButton" name="submitButton" value="注册">注册</a> <a href="#" id="registerBack">返回</a></div>
 				</form>
 			</div>
 		</div>
-		<div class="groupWarp">
-			<!-- basic group infomation -->
-			<div class="groupInfo">
-				<img class="groupImage" src="{{ static_url("css/image/forumTest.jpg") }}" />
-				<div class="groupInfoCon">
-					<div class="groupTitle"><a id="" href="#">Kyleslight的同好会</a><span id='titleCut'> | </span><span id='groupMotto'>西十二自习室欢迎你</span></div>
-				</div>
-			</div>
-			<div class="groupOptions">
-				<a href="#"><div class='groupOptionItem'>公告</div></a>
-				<a href="#"><div class='groupOptionItem'>名片</div></a>
-				<a href="#"><div class='groupOptionItem'>成员</div></a>
-				<a href="#"><div class='groupOptionItem'>作品</div></a>
-				<a href="#"><div class='groupOptionItem'>最近话题</div></a>
-				<a href="#"><div class='groupOptionItem'>设置</div></a>
-			</div>
-			<div class="groupItem">
-				<!-- bulletin -->
-				<div class="bulletin" id="groupOptionShow0">
-					<li class="bulletinList">
-						<a href="#" class="bulletinInline">
-							<img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
-							<div class="bulletinTitle">第六次团队大会</div>
-							<div class="bulletinUserName">Kyleslight</div>
-							<div class="bulletinTime">10-23 20:56</div>
-						</a>
-						<div id="bulletinConActive" class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
-					</li>
-					<br>
-					<div id="bulletinOption"><a href="#" id="unfold">展开前6条</a> <a href="#" id="bulletinBack" class="optionBack">返回</a></div>
-				</div>
-				<!-- information card -->
-				<div class="infoCard" id="groupOptionShow1">
-					<div id="groupName">Kyleslight的同好会<p id="IDVaule">(000001)</p></div>
-					<img id="groupCardImage" src="{{ static_url("css/image/forumTest.jpg") }}" />
-					<div id="groupDetail">
-						<div id="groupIntro" class="groupDetailItem">
-							<span class="introWord">简介：</span>一个Kyleslight建立的方便交流的同好会，嗯，是一个正常的社团啦
-						</div>
-
-						<div id="groupFounder" class="groupDetailItem">
-							<span class="introWord">创建：</span>
-								<p id="Founder">Kyleslight</p> 创立于<p id="foundTime">2013年12月13日</p>
-						</div>
-
-						<div id="groupAdmin" class="groupDetailItem">
-							<span class="introWord">组长：</span><p id="administrator">Kyleslight</p>
-						</div>
-
-						<div id="groupMemberNum" class="groupDetailItem">
-							<span class="introWord">成员数：</span><p id="memberNum">68</p>
-						</div>
-
-						<div id="groupGPA" class="groupDetailItem">
-							<span class="introWord">平均文章得分：</span><p id="GPA">95.36</p>
-						</div>
-
-						<div id="groupRank" class="groupDetailItem">
-							<span class="introWord" >小组排名：</span><p id="RANK">23</p>
-						</div>
-
-						<div id="groupInfoMotto" class="groupDetailItem">
-							<span class="introWord">签名：</span><p id="Motto">西十二自习室欢迎你</p>
-						</div>
-					</div>
-						<a href="#" class="optionBack">返回</a>
-				</div>
-				<!-- member -->
-				<div class="member" id="groupOptionShow2">
-					<div  class="memberCard">
-						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-						<div class="memberBasic">
-							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
-							<div class="memberIntro">一只普普通通的喵星人控</div>
-							<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
-						</div>
-						<div class="memberDetail">
-							<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-							<div class="memberGroup">小组：
-								<span class="memberGroup1">Kyleslight的同好会</span>
-								<span class="memberGroup2">思存工作室</span>
-								<span class="memberGroup3">赫萝</span>
-							</div>
-							<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
-							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-						</div>
-					</div>
-					<div  class="memberCard">
-						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-						<div class="memberBasic">
-							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
-							<div class="memberIntro">一只普普通通的喵星人控</div>
-							<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
-						</div>
-						<div class="memberDetail">
-							<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-							<div class="memberGroup">小组：
-								<span class="memberGroup1">Kyleslight的同好会</span>
-								<span class="memberGroup2">思存工作室</span>
-								<span class="memberGroup3">赫萝</span>
-							</div>
-							<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
-							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-						</div>
-					</div>
-					<div  class="memberCard">
-						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-						<div class="memberBasic">
-							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
-							<div class="memberIntro">一只普普通通的喵星人控</div>
-							<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
-						</div>
-						<div class="memberDetail">
-							<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-							<div class="memberGroup">小组：
-								<span class="memberGroup1">Kyleslight的同好会</span>
-								<span class="memberGroup2">思存工作室</span>
-								<span class="memberGroup3">赫萝</span>
-							</div>
-							<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
-							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-						</div>
-					</div>
-					<div  class="memberCard">
-						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-						<div class="memberBasic">
-							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
-							<div class="memberIntro">一只普普通通的喵星人控</div>
-							<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
-						</div>
-						<div class="memberDetail">
-							<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-							<div class="memberGroup">小组：
-								<span class="memberGroup1">Kyleslight的同好会</span>
-								<span class="memberGroup2">思存工作室</span>
-								<span class="memberGroup3">赫萝</span>
-							</div>
-							<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
-							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-						</div>
-					</div>
-					<div  class="memberCard">
-						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-						<div class="memberBasic">
-							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
-							<div class="memberIntro">一只普普通通的喵星人控</div>
-							<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
-						</div>
-						<div class="memberDetail">
-							<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-							<div class="memberGroup">小组：
-								<span class="memberGroup1">Kyleslight的同好会</span>
-								<span class="memberGroup2">思存工作室</span>
-								<span class="memberGroup3">赫萝</span>
-							</div>
-							<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
-							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-						</div>
-					</div>
-					<div  class="memberCard">
-						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-						<div class="memberBasic">
-							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
-							<div class="memberIntro">一只普普通通的喵星人控</div>
-							<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
-						</div>
-						<div class="memberDetail">
-							<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-							<div class="memberGroup">小组：
-								<span class="memberGroup1">Kyleslight的同好会</span>
-								<span class="memberGroup2">思存工作室</span>
-								<span class="memberGroup3">赫萝</span>
-							</div>
-							<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
-							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-						</div>
-					</div>
-					<div  class="memberCard">
-						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-						<div class="memberBasic">
-							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
-							<div class="memberIntro">一只普普通通的喵星人控</div>
-							<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
-						</div>
-						<div class="memberDetail">
-							<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-							<div class="memberGroup">小组：
-								<span class="memberGroup1">Kyleslight的同好会</span>
-								<span class="memberGroup2">思存工作室</span>
-								<span class="memberGroup3">赫萝</span>
-							</div>
-							<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
-							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-						</div>
-					</div>
-					<div  class="memberCard">
-						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-						<div class="memberBasic">
-							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
-							<div class="memberIntro">一只普普通通的喵星人控</div>
-							<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
-						</div>
-						<div class="memberDetail">
-							<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-							<div class="memberGroup">小组：
-								<span class="memberGroup1">Kyleslight的同好会</span>
-								<span class="memberGroup2">思存工作室</span>
-								<span class="memberGroup3">赫萝</span>
-							</div>
-							<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
-							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-						</div>
-					</div>
-					<div  class="memberCard">
-						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-						<div class="memberBasic">
-							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
-							<div class="memberIntro">一只普普通通的喵星人控</div>
-							<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
-						</div>
-						<div class="memberDetail">
-							<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-							<div class="memberGroup">小组：
-								<span class="memberGroup1">Kyleslight的同好会</span>
-								<span class="memberGroup2">思存工作室</span>
-								<span class="memberGroup3">赫萝</span>
-							</div>
-							<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
-							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-						</div>
-					</div>
-					<div  class="memberCard">
-						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-						<div class="memberBasic">
-							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
-							<div class="memberIntro">一只普普通通的喵星人控</div>
-							<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
-						</div>
-						<div class="memberDetail">
-							<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-							<div class="memberGroup">小组：
-								<span class="memberGroup1">Kyleslight的同好会</span>
-								<span class="memberGroup2">思存工作室</span>
-								<span class="memberGroup3">赫萝</span>
-							</div>
-							<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
-							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-						</div>
-					</div>
-					<div  class="memberCard">
-						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-						<div class="memberBasic">
-							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
-							<div class="memberIntro">一只普普通通的喵星人控</div>
-							<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
-						</div>
-						<div class="memberDetail">
-							<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-							<div class="memberGroup">小组：
-								<span class="memberGroup1">Kyleslight的同好会</span>
-								<span class="memberGroup2">思存工作室</span>
-								<span class="memberGroup3">赫萝</span>
-							</div>
-							<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
-							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-						</div>
-					</div>
-					<div  class="memberCard">
-						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-						<div class="memberBasic">
-							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
-							<div class="memberIntro">一只普普通通的喵星人控</div>
-							<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
-						</div>
-						<div class="memberDetail">
-							<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-							<div class="memberGroup">小组：
-								<span class="memberGroup1">Kyleslight的同好会</span>
-								<span class="memberGroup2">思存工作室</span>
-								<span class="memberGroup3">赫萝</span>
-							</div>
-							<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
-							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-						</div>
-					</div>
-					<div id="memOption">
-						<a href="#">上一页</a><a href="#">下一页</a><a href="#" class="optionBack">返回</a>
+		<div class="groupWarpOuter">
+			<div class="groupWarp">
+				<!-- basic group infomation -->
+				<div class="groupInfo">
+					<img class="groupImage" src="{{ static_url("css/image/forumTest.jpg") }}" />
+					<div class="groupInfoCon">
+						<div class="groupTitle"><a id="" href="#">Kyleslight的同好会</a><span id='titleCut'> | </span><span id='groupMotto'>西十二自习室欢迎你</span></div>
 					</div>
 				</div>
-				<!-- works -->
-				<div class="works" id="groupOptionShow3">
-					<div id="worksOption">
-						<div class="worksMainOption"><a id="articalOption" href="#">文章</a><a id="frangmentOption" href="#">小品</a></div>
-						<a id="worksFliter" href="#">筛选器</a>
-					</div>
-					<div id="worksArticals">
-						<li class="worksArticalShow">
+				<div class="groupOptions">
+					<a href="#"><div class='groupOptionItem'>公告</div></a>
+					<a href="#"><div class='groupOptionItem'>名片</div></a>
+					<a href="#"><div class='groupOptionItem'>成员</div></a>
+					<a href="#"><div class='groupOptionItem'>作品</div></a>
+					<a href="#"><div class='groupOptionItem'>最近话题</div></a>
+					<a href="#"><div class='groupOptionItem'>设置</div></a>
+				</div>
+				<div class="groupItem">
+					<!-- bulletin -->
+					<div class="bulletin" id="groupOptionShow0">
+						<li class="bulletinList">
+							<a href="#" class="bulletinInline">
+								<img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
+								<div class="bulletinTitle">第六次团队大会</div>
+								<div class="bulletinUserName">Kyleslight</div>
+								<div class="bulletinTime">10-23 20:56</div>
+							</a>
+							<div id="bulletinConActive" class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
+						</li>
+						<li class="bulletinList">
+							<a href="#" class="bulletinInline">
+								<img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
+								<div class="bulletinTitle">第六次团队大会</div>
+								<div class="bulletinUserName">Kyleslight</div>
+								<div class="bulletinTime">10-23 20:56</div>
+							</a>
+							<div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
+						</li>
+						<li class="bulletinList">
+							<a href="#" class="bulletinInline">
+								<img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
+								<div class="bulletinTitle">第六次团队大会</div>
+								<div class="bulletinUserName">Kyleslight</div>
+								<div class="bulletinTime">10-23 20:56</div>
+							</a>
+							<div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
+						</li>
+						<li class="bulletinList">
+							<a href="#" class="bulletinInline">
+								<img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
+								<div class="bulletinTitle">第六次团队大会</div>
+								<div class="bulletinUserName">Kyleslight</div>
+								<div class="bulletinTime">10-23 20:56</div>
+							</a>
+							<div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
+						</li>
+						<li class="bulletinList">
+							<a href="#" class="bulletinInline">
+								<img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
+								<div class="bulletinTitle">第六次团队大会</div>
+								<div class="bulletinUserName">Kyleslight</div>
+								<div class="bulletinTime">10-23 20:56</div>
+							</a>
+							<div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
+						</li>
+						<li class="bulletinList">
+							<a href="#" class="bulletinInline">
+								<img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
+								<div class="bulletinTitle">第六次团队大会</div>
+								<div class="bulletinUserName">Kyleslight</div>
+								<div class="bulletinTime">10-23 20:56</div>
+							</a>
+							<div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
+						</li>
 
-							<div class="artical">
-								<div class="articalBasicInfo">
-									<img src="{{ static_url("css/image/test.png") }}" class="articAluthorImage">
-									<a href="#" class="articalTitle">odC VOL.I chapter5</a>
-									<a href="#" class="articalAuthor">Kyleslight</a>
+						<br>
+						<div id="bulletinOption"><a href="#" id="unfold">展开前6条</a> <a href="#" id="bulletinBack" class="optionBack">返回</a></div>
+					</div>
+					<!-- information card -->
+					<div class="infoCard" id="groupOptionShow1">
+						<div id="groupName">Kyleslight的同好会<p id="IDVaule">(000001)</p></div>
+						<img id="groupCardImage" src="{{ static_url("css/image/forumTest.jpg") }}" />
+						<div id="groupDetail">
+							<div id="groupIntro" class="groupDetailItem">
+								<span class="introWord">简介：</span>一个Kyleslight建立的方便交流的同好会，嗯，是一个正常的社团啦
+							</div>
+
+							<div id="groupFounder" class="groupDetailItem">
+								<span class="introWord">创建：</span>
+									<p id="Founder">Kyleslight</p> 创立于<p id="foundTime">2013年12月13日</p>
+							</div>
+
+							<div id="groupAdmin" class="groupDetailItem">
+								<span class="introWord">组长：</span><p id="administrator">Kyleslight</p>
+							</div>
+
+							<div id="groupMemberNum" class="groupDetailItem">
+								<span class="introWord">成员数：</span><p id="memberNum">68</p>
+							</div>
+
+							<div id="groupGPA" class="groupDetailItem">
+								<span class="introWord">平均文章得分：</span><p id="GPA">95.36</p>
+							</div>
+
+							<div id="groupRank" class="groupDetailItem">
+								<span class="introWord" >小组排名：</span><p id="RANK">23</p>
+							</div>
+
+							<div id="groupInfoMotto" class="groupDetailItem">
+								<span class="introWord">签名：</span><p id="Motto">西十二自习室欢迎你</p>
+							</div>
+						</div>
+							<a href="#" class="optionBack">返回</a>
+					</div>
+					<!-- member -->
+					<div class="member" id="groupOptionShow2">
+						<div  class="memberCard">							
+							<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
+							<div class="memberBasic">
+								<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
+								<div class="memberIntro">一只普普通通的喵星人控</div>
+								<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
+							</div>
+							<div class="memberDetail">
+								<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+								<div class="memberGroup">小组：
+									<span class="memberGroup1">Kyleslight的同好会</span>
+									<span class="memberGroup2">思存工作室</span>
+									<span class="memberGroup3">赫萝</span>
 								</div>
-
-
-								<div class="articalTag">Tags：<a href="#">长篇小说</a><a href="#">odC</a><a href="#">依诺</a></div>
-								<div class="articaltime">2-14 13:18</div>
+								<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
+								<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+							</div>
+						</div>
+						<div  class="memberCard">							
+							<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
+							<div class="memberBasic">
+								<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
+								<div class="memberIntro">一只普普通通的喵星人控</div>
+								<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
+							</div>
+							<div class="memberDetail">
+								<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+								<div class="memberGroup">小组：
+									<span class="memberGroup1">Kyleslight的同好会</span>
+									<span class="memberGroup2">思存工作室</span>
+									<span class="memberGroup3">赫萝</span>
+								</div>
+								<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
+								<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+							</div>
+						</div>
+						<div  class="memberCard">							
+							<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
+							<div class="memberBasic">
+								<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
+								<div class="memberIntro">一只普普通通的喵星人控</div>
+								<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
+							</div>
+							<div class="memberDetail">
+								<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+								<div class="memberGroup">小组：
+									<span class="memberGroup1">Kyleslight的同好会</span>
+									<span class="memberGroup2">思存工作室</span>
+									<span class="memberGroup3">赫萝</span>
+								</div>
+								<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
+								<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+							</div>
+						</div>
+						<div  class="memberCard">							
+							<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
+							<div class="memberBasic">
+								<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
+								<div class="memberIntro">一只普普通通的喵星人控</div>
+								<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
+							</div>
+							<div class="memberDetail">
+								<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+								<div class="memberGroup">小组：
+									<span class="memberGroup1">Kyleslight的同好会</span>
+									<span class="memberGroup2">思存工作室</span>
+									<span class="memberGroup3">赫萝</span>
+								</div>
+								<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
+								<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+							</div>
+						</div>
+						<div  class="memberCard">							
+							<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
+							<div class="memberBasic">
+								<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
+								<div class="memberIntro">一只普普通通的喵星人控</div>
+								<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
+							</div>
+							<div class="memberDetail">
+								<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+								<div class="memberGroup">小组：
+									<span class="memberGroup1">Kyleslight的同好会</span>
+									<span class="memberGroup2">思存工作室</span>
+									<span class="memberGroup3">赫萝</span>
+								</div>
+								<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
+								<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+							</div>
+						</div>
+						<div  class="memberCard">							
+							<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
+							<div class="memberBasic">
+								<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
+								<div class="memberIntro">一只普普通通的喵星人控</div>
+								<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
+							</div>
+							<div class="memberDetail">
+								<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+								<div class="memberGroup">小组：
+									<span class="memberGroup1">Kyleslight的同好会</span>
+									<span class="memberGroup2">思存工作室</span>
+									<span class="memberGroup3">赫萝</span>
+								</div>
+								<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
+								<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+							</div>
+						</div>
+						<div  class="memberCard">							
+							<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
+							<div class="memberBasic">
+								<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
+								<div class="memberIntro">一只普普通通的喵星人控</div>
+								<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
+							</div>
+							<div class="memberDetail">
+								<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+								<div class="memberGroup">小组：
+									<span class="memberGroup1">Kyleslight的同好会</span>
+									<span class="memberGroup2">思存工作室</span>
+									<span class="memberGroup3">赫萝</span>
+								</div>
+								<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
+								<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+							</div>
+						</div>
+						<div  class="memberCard">							
+							<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
+							<div class="memberBasic">
+								<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
+								<div class="memberIntro">一只普普通通的喵星人控</div>
+								<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
+							</div>
+							<div class="memberDetail">
+								<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+								<div class="memberGroup">小组：
+									<span class="memberGroup1">Kyleslight的同好会</span>
+									<span class="memberGroup2">思存工作室</span>
+									<span class="memberGroup3">赫萝</span>
+								</div>
+								<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
+								<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+							</div>
+						</div>
+						<div  class="memberCard">							
+							<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
+							<div class="memberBasic">
+								<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
+								<div class="memberIntro">一只普普通通的喵星人控</div>
+								<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
+							</div>
+							<div class="memberDetail">
+								<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+								<div class="memberGroup">小组：
+									<span class="memberGroup1">Kyleslight的同好会</span>
+									<span class="memberGroup2">思存工作室</span>
+									<span class="memberGroup3">赫萝</span>
+								</div>
+								<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
+								<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+							</div>
+						</div>
+						<div  class="memberCard">							
+							<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
+							<div class="memberBasic">
+								<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
+								<div class="memberIntro">一只普普通通的喵星人控</div>
+								<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
+							</div>
+							<div class="memberDetail">
+								<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+								<div class="memberGroup">小组：
+									<span class="memberGroup1">Kyleslight的同好会</span>
+									<span class="memberGroup2">思存工作室</span>
+									<span class="memberGroup3">赫萝</span>
+								</div>
+								<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
+								<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+							</div>
+						</div>
+						<div  class="memberCard">							
+							<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
+							<div class="memberBasic">
+								<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
+								<div class="memberIntro">一只普普通通的喵星人控</div>
+								<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
+							</div>
+							<div class="memberDetail">
+								<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+								<div class="memberGroup">小组：
+									<span class="memberGroup1">Kyleslight的同好会</span>
+									<span class="memberGroup2">思存工作室</span>
+									<span class="memberGroup3">赫萝</span>
+								</div>
+								<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
+								<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+							</div>
+						</div>
+						<div  class="memberCard">							
+							<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
+							<div class="memberBasic">
+								<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
+								<div class="memberIntro">一只普普通通的喵星人控</div>
+								<div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span></div>
+							</div>
+							<div class="memberDetail">
+								<div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+								<div class="memberGroup">小组：
+									<span class="memberGroup1">Kyleslight的同好会</span>
+									<span class="memberGroup2">思存工作室</span>
+									<span class="memberGroup3">赫萝</span>
+								</div>
+								<div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span></div>
+								<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+							</div>
+						</div>
+						<div id="memOption">
+							<a href="#">上一页</a><a href="#">下一页</a><a href="#" class="optionBack">返回</a>
+						</div>
+					</div>
+					<!-- works -->
+					<div class="works" id="groupOptionShow3">
+						<div id="worksOption">
+							<div class="worksMainOption"><a id="articalOption" href="#">文章</a><a id="frangmentOption" href="#">小品</a></div>
+							<a id="worksFliter" href="#">筛选器</a>
+						</div>
+						<div id="worksArticals">
+							<li class="worksArticalShow">
+									
+								<div class="artical">	
+									<div class="articalBasicInfo">
+										<img src="{{ static_url("css/image/test.png") }}" class="articAluthorImage">
+										<a href="#" class="articalTitle">odC VOL.I chapter5</a>
+										<a href="#" class="articalAuthor">Kyleslight</a>
+									</div>								
+									
+									
+									<div class="articalTag">Tags：<a href="#">长篇小说</a><a href="#">odC</a><a href="#">依诺</a></div>
+									<div class="articaltime">2-14 13:18</div>
+								</div>
+							</li>
+							<li class="worksArticalShow">
+								<div class="artical">	
+									<div class="articalBasicInfo">
+										<img src="{{ static_url("css/image/test7.jpg") }}" class="articAluthorImage">
+										<a href="#" class="articalTitle">Ubuntu下使用MentoHUST代替锐捷认证上网</a>
+										<a href="#" class="articalAuthor">Longerhead</a>
+									</div>			
+														
+									
+									<div class="articalTag">Tags：	
+									<a href="#">泛科技</a>
+									<a href="#">Linux</a>
+									<a href="#">MentoHust</a>
+									<a href="#">Ubuntu</a>
+									<a href="#">锐捷安装失败</a>
+									<a href="#">认证客户端</a>
+									<a href="#">校园网</a>
+									</div>
+									<div class="articaltime">2-12 18:27</div>
+								</div>
+							</li>
+						</div>
+						<div class="articalDirectionOption"><a href="#">上一页</a><a href="#">下一页</a><a href="#" class="optionBack">返回</a></div>		
+					</div>
+					<div class="latestTopic" id="groupOptionShow4">
+						<li class="latestTopicList">
+							<img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
+							<span class="latestTopicTitle">梧桐项目部署</span>
+							<div class="latestTopicBasic">
+								<span class="latestTopicAuthor">Kyleslight</span>
+								<span class="latestTopicTime">2-2 13:24</span>
 							</div>
 						</li>
-						<li class="worksArticalShow">
-							<div class="artical">
-								<div class="articalBasicInfo">
-									<img src="{{ static_url("css/image/test7.jpg") }}" class="articAluthorImage">
-									<a href="#" class="articalTitle">Ubuntu下使用MentoHUST代替锐捷认证上网</a>
-									<a href="#" class="articalAuthor">Longerhead</a>
-								</div>
-
-
-								<div class="articalTag">Tags：
-								<a href="#">泛科技</a>
-								<a href="#">Linux</a>
-								<a href="#">MentoHust</a>
-								<a href="#">Ubuntu</a>
-								<a href="#">锐捷安装失败</a>
-								<a href="#">认证客户端</a>
-								<a href="#">校园网</a>
-								</div>
-								<div class="articaltime">2-12 18:27</div>
+						<li class="latestTopicList">
+							<img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
+							<span class="latestTopicTitle">梧桐项目部署</span>
+							<div class="latestTopicBasic">
+								<span class="latestTopicAuthor">Kyleslight</span>
+								<span class="latestTopicTime">2-2 13:24</span>
 							</div>
 						</li>
+						<li class="latestTopicList">
+							<img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
+							<span class="latestTopicTitle">梧桐项目部署</span>
+							<div class="latestTopicBasic">
+								<span class="latestTopicAuthor">Kyleslight</span>
+								<span class="latestTopicTime">2-2 13:24</span>
+							</div>
+						</li>
+						<li class="latestTopicList">
+							<img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
+							<span class="latestTopicTitle">梧桐项目部署</span>
+							<div class="latestTopicBasic">
+								<span class="latestTopicAuthor">Kyleslight</span>
+								<span class="latestTopicTime">2-2 13:24</span>
+							</div>
+						</li>
+						<li class="latestTopicList">
+							<img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
+							<span class="latestTopicTitle">梧桐项目部署</span>
+							<div class="latestTopicBasic">
+								<span class="latestTopicAuthor">Kyleslight</span>
+								<span class="latestTopicTime">2-2 13:24</span>
+							</div>
+						</li>
+						<li class="latestTopicList">
+							<img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
+							<span class="latestTopicTitle">梧桐项目部署</span>
+							<div class="latestTopicBasic">
+								<span class="latestTopicAuthor">Kyleslight</span>
+								<span class="latestTopicTime">2-2 13:24</span>
+							</div>
+						</li>
+						<div id="latestTopicOption"><a href="#" id="latestTopicUnfold">展开前6条</a> <a href="#" id="latestTopicBack" class="optionBack">返回</a></div>
 					</div>
-					<div class="articalDirectionOption"><a href="#">上一页</a><a href="#">下一页</a><a href="#" class="optionBack">返回</a></div>
-				</div>
-				<div class="latestTopic" id="groupOptionShow4">
-					<li class="latestTopicList">
-						<img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
-						<span class="latestTopicTitle">梧桐项目部署</span>
-						<div class="latestTopicBasic">
-							<span class="latestTopicAuthor">Kyleslight</span>
-							<span class="latestTopicTime">2-2 13:24</span>
-						</div>
-					</li>
-					<li class="latestTopicList">
-						<img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
-						<span class="latestTopicTitle">梧桐项目部署</span>
-						<div class="latestTopicBasic">
-							<span class="latestTopicAuthor">Kyleslight</span>
-							<span class="latestTopicTime">2-2 13:24</span>
-						</div>
-					</li>
-					<li class="latestTopicList">
-						<img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
-						<span class="latestTopicTitle">梧桐项目部署</span>
-						<div class="latestTopicBasic">
-							<span class="latestTopicAuthor">Kyleslight</span>
-							<span class="latestTopicTime">2-2 13:24</span>
-						</div>
-					</li>
-					<li class="latestTopicList">
-						<img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
-						<span class="latestTopicTitle">梧桐项目部署</span>
-						<div class="latestTopicBasic">
-							<span class="latestTopicAuthor">Kyleslight</span>
-							<span class="latestTopicTime">2-2 13:24</span>
-						</div>
-					</li>
-					<li class="latestTopicList">
-						<img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
-						<span class="latestTopicTitle">梧桐项目部署</span>
-						<div class="latestTopicBasic">
-							<span class="latestTopicAuthor">Kyleslight</span>
-							<span class="latestTopicTime">2-2 13:24</span>
-						</div>
-					</li>
-					<li class="latestTopicList">
-						<img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
-						<span class="latestTopicTitle">梧桐项目部署</span>
-						<div class="latestTopicBasic">
-							<span class="latestTopicAuthor">Kyleslight</span>
-							<span class="latestTopicTime">2-2 13:24</span>
-						</div>
-					</li>
-					<div id="latestTopicOption"><a href="#" id="latestTopicUnfold">展开前6条</a> <a href="#" id="latestTopicBack" class="optionBack">返回</a></div>
-				</div>
 
-			</div>
-			<div id="communicationWrap">
-				<div id="communicationBackgroud">
-					<form id="communicationData"  method="post">
-						<a href="#" id="changeSendState">切换为话题模式</a>
-						<div class="chatSend">
-							<textarea id="chatData" class="input" type="text" name="chatConData" placeholder=""></textarea>
-							<a href="#" id="chatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
-						</div>
-						<div class="topicSend">
-							<input id="topicTitle" class="input" type="text" name="topicTitle" placeholder="话题标题" />
-							<a href="#" id="topicSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~(发送话题)">发送</a>
-							<textarea id="topicData" class="input" type="text" name="topicData" placeholder=""></textarea>
-						</div>
-					</form>
-					<div id="communicationConWrap">
-						<div class="communication" id="communication">
-							诶，多了一行
+				</div>
+				<div id="communicationWrapOuter">
+					<div id="communicationWrap">
+						<div id="communicationBackgroud">
+							<form id="communicationData"  method="post">
+								<a href="#" id="changeSendState">切换为话题模式</a>
+								<div class="chatSend">
+									<textarea id="chatData" class="input" type="text" name="chatConData" placeholder=""></textarea>
+									<a href="#" id="chatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
+								</div>
+								<div class="topicSend">
+									<input id="topicTitle" class="input" type="text" name="topicTitle" placeholder="话题标题" />
+									<a href="#" id="topicSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~(发送话题)">发送</a>
+									<textarea id="topicData" class="input" type="text" name="topicData" placeholder=""></textarea>
+								</div>
+							</form>
+							<div id="communicationConWrap">
+								<div class="communication" id="communication">
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -480,7 +539,7 @@
 		<script type="text/javascript">SyntaxHighlighter.all();</script>
 		<script type="text/javascript">
 			var editor = new UE.ui.Editor();
-			textarea:'#topicData';
+			textarea:'#topicData'; 
 			editor.render('topicData');
 		</script>
 	</body>

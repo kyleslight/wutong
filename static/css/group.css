@@ -20,6 +20,15 @@ textarea,input{
 	color: #333;
 }
 
+.groupWarpOuter{
+	width: 1060px;
+	margin: 0 auto;
+}
+
+.groupWarp{
+	float: left;
+}
+
 .forumImage img{
 	width: 50px;
 	height: 50px;
@@ -55,9 +64,10 @@ textarea,input{
 /*group infomation*/
 .groupInfo{
 	width: 960px;
-	height: 80px;
 	margin: 0 auto;
+	height: 80px;
 	margin-top: 20px;
+	padding-left: 10px;
 	position: relative;
 }
 
@@ -97,6 +107,7 @@ textarea,input{
 }
 
 .groupItem{
+	/*float: left;*/
 	width: 960px;
 	margin: 0 auto;
 	overflow: hidden;
@@ -495,7 +506,7 @@ textarea,input{
 	margin: 0 auto;
 	height: 30px;
 	font-size: 12px;
-	margin-top: 15px;
+	margin-top: 5px;
 	font-size: 18px;
 	color: white;
 	margin-bottom: 10px;
@@ -519,17 +530,21 @@ textarea,input{
 }
 
 /*Communication Wrap*/
-#communicationWrap{
+#communicationWrapOuter{
+	float: left;
 	width: 1060px;
-	margin: 0 auto;
 	margin-top: 20px;
 }
 
+#communicationWrap{
+	float: left;
+}
+
 #communicationBackgroud{
-	background: rgba(255,255,255,0.9);
+	background: rgba(0,0,0,0.01);
 	float: left;
 	border-radius: 7px;
-	border: 1px solid #CCC;
+	border: 1px solid #AAA;
 	border-top-left-radius: 9px;
 	border-top-right-radius: 9px;
 }
@@ -554,9 +569,9 @@ textarea,input{
 	border-top-right-radius: 9px;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
-	border-bottom: 1px solid #CCC;
+	border-bottom: 2px solid #CCC;
 	/*background: rgba(0,0,0,0.9);*/
-	background: rgba(0,0,0,0.7);
+	background:black;
 
 }
 
@@ -635,19 +650,24 @@ div.input.edui-default{
 .communication li{
 	list-style: none;
 	float: left;
-	width: 960px;
+	width: 1040px;
+	margin-left: -40px;
+	margin-bottom: 3px;
 	padding-top: 5px;
 	padding-bottom: 8px;
-	border-bottom: 1px solid #CCC;
+	border-bottom: 2px solid #CCC;
+	border-radius: 7px;
+	background: white;
 }
 
 .talkmain{
 	float: left;
-	width: 700px;
+	width: 800px;
 }
 
 .talkcontent{
 	word-break:break-all;
+	font-size: 0.8em;
 }
 
 .talkcontent a{
@@ -661,6 +681,7 @@ div.input.edui-default{
 .timeshow{
 	float: right;
 	font-size: 0.8em;
+	margin-right: 20px;
 }
 
 #topiccondata{
