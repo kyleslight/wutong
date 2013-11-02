@@ -45,17 +45,17 @@
 		<div id="lrBoxWrap">
 			<div class="lrBox" id="loginBox">
 				<form id="loginForm" name="loginForm" action="#" method="post">
-					<div class="loginList"><span class="inputTip">用户名/邮箱</span> <input class="input" type="text" name="username" placeholder="用户名/邮箱" /></div>
-					<div class="loginList"><span class="inputTip">密码</span>  <input class="input" type="password" name="password" placeholder="密码" /></div>
+					<div class="loginList"><span class="inputTip">用户名/邮箱</span> <input class="input" id="loginUsername" type="text" name="username" placeholder="用户名/邮箱" /></div>
+					<div class="loginList"><span class="inputTip">密码</span>  <input class="input" id="loginPassword" type="password" name="password" placeholder="密码" /></div>
 					<div id="loginListlast" class="loginList"><a href="#" id="loginSubmitButton" class="formButton" name="submitButton" value="登陆">登入</a> <a href="#" id="loginBack" >返回</a></div>
 				</form>
 			</div>
 			<div class="lrBox" id="registerBox">
 				<form id="registerForm" name="registerForm" action="#" method="post">
-					<div class="registerList"><span class="inputTip">用户名</span> <input class="input" type="text" name="username" placeholder="用户名" /></div>
-					<div class="registerList"><span class="inputTip">邮箱</span> <input class="input" type="text" name="email" placeholder="邮箱" /></div>
-					<div class="registerList"><span class="inputTip">密码</span> <input class="input" type="password" name="password" placeholder="密码" /></div>
-					<div class="registerList"><span class="inputTip">重复密码</span> <input class="input" type="password" name="repassword" placeholder="重复密码" /></div>
+					<div class="registerList"><span class="inputTip">用户名</span> <input class="input" id="registerUsername" type="text" name="username" placeholder="用户名" /></div>
+					<div class="registerList"><span class="inputTip">邮箱</span> <input class="input" id="registerEmail" type="text" name="email" placeholder="邮箱" /></div>
+					<div class="registerList"><span class="inputTip">密码</span> <input class="input" id="registerPassword" type="password" name="password" placeholder="密码" /></div>
+					<div class="registerList"><span class="inputTip">重复密码</span> <input class="input" id="registerRepassword" type="password" name="repassword" placeholder="重复密码" /></div>
 					<div id="registerListLast" class="registerList"><a href="#" id="registerSubmitButton" class="formButton" name="submitButton" value="注册">注册</a> <a href="#" id="registerBack">返回</a></div>
 				</form>
 			</div>
@@ -129,7 +129,7 @@
 				</div>
 				<!-- member -->
 				<div class="member" id="groupOptionShow2">
-					<div  class="memberCard">							
+					<div  class="memberCard">
 						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
 						<div class="memberBasic">
 							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
@@ -147,7 +147,7 @@
 							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
 						</div>
 					</div>
-					<div  class="memberCard">							
+					<div  class="memberCard">
 						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
 						<div class="memberBasic">
 							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
@@ -165,7 +165,7 @@
 							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
 						</div>
 					</div>
-					<div  class="memberCard">							
+					<div  class="memberCard">
 						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
 						<div class="memberBasic">
 							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
@@ -183,7 +183,7 @@
 							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
 						</div>
 					</div>
-					<div  class="memberCard">							
+					<div  class="memberCard">
 						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
 						<div class="memberBasic">
 							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
@@ -201,7 +201,7 @@
 							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
 						</div>
 					</div>
-					<div  class="memberCard">							
+					<div  class="memberCard">
 						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
 						<div class="memberBasic">
 							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
@@ -219,7 +219,7 @@
 							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
 						</div>
 					</div>
-					<div  class="memberCard">							
+					<div  class="memberCard">
 						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
 						<div class="memberBasic">
 							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
@@ -237,7 +237,7 @@
 							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
 						</div>
 					</div>
-					<div  class="memberCard">							
+					<div  class="memberCard">
 						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
 						<div class="memberBasic">
 							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
@@ -255,7 +255,7 @@
 							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
 						</div>
 					</div>
-					<div  class="memberCard">							
+					<div  class="memberCard">
 						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
 						<div class="memberBasic">
 							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
@@ -273,7 +273,7 @@
 							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
 						</div>
 					</div>
-					<div  class="memberCard">							
+					<div  class="memberCard">
 						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
 						<div class="memberBasic">
 							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
@@ -291,7 +291,7 @@
 							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
 						</div>
 					</div>
-					<div  class="memberCard">							
+					<div  class="memberCard">
 						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
 						<div class="memberBasic">
 							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
@@ -309,7 +309,7 @@
 							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
 						</div>
 					</div>
-					<div  class="memberCard">							
+					<div  class="memberCard">
 						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
 						<div class="memberBasic">
 							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
@@ -327,7 +327,7 @@
 							<div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
 						</div>
 					</div>
-					<div  class="memberCard">							
+					<div  class="memberCard">
 						<img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
 						<div class="memberBasic">
 							<div class="memberName">Kyleslight<span class="memberHonour">站长</span></div>
@@ -357,29 +357,29 @@
 					</div>
 					<div id="worksArticals">
 						<li class="worksArticalShow">
-								
-							<div class="artical">	
+
+							<div class="artical">
 								<div class="articalBasicInfo">
 									<img src="{{ static_url("css/image/test.png") }}" class="articAluthorImage">
 									<a href="#" class="articalTitle">odC VOL.I chapter5</a>
 									<a href="#" class="articalAuthor">Kyleslight</a>
-								</div>								
-								
-								
+								</div>
+
+
 								<div class="articalTag">Tags：<a href="#">长篇小说</a><a href="#">odC</a><a href="#">依诺</a></div>
 								<div class="articaltime">2-14 13:18</div>
 							</div>
 						</li>
 						<li class="worksArticalShow">
-							<div class="artical">	
+							<div class="artical">
 								<div class="articalBasicInfo">
 									<img src="{{ static_url("css/image/test7.jpg") }}" class="articAluthorImage">
 									<a href="#" class="articalTitle">Ubuntu下使用MentoHUST代替锐捷认证上网</a>
 									<a href="#" class="articalAuthor">Longerhead</a>
-								</div>			
-													
-								
-								<div class="articalTag">Tags：	
+								</div>
+
+
+								<div class="articalTag">Tags：
 								<a href="#">泛科技</a>
 								<a href="#">Linux</a>
 								<a href="#">MentoHust</a>
@@ -392,7 +392,7 @@
 							</div>
 						</li>
 					</div>
-					<div class="articalDirectionOption"><a href="#">上一页</a><a href="#">下一页</a><a href="#" class="optionBack">返回</a></div>		
+					<div class="articalDirectionOption"><a href="#">上一页</a><a href="#">下一页</a><a href="#" class="optionBack">返回</a></div>
 				</div>
 				<div class="latestTopic" id="groupOptionShow4">
 					<li class="latestTopicList">
@@ -480,7 +480,7 @@
 		<script type="text/javascript">SyntaxHighlighter.all();</script>
 		<script type="text/javascript">
 			var editor = new UE.ui.Editor();
-			textarea:'#topicData'; 
+			textarea:'#topicData';
 			editor.render('topicData');
 		</script>
 	</body>

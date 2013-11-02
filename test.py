@@ -1,7 +1,7 @@
+import logging
 from settings import get_settings
 from apps.db import db_backend
 from apps.util import createpasswd
-import logging
 
 if __name__ == "__main__":
     settings = get_settings()

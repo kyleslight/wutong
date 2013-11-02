@@ -8,11 +8,43 @@ var _showwel_flag = true;
 var _last_post_id;
 
 $(document).ready(function(){
-    // test
-
-
     //check sex of the member
     renderMaleAndFemale();
+    // $.getJSON("/foo", function (data) {
+    //     data.groupName;
+    // });
+
+    $("#loginSubmitButton").click(function() {
+        var loginUsername=$("#loginUsername").val();
+        var loginPassword=$("#loginPassword").val();
+        $.post("/login", {
+            username:loginUsername,
+            password:loginPassword
+        }, function (response) {
+            if (response == "success") {
+                // todo
+            } else if (response == "failed") {
+
+            }
+        });
+    });
+
+    $("#registerSubmitButton").click(function() {
+        var registerUsername=$("#registerUsername").val();
+        var registerEmail=$("#registerEmail").val();
+        var registerPassword=$("#registerPassword").val();
+        var registerRepassword=$("#registerRepassword").val();
+        if (registerPassword!=registerRepassword) {
+            alert("password and repassword must be the same vaule");
+            return;
+        };
+        $.post("/register",{
+            username:registerUsername,
+            password:registerPassword,
+            email:registerEmail
+        });
+    });
+
 
     // login and register
     $("#login").click(function(){
@@ -72,7 +104,7 @@ $(document).ready(function(){
             _showwel_flag = false;
             setTimeout(function() {
                 _showwel_flag = true;
-            }, shortElapseTime);                   
+            }, shortElapseTime);
             checkIsOtherOptionShow();
             var indexOfDetailItem=$(".groupOptions a").index($(this));
             if (isOtherOptionShow) {
@@ -101,7 +133,7 @@ $(document).ready(function(){
                 $("#groupOptionShow"+indexOfDetailItem).removeClass("prepare").addClass("active").animate({left:'0px'},1500);
                 // isOtherOptionShow=true;
                 activeIndex=indexOfDetailItem;
-            }  
+            }
             // if (isOtherOptionShow) {
             //     $(".groupOptionShow"+activeIndex).removeClass("active").addClass("outOfView");
             //     $(".groupOptionShow"+activeIndex).animate({left:"-960px"},1500,function(){$(this).fadeOut(100,function(){$(this).removeClass("outOfView").addClass("none");$(".groupOptionShow"+indexOfDetailItem).addClass("prepare").css("left","960px").fadeIn(100,function(){$(".fourmOption").slideDown();});$(".groupOptionShow"+indexOfDetailItem).animate({left:"0px"},1500,function(){$(this).removeClass("prepare").addClass("active");});})});
@@ -126,7 +158,7 @@ $(document).ready(function(){
             //         isOtherOptionShow=false;
             //         activeIndex=indexOfDetailItem;
             //     }
-            // }  
+            // }
             return false;
         }
     })
@@ -155,13 +187,13 @@ $(document).ready(function(){
     })
     // member card effect
     $("div.memberCard").mouseover(function(){
-        $(this).css({"background-color":"#680","color":"white","cursor":"pointer"}); 
+        $(this).css({"background-color":"#680","color":"white","cursor":"pointer"});
         $(this).click(function(){
-            if ($(this).children("div.memberDetail").css("display")=="none") { 
-                $(this).css("cursor","default");    
+            if ($(this).children("div.memberDetail").css("display")=="none") {
+                $(this).css("cursor","default");
                 $(this).children("div.memberDetail").slideDown(150).css({"position":"absolute","z-index":"999999","top":"72px","opacity":"0.9"});
             }
-        })           
+        })
         return false;
     })
     $("div.memberCard").mouseleave(function(){
@@ -203,7 +235,7 @@ $(document).ready(function(){
                 submitChatData();
             }else{
                 submitTopicData();
-            }          
+            }
         }
         return false;
     });
@@ -257,7 +289,7 @@ $(document).ready(function(){
                 $("#communication").children("li").eq(i).remove();
             }
         }
-    }, 700);
+    }, 70000);
 });
 
 // function for login and register
@@ -339,7 +371,7 @@ function submitTopicData(){
 function foo() {
     $.post("/test", {
         option: "send_normal",
-        data: data    
+        data: data
     });
 }
 */

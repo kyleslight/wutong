@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from tornado.options import define, options
 from os import path, environ
 from uuid import uuid5, NAMESPACE_OID
+from tornado.options import define, options
 
-def get_settings(settings={}):
-    if settings: return settings
+_settings = None
+def get_settings(key=None):
+    global _settings
+    if key:
+        return _settings[key]
+    elif _settings:
+        return _settings
 
     define("host", default="localhost", type=str)
     define("port", default=8888, type=int)
@@ -17,11 +22,11 @@ def get_settings(settings={}):
     define("dbpasswd", default=environ.get("WUTONG_PASSWD", "fz"), type=str)
     options.parse_command_line()
 
-    settings = dict(
+    _settings = dict(
             sitename=u"梧桐".encode("utf8"),
             template_path=path.join(path.dirname(__file__), "templates"),
             static_path=path.join(path.dirname(__file__), "static"),
-            xsrf_cookies=True,
+            xsrf_cookies=False,
             login_url="/login",
             host=options.host,
             port=options.port,
@@ -30,6 +35,6 @@ def get_settings(settings={}):
                 options.dbname, options.dbuser, options.dbpasswd,
                 options.dbhost, options.dbport),
         )
-    settings["cookie_secret"] = uuid5(NAMESPACE_OID, settings["sitename"])
+    _settings["cookie_secret"] = str(uuid5(NAMESPACE_OID, _settings["sitename"]))
 
-    return settings
+    return _settings

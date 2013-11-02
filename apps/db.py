@@ -22,6 +22,15 @@ class db_backend:
         self.execute("DELETE FROM \"artical\" * CASCADE")
         self.execute("DELETE FROM \"group\" * CASCADE")
 
+    def is_user_exists(self, email=None, name=None):
+        if email and name:
+            if not self.execute("""
+                        SELECT id FROM \"user\"
+                         WHERE email=%s OR name=%s""",
+                        email, name):
+                return False
+        return True
+
     def do_user_register(self, email=None, password=None, name=None):
         if email and password and name:
             return self.execute("""
@@ -31,26 +40,35 @@ class db_backend:
                         email, password, name)
         return False
 
-    def do_user_login(self, email=None, password=None):
-        if email and password:
+    def do_user_login(self, account=None, password=None):
+        if account and password:
             result = self.execute("""
-                          SELECT * FROM \"user\"
-                           WHERE email=%s AND password=%s""",
-                          email, password)
+                          SELECT id FROM \"user\"
+                           WHERE password=%s
+                             AND (email=%s OR name=%s)""",
+                          password, account, account)
             if result:
-                result = result[0]
-                result = dict(
-                        id=result[0],
-                        email=result[1],
-                        password=result[2],
-                        name=result[3],
-                        realname=result[4],
-                        register_date=result[5],
-                        total_grade=result[6],
-                    )
-        if not result:
-            result = None
+                return str(result[0][0])
+        return False
+
+    def get_user(self, id):
+        result = self.execute("""
+                      SELECT * FROM \"user\"
+                       WHERE id = %s""",
+                      id)
+        if result:
+            result = result[0]
+            result = dict(
+                    id=str(result[0]),
+                    email=str(result[1]),
+                    password=str(result[2]),
+                    name=str(result[3]),
+                    realname=str(result[4]),
+                    register_date=str(result[5]),
+                    total_grade=str(result[6]),
+                )
         return result
+
 
 class Pool:
 

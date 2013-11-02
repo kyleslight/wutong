@@ -9,7 +9,7 @@ def main():
     settings = get_settings()
     application = Application(urls, **settings)
     http_server = HTTPServer(application)
-    http_server.listen(settings["port"], settings["localhost"])
+    http_server.listen(settings["port"], settings["host"])
     IOLoop.instance().start()
 
 if __name__ == "__main__":
