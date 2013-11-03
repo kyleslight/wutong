@@ -1,5 +1,7 @@
+from tornado import escape
+from tornado.web import authenticated
 from base import BaseHandler
-from util import createpasswd
+from util import createpasswd, echo
 
 class LoginHandler(BaseHandler):
     def get(self):
@@ -12,6 +14,7 @@ class LoginHandler(BaseHandler):
             password = createpasswd(password)
             user_id = self.db.do_user_login(account=username, password=password);
             if user_id:
+                user_id = str(user_id)
                 self.set_secure_cookie("user_id", user_id, 5, httponly=True)
                 self.write("success")
                 return
@@ -44,4 +47,12 @@ class RegisterHandler(BaseHandler):
                 return
         self.write("failed")
 
+class UserinfoHandler(BaseHandler):
+
+    @authenticated
+    def get(self):
+        userinfo = self.get_current_user()
+        userinfo["register_date"] = str(userinfo["register_date"])
+        userinfo = escape.json_encode(userinfo)
+        self.write(userinfo)
 

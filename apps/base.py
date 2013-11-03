@@ -15,7 +15,7 @@ class BaseHandler(RequestHandler):
     def get_current_user(self):
         user_id = self.get_user_id()
         if user_id:
-            return self.db.get_user(user_id)
+            return self.db.get_user_info(user_id)
 
     def get(self):
         self.write_error(403)

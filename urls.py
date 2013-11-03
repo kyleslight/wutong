@@ -7,5 +7,6 @@ urls = [(r"/", group.IndexHandler),
         (r"/login", account.LoginHandler),
         (r"/logout", account.LogoutHandler),
         (r"/register", account.RegisterHandler),
+        (r"/account/userinfo", account.UserinfoHandler),
         (r"/group/(\w+)/message", group.MessageHandler),
         ]

@@ -13,7 +13,7 @@ $(document).ready(function(){
     // $.getJSON("/foo", function (data) {
     //     data.groupName;
     // });
-    
+
     // navrighton effect
     $("#username").mouseover(function(){
         $(this).css("background","white");
@@ -34,14 +34,19 @@ $(document).ready(function(){
             username:loginUsername,
             password:loginPassword
         }, function (response) {
-            $.getJSON("/login", function (data) {
-                var username=data.username;
-                alert(username);
-            });
             if (response == "success") {
+                // TODO: process user_info
+                var username;
+                $.getJSON("/account/userinfo", function (data) {
+                    console.log(data);
+                    username = data.penname;
+                });
+
                 $(".navrightoff").fadeOut(function(){
                     $(".navrighton").fadeIn();
                     $("#username").children().val(username);
+                    // TODO: you should change this
+                    $("#usernameHover").text(username);
                     loginBoxFade();
                 });
             } else if (response == "failed") {
@@ -124,7 +129,7 @@ $(document).ready(function(){
             _showwel_flag = false;
             setTimeout(function() {
                 _showwel_flag = true;
-            }, shortElapseTime);                   
+            }, shortElapseTime);
             checkIsOtherOptionShow();
             var indexOfDetailItem=$(".groupOptions a").index($(this));
             if (isOtherOptionShow) {
@@ -146,10 +151,10 @@ $(document).ready(function(){
             }else{
                 $("#groupOptionShow"+indexOfDetailItem).addClass("prepare").css("left","960px").show(function(){
                     $(".groupItem").slideDown(500,function(){
-                        $("#groupOptionShow"+indexOfDetailItem).removeClass("prepare").addClass("active").animate({left:'0px'},1500);    
-                    });                                   
+                        $("#groupOptionShow"+indexOfDetailItem).removeClass("prepare").addClass("active").animate({left:'0px'},1500);
+                    });
                 });
-            }  
+            }
             return false;
         }
     })
@@ -398,7 +403,7 @@ function submitTopicData(){
 function foo() {
     $.post("/test", {
         option: "send_normal",
-        data: data    
+        data: data
     });
 }
 */

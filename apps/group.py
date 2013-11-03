@@ -5,9 +5,9 @@ from base import BaseHandler
 
 class IndexHandler(BaseHandler):
 
-    def get(self, id):
-        self.render("group.html")
-        to_basestring(self.render_string("message.html", message=message))
+    def get(self, id=None):
+        # message[] = to_basestring(self.render_string("message.html", messages=messages))
+        self.render("group.html", messages=[])
 
     @authenticated
     def post(self, id):

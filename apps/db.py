@@ -1,3 +1,5 @@
+# encoding=utf8
+import uuid
 import psycopg2
 from psycopg2.extensions import TRANSACTION_STATUS_IDLE
 
@@ -16,73 +18,148 @@ class db_backend:
     def execute(self, sql, *args):
         return self.pool.execute(sql, *args)
 
-    def do_delete_all(self):
+    def do_delete_all_user(self):
         self.execute("DELETE FROM \"user\" * CASCADE")
-        self.execute("DELETE FROM \"user_info\" * CASCADE")
+
+    def do_delete_all_article(self):
         self.execute("DELETE FROM \"artical\" * CASCADE")
+
+    def do_delete_all_group(self):
         self.execute("DELETE FROM \"group\" * CASCADE")
 
-    def is_user_exists(self, email=None, name=None):
-        if email and name:
+    def is_user_exists(self, email=None, penname=None):
+        if email and penname:
             if not self.execute("""
-                        SELECT id FROM \"user\"
-                         WHERE email=%s OR name=%s""",
-                        email, name):
+                        SELECT uid FROM \"user\"
+                         WHERE email=%s OR penname=%s""",
+                        email, penname):
                 return False
         return True
 
-    def do_user_register(self, email=None, password=None, name=None):
-        if email and password and name:
+    def do_user_register(self, email=None, password=None, penname=None):
+        if email and password and penname:
+            # TODO: remove `status`
             return self.execute("""
                         INSERT INTO \"user\"
-                               (email,password,name)
+                               (email,password,penname)
                         VALUES (%s,%s,%s)""",
-                        email, password, name)
-        return False
+                        email, password, penname)
 
+    # 邮箱认证通过
+    def do_email_check(self, uid):
+        if uid:
+            if self.execute("""
+                    UPDATE \"user\"
+                       SET (status)
+                         = (%s)
+                     WHERE uid = %s""",
+                    True, uid):
+                return self.execute("""
+                            INSERT INTO \"user_info\"
+                                   (uid)
+                            VALUES (%s)""",
+                            uid)
+
+    # return uid
     def do_user_login(self, account=None, password=None):
         if account and password:
             result = self.execute("""
-                          SELECT id FROM \"user\"
-                           WHERE password=%s
-                             AND (email=%s OR name=%s)""",
-                          password, account, account)
+                          SELECT uid FROM \"user\"
+                           WHERE status=true
+                             AND (email=%s OR penname=%s OR phone=%s)
+                             AND password=%s""",
+                          account, account, account, password)
             if result:
-                return str(result[0][0])
-        return False
+                return result[0][0]
 
-    def get_user(self, id):
+    def get_user_id(self, account=None):
+        if account:
+            result = self.execute("""
+                          SELECT uid FROM \"user\"
+                           WHERE email=%s
+                              OR penname=%s
+                              OR phone=%s""",
+                          account, account, account)
+            if result:
+                return result[0][0]
+
+    def get_user_info(self, uid):
         result = self.execute("""
-                      SELECT * FROM \"user\"
-                       WHERE id = %s""",
-                      id)
+                      SELECT * FROM v_user_info
+                       WHERE uid = %s""",
+                      uid)
         if result:
             result = result[0]
-            result = dict(
-                    id=str(result[0]),
-                    email=str(result[1]),
-                    password=str(result[2]),
-                    name=str(result[3]),
-                    realname=str(result[4]),
-                    register_date=str(result[5]),
-                    total_grade=str(result[6]),
+            # TODO
+            grade = 0
+            # grade = self.execute("""
+            #              SELECT *
+            #                FROM v_user_grade
+            #               WHERE uid = %s""",
+            #              uid)[0][0]
+            return dict(
+                    uid=uid,
+                    email=result[0],
+                    penname=result[1],
+                    phone=result[2],
+                    intro=result[3],
+                    motton=result[4],
+                    avatar=result[5],
+                    realname=result[6],
+                    sex=result[7],
+                    age=result[8],
+                    address=result[9],
+                    register_date=result[10],
+                    warnned_times=result[11],
+                    grade=grade,
                 )
-        return result
 
-    def do_join_group(self, user_id=None, group_id=None):
-        if user_id and group_id:
+    # TODO
+    def do_join_group(self, uid=None, gid=None):
+        if uid and gid:
             return self.execute("""
                         INSERT INTO \"group_user\"
-                               (group_id,user_id)
-                        VALUES (%s,%s)
-                    """,
-                    group_id, user_id)
-        return False
+                               (gid,uid)
+                        VALUES (%s,%s)""",
+                        gid, uid)
 
-    def get_user_group(self, user_id):
-        self.execute("""
-             SELECT id FROM \"group_user\"
-              WHERE """)
+    def get_group(self, gid):
+        result = self.execute("""
+                     SELECT * FROM \"group\"
+                      WHERE gid = %s""",
+                      gid)
+        if result:
+            result = result[0]
+            return dict(
+                    gid=gid,
+                    name=result[1],
+                    foundTime=result[2],
+                    score=result[3],
+                    intro=result[4],
+                    motton=result[5],
+                    founder=result[6],
+                    publicity=result[7],
+                )
+
+    def get_group_messages(self, gid, size=30, offset=0):
+        results = self.execute("""
+                       SELECT * FROM \"group_message\"
+                        WHERE gid = %s
+                        LIMIT %s
+                       OFFSET %s""",
+                       gid, size, offset)
+        msgs = []
+        for res in results:
+            msgs.append(dict(
+                    gmid=res[0],
+                    gid=res[1],
+                    uid=res[2],
+                    content=res[3],
+                    title=res[4],
+                    submit_time=res[5],
+                    reply_gmid=res[6],
+                ))
+        return msgs
 
 
 class Pool:
