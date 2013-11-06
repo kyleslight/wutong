@@ -2,8 +2,15 @@
 # -*- coding: utf-8 -*-
 
 from apps import group, account
+from tornado.web import RequestHandler
+import logging
 
-urls = [(r"/", group.IndexHandler),
+class RouteHandler(RequestHandler):
+	def get(self, filename="group.html"):
+		logging.info(filename)
+		self.render(filename, messages=[])
+
+urls = [(r"/(.*)", RouteHandler),
         (r"/login", account.LoginHandler),
         (r"/logout", account.LogoutHandler),
         (r"/register", account.RegisterHandler),

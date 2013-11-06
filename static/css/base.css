@@ -24,7 +24,7 @@ img{
 }
 
 input{
-	border: 2px solid #680;
+	border: 1px solid #680;
 	background: white !important;
 }
 
@@ -204,6 +204,7 @@ textarea{
 }
 
 .header li{
+	float: left;
 	display: inline-block;
 	list-style: none;
 	padding-top: 25px;
@@ -211,7 +212,7 @@ textarea{
 	padding-right: 15px;
 	height: 47px;
 	margin-right: 10px;
-	display: inline-block;
+	display: block;
 	transition: 0.5s;
 	-moz-transition:0.5s;
 	-webkit-transition:0.5s;
@@ -290,6 +291,7 @@ textarea{
 	padding-left: 0;
 	padding-right: 0;
 	margin-right: 15px;
+	min-width: 84px;
 }
 
 #username:hover{
@@ -314,10 +316,14 @@ textarea{
 }
 
 .userExpand div{
-	padding: 10px;
+	padding: 5px 10px;
 	text-align: center;
 	border-top: 2px solid rgba(102,136,0,0.9);
 	color: #680;
+	transition: 0.5s;
+	-moz-transition: 0.5s;
+	-webkit-transition: 0.5s;
+	-o-transition: 0.5s;
 }
 
 .userExpand div:hover{
