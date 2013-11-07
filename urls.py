@@ -15,5 +15,5 @@ urls = [(r"/(.*)", RouteHandler),
         (r"/logout", account.LogoutHandler),
         (r"/register", account.RegisterHandler),
         (r"/account/userinfo", account.UserinfoHandler),
-        (r"/group/(\w+)/message", group.MessageHandler),
+        (r"/group/(\w+)/message", group.MessageHandler)
         ]
