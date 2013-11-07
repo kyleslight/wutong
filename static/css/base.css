@@ -234,6 +234,15 @@ textarea{
 	color: #680;
 }
 
+#thisPage{
+	background:rgba(255,255,255,0.3);
+	color: #680;
+}
+
+#thisPage:hover{
+	background: white;
+}
+
 .navcontainer{
 	height:71px;
 	background: transparent;

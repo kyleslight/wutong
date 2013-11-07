@@ -33,7 +33,7 @@
                         <li>小品</li>
                     </a>
                     <a id="group" href="#">
-                        <li>小组</li>
+                        <li id="thisPage">小组</li>
                     </a>
                 </div>
                 <div class="navrighton">
@@ -619,13 +619,16 @@
                         </form>
                         <div id="communicationConWrap">
                             <div class="communication" id="communication">
-                                {% for msg in messages %}
+                                <!-- {% for msg in messages %}
 	                                {{ msg }}
-                                {% end %}
+                                {% end %} -->
                                 <li id='groupWelcomeChat'>
                                     <a href='#'><img src='static/css/image/test.png'/></a>
                                     <div class='talkmain'>
                                         <div class='username'><a href='#'>Kyleslight</a></div>
+                                        <div class='timeshow'>
+                                            --:--
+                                        </div>
                                         <div class='talkcontent'>
                                             <br/>
                                             首先欢迎来到梧桐小组<br/><br/>
@@ -639,9 +642,7 @@
                                             嗯，那么就开始一段在梧桐小组的难忘旅程吧~
                                         </div>
                                     </div>
-                                    <div class='timeshow'>
-                                        --:--
-                                    </div>
+                                    
                                 </li>
                             </div>
                         </div>
