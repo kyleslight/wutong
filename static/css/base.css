@@ -46,7 +46,7 @@ textarea{
 	padding-left: 5px;
 	padding-top: 7px;
 	padding-bottom: 7px;
-	width: 700px;
+	width: 900px;
 	border-radius: 3px;
 }
 
@@ -222,6 +222,7 @@ textarea{
 .header li:hover{
 	background: white;
 	color: #680;
+	/*box-shadow:2px 2px 3px #CCC;*/
 }
 
 .header a{
@@ -359,6 +360,7 @@ textarea{
 .userExpand div:hover{
 	background: #680;
 	color: white;
+	box-shadow:2px 2px 3px #aaaaaa;
 }
 
 .navrightonOption{

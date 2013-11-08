@@ -28,6 +28,7 @@ textarea,input{
 
 .groupWarp{
 	float: left;
+	width: 1062px;
 }
 
 .forumImage img{
@@ -78,7 +79,8 @@ textarea,input{
 	height: 55px;
 	border-radius: 7px;
 	margin-top: 10px;
-	margin-right: 20px;
+	margin-right: 10px;
+	/*box-shadow:2px 2px 3px #aaaaaa;*/
 }
 
 .groupInfoCon{
@@ -102,9 +104,21 @@ textarea,input{
 	color: black;
 }
 
+#groupTitleName{
+	float: left;
+	margin-right: 10px;
+}
+
+#titleCut{
+	float: left;
+}
+
 #groupMotto{
-	width: 200px;
+	float: left;
+	max-width: 430px;
 	font-size: 25px;
+	margin-left: 7px;
+	margin-top: 30px;
 }
 
 .groupItem{
@@ -472,6 +486,12 @@ textarea,input{
 	background: #680;
 	color: white;
 	cursor: pointer;
+	/*-ms-transform:rotate(7deg); 
+	-moz-transform:rotate(7deg); 
+	-webkit-transform:rotate(7deg); 
+	-o-transform:rotate(7deg);
+	transform:rotate(7deg);
+*/	box-shadow:2px 2px 3px #aaaaaa;
 }
 
 .latestTopic img{
@@ -671,6 +691,10 @@ div.input.edui-default{
 .talkcontent{
 	word-break:break-all;
 	font-size: 0.9em;
+}
+
+.talkcontent a{
+	color: #680;
 }
 
 .talkcontent p{

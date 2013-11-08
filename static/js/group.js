@@ -13,6 +13,11 @@ $(document).ready(function(){
     // $.getJSON("/foo", function (data) {
     //     data.groupName;
     // });
+    var groupMottoPrimaryWidth=$("#groupMotto").width();
+    if(groupMottoPrimaryWidth>425){
+            $("#groupMotto").css({"margin-top":"2px"});
+    }
+
     $.getJSON("/account/userinfo", function (data) {
         var username;
         console.log(data);
@@ -107,12 +112,12 @@ $(document).ready(function(){
         if ($(".topicSend").css("display")=="none") {
             $(".chatSend").slideUp(500,function(){
                 $(".topicSend").slideDown(1000);
-                $("#changeSendState").html("切换为聊天模式");
+                $("#changeSendState").html("切换至聊天模式");
             });
         }else{
             $(".topicSend").slideUp(1000,function(){
                 $(".chatSend").slideDown(500);
-                $("#changeSendState").html("切换为话题模式");
+                $("#changeSendState").html("切换至话题模式");
             });
         }
         return false;

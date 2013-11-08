@@ -210,7 +210,7 @@
 
         //,initialContent:'欢迎使用ueditor!'    //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
 
-        ,initialFrameWidth:900  //初始化编辑器宽度,默认1000
+        ,initialFrameWidth:1060  //初始化编辑器宽度,默认1000
         ,initialFrameHeight:450 //初始化编辑器高度,默认320
 
         //,autoClearinitialContent:true //是否自动清除编辑器初始内容，注意：如果focus属性设置为true,这个也为真，那么编辑器一上来就会触发导致初始化的内容看不到了
@@ -227,7 +227,7 @@
 
         //,readonly : false //编辑器初始化结束后,编辑区域是否是只读的，默认是false
 
-        //,zIndex : 900     //编辑器层级的基数,默认是900
+        ,zIndex : 90000     //编辑器层级的基数,默认是900
 
         //,imagePopup:true      //图片操作的浮层开关，默认打开
 
