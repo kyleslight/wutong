@@ -10,10 +10,11 @@ class RouteHandler(RequestHandler):
 		logging.info(filename)
 		self.render(filename, messages=[])
 
-urls = [(r"/(.*)", RouteHandler),
+urls = [
         (r"/login", account.LoginHandler),
         (r"/logout", account.LogoutHandler),
         (r"/register", account.RegisterHandler),
         (r"/account/userinfo", account.UserinfoHandler),
-        (r"/group/(\w+)/message", group.MessageHandler)
+        (r"/group/(\w+)/message", group.MessageHandler),
+		(r"/(.*)", RouteHandler),
         ]

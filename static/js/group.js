@@ -13,115 +13,16 @@ $(document).ready(function(){
     // $.getJSON("/foo", function (data) {
     //     data.groupName;
     // });
-
-    // navrighton effect
-    $("#username").mouseover(function(){
-        $(this).css("background","white");
-        $(this).children("#usernameHover").css("color","#680");
-        $(".userExpand").show();
-    });
-    $("#username").mouseleave(function(){
-        $(this).css("background","transparent");
-        $(this).children("#usernameHover").css("color","white");
-        $(".userExpand").hide();
-    })
-
-    // login and register
-    $("#loginSubmitButton").click(function() {
-        var loginUsername=$("#loginUsername").val();
-        var loginPassword=$("#loginPassword").val();
-        $.post("/login", {
-            username:loginUsername,
-            password:loginPassword
-        }, function (response) {
-            if (response == "success") {
-                // TODO: process user_info
-                var username;
-                $.getJSON("/account/userinfo", function (data) {
-                    console.log(data);
-                    username = data.penname;
-                });
-
-                $(".navrightoff").fadeOut(function(){
-                    $(".navrighton").fadeIn();
-                    $("#username").children().val(username);
-                    // TODO: you should change this
-                    $("#usernameHover").text(username);
-                    loginBoxFade();
-                });
-            } else if (response == "failed") {
-                alert("loginfailed");
-            }
+    $.getJSON("/account/userinfo", function (data) {
+        var username;
+        console.log(data);
+        username = data.penname;
+        $(".navrightoff").fadeOut(10,function(){
+            $(".navrighton").fadeIn(10);
+            $("#username").children().val(username);
+            $("#usernameHover").text(username);
         });
-    });
-
-    $("#registerSubmitButton").click(function() {
-        var registerUsername=$("#registerUsername").val();
-        var registerEmail=$("#registerEmail").val();
-        var registerPassword=$("#registerPassword").val();
-        var registerRepassword=$("#registerRepassword").val();
-        if (registerPassword!=registerRepassword) {
-            alert("password and repassword must be the same vaule");
-            return;
-        };
-        alert(registerEmail);
-        $.post("/register",{
-            username:registerUsername,
-            password:registerPassword,
-            email:registerEmail
-        },function(){
-            registerBoxFade();
-        });
-    });
-    // logout
-    $("#logout").click(function(){
-        // logout function
-        $.post("/logout");
-        $(".navrighton").fadeOut(function(){
-            $(".navrightoff").fadeIn();
-        });
-        // $("#username").children().val(username);
-    })
-
-    // loginBox and registerBox
-    $("#login").click(function(){
-        if (_showwel_flag == true){
-            _showwel_flag = false;
-            setTimeout(function() {
-                _showwel_flag = true;
-            }, elapseTime);
-            if (isRegisterBox||isLoginBox) {
-                return;
-            }else{
-                loginBoxShow();
-            }
-        }
-        return false;
-    });
-    $("#loginBack").click(function(){
-        loginBoxFade();
-        isLoadBox=false;
-        return false;
-    });
-    $("#register").click(function(){
-        if (_showwel_flag == true){
-            _showwel_flag = false;
-            setTimeout(function() {
-                _showwel_flag = true;
-            }, elapseTime);
-            if (isRegisterBox||isLoginBox) {
-                return;
-            }else{
-                registerBoxShow();
-            }
-        }
-        return false;
-    });
-    $("#registerBack").click(function(){
-        registerBoxFade();
-        isRegisterBox=false;
-        return false;
-    });
+    });        
 
     // groupItem
     $(".groupOptions a").click(function(){
@@ -137,7 +38,7 @@ $(document).ready(function(){
                 $("#groupOptionShow"+activeIndex).animate({left:"-960px"},1500,function(){
                     $(this).slideUp(400);
                     $("#groupOptionShow"+indexOfDetailItem).addClass("prepare").css("left","960px").show(function(){
-                        var prepareHeight=$(this).height()+32+"px";
+                        var prepareHeight=$(this).height()+25+"px";
                         $(".groupItem").animate({height:prepareHeight},1000,function(){
                             $("#groupOptionShow"+activeIndex).addClass("none");
                         });
@@ -291,51 +192,6 @@ $(document).ready(function(){
         }
     }, 70000);
 });
-
-// function for login and register
-function loginBoxShow(){
-    $("#loginBox").show().css("opacity","0");
-    var heightOfLRBox=$("#loginBox").height()+"px";
-    $("#lrBoxWrap").animate({height:heightOfLRBox},1000,function(){
-        $("#loginBox").animate({opacity:1.0},1000,function(){
-            isLoginBox=true;
-            isRegisterBox=false;
-        });
-    });
-}
-
-
-function loginBoxFade(){
-    $("#loginBox").animate({opacity:0.0},1000,function(){
-        $("#lrBoxWrap").animate({height:"0"},1000,function(){
-            $("#loginBox").hide();
-            isLoginBox=false;
-            isRegisterBox=false;
-        });
-    })
-}
-
-function registerBoxShow(){
-    $("#registerBox").show().css("opacity","0");
-    var heightOfLRBox=$("#registerBox").height()+"px";
-    $("#lrBoxWrap").animate({height:heightOfLRBox},1000,function(){
-        $("#registerBox").animate({opacity:1.0},1000,function(){
-            isLoginBox=false;
-            isRegisterBox=true;
-        });
-    });
-}
-
-function registerBoxFade(){
-    $("#registerBox").animate({opacity:0.0},1000,function(){
-        $("#lrBoxWrap").animate({height:"0"},1000,function(){
-            $("#registerBox").hide();
-            isLoginBox=false;
-            isRegisterBox=false;
-        });
-    })
-}
-
 
 // function for submit data
 function submitChatData(){

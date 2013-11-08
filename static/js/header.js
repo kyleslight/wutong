@@ -22,51 +22,32 @@ $(document).ready(function(){
 
     // login and register
     $("#loginSubmitButton").click(function() {
-        var loginUsername=$("#loginUsername").val();
-        var loginPassword=$("#loginPassword").val();
-        $.post("/login", {
-            username:loginUsername,
-            password:loginPassword
-        }, function (response) {
-            if (response == "success") {
-                // TODO: process user_info
-                var username;
-                $.getJSON("/account/userinfo", function (data) {
-                    console.log(data);
-                    username = data.penname;
-                });
-
-                $(".navrightoff").fadeOut(function(){
-                    $(".navrighton").fadeIn();
-                    $("#username").children().val(username);
-                    // TODO: you should change this
-                    $("#usernameHover").text(username);
-                    loginBoxFade();
-                });
-            } else if (response == "failed") {
-                alert("loginfailed");
-            }
-        });
+        loginSubmit();
     });
+    // quick login
+    $("#loginPassword").focus(function(){
+    	$(window).keyup(function(e){
+	        var keyCode=e.keyCode;
+	        if (keyCode==13) {
+	           	loginSubmit();
+	        }
+	        return false;
+	    });
+    })
 
     $("#registerSubmitButton").click(function() {
-        var registerUsername=$("#registerUsername").val();
-        var registerEmail=$("#registerEmail").val();
-        var registerPassword=$("#registerPassword").val();
-        var registerRepassword=$("#registerRepassword").val();
-        if (registerPassword!=registerRepassword) {
-            alert("password and repassword must be the same vaule");
-            return;
-        };
-        alert(registerEmail);
-        $.post("/register",{
-            username:registerUsername,
-            password:registerPassword,
-            email:registerEmail
-        },function(){
-            registerBoxFade();
-        });
+        registerSubmit();
     });
+    // quick register
+    $("#registerRepassword").focus(function(){
+    	$(window).keyup(function(e){
+	        var keyCode=e.keyCode;
+	        if (keyCode==13) {
+	           	registerSubmit();
+	        }
+	        return false;
+	    });
+    })
     // logout
     $("#logout").click(function(){
         // logout function
@@ -88,6 +69,10 @@ $(document).ready(function(){
                 return;
             }else{
                 loginBoxShow();
+                var loginUsernamePosition = 0;
+                var loginUsernameFocus = document.getElementById("loginUsername");
+                loginUsernameFocus.setSelectionRange(loginUsernamePosition, loginUsernamePosition);
+                loginUsernameFocus.focus();
             }
         }
         return false;
@@ -107,6 +92,10 @@ $(document).ready(function(){
                 return;
             }else{
                 registerBoxShow();
+                var registerUsernamePosition = 0;
+                var registerUsernameFocus = document.getElementById("registerUsername");
+                registerUsernameFocus.setSelectionRange(registerUsernamePosition, registerUsernamePosition);
+                registerUsernameFocus.focus();
             }
         }
         return false;
@@ -161,4 +150,51 @@ function registerBoxFade(){
             isRegisterBox=false;
         });
     })
+}
+
+function loginSubmit(){
+	var loginUsername=$("#loginUsername").val();
+        var loginPassword=$("#loginPassword").val();
+        $.post("/login", {
+            username:loginUsername,
+            password:loginPassword
+        }, function (response) {
+            if (response == "success") {
+                // TODO: process user_info
+                var username;
+                $.getJSON("/account/userinfo", function (data) {
+                    console.log(data);
+                    username = data.penname;
+                });
+
+                $(".navrightoff").fadeOut(function(){
+                    $(".navrighton").fadeIn();
+                    $("#username").children().val(username);
+                    // TODO: you should change this
+                    $("#usernameHover").text(username);
+                    loginBoxFade();
+                });
+            } else if (response == "failed") {
+                alert("loginfailed");
+            }
+        });
+}
+
+function registerSubmit(){
+	var registerUsername=$("#registerUsername").val();
+        var registerEmail=$("#registerEmail").val();
+        var registerPassword=$("#registerPassword").val();
+        var registerRepassword=$("#registerRepassword").val();
+        if (registerPassword!=registerRepassword) {
+            alert("password and repassword must be the same vaule");
+            return;
+        };
+        alert(registerEmail);
+        $.post("/register",{
+            username:registerUsername,
+            password:registerPassword,
+            email:registerEmail
+        },function(){
+            registerBoxFade();
+        });
 }
