@@ -19,6 +19,14 @@ $(document).ready(function(){
         $(this).children("#usernameHover").css("color","white");
         $(".userExpand").hide();
     })
+    $("#message").mouseover(function(){
+        $("#msgNum").css({"background":"pink","color":"darkred","box-shadow":"#FFF"});
+        $("#msgNum").addClass("tremble");
+    });
+    $("#message").mouseleave(function(){
+        $("#msgNum").css({"background":"pink","color":"#680","box-shadow":"#AAA"});
+        $("#msgNum").removeClass("tremble");
+    })
 
     // login and register
     $("#loginSubmitButton").click(function() {
