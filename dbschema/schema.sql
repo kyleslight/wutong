@@ -10,15 +10,15 @@ CREATE TABLE "user" (
     penname varchar(32) UNIQUE NOT NULL,
     phone varchar(18) UNIQUE,
     password varchar(128) NOT NULL,
-    -- 验证状态
-    status bool NOT NULL DEFAULT false,
+    -- 帐号激活了?
+    is_activated bool NOT NULL DEFAULT false,
     is_admin bool NOT NULL DEFAULT false
 );
 
 -- 用户详细信息
 DROP TABLE IF EXISTS "user_info" CASCADE;
 CREATE TABLE "user_info" (
-    uiid serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     uid serial REFERENCES "user"(uid),
     realname varchar(32),
     -- 男true 女false
@@ -64,22 +64,21 @@ DROP TABLE IF EXISTS "group" CASCADE;
 CREATE TABLE "group" (
     gid serial PRIMARY KEY,
     name varchar(32),
-    foundtime timestamp NOT NULl DEFAULT now(),
-    score int NOT NULL DEFAULT 0,
+    -- 创建者penname
+    founder varchar(200),
     intro varchar(200),
     motton varchar(100),
     -- 公告
     bulletin varchar(200),
-    -- 创建者penname
-    founder varchar(200),
     -- 公开性
-    publicity bool NOT NULL DEFAULT true
+    publicity bool NOT NULL DEFAULT true,
+    foundtime timestamp NOT NULl DEFAULT now()
 );
 
 -- 用户头衔
 DROP TABLE IF EXISTS "user_title" CASCADE;
 CREATE TABLE "user_title" (
-    utid serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     uid serial REFERENCES "user"(uid),
     name varchar(20),
     create_time timestamp NOT NULL DEFAULT now()
@@ -88,7 +87,7 @@ CREATE TABLE "user_title" (
 -- 文章-用户
 DROP TABLE IF EXISTS "article_user" CASCADE;
 CREATE TABLE "article_user" (
-    auid serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     aid serial REFERENCES "article"(aid),
     uid serial REFERENCES "user"(uid),
     -- 用户对文章的评分
@@ -105,7 +104,7 @@ CREATE TABLE "article_user" (
 -- 文章评论
 DROP TABLE IF EXISTS "article_comment" CASCADE;
 CREATE TABLE "article_comment" (
-    acid serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     aid serial REFERENCES "article"(aid),
     uid serial REFERENCES "user"(uid),
     content varchar(200) NOT NULL,
@@ -120,7 +119,7 @@ CREATE TABLE "article_comment" (
 -- 文章读者群, 类似tag
 DROP TABLE IF EXISTS "article_appositeness" CASCADE;
 CREATE TABLE "article_appositeness" (
-    aaid serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     aid serial REFERENCES "article"(aid),
     name varchar(20),
     create_time timestamp NOT NULL DEFAULT now()
@@ -129,7 +128,7 @@ CREATE TABLE "article_appositeness" (
 -- 文章tag
 DROP TABLE IF EXISTS "article_tag" CASCADE;
 CREATE TABLE "article_tag" (
-    atid serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     aid serial REFERENCES "article"(aid),
     name varchar(20),
     create_time timestamp NOT NULL DEFAULT now()
@@ -138,7 +137,7 @@ CREATE TABLE "article_tag" (
 -- 文章成就
 DROP TABLE IF EXISTS "article_honor" CASCADE;
 CREATE TABLE "article_honor" (
-    ahid serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     aid serial REFERENCES "article"(aid),
     name varchar(20),
     create_time timestamp NOT NULL DEFAULT now()
@@ -147,7 +146,7 @@ CREATE TABLE "article_honor" (
 -- 浏览过文章的user
 DROP TABLE IF EXISTS "article_view" CASCADE;
 CREATE TABLE "article_view" (
-    avid serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     aid serial REFERENCES "article"(aid),
     uid serial REFERENCES "user"(uid),
     view_time timestamp NOT NULL DEFAULT now()
@@ -156,7 +155,7 @@ CREATE TABLE "article_view" (
 -- 浏览过小组的user
 DROP TABLE IF EXISTS "group_user" CASCADE;
 CREATE TABLE "group_user" (
-    guid serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     gid serial REFERENCES "group"(gid),
     uid serial REFERENCES "user"(uid),
     -- 组长
@@ -168,21 +167,10 @@ CREATE TABLE "group_user" (
     view_time timestamp NOT NULL DEFAULT now()
 );
 
--- 小组消息
-DROP TABLE IF EXISTS "group_chat" CASCADE;
-CREATE TABLE "group_chat" (
-    gcid serial PRIMARY KEY,
-    -- 所回复的topic id
-    gtid serial REFERENCES "group_topic"(gtid),
-    uid serial REFERENCES "user"(uid),
-    content varchar(400) NOT NULL,
-    submit_time timestamp NOT NULL DEFAULT now()
-);
-
--- 小组话题
-DROP TABLE IF EXISTS "group_topic" CASCADE;
-CREATE TABLE "group_topic" (
-    gtid serial PRIMARY KEY,
+-- 小组公告
+DROP TABLE IF EXISTS "group_bulletin" CASCADE;
+CREATE TABLE "group_bulletin" (
+    id serial PRIMARY KEY,
     gid serial REFERENCES "group"(gid),
     uid serial REFERENCES "user"(uid),
     content varchar(400) NOT NULL,
@@ -190,29 +178,14 @@ CREATE TABLE "group_topic" (
     submit_time timestamp NOT NULL DEFAULT now()
 );
 
--- 用户详细信息
-DROP VIEW IF EXISTS v_user_info CASCADE;
-CREATE VIEW v_user_info
-  AS
-SELECT email, penname, phone, 
-       intro, motton, avatar, 
-       realname, sex, age,
-       address, register_date, 
-       warnned_times, uid
-  FROM "user" 
-  NATURAL JOIN "user_info";
-
--- 用户得分
-DROP VIEW IF EXISTS v_user_grade CASCADE;
-CREATE VIEW v_user_grade
-  AS
-SELECT 0 AS "uid";
-
 -- 小组消息
-DROP VIEW IF EXISTS v_group_chats CASCADE;
-CREATE VIEW v_group_chats
-  AS
-SELECT penname, content,
-       submit_time
-  FROM "user"
-  NATURAL JOIN "group_chat";
+DROP TABLE IF EXISTS "group_message" CASCADE;
+CREATE TABLE "group_message" (
+    id serial PRIMARY KEY,
+    gid serial REFERENCES "group"(gid),
+    uid serial REFERENCES "user"(uid),
+    content varchar(400) NOT NULL,
+    title varchar(50),
+    reply_id integer,
+    submit_time timestamp NOT NULL DEFAULT now()
+);

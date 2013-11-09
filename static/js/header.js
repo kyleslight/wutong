@@ -8,7 +8,7 @@ var _showwel_flag = true;
 var _last_post_id;
 
 $(document).ready(function(){
-	// navrighton effect
+    // navrighton effect
     $("#username").mouseover(function(){
         $(this).css("background","white");
         $(this).children("#usernameHover").css("color","#680");
@@ -34,13 +34,13 @@ $(document).ready(function(){
     });
     // quick login
     $("#loginPassword").focus(function(){
-    	$(window).keyup(function(e){
-	        var keyCode=e.keyCode;
-	        if (keyCode==13) {
-	           	loginSubmit();
-	        }
-	        return false;
-	    });
+        $(window).keyup(function(e){
+            var keyCode=e.keyCode;
+            if (keyCode==13) {
+                loginSubmit();
+            }
+            return false;
+        });
     })
 
     $("#registerSubmitButton").click(function() {
@@ -48,13 +48,13 @@ $(document).ready(function(){
     });
     // quick register
     $("#registerRepassword").focus(function(){
-    	$(window).keyup(function(e){
-	        var keyCode=e.keyCode;
-	        if (keyCode==13) {
-	           	registerSubmit();
-	        }
-	        return false;
-	    });
+        $(window).keyup(function(e){
+            var keyCode=e.keyCode;
+            if (keyCode==13) {
+                registerSubmit();
+            }
+            return false;
+        });
     })
     // logout
     $("#logout").click(function(){
@@ -161,7 +161,7 @@ function registerBoxFade(){
 }
 
 function loginSubmit(){
-	var loginUsername=$("#loginUsername").val();
+    var loginUsername=$("#loginUsername").val();
         var loginPassword=$("#loginPassword").val();
         $.post("/login", {
             username:loginUsername,
@@ -170,7 +170,7 @@ function loginSubmit(){
             if (response == "success") {
                 // TODO: process user_info
                 var username;
-                $.getJSON("/account/userinfo", function (data) {
+                $.getJSON("/u/info", function (data) {
                     console.log(data);
                     username = data.penname;
                 });
@@ -189,7 +189,7 @@ function loginSubmit(){
 }
 
 function registerSubmit(){
-	var registerUsername=$("#registerUsername").val();
+    var registerUsername=$("#registerUsername").val();
         var registerEmail=$("#registerEmail").val();
         var registerPassword=$("#registerPassword").val();
         var registerRepassword=$("#registerRepassword").val();

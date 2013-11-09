@@ -1,20 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from apps import group, account
-from tornado.web import RequestHandler
-import logging
-
-class RouteHandler(RequestHandler):
-	def get(self, filename="group.html"):
-		logging.info(filename)
-		self.render(filename, messages=[])
+from handler import group, user
 
 urls = [
-        (r"/login", account.LoginHandler),
-        (r"/logout", account.LogoutHandler),
-        (r"/register", account.RegisterHandler),
-        (r"/account/userinfo", account.UserinfoHandler),
-        (r"/group/(\w+)/message", group.MessageHandler),
-		(r"/(.*)", RouteHandler),
-        ]
+        (r"/u/home/(\w+)", user.HomeHandler),
+        (r"/u/info", user.UserinfoHandler),
+        (r"/login", user.LoginHandler),
+        (r"/logout", user.LogoutHandler),
+        (r"/register", user.RegisterHandler),
+        (r"/account/check", user.CheckMailHandler),
+        (r"/g/(\w+)", group.IndexHandler),
+        (r"/g/(\w+)/message", group.MessageHandler),
+    ]
