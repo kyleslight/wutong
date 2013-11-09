@@ -1,7 +1,15 @@
-
+a{
+	/*color: #555;
+	font-weight: normal;
+	text-shadow: 0px 1px 1px #AAAAAA;
+	transition: 2s;
+	-moz-transition:2s;
+	-webkit-transition:2s;
+	-o-transition:2s;*/
+}
 
 .write{
-	width: 900px;
+	width: 1060px;
 	margin: 0 auto;
 	margin-top: 30px;	
 	text-align: left;
@@ -15,21 +23,29 @@
 .maindata{
 	float: left;
 	border: 1px solid #CCC;
+	border-radius: 4px;
+	border:1px solid #CCC;
+	/*box-shadow:0px 1px 3px 3px #CCC;*/
 }
 
 .formlist{
 	display: block;
 	float: left;
-	width: 900px;
+	width: 1060px;
 	background: white;
 	padding-bottom: 15px;
 	border-bottom: 1px dashed #CCC;
 }
 
+#formlistfirst{
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
 .offborformlist{
 	display: block;
 	float: left;
-	width: 900px;
+	width: 1060px;
 	background: white;
 	padding-bottom: 15px;
 }
@@ -38,7 +54,7 @@
 	clear: both;
 	color: white;
 	background: #680;
-	width: 870px;
+	width: 1030px;
 	padding-top: 5px;
 	padding-bottom: 5px;
 	padding-left: 15px;
@@ -80,6 +96,8 @@
 
 #formlistlast{
 	border-bottom: 0;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
 }
 
 #artsubmitButton{
@@ -91,6 +109,7 @@
 #describe,#reference{
 	height: 60px;
 	resize:vertical;
+	width: 898px;
 }
 
 

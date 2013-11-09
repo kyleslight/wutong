@@ -2,7 +2,6 @@ import logging
 from hashlib import sha1
 from uuid import uuid3, NAMESPACE_X500
 
-
 def hexstring(salt, string):
     hexstr = sha1((salt + string).encode("utf-8"))
     hexstr = sha1(hexstr.hexdigest().encode("utf-8"))

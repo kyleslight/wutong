@@ -26,8 +26,9 @@ class TestModel(unittest.TestCase):
         self.group_motton = "group_motton"
 
     def tearDown(self):
-        self.execute('DELETE FROM "user" *')
-        self.execute('DELETE FROM "group" *')
+        # self.execute('DELETE FROM "user" *')
+        # self.execute('DELETE FROM "group" *')
+        pass
 
     def test_db(self):
         dirpath = "../dbschema/"
@@ -55,6 +56,7 @@ class TestModel(unittest.TestCase):
 
     def test_group(self):
         pass
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -10,8 +10,8 @@ define("debug", default=True, type=bool)
 define("dbname", default=environ.get("WUTONG_DB", "wutong"), type=str)
 define("dbhost", default=environ.get("WUTONG_HOST", "localhost"), type=str)
 define("dbport", default=environ.get("WUTONG_PORT", 5432), type=str)
-define("dbuser", default=environ.get("WUTONG_USER", "fz"), type=str)
-define("dbpasswd", default=environ.get("WUTONG_PASSWD", "fz"), type=str)
+define("dbuser", default=environ.get("WUTONG_USER", "wutong"), type=str)
+define("dbpasswd", default=environ.get("WUTONG_PASSWD", "wutong"), type=str)
 options.parse_command_line()
 
 settings = dict(
@@ -24,9 +24,13 @@ settings = dict(
         host=options.host,
         port=options.port,
         debug=options.debug,
-        dsn="dbname=%s user=%s password=%s host=%s port=%s" % (
-             options.dbname, options.dbuser, options.dbpasswd,
-             options.dbhost, options.dbport
-            ),
     )
+
 settings["cookie_secret"] = str(uuid5(NAMESPACE_OID, settings["sitename"]))
+
+if settings["debug"]:
+    options.dbname += "_test"
+settings["dsn"] = "dbname=%s user=%s password=%s host=%s port=%s" % (
+                       options.dbname, options.dbuser, options.dbpasswd,
+                       options.dbhost, options.dbport
+                    )

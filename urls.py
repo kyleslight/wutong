@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from handler import group, account
+from handler import group, user
 
-urls = [(r"/", group.IndexHandler),
-        (r"/login", account.LoginHandler),
-        (r"/logout", account.LogoutHandler),
-        (r"/register", account.RegisterHandler),
-        (r"/account/userinfo", account.UserinfoHandler),
-        (r"/account/check", account.CheckHandler),
-        (r"/group/(\w+)", group.IndexHandler),
-        (r"/group/(\w+)/message", group.MessageHandler),
-        ]
+urls = [
+        (r"/u/home/(\w+)", user.HomeHandler),
+        (r"/u/info", user.UserinfoHandler),
+        (r"/login", user.LoginHandler),
+        (r"/logout", user.LogoutHandler),
+        (r"/register", user.RegisterHandler),
+        (r"/account/check", user.CheckMailHandler),
+        (r"/g/(\w+)", group.IndexHandler),
+        (r"/g/(\w+)/message", group.MessageHandler),
+    ]

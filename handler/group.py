@@ -1,9 +1,9 @@
+import logging
 from datetime import datetime
 from tornado.web import authenticated
 from tornado.websocket import WebSocketHandler
 from tornado.escape import json_encode, json_decode
 from base import BaseHandler
-from lib.util import log
 
 class IndexHandler(BaseHandler):
 
@@ -51,7 +51,7 @@ class MessageHandler(BaseHandler, WebSocketHandler):
                     avatar=self.user["avatar"],
                     title=title,
                 )
-            log(entry)
+            logging.info(entry)
             for self.mem in self.members[self.gid]:
                 self.mem.write_message(json_encode(entry))
 

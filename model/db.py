@@ -65,7 +65,6 @@ class Pool:
             return self._new_connection()
 
 
-
 class Connection:
 
     def __init__(self, dsn):

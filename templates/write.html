@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>写文章 - 梧桐</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Language" content="zh-CN" />
+		<meta name="Keywords" content="梧桐 文章 浏览 撰写 创作 小组" />
+		<meta name="Description" content="梧桐文章" />
+		<link rel="stylesheet" href="{{ static_url("css/base.css") }}" type="text/css" />
+    	<link rel="stylesheet" href="{{ static_url("css/write.css") }}" type="text/css" />
+    	<link rel="stylesheet" href="{{ static_url("css/shCoreEclipse.css") }}" type="text/css" />
+		<!--<script type="text/javascript"  src="ckeditor/ckeditor.js"></script>-->
+	</head>
+	<body class="body">
+<!-- header -->
+    <div class="header" id="header">
+        <div class="navcontainer">
+            <div class="navigation" id="navigation">
+                <div id="navLogo">
+                    <a href="#">
+                        <img id="logo" src="{{ static_url("css/image/logo.png") }}">
+                    </a>
+                </div>
+                <div class="navLeft">
+                    <a id="browse" href="#">
+                        <li>浏览</li>
+                    </a>
+                    <a id="article" href="write.html">
+                        <li id="thisPage">文章</li>
+                    </a>
+                    <a id="fragment" href="#">
+                        <li>小品</li>
+                    </a>
+                    <a id="group" href="group.html">
+                        <li>小组</li>
+                    </a>
+                </div>
+                <div class="navrighton">
+                    <!-- <div class="usernameOuter"> -->
+                    <a href="#">
+                        <li id="username">
+                            <span id="usernameHover" href="#"></span>
+                            <div class="userExpand">
+                                <div id="myHomepage">我的主页</div>
+                                <div id="logout">登出</div>
+                            </div>
+                        </li>
+                    </a>
+                    <!-- </div> -->
+                    <div class="navrightonOption">
+                        <a id="message" href="#">
+                            <li>消息</li>
+                        </a>
+                        <a id="setting" href="#">
+                            <li>设置</li>
+                        </a>
+                    </div>
+                </div>
+                <div class="navrightoff">
+
+                    <a id="login" href="#">
+                        <li>登入</li>
+                    </a>
+
+
+                    <a id="register" href="#">
+                        <li>注册</li>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- login box -->
+    <div id="lrBoxWrap">
+        <div class="lrBox" id="loginBox">
+            <form id="loginForm" name="loginForm" action="#" method="post">
+                <div class="loginList"><span class="inputTip">用户名/邮箱</span>
+                    <input class="input" id="loginUsername" type="text" name="username" placeholder="用户名/邮箱" />
+                </div>
+                <div class="loginList"><span class="inputTip">密码</span>
+                    <input class="input" id="loginPassword" type="password" name="password" placeholder="密码" />
+                </div>
+                <div id="loginListlast" class="loginList"><a href="#" id="loginSubmitButton" class="formButton" name="submitButton" value="登陆">登入</a>  <a href="#" id="loginBack">返回</a>
+                </div>
+            </form>
+        </div>
+        <div class="lrBox" id="registerBox">
+            <form id="registerForm" name="registerForm" action="#" method="post">
+                <div class="registerList"><span class="inputTip">用户名</span>
+                    <input class="input" id="registerUsername" type="text" name="username" placeholder="用户名" />
+                </div>
+                <div class="registerList"><span class="inputTip">邮箱</span>
+                    <input class="input" id="registerEmail" type="text" name="email" placeholder="邮箱" />
+                </div>
+                <div class="registerList"><span class="inputTip">密码</span>
+                    <input class="input" id="registerPassword" type="password" name="password" placeholder="密码" />
+                </div>
+                <div class="registerList"><span class="inputTip">重复密码</span>
+                    <input class="input" id="registerRepassword" type="password" name="repassword" placeholder="重复密码" />
+                </div>
+                <div id="registerListLast" class="registerList"><a href="#" id="registerSubmitButton" class="formButton" name="submitButton" value="注册">注册</a>  <a href="#" id="registerBack">返回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+	<a id="return_top" href="#" title="回到顶部" class="none"></a>
+	<div class="write">
+		<form id="textdata" name="textdata" action="wutongshow.php" method="post">
+			<div class="maindata">
+				<div id="formlistfirst" class="formlist"><span class="inputTip"><a href="#" title="标题说明">标题</a></span>  <input id="arttitle" class="input" type="text" name="title" placeholder="填写标题" /></div>
+				<div class="formlisttip" id="formlisttip1"></div>
+
+				<div class="formlist"><span class="inputTip"><a href="#" title="副标题说明">副标题</a></span>  <input class="input" type="text" name="subtitle" placeholder="填写副标题（可选）" /></div>
+				<div class="formlisttip" id="formlisttip2">在副标题中添加主标题中没有涉及到的内容，对主标题进行补充说明，例如：<br/>（主标题）El Psy Congroo  <br/>（副标题）那些时间里的那些人们<br/>方式没有绝对的限定，根据个人需要而论。</div>
+
+				<div id="formlistfourth" class="formlist"><span class="inputTip"><a href="#" title="描述说明">描述</a></span>  <textarea id="describe" class="input" type="text" name="describe" placeholder="填写描述"></textarea></div>
+				<div class="formlisttip" id="formlisttip3">描述的方式比较随意。一般而言，描述用于读者在浏览文章信息时作为文章的展示文字使用。<br/>描述中可以概览全文，也可以阐述自己的写作目的，提示引导读者等。</div>
+
+				<div class="formlist"><span class="inputTip"><a href="#" title="适合说明">适合</a></span>  <input class="input" type="text" name="suit" placeholder="这里注明适合人群，人群之间用';'隔开（可选）" /></div>
+				<div class="formlisttip" id="formlisttip4">适合用于提示读者类别。<br/>例如当文章涉及专业性较强的领域时可能需要读者满足一定条件才能没有障碍地阅读。<br/>一篇Python的建站指南可能需要读者具有一定Python编程基础与网站开发基础，作者可以这样写：<br/>具有Python编程经验;具有网站开发经验;<br/>在另外一些情况下，作者可能需要对读者进行一些提示，例如文章的内容涉及剧透，或者有不适内容希望拒绝一部分读者。<br/>请注意，“适合”仅作为一种提示，并没有阻止读者继续浏览的绝对权力。</div>
+
+				
+				<div id="speformlist" class="formlist"><span id="speinputtip" class="inputTip"><a href="#" title="正文说明">正文</a></span></div>
+				<div class="formlisttip" id="formlisttip5">这里只是对正文编辑的部分提示，如果需要较为系统的帮助请参考我们的 <a href="#" target="_blank">梧桐指南</a><br/>1.正文编辑对文章内容没有任何限定，但这并不意味着任何人可以随意创作可能让他人感到不适的文章。创作前请确保你的文章不属于无效文章的范畴。<br/>2.可部分引用其他文献，但请确保作品的原创性。<br/>3.富文本编辑器目前支持表格创建，图片本地上传，代码块创建，合理运用这些工具可能为你的文章增色。<br/>4.需要应用公式编辑可以在 <a href="http://www.codecogs.com/latex/eqneditor.php" target="_blank">在线Latex公式编辑器</a> 创建公式gif图片，将图拖拽至你正在编辑的地方即可。<br/>5.需要应用在线图表编辑可以在<a href='http://www.onlinecharttool.com/' target="_blank"> 在线图表编辑器 </a>创建图表，将图拖拽至你正在编辑的地方即可。<br/>6.目前富文本编辑器在全屏的时候可能会出现滚动条不能滚动问题，可调整浏览器大小解决。</div>
+				<div class="formlist"><textarea id="textArea" name="textArea" cols="100" rows="14">正文从这里开始</textarea></div>
+
+				<div class="formlist"><span class="inputTip"><a href="#" title="引用来源说明">引用来源</a></span> <textarea id="reference" class="input" type="text" name="reference" placeholder="这里注明引用来源，引用格式为'···:···;',冒号前为来源说明，冒号后为引用地址（可选）" draggable="false"></textarea></div>
+				<div class="formlisttip" <div class="formlisttip" id="formlisttip6">当你的文章引用到文献的部分片段时，请在引用来源处注明，否则，此文章可能带来的版权问题将由作者本人承担。<br/>在引用时请注意被引用源的许可条件，例如用于非商业性质。<br/>任何本站公开文章可视为引用源，作者可以以非商业目的部分引用这些引用源，并在“引用来源”处注明其ART号，例如：<br/>在梧桐创建之时:ART1;<br/>或者<br/>在梧桐创建之时:http://www.wutong.com/ART1;</div>
+
+				<div class="formlist"><span class="inputTip"><a href="#" title="合作编辑说明">合作编辑</a></span>  <input class="input" type="text" name="partner" placeholder="这里注明合作编辑者（可选）" /></div>
+				<div class="formlisttip" id="formlisttip7"></div>
+
+				<div id="formlistlast" class="formlist"><span class="inputTip"><a href="#" title="Tag说明">Tags</a></span>  <input class="input" type="text" name="tags" placeholder="这里输入Tag，Tag之间用';'隔开，默认Tag为一级分类" /></div>
+				<div class="formlisttip" id="formlisttip8"></div>
+			</div>
+			<a href="javascript:void(0)" id="artsubmitButton" class="formButton" name="submitButton" title="提交你的文章">提交</a>
+		</form>
+	</div>
+	<!--<script type="text/javascript"> var editor = CKEDITOR.replace('textArea');  </script>-->
+	<div class="footer" id="footer">
+				<p class="f1">&nbsp;&nbsp;&nbsp;&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
+	</div>
+	<script type="text/javascript" src="{{ static_url("js/jquery.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/write.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/header.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/shCore.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/allhl.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("ueditor/ueditor.config.write.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("ueditor/ueditor.all.min.js") }}"></script>
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+    <script type="text/javascript">
+        var editor = new UE.ui.Editor();
+        textarea: '#textArea';
+        editor.render('textArea');
+    </script>
+	</body>
+</html>
