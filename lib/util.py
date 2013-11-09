@@ -19,14 +19,27 @@ def createpasswd(value):
     enpasswd = enpasswd[:128]
     return enpasswd
 
-def echo(*msgs):
-    seplen = 40
+def log(*objs, **kwargs):
+    sepsort = kwargs.get("sep", '-')
+    seplen = kwargs.get("length", 40)
 
-    if not msgs:
-        logging.info('-' * seplen)
+    if sepsort == "number":
+        sep = '0'
+    else:
+        sep = sepsort
+    if not objs:
+        logging.info(sep * seplen)
         return
+
     cnt = 0
-    for msg in msgs:
+    for obj in objs:
         cnt += 1
-        logging.info(str(cnt) * seplen)
+
+        if sepsort == "number":
+            sep = str(cnt)
+        logging.info(sep * seplen)
+        if hasattr(obj, "__name__"):
+            msg = obj.__name__
+        else:
+            msg = str(obj)
         logging.info(msg)

@@ -7,6 +7,10 @@ var shortElapseTime=4000;
 var _showwel_flag = true;
 var _last_post_id;
 
+var url = "ws://" + location.host + location.pathname + "/message";
+var msg_socket = new WebSocket(url);
+msg_socket.onclose = function() {};
+
 $(document).ready(function(){
     //check sex of the member
     renderMaleAndFemale();
@@ -247,41 +251,25 @@ $(document).ready(function(){
     //     }
     // })
 
-    // long polling
-    setInterval(function(){
+    msg_socket.onmessage = function(e) {
+        var data = e.data;
+        if (!data)
+            return;
+
         topic_id = $("#communication li:first-child").attr("id");
         topic_id = topic_id ? topic_id.replace("topic_", "") : '0';
         _last_post_id = topic_id;
 
-        $.ajax({
-            type:"GET",
-            dataType: "json",
-            url: "/test",
-            timeout: 80000,
-            data: {
-                topic_id: topic_id
-            },
-            success:function(data, textStatus){
-                if (!data)
-                    return;
+        var entry = JSON.parse(data);
+        if (parseInt(entry.id, 10) <= parseInt(_last_post_id, 10))
+            return;
+        else
+            _last_post_id = entry.id;
 
-                var len = data.length;
-                for (var i = 0; i < len; i++) {
-                    var entry = data[i];
-                    if (parseInt(entry.id, 10) <= parseInt(_last_post_id, 10))
-                        continue;
-                    else
-                        _last_post_id = entry.id;
-                    entry.submit_time=entry.submit_time.toString().substring(5,19);
-                    condata = $(condata);
-                    var condata="<li id='topic_"+entry.id+"'>"+"<a href='#'><img src='static/css/image/test.png'/></a><div class='talkmain'><div class='username'><a href='#'>"+entry.ip+"</a></div><div class='talkcontent'>"+entry.content+"</div>    </div><div class='timeshow'>"+entry.submit_time+"</div></li>";
-                    $("#communication").prepend(condata);
-                }
-            },
-            error:function(XMLHttpRequest,textStatus,errorThrown){
-                // just do nothing
-            }
-        });
+        entry.submit_time=entry.submit_time.toString().substring(5,19);
+        condata = $(condata);
+        var condata="<li id='topic_"+entry.id+"'>"+"<a href='#'><img src='"+entry.avatar+"'/></a><div class='talkmain'><div class='username'><a href='#'>"+entry.penname+"</a></div><div class='talkcontent'>"+entry.content+"</div></div><div class='timeshow'>"+entry.submit_time+"</div></li>";
+        $("#communication").prepend(condata);
 
         var thedata=$("#communication").children().size();
         if (thedata>30) {
@@ -289,7 +277,7 @@ $(document).ready(function(){
                 $("#communication").children("li").eq(i).remove();
             }
         }
-    }, 70000);
+    }
 });
 
 // function for login and register
@@ -349,31 +337,18 @@ function submitChatData(){
         alert("Please input content");
         return;
     }
-    // var thedata=$(".communication").children().size();
-    // if (thedata>30) {
-    //     for (var i =30; i < thedata; i++) {
-    //         $("#communication").children("li").eq(i).remove();
-    //     }
-    // }
-    /*
-    var socket = new WebSocket("ws://" + location.host + "/message");
-
-    socket.send(chatCon);
-    socket.onmessage = function(e) {
-        $("#inbox").append("<div>" + e.data + "</div>");
-    }
-    */
-    $.ajax({
-        type:"POST",
-        dataType:"json",
-        url:"/test",
-        timeout:80000,
-        data:{
-            content:chatCon
-        },
-        success:function(data,textStatus){
+    var thedata=$(".communication").children().size();
+    if (thedata>30) {
+        for (var i =30; i < thedata; i++) {
+            $("#communication").children("li").eq(i).remove();
         }
-    });
+    }
+
+    data = {};
+    data["content"] = chatCon;
+    data["title"] = null;
+    data = JSON.stringify(data);
+    msg_socket.send(data);
     $("#chatData").val("");
 }
 
