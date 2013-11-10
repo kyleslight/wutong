@@ -153,7 +153,8 @@ transform: rotate(0deg);
 -ms-transform: rotate(0deg);		
 -webkit-transform: rotate(0deg);	
 -o-transform: rotate(0deg);
--moz-transform: rotate(0deg);}
+-moz-transform: rotate(0deg);
+background: white;}
 62%{
 	transform: rotate(30deg);
 -ms-transform: rotate(30deg);		
@@ -233,6 +234,69 @@ transform: rotate(0deg);
 -webkit-transform: rotate(-30deg);	
 -o-transform: rotate(-30deg);
 -moz-transform: rotate(-30deg);
+}
+100% {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+}
+
+
+@-webkit-keyframes littleTremble /* Safari 和 Chrome */
+{
+0%   {
+transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+}
+12%  {
+	transform: rotate(15deg);
+-ms-transform: rotate(15deg);		
+-webkit-transform: rotate(15deg);	
+-o-transform: rotate(15deg);
+-moz-transform: rotate(15deg);
+}
+25%  {
+	transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+}
+36% {
+	transform: rotate(-15deg);
+-ms-transform: rotate(-15deg);		
+-webkit-transform: rotate(-15deg);	
+-o-transform: rotate(-15deg);
+-moz-transform: rotate(-15deg);
+}
+50%  {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+background: white;}
+62%{
+	transform: rotate(15deg);
+-ms-transform: rotate(15deg);		
+-webkit-transform: rotate(15deg);	
+-o-transform: rotate(15deg);
+-moz-transform: rotate(15deg);
+}
+75%  {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+86% {
+	transform: rotate(-15deg);
+-ms-transform: rotate(-15deg);		
+-webkit-transform: rotate(-15deg);	
+-o-transform: rotate(-15deg);
+-moz-transform: rotate(-15deg);
 }
 100% {transform: rotate(0deg);
 -ms-transform: rotate(0deg);		

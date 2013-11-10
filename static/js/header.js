@@ -21,12 +21,15 @@ $(document).ready(function(){
     })
     $("#message").mouseover(function(){
         $("#msgNum").css({"background":"pink","color":"darkred","box-shadow":"#FFF"});
-        $("#msgNum").addClass("tremble");
+        // $("#msgNum").addClass("tremble");
     });
     $("#message").mouseleave(function(){
         $("#msgNum").css({"background":"pink","color":"#680","box-shadow":"#AAA"});
-        $("#msgNum").removeClass("tremble");
+        // $("#msgNum").removeClass("tremble");
     })
+
+    testTremble();
+
 
     // login and register
     $("#loginSubmitButton").click(function() {
@@ -183,7 +186,11 @@ function loginSubmit(){
                     loginBoxFade();
                 });
             } else if (response == "failed") {
-                alert("loginfailed");
+            	$("#loginBox").addClass("littleTremble");
+            	setTimeout(function(){
+            		$("#loginBox").removeClass("littleTremble");
+            	},1000);
+                // alert("loginfailed");
             }
         });
 }
@@ -195,9 +202,12 @@ function registerSubmit(){
         var registerRepassword=$("#registerRepassword").val();
         if (registerPassword!=registerRepassword) {
             alert("password and repassword must be the same vaule");
+            $("#loginBox").addClass("littleTremble");
+            	setTimeout(function(){
+            	$("#loginBox").removeClass("littleTremble");
+            },1000);
             return;
         };
-        alert(registerEmail);
         $.post("/register",{
             username:registerUsername,
             password:registerPassword,
@@ -205,4 +215,11 @@ function registerSubmit(){
         },function(){
             registerBoxFade();
         });
+}
+
+function testTremble(){
+	document.getElementById("msgNum").innerHTML=parseInt($("#msgNum").text())+1;
+	$("#msgNum").addClass("tremble");
+	setTimeout(function(){$("#msgNum").removeClass("tremble");},2000)
+	setTimeout(function(){testTremble()},10000);
 }

@@ -1,43 +1,32 @@
+/*basic setting*/
 body{
 	font-family: "Microsoft YaHei";
   	margin: 0;
   	background: url('image/bg.png');
 }
-
 a{
 	color:#444;
 	text-decoration:none;
-}
-	
-
+}	
 a:hover{
 	color:#c1d739;
 	text-decoration:none;
 } 
-
 p{
 	color: black;
 }
-
 img{
 	border: 0;
 }
-
 input{
 	border: 1px solid #680;
 	background: white !important;
 }
-
 textarea{
 	border: 1px solid #680;
 	margin-top: 20px;
 }
 
-#logo{
-	width: 30px;
-	height: 30px;
-	border:0;
-}
 .input{
 	float: left;
 	margin-left: 10px;
@@ -49,7 +38,6 @@ textarea{
 	width: 900px;
 	border-radius: 3px;
 }
-
 .inputTip{
 	float: left;
 	margin-left: 10px;
@@ -62,29 +50,210 @@ textarea{
 	font-weight: 600;
 	display: block;
 }
+#logo{
+	width: 30px;
+	height: 30px;
+	border:0;
+}
 
+/*Navigation*/
+.header{
+	height: 72px;
+	margin: 0 auto;
+	clear: both;
+	background: rgba(102,136,0,0.9);
+	border-bottom: 1px solid #CCC;
+	color: white;
+	min-width:1253px;
+}
+
+/*navgation list*/
+.header li{
+	float: left;
+	display: inline-block;
+	list-style: none;
+	padding-top: 25px;
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 47px;
+	margin-right: 10px;
+	display: block;
+	transition: 0.5s;
+	-moz-transition:0.5s;
+	-webkit-transition:0.5s;
+	-o-transition:0.5s;
+}
+.header li:hover{
+	background: white;
+	color: #680;
+}
+.header a{
+	color: white;
+}
+.header a:hover{
+	color: #680;
+}
+
+/*mark for this page*/
+#thisPage{
+	background:rgba(255,255,255,0.3);
+	color: #680;
+}
+#thisPage:hover{
+	background: white;
+}
+
+.navcontainer{
+	height:71px;
+	max-width:1253px;
+	min-width: 800px;
+	margin:0 auto;
+}
+
+.navigation{
+	height:71px;
+	max-width:1253px;
+	min-width: 800px;
+	margin:0 auto;
+}
+
+#navLogo{
+	margin-top: 20px;
+	margin-left: 20px;
+	float: left;
+}
+
+.navLeft{
+	margin-left: 50px;
+	float: left;
+}
+
+/*default display none*/
+.navrighton{
+	float: right;
+	display: none;
+}
+
+/*default diaplay block*/
+.navrightoff{
+	float: right;
+}
+
+/*user*/
+#username{
+	float: left;
+	text-align: center;
+	padding-left: 0;
+	padding-right: 0;
+	margin-right: 15px;
+	min-width: 88px;
+	z-index: 100;
+}
+
+#username:hover{
+	background: white;
+	color: #680;
+}
+
+#usernameHover{
+	padding: 0 15px;
+}
+
+.userExpand{
+	position: relative;
+	margin: 0 auto;
+	display: none;
+	margin-top: 26px;
+	background:white;
+	z-index: 100;
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+.userExpand div{
+	padding: 5px 10px;
+	text-align: center;
+	border-top: 2px solid rgba(102,136,0,0.9);
+	color: #680;
+	transition: 0.7s;
+	-moz-transition: 0.7s;
+	-webkit-transition: 0.7s;
+	-o-transition: 0.7s;
+}
+
+.userExpand div:hover{
+	background: #680;
+	color: white;
+	box-shadow:2px 2px 3px #aaaaaa;
+}
+
+#myHomepage{
+	border-left: 1px solid transparent;
+	border-right: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+}
+
+#logout:hover{
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+/*message counter*/
+#msgNum{
+	position: absolute;
+	background: #EF9AA0;
+	color: #680;
+	padding: 0 3px;
+	font-size: 0.6em;
+	line-height: 13px;
+	border-radius: 4px;
+	float: right;
+	margin-top: -5px;	
+	transition: 2s;
+	-moz-transition:2s;
+	-webkit-transition:2s;
+	-o-transition:2s;
+}
+
+/*tremble effect*/
+.tremble{
+	animation: tremble 0.7s;
+	-moz-animation: tremble 0.7s;	
+	-webkit-animation: tremble 0.7s;
+	-o-animation: tremble 0.7s;
+	box-shadow: 0px 0px 20px white;
+}
+
+.littleTremble{
+	animation: littleTremble 0.7s;
+	-moz-animation: littleTremble 0.7s;	
+	-webkit-animation: littleTremble 0.7s;
+	-o-animation: littleTremble 0.7s;
+	box-shadow: 0px 0px 20px darkred;
+}
+
+.navrightonOption{
+	float: left;
+}
+
+/*Loginbox and Registerbox*/
 #lrBoxWrap{
-	/*position: relative;*/
-	/*float: left;*/
 	clear: both;
 	width: 100%;
 	height: 0px;
 	background:rgba(102,136,0,0.1);
-	/*border-top: 1px solid #CCC;*/
 	border-bottom: 1px solid #CCC;
 	margin-bottom: 20px;
-	/*display: none;*/
 }
-
 #lrBoxWrap .input{
 	width: 300px;
 }
-
-
 #lrBoxWrap span{
 	width: 100px;
 }
-
 .lrBox{
 	border-left: 1px solid #CCC;
 	border-right: 1px solid #CCC;
@@ -100,29 +269,24 @@ textarea{
 	background: white;
 	display: none;
 }
-
 .loginList{
 	float: left;
 	background: white;
 	margin-left: 60px;
 }
-
 #loginBox .inputTip{
 	position: relative;
 }
-
 #loginListLast{
 	margin-top: 20px;
 	width: 500px;
 	float: left;
 }
-
 #loginSubmitButton{
 	margin-top: 10px;
 	margin-left: 150px;
 	margin-right: 95px;
 }
-
 #loginBack{
 	font-size: 0.8em;
 	float: right;
@@ -140,28 +304,23 @@ textarea{
 	background: white;
 	display: none;
 }
-
 .registerList{
 	float: left;
 	background: white;
 	margin-left: 60px;
 }
-
 #registerBox .inputTip{
 	position: relative;
 }
-
 #registerListLast{
 	margin-top: 30px;
 	width: 500px;
 	float: left;
 }
-
 #registerSubmitButton{
 	margin-left: 150px;
 	margin-right: 95px;
 }
-
 #registerBack{
 	font-size: 0.8em;
 	float: right;
@@ -170,6 +329,7 @@ textarea{
 	margin-right: 65px;
 }
 
+/*submit button*/
 .formButton{
 	background: #680;
 	color: #DDD;
@@ -186,261 +346,32 @@ textarea{
 	-webkit-transition:2s;
 	-o-transition:2s;
 }
-
 .formButton:hover{
 	color: white;
 	background: #c1d739;
-}
-
-/*Navigation*/
-.header{
-	height: 72px;
-	margin: 0 auto;
-	clear: both;
-	background: rgba(102,136,0,0.9);
-	border-bottom: 1px solid #CCC;
-	color: white;
-	min-width:1253px;
-	/*margin-bottom: 30px;*/
-	/*margin-bottom: 20px;*/
-}
-
-.header li{
-	float: left;
-	display: inline-block;
-	list-style: none;
-	padding-top: 25px;
-	padding-left: 15px;
-	padding-right: 15px;
-	height: 47px;
-	margin-right: 10px;
-	display: block;
-	transition: 0.5s;
-	-moz-transition:0.5s;
-	-webkit-transition:0.5s;
-	-o-transition:0.5s;
-}
-
-.header li:hover{
-	background: white;
-	color: #680;
-	/*box-shadow:2px 2px 3px #CCC;*/
-}
-
-.header a{
-	color: white;
-}
-
-.header li a:hover{
-	color: #680;
-}
-
-#thisPage{
-	background:rgba(255,255,255,0.3);
-	color: #680;
-}
-
-#thisPage:hover{
-	background: white;
-}
-
-.navcontainer{
-	height:71px;
-	/*background: transparent;*/
-	/*background: rgba(102,136,0,0.9);*/
-	max-width:1253px;
-	min-width: 800px;
-	margin:0 auto;
-}
-.navigation{
-	height:71px;
-	/*background-color:transparent;*/
-	/*background: rgba(102,136,0,0.9);*/
-	/*border-bottom: 1px solid #CCC;*/
-	max-width:1253px;
-	min-width: 800px;
-	margin:0 auto;
-}
-.navigation h1{
-	color: white;
-}
-
-.nav{
-	float: right;
-	margin-right: 13px;
-	width: 97px;
-	height: 46px;
-	padding-top: 25px;
-	text-align:center;
-}
-
-/*.nav:hover{	
-	color: white;
-	background-color:#007400;
-	border-bottom: solid 5px black;
-	border-bottom-left-radius: 7px;
-	border-bottom-right-radius: 7px;
-}*/
-#nav1{
-	position: absolute;
-	margin-left: 47px;
-	margin-top: 17px;
-	width: 292px;
-	font-size: 40;
-	font-weight: 900;
-}
-
-#navLogo{
-	margin-top: 20px;
-	margin-left: 20px;
-	float: left;
-}
-
-.navLeft{
-	margin-left: 50px;
-	float: left;
-}
-
-#username{
-	float: left;
-	text-align: center;
-	padding-left: 0;
-	padding-right: 0;
-	margin-right: 15px;
-	min-width: 88px;
-}
-
-#username:hover{
-	background: white;
-	color: #680;
-}
-
-#usernameHover{
-	padding: 0 15px;
-}
-
-.userExpand{
-	position: relative;
-	margin: 0 auto;
-	display: none;
-	margin-top: 26px;
-	/*padding: 0 10px;*/
-	background:white;
-	z-index: 100;
-	border-left: 1px solid #CCC;
-	border-right: 1px solid #CCC;
-	border-bottom: 1px solid #CCC;
-	border-bottom-left-radius: 4px;
-	border-bottom-right-radius: 4px;
-}
-
-#myHomepage{
-	border-left: 1px solid transparent;
-	border-right: 1px solid transparent;
-	border-bottom: 1px solid transparent;
-}
-#myHomepage:hover{
-	/*border-left: 1px solid #CCC;
-	border-right: 1px solid #CCC;
-	border-bottom: 1px solid #CCC;*/
-	/*border-bottom-left-radius: 4px;*/
-	/*border-bottom-right-radius: 4px;*/
-}
-#logout:hover{
-	/*border-left: 1px solid #CCC;
-	border-right: 1px solid #CCC;
-	border-bottom: 1px solid #CCC;*/
-	border-bottom-left-radius: 4px;
-	border-bottom-right-radius: 4px;
-}
-
-.userExpand div{
-	padding: 5px 10px;
-	text-align: center;
-	border-top: 2px solid rgba(102,136,0,0.9);
-	color: #680;
-	transition: 0.7s;
-	-moz-transition: 0.7s;
-	-webkit-transition: 0.7s;
-	-o-transition: 0.7s;
-}
-
-#msgNum{
-	position: absolute;
-	background: #EF9AA0;
-	/*background: pink;*/
-	color: #680;
-	padding: 0 3px;
-	font-size: 0.6em;
-	line-height: 13px;
-	border-radius: 4px;
-	float: right;
-	margin-top: -5px;
-	
-	transition: 2s;
-	-moz-transition:2s;
-	-webkit-transition:2s;
-	-o-transition:2s;
-}
-
-.tremble{
-	animation: tremble 0.7s;
-	-moz-animation: tremble 0.7s;	
-	-webkit-animation: tremble 0.7s;
-	-o-animation: tremble 0.7s;
-	box-shadow: 0px 0px 20px #AAA;
-}
-
-.userExpand div:hover{
-	background: #680;
-	color: white;
-	box-shadow:2px 2px 3px #aaaaaa;
-}
-
-.navrightonOption{
-	float: left;
-}
-
-.navrighton{
-	float: right;
-	display: none;
-}
-
-.navrightoff{
-	float: right;
-	/*display: none;*/
-	/*margin-top: 25px;*/
-}
-
-.navLeft a,.navrightoff a,.navrighton a{
-	/*margin-right: 20px;*/
 }
 
 .none{
 	display: none;
 }
 
-.footer
-{
+/*page footer*/
+.footer{
 	clear:both;
 	background:transparent;
 	margin:0 auto;
 	margin-top: 2px;
 	line-height:30px;
 }
-
 .footer a{
 	color: ForestGreen;
 }
-
 .footer a:hover{
 	color: DarkGreen;
 }
-
-.f1
-{
+.f1{
 	margin:0 auto;
 	color:black;
-	width:1253px;
+	min-width:760px;
 	text-align:center;
 }

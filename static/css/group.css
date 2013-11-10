@@ -660,12 +660,11 @@ div.input.edui-default{
 }
 
 /*Communication*/
-.username{
-	display: inline;
-	font-size: 0.9em;
-	margin-bottom: 2px;
+.communication{
+	float: left;
+	width: 960px;
+	margin: 0 auto;
 }
-
 #communicationConWrap{
 	float: left;
 	background: rgba(255,255,255,0.05);
@@ -673,14 +672,7 @@ div.input.edui-default{
 	border-bottom-left-radius: 7px;
 	border-bottom-right-radius: 7px;
 }
-
-.communication{
-	float: left;
-	width: 960px;
-	margin: 0 auto;
-}
-
-#communicationWrapOuter li{
+li.chat{
 	list-style: none;
 	float: left;
 	width: 1040px;
@@ -692,108 +684,100 @@ div.input.edui-default{
 	border-radius: 7px;
 	background: white;
 }
-
-#testTopicDefaultShow{
+li.topicOutter{
 	list-style: none;
 	float: left;
-	width: 1042px;
-	margin-left: 10px;
-	margin-top: 17px;
-	margin-bottom: 11px;
-	/*padding: 10px;*/
+	width: 1040px;
+	margin-left: -40px;
+	margin-bottom: 3px;
 	padding-top: 5px;
 	padding-bottom: 8px;
 	border-bottom: 2px solid #CCC;
 	border-radius: 7px;
 	background: rgba(0,0,0,0.1);
 }
-
-#testTopicDefaultShow img{
-	width: 50px;
-	height: 50px;
-	border-radius: 7px;
-	margin-left: 7px;
-	margin-right: 20px;
-	float: left;
-	opacity: 0.9;
-	transition: 0.5s;
-	-moz-transition:0.5s;
-	-webkit-transition:0.5s;
-	-o-transition:0.5s;
+.userName{
+	display: inline;
+	font-size: 0.9em;
+	margin-bottom: 2px;
 }
-
-.talkmain{
+.talkMain{
 	float: left;
 	width: 950px;
 	margin-top: 0px;
 }
 
-.talkcontent{
+/*chat&topic content*/
+.talkContent{
 	word-break:break-all;
 	font-size: 0.9em;
 	clear: both;
 }
-
-.topictalktitle{
-	display: block;
-	font-size: 14px;
-	background: #680;
-	width: 1031px;
-	color: white;
-	border-radius: 4px;
-	padding: 3px 6px;
-	margin-top: 10px;
-	margin-bottom: -10px;
-	margin-left: 10px;
-}
-.topictalktitle a{
-	color: white;
-}
-.topictalktitle a:hover{
-	color: #EEE;
-}
-.topictalkcontent{
-	clear: both;
-	font-size: 0.8em;
-	color: #777;
-	padding-top: 11px;
-}
-
-.talkcontent a{
+.talkContent a{
 	color: #680;
 }
-
-.talkcontent p{
+.talkContent p{
 	margin: 0;
 }
-
-.timeshow{
+.timeShow{
 	float: right;
 	font-size: 0.8em;
 	margin-right: 20px;
 	display: inline;
 }
 
-.talkaction{
+/*topic show in out layer*/
+.talkAction{
 	float: left;
 	font-size: 15px;
 }
-.talkaction a{
+.talkAction a{
 	color:rgba(102,136,0,0.9);
 }
-
-.talkaction a:hover{
+.talkAction a:hover{
 	color: #680;
 }
-
-li#testTopic{
-	background: rgba(0,0,0,0.1);
+.topicTalkContent{
+	clear: both;
+	font-size: 0.8em;
+	color: #777;
+	padding-top: 11px;
 }
 
-#topiccondata{
-	margin-top: 15px;
-	width: 740px;
-	border-radius: 2px;
-	resize:none;
+/*topic show in inner layer*/
+li.topicInner{
+	list-style: none;
+	float: left;
+	width: 1042px;
+	margin-left: 10px;
+	margin-bottom: 11px;
+	padding-top: 5px;
+	padding-bottom: 8px;
+	border-bottom: 2px solid #CCC;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	background: rgba(0,0,0,0.1);
+}
+.topicLocation{
+	display: block;
+	font-size: 14px;
+	background: rgba(0,0,0,0.6);
+	width: 1030px;
+	color: #CCC;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	padding: 3px 6px;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+.topicLocation a{
+	color: #CCC;
+	transition: 0.5s;
+	-moz-transition:0.5s;
+	-webkit-transition:0.5s;
+	-o-transition:0.5s;
+}
+.topicLocation a:hover{
+	color: white;
 }
 

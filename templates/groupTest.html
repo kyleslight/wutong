@@ -116,7 +116,7 @@
                     
                     <div class="groupTitle">
                     <img class="groupImage" src="{{ static_url("css/image/forumTest.jpg") }}" />
-                    <a id="groupTitleName" href="#">Kyleslight的同好会</a><span id='titleCut'> | </span><div id='groupMotto'>西十二自习室欢迎你</div>
+                    <a id="groupTitleName" href="group.html">Kyleslight的同好会</a><span id='titleCut'> | </span><div id='groupMotto'>西十二自习室欢迎你</div>
                     </div>
                 </div>
             </div>
@@ -606,26 +606,25 @@
                 </div>
 
             </div>
-            <span class='topictalktitle'>
+            <span class='topicLocation'>
                 >><a href="#">这是一个测试用的话题</a>
             </span>
-            <div id="testTopicDefaultShow">
-                                    <a href='#'><img src='static/css/image/test.png'/></a>
-                                    <div class='talkmain'>
-                                        <div class="username"><a href='#'>Kyleslight</a></div>
-                                        <div class='timeshow'>
-                                            --:--
-                                        </div>
-                                        <div class='talkcontent'>
-                                            这里是测试用的话题这里是测试用的话题<br/>
-                                            这里是测试用的话题这里是测试用的话题<br/>
-                                            这里是测试用的话题这里是测试用的话题<br/>
-                                            这里是测试用的话题这里是测试用的话题<br/>
-                                            这里是测试用的话题这里是测试用的话题<br/>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
+            <li class="topicInner">
+                <a class="userImage" href='#'><img src='static/css/image/test.png'/></a>
+                <div class='talkMain'>
+                    <div class="userName"><a href='#'>Kyleslight</a></div>
+                    <div class='timeShow'>
+                        --:--
+                    </div>
+                    <div class='talkContent'>
+                        这里是测试用的话题这里是测试用的话题<br/>
+                        这里是测试用的话题这里是测试用的话题<br/>
+                        这里是测试用的话题这里是测试用的话题<br/>
+                        这里是测试用的话题这里是测试用的话题<br/>
+                        这里是测试用的话题这里是测试用的话题<br/>
+                    </div>
+                </div>                          
+            </li>
             <div id="communicationWrapOuter">
                 <div id="communicationWrap">
                     <div id="communicationBackgroud">
@@ -646,14 +645,14 @@
                                 <!-- {% for msg in messages %}
 	                                {{ msg }}
                                 {% end %} -->
-                            <li id='groupWelcomeChat'>
-                                    <a href='#'><img src='static/css/image/test.png'/></a>
-                                    <div class='talkmain'>
-                                        <div class='username'><a href='#'>Loggerhead</a></div>
-                                        <div class='timeshow'>
+                            <li class="chat">
+                                    <a class="userImage" href='#'><img src='static/css/image/test.png'/></a>
+                                    <div class='talkMain'>
+                                        <div class='userName'><a href='#'>Loggerhead</a></div>
+                                        <div class='timeShow'>
                                             --:--
                                         </div>
-                                        <div class='talkcontent'>
+                                        <div class='talkContent'>
                                             这里是回复测试用话题这里是回复测试用话题<br/>
                                             这里是回复测试用话题这里是回复测试用话题<br/>
                                             这里是回复测试用话题这里是回复测试用话题<br/>
