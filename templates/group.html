@@ -9,6 +9,7 @@
     <meta name="Description" content="梧桐小组" />
     <link rel="stylesheet" href="{{ static_url("css/base.css") }}" type="text/css" />
     <link rel="stylesheet" href="{{ static_url("css/group.css") }}" type="text/css" />
+    <link rel="stylesheet" href="{{ static_url("css/animation.css") }}" type="text/css" />
     <link rel="stylesheet" href="{{ static_url("css/shCoreEclipse.css") }}" type="text/css" />
 </head>
 
@@ -51,7 +52,7 @@
                     <div class="navrightonOption">
                         
                         <a id="message" href="#">
-                            <li>消息</li>
+                            <li>消息<span id="msgNum">19</span></li>
                         </a>
                         <a id="setting" href="#">
                             <li>设置</li>
@@ -133,7 +134,7 @@
                     <div class='groupOptionItem'>作品</div>
                 </a>
                 <a href="#">
-                    <div class='groupOptionItem'>最近话题</div>
+                    <div class='groupOptionItem'>话题</div>
                 </a>
                 <a href="#">
                     <div class='groupOptionItem'>设置</div>
@@ -609,7 +610,7 @@
                 <div id="communicationWrap">
                     <div id="communicationBackgroud">
                         <form id="communicationData" method="post">
-                            <a href="#" id="changeSendState">切换为话题模式</a>
+                            <a href="#" id="changeSendState">切换至话题模式</a>
                             <div class="chatSend">
                                 <textarea id="chatData" class="input" type="text" name="chatConData" placeholder=""></textarea>
                                 <a href="#" id="chatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
@@ -625,6 +626,21 @@
                                 <!-- {% for msg in messages %}
 	                                {{ msg }}
                                 {% end %} -->
+                                <li id="testTopic">
+                                    <a href='#'><img src='static/css/image/test.png'/></a>
+                                    <div class='talkmain'>
+                                        <div class="talkaction"><a class='username' href='#'>Kyleslight</a> 发起了话题 <span class='talkTitle'>
+                                            <a href="groupTest.html" target="_blank">这是一个测试用的话题</a>
+                                        </span></div>
+                                        <div class='timeshow'>
+                                            --:--
+                                        </div>
+                                        <div class='topictalkcontent'>
+                                            这是一个测试用的话题这是一个测试用的话题这是一个测试用的话题这是一个测试用的话题...
+                                        </div>
+                                    </div>
+                                    
+                                </li>
                                 <li id='groupWelcomeChat'>
                                     <a href='#'><img src='static/css/image/test.png'/></a>
                                     <div class='talkmain'>

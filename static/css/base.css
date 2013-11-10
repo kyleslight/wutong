@@ -196,9 +196,11 @@ textarea{
 .header{
 	height: 72px;
 	margin: 0 auto;
+	clear: both;
 	background: rgba(102,136,0,0.9);
 	border-bottom: 1px solid #CCC;
 	color: white;
+	min-width:1253px;
 	/*margin-bottom: 30px;*/
 	/*margin-bottom: 20px;*/
 }
@@ -244,13 +246,19 @@ textarea{
 
 .navcontainer{
 	height:71px;
-	background: transparent;
+	/*background: transparent;*/
+	/*background: rgba(102,136,0,0.9);*/
+	max-width:1253px;
+	min-width: 800px;
 	margin:0 auto;
 }
 .navigation{
 	height:71px;
-	background-color:transparent;
-	width:1253px;
+	/*background-color:transparent;*/
+	/*background: rgba(102,136,0,0.9);*/
+	/*border-bottom: 1px solid #CCC;*/
+	max-width:1253px;
+	min-width: 800px;
 	margin:0 auto;
 }
 .navigation h1{
@@ -332,16 +340,16 @@ textarea{
 	border-bottom: 1px solid transparent;
 }
 #myHomepage:hover{
-	border-left: 1px solid #CCC;
+	/*border-left: 1px solid #CCC;
 	border-right: 1px solid #CCC;
-	border-bottom: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;*/
 	/*border-bottom-left-radius: 4px;*/
 	/*border-bottom-right-radius: 4px;*/
 }
 #logout:hover{
-	border-left: 1px solid #CCC;
+	/*border-left: 1px solid #CCC;
 	border-right: 1px solid #CCC;
-	border-bottom: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;*/
 	border-bottom-left-radius: 4px;
 	border-bottom-right-radius: 4px;
 }
@@ -355,6 +363,32 @@ textarea{
 	-moz-transition: 0.7s;
 	-webkit-transition: 0.7s;
 	-o-transition: 0.7s;
+}
+
+#msgNum{
+	position: absolute;
+	background: #EF9AA0;
+	/*background: pink;*/
+	color: #680;
+	padding: 0 3px;
+	font-size: 0.6em;
+	line-height: 13px;
+	border-radius: 4px;
+	float: right;
+	margin-top: -5px;
+	
+	transition: 2s;
+	-moz-transition:2s;
+	-webkit-transition:2s;
+	-o-transition:2s;
+}
+
+.tremble{
+	animation: tremble 0.7s;
+	-moz-animation: tremble 0.7s;	
+	-webkit-animation: tremble 0.7s;
+	-o-animation: tremble 0.7s;
+	box-shadow: 0px 0px 20px #AAA;
 }
 
 .userExpand div:hover{

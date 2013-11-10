@@ -1,0 +1,242 @@
+@keyframes tremble{
+0%   {
+transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+}
+12%  {
+	transform: rotate(30deg);
+-ms-transform: rotate(30deg);		
+-webkit-transform: rotate(30deg);	
+-o-transform: rotate(30deg);
+-moz-transform: rotate(30deg);
+}
+25%  {
+	transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+}
+36% {
+	transform: rotate(-30deg);
+-ms-transform: rotate(-30deg);		
+-webkit-transform: rotate(-30deg);	
+-o-transform: rotate(-30deg);
+-moz-transform: rotate(-30deg);
+}
+50%  {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+62%{
+	transform: rotate(30deg);
+-ms-transform: rotate(30deg);		
+-webkit-transform: rotate(30deg);	
+-o-transform: rotate(30deg);
+-moz-transform: rotate(30deg);
+}
+75%  {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+86% {
+	transform: rotate(-30deg);
+-ms-transform: rotate(-30deg);		
+-webkit-transform: rotate(-30deg);	
+-o-transform: rotate(-30deg);
+-moz-transform: rotate(-30deg);
+}
+100% {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+}
+
+@-moz-keyframes tremble /* Firefox */
+{
+0%   {
+transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+}
+12%  {
+	transform: rotate(30deg);
+-ms-transform: rotate(30deg);		
+-webkit-transform: rotate(30deg);	
+-o-transform: rotate(30deg);
+-moz-transform: rotate(30deg);
+}
+25%  {
+	transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+}
+36% {
+	transform: rotate(-30deg);
+-ms-transform: rotate(-30deg);		
+-webkit-transform: rotate(-30deg);	
+-o-transform: rotate(-30deg);
+-moz-transform: rotate(-30deg);
+}
+50%  {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+62%{
+	transform: rotate(30deg);
+-ms-transform: rotate(30deg);		
+-webkit-transform: rotate(30deg);	
+-o-transform: rotate(30deg);
+-moz-transform: rotate(30deg);
+}
+75%  {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+86% {
+	transform: rotate(-30deg);
+-ms-transform: rotate(-30deg);		
+-webkit-transform: rotate(-30deg);	
+-o-transform: rotate(-30deg);
+-moz-transform: rotate(-30deg);
+}
+100% {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+}
+
+@-webkit-keyframes tremble /* Safari 和 Chrome */
+{
+0%   {
+transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+}
+12%  {
+	transform: rotate(30deg);
+-ms-transform: rotate(30deg);		
+-webkit-transform: rotate(30deg);	
+-o-transform: rotate(30deg);
+-moz-transform: rotate(30deg);
+}
+25%  {
+	transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+}
+36% {
+	transform: rotate(-30deg);
+-ms-transform: rotate(-30deg);		
+-webkit-transform: rotate(-30deg);	
+-o-transform: rotate(-30deg);
+-moz-transform: rotate(-30deg);
+}
+50%  {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+62%{
+	transform: rotate(30deg);
+-ms-transform: rotate(30deg);		
+-webkit-transform: rotate(30deg);	
+-o-transform: rotate(30deg);
+-moz-transform: rotate(30deg);
+}
+75%  {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+86% {
+	transform: rotate(-30deg);
+-ms-transform: rotate(-30deg);		
+-webkit-transform: rotate(-30deg);	
+-o-transform: rotate(-30deg);
+-moz-transform: rotate(-30deg);
+}
+100% {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+}
+
+@-o-keyframes tremble /* Opera */
+{
+0%   {
+transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+}
+12%  {
+	transform: rotate(30deg);
+-ms-transform: rotate(30deg);		
+-webkit-transform: rotate(30deg);	
+-o-transform: rotate(30deg);
+-moz-transform: rotate(30deg);
+}
+25%  {
+	transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);
+}
+36% {
+	transform: rotate(-30deg);
+-ms-transform: rotate(-30deg);		
+-webkit-transform: rotate(-30deg);	
+-o-transform: rotate(-30deg);
+-moz-transform: rotate(-30deg);
+}
+50%  {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+62%{
+	transform: rotate(30deg);
+-ms-transform: rotate(30deg);		
+-webkit-transform: rotate(30deg);	
+-o-transform: rotate(30deg);
+-moz-transform: rotate(30deg);
+}
+75%  {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+86% {
+	transform: rotate(-30deg);
+-ms-transform: rotate(-30deg);		
+-webkit-transform: rotate(-30deg);	
+-o-transform: rotate(-30deg);
+-moz-transform: rotate(-30deg);
+}
+100% {transform: rotate(0deg);
+-ms-transform: rotate(0deg);		
+-webkit-transform: rotate(0deg);	
+-o-transform: rotate(0deg);
+-moz-transform: rotate(0deg);}
+}
