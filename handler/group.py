@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Last Modified: 2013-11-10 14:29:17
+
 import logging
 from datetime import datetime
 from tornado.web import authenticated
@@ -5,17 +9,39 @@ from tornado.websocket import WebSocketHandler
 from tornado.escape import json_encode, json_decode
 from base import BaseHandler
 
-class IndexHandler(BaseHandler):
+class GroupBaseHandler(BaseHandler):
 
-    def get(self, id=None):
-        # message[] = to_basestring(self.render_string("message.html", messages=messages))
-        self.render("group.html", messages=[])
+    @property
+    def model(self):
+        return self.groupmodel
 
-    @authenticated
-    def post(self, id):
-        pass
+    def render_message(self, message):
+        rmsg = self.render_string("message.html", message=message)
+        rmsg = to_basestring(rmsg)
+        return rmsg
 
-class MessageHandler(BaseHandler, WebSocketHandler):
+    def get_messages(self, gid, size=30, offset=0):
+        messages = self.model.get_group_messages(gid, size, offset)
+        if not messages:
+            messages = []
+        return messages
+
+class IndexHandler(GroupBaseHandler):
+
+    def render_messages(self, messages):
+        rmsgs = []
+        for message in messages:
+            rmsgs.append(self.render_message(message))
+        return rmsgs
+
+    def get(self, gid):
+        messages = self.get_messages(gid)
+        logging.info('-' * 80)
+        logging.info(messages)
+        messages = self.render_messages(messages)
+        self.render("group.html", messages=messages)
+
+class MessageHandler(GroupBaseHandler, WebSocketHandler):
     members = dict()
 
     def is_member(self, uid):

@@ -63,13 +63,11 @@ CREATE TABLE "article" (
 DROP TABLE IF EXISTS "group" CASCADE;
 CREATE TABLE "group" (
     gid serial PRIMARY KEY,
-    name varchar(32),
+    name varchar(32) NOT NULL,
     -- 创建者penname
-    founder varchar(200),
+    founder varchar(200) NOT NULL,
     intro varchar(200),
     motton varchar(100),
-    -- 公告
-    bulletin varchar(200),
     -- 公开性
     publicity bool NOT NULL DEFAULT true,
     foundtime timestamp NOT NULl DEFAULT now()

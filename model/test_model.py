@@ -3,31 +3,43 @@
 
 import unittest
 from db import Pool
-import user
-import group
+from user import UserModel
+from group import GroupModel
 
 # TODO: 异常测试
 class TestModel(unittest.TestCase):
 
     def setUp(self):
         self.dsn = "host=%s dbname=%s user=%s password=%s" % (
-                        "localhost", "wutong_test", "wutong", "wutong"
-                    )
+            "localhost", "wutong_test", "wutong", "wutong"
+        )
         self.db = Pool.instance(self.dsn)
-        self.execute = self.db._get_connection()._execute
 
-        self.email = "test@wutong.com"
-        self.penname = "wutong"
-        self.password = "wutong"
-        self.user_intro = "user_intro"
-        self.user_motton = "user_motton"
-        self.group_name = "group_name"
-        self.group_intro = "group_intro"
-        self.group_motton = "group_motton"
+        self.user = {
+            "email": "test@wutong.com",
+            "penname": "wutong",
+            "password": "wutong",
+            "realname": "wu xiao tong",
+            # man
+            "sex": True,
+            "intro": "intro",
+            "motton": "motton",
+            "avatar": "/image/test.png",
+        }
+        self.group = {
+            "name": "testgroup",
+            "founder": self.user["penname"],
+            "intro": "intro",
+            "motton": "motton",
+            "publicity": True,
+        }
+        self.message = {
+            "content": "content",
+            "title": "title",
+            "reply_id": 1,
+        }
 
     def tearDown(self):
-        # self.execute('DELETE FROM "user" *')
-        # self.execute('DELETE FROM "group" *')
         pass
 
     def test_db(self):
@@ -38,25 +50,82 @@ class TestModel(unittest.TestCase):
         self.assertIsNotNone(self.db.getitem('SELECT 1'))
         self.assertIsNotNone(self.db.getitems('SELECT 1'))
         sql = open(dirpath + "schema.sql", "r").read()
-        self.assertTrue(self.execute(sql))
+        self.assertTrue(self.db.execute(sql))
         sql = open(dirpath + "function.sql", "r").read()
-        self.assertTrue(self.execute(sql))
+        self.assertTrue(self.db.execute(sql))
 
-    def test_user(self):
-        model = user.UserModel(self.db)
-
-        hashuid = model.do_register(email=self.email, penname=self.penname, password=self.password)
-        self.assertIsNotNone(hashuid)
-        uid = model.do_activate_by_hashuid(hashuid)
-        self.assertIsInstance(uid, int)
-        self.assertIsInstance(model.get_uid_by_account(self.penname), int)
-        self.assertIsInstance(model.do_login_by_account_and_password(account=self.email, password=self.password), int)
-        self.assertIsNotNone(model.get_user_info_by_uid(uid))
-        self.assertIsInstance(model.get_score_by_uid(uid), (int, float))
-
-    def test_group(self):
+    def init(self):
         pass
 
+    def do_test(self):
+        pass
+
+    def test(self):
+        self.init()
+        self.do_test()
+
+class TestUserModel(TestModel):
+
+    def init(self):
+        self.db.execute('DELETE FROM "user" *')
+        self.model = UserModel(self.db)
+
+    def do_test(self):
+        hashuid = self.model.do_register(
+                email=self.user["email"],
+                penname=self.user["penname"],
+                password=self.user["password"]
+            )
+        self.assertIsNotNone(hashuid)
+        uid = self.model.do_activate_by_hashuid(hashuid)
+        self.assertIsInstance(uid, int)
+        uid = self.model.get_uid_by_account(self.user["penname"])
+        self.assertIsInstance(uid, int)
+        uid = self.model.do_login_by_account_and_password(
+                account=self.user["email"],
+                password=self.user["password"]
+            )
+        self.assertIsInstance(uid, int)
+        user_info = self.model.get_user_info_by_uid(uid)
+        self.assertIsNotNone(user_info)
+        score = self.model.get_score_by_uid(uid)
+        self.assertIsInstance(score, (int, float))
+
+class TestGroupModel(TestModel):
+
+    def init(self):
+        self.db.execute('DELETE FROM "user" *')
+        self.db.execute('DELETE FROM "group" *')
+        self.model = GroupModel(self.db)
+        usermodel = UserModel(self.db)
+        hashuid = usermodel.do_register(
+                email=self.user["email"],
+                penname=self.user["penname"],
+                password=self.user["password"]
+            )
+        self.uid = usermodel.do_activate_by_hashuid(hashuid)
+
+    def do_test(self):
+        gid = self.model.do_create(
+                name=self.group["name"],
+                founder=self.user["penname"],
+                intro=self.group["intro"],
+                motton=self.group["motton"]
+            )
+        self.assertIsInstance(gid, int)
+        res = self.model.do_user_join_group(gid=gid, uid=self.uid)
+        self.assertTrue(res)
+        for i in xrange(70):
+            res = self.model.do_insert_message(
+                    gid=gid,
+                    uid=self.uid,
+                    content=self.message["content"],
+                    title=self.message["title"]
+                )
+            self.assertTrue(res)
+
+        msgs = self.model.get_group_messages(gid, 30, 0)
+        self.assertIsInstance(msgs, list)
 
 if __name__ == "__main__":
     unittest.main()

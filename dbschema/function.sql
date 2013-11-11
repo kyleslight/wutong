@@ -1,13 +1,13 @@
 --------------------------------------------------------------------------------
--- 函数与视图
+-- 函数
 --------------------------------------------------------------------------------
--- refcursor
+
 -- 用户详细信息
 DROP FUNCTION IF EXISTS f_get_user_info_j(integer);
 CREATE FUNCTION f_get_user_info_j(integer)
   RETURNS json
 AS $$
-    SELECT row_to_json(u)
+    SELECT row_to_json(row(u))
       FROM (
            SELECT email, penname, phone,
                   intro, motton, avatar,
@@ -54,16 +54,11 @@ DROP FUNCTION IF EXISTS f_activate_user(varchar);
 CREATE FUNCTION f_activate_user(varchar)
   RETURNS integer AS
 $$
-DECLARE
-    v_uid "user".uid%TYPE;
-BEGIN
     UPDATE "user"
        SET ("is_activated") = (true)
      WHERE md5(CAST("uid" AS varchar)) = $1
-    RETURNING "uid" INTO v_uid;
-    RETURN v_uid;
-END;
-$$ LANGUAGE plpgsql;
+    RETURNING "uid";
+$$ LANGUAGE SQL;
 
 -- 用户登录, return uid
 DROP FUNCTION IF EXISTS f_user_login(varchar, varchar);
@@ -85,7 +80,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- return uid by account
+-- 根据email或penname或phone返回uid
 DROP FUNCTION IF EXISTS f_get_uid(varchar);
 CREATE FUNCTION f_get_uid(varchar)
   RETURNS integer AS $$
@@ -102,25 +97,25 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 小组
+--------------------------------------------------------------------------------
 -- 小组详细信息
 DROP FUNCTION IF EXISTS f_get_group_info_j(integer);
 CREATE FUNCTION f_get_group_info_j(integer)
   RETURNS json
 AS $$
-    SELECT row_to_json(g)
+    SELECT row_to_json(row(g))
       FROM (
            SELECT gid, name, founder,
-                  intro, motton, bulletin,
-                  publicity, foundtime
+                  intro, motton, publicity,
+                  foundtime
              FROM "group"
              WHERE gid = $1
         ) g;
 $$ LANGUAGE SQL;
 
--- 创建小组
-DROP FUNCTION IF EXISTS f_create_group_j(varchar, varchar, varchar, varchar);
-CREATE FUNCTION f_create_group_j(varchar, varchar, varchar, varchar)
+-- 创建小组, return gid
+DROP FUNCTION IF EXISTS f_create_group(varchar, varchar, varchar, varchar);
+CREATE FUNCTION f_create_group(varchar, varchar, varchar, varchar)
   RETURNS integer
 AS $$
     INSERT INTO "group"
@@ -130,25 +125,66 @@ AS $$
 $$ LANGUAGE SQL;
 
 -- 加入小组
--- DROP FUNCTION IF EXISTS f_join_group(integer, integer);
--- CREATE FUNCTION f_join_group(integer, integer)
---   RETURNS boolean
--- AS $$
---     INSERT INTO "group_user"
---            (gid, uid)
---     VALUES ($1, $2)
---     RETURNING true;
---     RETURN false;
--- $$ LANGUAGE SQL;
+DROP FUNCTION IF EXISTS f_join_group(integer, integer);
+CREATE FUNCTION f_join_group(integer, integer)
+  RETURNS void
+AS $$
+    INSERT INTO "group_user"
+           ("gid", "uid")
+    VALUES ($1, $2);
+$$ LANGUAGE SQL;
+--------------------------------------------------------------------------------
+DROP FUNCTION IF EXISTS f_get_group_messages_j(integer, integer, integer);
+CREATE FUNCTION f_get_group_messages_j(integer, integer, integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(gm))
+      FROM (SELECT id, gid, uid,
+                   content, title, reply_id,
+                   submit_time
+              FROM "group_message"
+             WHERE gid = $1
+             LIMIT $2
+            OFFSET $3) gm;
+$$ LANGUAGE SQL;
+
+DROP FUNCTION IF EXISTS f_insert_group_message(integer, integer, varchar, varchar, integer);
+CREATE FUNCTION f_insert_group_message(integer, integer, varchar, varchar, integer)
+  RETURNS void
+AS $$
+    INSERT INTO "group_message"
+           (gid, uid, content,
+            title, reply_id)
+    VALUES ($1, $2, $3, $4, $5)
+$$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION f_delete_user() RETURNS trigger AS
 $$
 BEGIN
     DELETE FROM "user_info" AS ui WHERE ui.uid = OLD.uid;
+    DELETE FROM "group_user" AS gu WHERE gu.uid = OLD.uid;
+    DELETE FROM "group_message" AS gm WHERE gm.uid = OLD.uid;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION f_delete_group() RETURNS trigger AS
+$$
+BEGIN
+    DELETE FROM "group_user" AS gu WHERE gu.gid = OLD.gid;
+    DELETE FROM "group_message" AS gm WHERE gm.gid = OLD.gid;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+--------------------------------------------------------------------------------
+-- 触发器
+--------------------------------------------------------------------------------
+
 DROP TRIGGER IF EXISTS "t_delete_user" ON "user";
 CREATE TRIGGER "t_delete_user" BEFORE DELETE ON "user"
    FOR EACH ROW EXECUTE PROCEDURE f_delete_user();
+
+
+DROP TRIGGER IF EXISTS "t_delete_group" ON "group";
+CREATE TRIGGER "t_delete_group" BEFORE DELETE ON "group"
+   FOR EACH ROW EXECUTE PROCEDURE f_delete_group();

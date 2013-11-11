@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Last Modified time: 2013-11-10 10:20:57
+
 import logging
 from hashlib import sha1
 from uuid import uuid3, NAMESPACE_X500

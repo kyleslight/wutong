@@ -23,6 +23,9 @@ class Pool:
         for i in xrange(self.min_size):
             self._new_connection()
 
+    def execute(self, sql, *args):
+        return self._get_connection().execute(sql, *args)
+
     def getfirstfield(self, sql, *args):
         return self._get_connection().getfirstfield(sql, *args)
 
@@ -85,7 +88,7 @@ class Connection:
                self.cnn.get_transaction_status() != TRANSACTION_STATUS_IDLE)
 
     def getitems(self, sql, *args):
-        self._execute(sql, *args)
+        self.execute(sql, *args)
         try:
             result = self.cur.fetchall()
         except:
@@ -93,7 +96,7 @@ class Connection:
         return result
 
     def getitem(self, sql, *args):
-        self._execute(sql, *args)
+        self.execute(sql, *args)
         try:
             result = self.cur.fetchone()
         except:
@@ -104,22 +107,22 @@ class Connection:
         return self.getitem(sql, *args)[0]
 
     def getjson(self, sql, *args):
-        result = self.getitem(sql, *args)[0]
+        result = self.getfirstfield(sql, *args)
         if result:
             return json_decode(result)
         else:
             return None
 
-    def _execute(self, sql, *args):
+    def execute(self, sql, *args):
         if not args: args = None
         try:
             self.cur.execute(sql, args)
             result = True
         except Exception as e:
             dbsql = self.cur.mogrify(sql, args)
-            result = False
             logging.error("SQL: `%s`", dbsql)
             logging.error(str(e))
+            result = False
         self.cnn.commit()
         return result
 
