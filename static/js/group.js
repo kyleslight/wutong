@@ -5,8 +5,8 @@ var activeIndex=-1;
 var elapseTime = 4500;
 var shortElapseTime=4000;
 var _showwel_flag = true;
-var _last_post_id;
 
+// TODO: refactor, package as a function. this statement should run at first
 var url = "ws://" + location.host + location.pathname + "/message";
 var msg_socket = new WebSocket(url);
 msg_socket.onclose = function() {};
@@ -14,9 +14,6 @@ msg_socket.onclose = function() {};
 $(document).ready(function(){
     //check sex of the member
     renderMaleAndFemale();
-    // $.getJSON("/foo", function (data) {
-    //     data.groupName;
-    // });
     var groupMottoPrimaryWidth=$("#groupMotto").width();
     if(groupMottoPrimaryWidth>425){
             $("#groupMotto").css({"margin-top":"2px"});
@@ -24,7 +21,6 @@ $(document).ready(function(){
 
     $.getJSON("/u/info", function (data) {
         var username;
-        console.log(data);
         username = data.penname;
         $(".navrightoff").fadeOut(10,function(){
             $(".navrighton").fadeIn(10);
@@ -157,32 +153,35 @@ $(document).ready(function(){
     //     }
     // })
 
-    msg_socket.onmessage = function(e) {
-        var data = e.data;
-        if (!data)
-            return;
-
-        topic_id = $("#communication li:first-child").attr("id");
-        topic_id = topic_id ? topic_id.replace("topic_", "") : '0';
-        _last_post_id = topic_id;
-
-        var entry = JSON.parse(data);
-        if (parseInt(entry.id, 10) <= parseInt(_last_post_id, 10))
-            return;
-        else
-            _last_post_id = entry.id;
-
-        entry.submit_time=entry.submit_time.toString().substring(5,19);
-        condata = $(condata);
-        var condata="<li id='topic_"+entry.id+"'>"+"<a href='#'><img src='"+entry.avatar+"'/></a><div class='talkmain'><div class='username'><a href='#'>"+entry.penname+"</a></div><div class='talkcontent'>"+entry.content+"</div></div><div class='timeshow'>"+entry.submit_time+"</div></li>";
-        $("#communication").prepend(condata);
-
+    function removeMessage() {
         var thedata=$("#communication").children().size();
         if (thedata>30) {
             for (var i = 30; i < thedata; i++) {
                 $("#communication").children("li").eq(i).remove();
             }
         }
+    }
+
+    msg_socket.onmessage = function(e) {
+        var data = e.data;
+        var item;
+        if (data)
+            item = JSON.parse(data);
+        else
+            return;
+
+        item.submit_time = item.submit_time.toString().substring(5,19);
+        // TODO: 通过title判断是否为topic
+        var condata = '<li id="topic_"'+item.id+' class="topicOutter">'
+                    + '<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
+                    + '<div class="talkMain"><div class="talkAction">'
+                    + '<a class="userName" href="#">'+item.user.penname+'</a> 发起了话题 <span class="talkTitle">'
+                    + '<a href="/topic/'+item.id+'" target="_blank">'+item.title+'</a></span></div>'
+                    + "<div class='timeShow'>"+item.submit_time+"</div>"
+                    + "<div class='topicTalkContent'>"+item.content+"</div></div></li>";
+
+        $("#communication").prepend(condata);
+        removeMessage();
     }
 });
 
@@ -205,12 +204,13 @@ function submitChatData(){
         }
     }
 
-    data = {};
-    data["content"] = chatCon;
-    data["title"] = null;
-    data = JSON.stringify(data);
-    msg_socket.send(data);
     $("#chatData").val("");
+    // send message to server, TODO: please refactor
+    message = {
+        "content": chatCon,
+    };
+    message = JSON.stringify(message);
+    msg_socket.send(message);
 }
 
 function submitTopicData(){
@@ -235,14 +235,7 @@ function submitTopicData(){
     $(window.frames["ueditor_0"].document).find("body.view").html("");
     return false;
 }
-/*
-function foo() {
-    $.post("/test", {
-        option: "send_normal",
-        data: data
-    });
-}
-*/
+
 function checkIsOtherOptionShow(){
     for (var i = 0; i < $(".groupOptions a").length; i++) {
         if ($("#groupOptionShow"+i).hasClass("active")) {

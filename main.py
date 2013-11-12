@@ -22,7 +22,6 @@ def debug():
             self.render(filename, messages=[])
 
     urls.append((r"/(.*)", RouteHandler))
-
     main()
 
 def is_debug():

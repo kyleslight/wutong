@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from handler import group, user
+from handler import base, group, user
 
 urls = [
         (r"/u/home/(\w+)", user.HomeHandler),
@@ -12,4 +12,6 @@ urls = [
         (r"/account/check", user.CheckMailHandler),
         (r"/g/(\w+)", group.IndexHandler),
         (r"/g/(\w+)/message", group.MessageHandler),
+        (r"/topic/(\w+)", group.TopicHandler),
+        # (r"/.*", base.BaseHandler),
     ]

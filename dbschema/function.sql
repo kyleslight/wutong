@@ -7,7 +7,7 @@ DROP FUNCTION IF EXISTS f_get_user_info_j(integer);
 CREATE FUNCTION f_get_user_info_j(integer)
   RETURNS json
 AS $$
-    SELECT row_to_json(row(u))
+    SELECT row_to_json(u.*)
       FROM (
            SELECT email, penname, phone,
                   intro, motton, avatar,
@@ -103,7 +103,7 @@ DROP FUNCTION IF EXISTS f_get_group_info_j(integer);
 CREATE FUNCTION f_get_group_info_j(integer)
   RETURNS json
 AS $$
-    SELECT row_to_json(row(g))
+    SELECT row_to_json(g.*)
       FROM (
            SELECT gid, name, founder,
                   intro, motton, publicity,
@@ -134,6 +134,30 @@ AS $$
     VALUES ($1, $2);
 $$ LANGUAGE SQL;
 --------------------------------------------------------------------------------
+DROP FUNCTION IF EXISTS f_get_member_info_j(integer, integer);
+CREATE FUNCTION f_get_member_info_j(integer, integer)
+  RETURNS json
+AS $$
+    SELECT row_to_json(m.*)
+      FROM (SELECT is_leader, is_subleader,
+                   is_member, join_time
+              FROM "group_user"
+             WHERE gid = $1
+               AND uid = $2) m;
+$$ LANGUAGE SQL;
+
+DROP FUNCTION IF EXISTS f_get_group_message_j(integer);
+CREATE FUNCTION f_get_group_message_j(integer)
+  RETURNS json
+AS $$
+    SELECT row_to_json(m.*)
+      FROM (SELECT id, gid, uid,
+                   content, title, reply_id,
+                   submit_time
+              FROM "group_message"
+             WHERE id = $1) m;
+$$ LANGUAGE SQL;
+
 DROP FUNCTION IF EXISTS f_get_group_messages_j(integer, integer, integer);
 CREATE FUNCTION f_get_group_messages_j(integer, integer, integer)
   RETURNS json
@@ -144,18 +168,20 @@ AS $$
                    submit_time
               FROM "group_message"
              WHERE gid = $1
+             ORDER BY id DESC
              LIMIT $2
             OFFSET $3) gm;
 $$ LANGUAGE SQL;
 
 DROP FUNCTION IF EXISTS f_insert_group_message(integer, integer, varchar, varchar, integer);
 CREATE FUNCTION f_insert_group_message(integer, integer, varchar, varchar, integer)
-  RETURNS void
+  RETURNS integer
 AS $$
     INSERT INTO "group_message"
            (gid, uid, content,
             title, reply_id)
     VALUES ($1, $2, $3, $4, $5)
+    RETURNING id;
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION f_delete_user() RETURNS trigger AS

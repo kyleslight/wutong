@@ -20,8 +20,7 @@ class TestModel(unittest.TestCase):
             "penname": "wutong",
             "password": "wutong",
             "realname": "wu xiao tong",
-            # man
-            "sex": True,
+            "sex": True, # man
             "intro": "intro",
             "motton": "motton",
             "avatar": "/image/test.png",
@@ -39,38 +38,31 @@ class TestModel(unittest.TestCase):
             "reply_id": 1,
         }
 
+        self.do_test_db()
+
     def tearDown(self):
         pass
 
-    def test_db(self):
+    def do_test_db(self):
         dirpath = "../dbschema/"
 
         self.assertEqual(self.db.getfirstfield('SELECT 1'), 1)
         self.assertEqual(self.db.getjson("SELECT '1'"), 1)
-        self.assertIsNotNone(self.db.getitem('SELECT 1'))
-        self.assertIsNotNone(self.db.getitems('SELECT 1'))
+        self.assertEqual(self.db.getitem('SELECT 1'), (1,))
+        self.assertEqual(self.db.getitems('SELECT 1'), [(1,)])
         sql = open(dirpath + "schema.sql", "r").read()
         self.assertTrue(self.db.execute(sql))
         sql = open(dirpath + "function.sql", "r").read()
         self.assertTrue(self.db.execute(sql))
 
-    def init(self):
-        pass
-
-    def do_test(self):
-        pass
-
-    def test(self):
-        self.init()
-        self.do_test()
-
 class TestUserModel(TestModel):
 
-    def init(self):
+    def setUp(self):
+        super(TestUserModel, self).setUp()
         self.db.execute('DELETE FROM "user" *')
         self.model = UserModel(self.db)
 
-    def do_test(self):
+    def test(self):
         hashuid = self.model.do_register(
                 email=self.user["email"],
                 penname=self.user["penname"],
@@ -93,7 +85,8 @@ class TestUserModel(TestModel):
 
 class TestGroupModel(TestModel):
 
-    def init(self):
+    def setUp(self):
+        super(TestGroupModel, self).setUp()
         self.db.execute('DELETE FROM "user" *')
         self.db.execute('DELETE FROM "group" *')
         self.model = GroupModel(self.db)
@@ -105,7 +98,7 @@ class TestGroupModel(TestModel):
             )
         self.uid = usermodel.do_activate_by_hashuid(hashuid)
 
-    def do_test(self):
+    def test(self):
         gid = self.model.do_create(
                 name=self.group["name"],
                 founder=self.user["penname"],
@@ -116,16 +109,30 @@ class TestGroupModel(TestModel):
         res = self.model.do_user_join_group(gid=gid, uid=self.uid)
         self.assertTrue(res)
         for i in xrange(70):
-            res = self.model.do_insert_message(
+            mid = self.model.do_insert_message(
                     gid=gid,
                     uid=self.uid,
                     content=self.message["content"],
                     title=self.message["title"]
                 )
-            self.assertTrue(res)
+            self.assertIsInstance(mid, int)
 
+        msg = self.model.get_group_message(mid)
+        self.assertIsNotNone(msg)
         msgs = self.model.get_group_messages(gid, 30, 0)
         self.assertIsInstance(msgs, list)
+        mem = self.model.get_member_info(gid, self.uid)
+        self.assertIsNotNone(mem)
+
+def suite():
+    suite = unittest.TestSuite()
+    suite.addTest(TestUserModel("test"))
+    suite.addTest(TestGroupModel("test"))
+    return suite
+
+def main():
+    runner = unittest.TextTestRunner()
+    runner.run(suite())
 
 if __name__ == "__main__":
-    unittest.main()
+    main()

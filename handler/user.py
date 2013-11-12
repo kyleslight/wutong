@@ -13,7 +13,8 @@ class UserBaseHandler(BaseHandler):
         return self.usermodel
 
     def set_authenticated(self, uid):
-        self.set_secure_cookie("uid", str(uid), 5, httponly=True)
+        # 15 days relogin
+        self.set_secure_cookie("uid", str(uid), expires_days=15, httponly=True)
 
 
 class LoginHandler(UserBaseHandler):

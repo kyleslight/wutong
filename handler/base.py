@@ -6,7 +6,7 @@ class BaseHandler(RequestHandler):
     def get_user_id(self):
         return self.get_secure_cookie("uid")
 
-    def get_current_user(self, key=None):
+    def get_current_user(self):
         uid = self.get_user_id()
         user_info = self.usermodel.get_user_info_by_uid(uid)
         return user_info

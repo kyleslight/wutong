@@ -6,7 +6,7 @@ import logging
 from datetime import datetime
 from tornado.web import authenticated
 from tornado.websocket import WebSocketHandler
-from tornado.escape import json_encode, json_decode
+from tornado.escape import json_encode, json_decode, to_basestring
 from base import BaseHandler
 
 class GroupBaseHandler(BaseHandler):
@@ -28,57 +28,60 @@ class GroupBaseHandler(BaseHandler):
 
 class IndexHandler(GroupBaseHandler):
 
-    def render_messages(self, messages):
-        rmsgs = []
-        for message in messages:
-            rmsgs.append(self.render_message(message))
-        return rmsgs
-
     def get(self, gid):
-        messages = self.get_messages(gid)
-        logging.info('-' * 80)
-        logging.info(messages)
-        messages = self.render_messages(messages)
-        self.render("group.html", messages=messages)
+        self.render("group.html")
 
 class MessageHandler(GroupBaseHandler, WebSocketHandler):
     members = dict()
 
-    def is_member(self, uid):
-        return True
+    def add_session(self):
+        if not MessageHandler.members.get(self.gid, None):
+            MessageHandler.members[self.gid] = list()
+        MessageHandler.members[self.gid].append(self)
+
+    def get_member_info(self, uid):
+        return self.model.get_member_info(self.gid, uid)
+
+    def send_message(self, message):
+        message["user"] = self.usermodel.get_user_info_by_uid(message["uid"])
+        self.write_message(json_encode(message))
+
+    def send_message_to_all(self, message_id):
+        message = self.model.get_group_message(message_id)
+        for member in MessageHandler.members[self.gid]:
+            member.send_message(message)
+
+    # message_id
+    def save_message(self, message):
+        return self.model.do_insert_message(
+                self.gid,
+                message["uid"],
+                message["content"],
+                message.get("title", None),
+                message.get("reply_id", None),
+            )
 
     def open(self, gid):
         self.gid = gid
-        if not self.members.get(gid, None):
-            self.members[gid] = list()
-
-        self.members[gid].append(self)
-        self.user = self.get_current_user()
+        self.add_session()
+        messages = self.get_messages(gid)
+        while messages:
+            self.send_message(messages.pop())
 
     def on_close(self):
-        self.members[self.gid].remove(self)
+        MessageHandler.members[self.gid].remove(self)
 
-    def on_message(self, json_data):
-        uid=self.user["uid"]
-        if json_data and self.is_member(uid):
-            data = json_decode(json_data)
-            content = data["content"]
-            title = data["title"]
+    def on_message(self, message):
+        uid = self.get_user_id()
+        if not self.get_member_info(uid):
+            return
+        message = json_decode(message)
+        message["uid"] = uid
+        message_id = self.save_message(message)
+        self.send_message_to_all(message_id)
 
-            if title:
-                self.db.insert_group_topic(self.gid, uid, content, title)
-            else:
-                self.db.insert_group_chat(self.gid, uid, content)
+class TopicHandler(GroupBaseHandler):
 
-            entry = dict(
-                    penname=self.user["penname"],
-                    content=content,
-                    submit_time=str(datetime.now()),
-                    avatar=self.user["avatar"],
-                    title=title,
-                )
-            logging.info(entry)
-            for self.mem in self.members[self.gid]:
-                self.mem.write_message(json_encode(entry))
-
+    def get(self, topic_id):
+        self.render("groupTest.html")
 

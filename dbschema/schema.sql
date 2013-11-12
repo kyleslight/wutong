@@ -162,7 +162,7 @@ CREATE TABLE "group_user" (
     is_subleader bool NOT NULL DEFAULT false,
     -- 组员
     is_member bool NOT NULL DEFAULT true,
-    view_time timestamp NOT NULL DEFAULT now()
+    join_time timestamp NOT NULL DEFAULT now()
 );
 
 -- 小组公告
