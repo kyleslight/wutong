@@ -4,10 +4,12 @@
 
 #依赖  
 python2.7  
+[python-memcached](https://github.com/linsomniac/python-memcached)    
 python-tornado  
 python-psycopg2  
 postgresql-9.2  
 postgresql-contrib-9.2  
+[memcached](http://memcached.org/)  
 
 #安装  
 \#创建数据库wutong  
