@@ -26,10 +26,12 @@ class GroupBaseHandler(BaseHandler):
             messages = []
         return messages
 
+
 class IndexHandler(GroupBaseHandler):
 
     def get(self, gid):
         self.render("group.html")
+
 
 class MessageHandler(GroupBaseHandler, WebSocketHandler):
     members = dict()
@@ -79,8 +81,60 @@ class MessageHandler(GroupBaseHandler, WebSocketHandler):
         message_id = self.save_message(message)
         self.send_message_to_all(message_id)
 
+
 class TopicHandler(GroupBaseHandler):
 
     def get(self, topic_id):
         self.render("groupTest.html")
 
+
+class GroupinfoHandler(GroupBaseHandler):
+
+    def get(self, gid):
+        group_info = self.model.get_group_info(gid)
+        group_info = json_encode(group_info)
+        self.write(group_info)
+
+    @authenticated
+    def post(self, gid):
+        name = self.get_argument("groupname", None)
+        intro = self.get_argument("groupintro", None)
+        motton = self.get_argument("groupmotton", None)
+        user = self.get_current_user()
+        founder = user["penname"]
+        self.model.update_group_info(gid, founder, name, intro, motton)
+
+
+class JoinHandler(GroupBaseHandler):
+
+    def post(self):
+        uid = self.get_argument("uid", None)
+        gid = self.get_argument("gid", None)
+        self.model.do_user_join_group(gid, uid)
+
+
+class GroupUserInfoHandler(GroupBaseHandler):
+
+    def post(self):
+        uid = self.get_argument("uid", None)
+        gid = self.get_argument("gid", None)
+        member_info = self.model.get_member_info(gid, uid)
+        member_info = json_encode(member_info)
+        self.write(member_info)
+
+class GroupBulletinHandler(GroupBaseHandler):
+
+    def get(self, gid):
+        bulletins = self.model.get_group_bulletins(gid, 6, 0)
+        while bulletins:
+            self.write(bulletins.pop())
+
+    def post(self, gid):
+        content = self.get_argument("content", None)
+        title = self.get_argument("title", None)
+        self.do_insert_bulletin(gid, self.user_id, content, title)
+
+class GroupMembersHandler(GroupBaseHandler):
+
+    def get(self, gid):
+        pass

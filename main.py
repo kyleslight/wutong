@@ -19,9 +19,7 @@ def debug():
 
     class RouteHandler(RequestHandler):
         def get(self, filename="group.html"):
-            #self.render(filename, messages=[])
-            res = self.get_secure_cookie("uid")
-            print(str(res))
+            self.render(filename, messages=[])
 
     urls.append((r"/(.*)", RouteHandler))
     main()

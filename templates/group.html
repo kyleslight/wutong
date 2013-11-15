@@ -105,6 +105,17 @@
             </form>
         </div>
     </div>
+    <div class="groupPrompt">
+        <p class="groupPromptPublic">这是一个公开的小组，你可以点击 <a id="publicJoin" class="joinButton" href="#"> 我喜欢 </a>加入它!</p>
+        <p class="groupPromptPrivate">这是一个私人的小组，你可以  <a id="privateJoin" class="joinButton" href="#"> 联系该小组组长 </a>来加入它!</p>
+        <form id="contactGroupLeader" name="contactGroupLeader" action="#" method="post">
+            <p>组长 <span id="groupLeadrerName">Kyleslight</span> :</p>
+            <textarea class="input" id="contactGroupLeaderCon" type="text" name="contactGroupLeaderCon" placeholder="向组长提出申请"></textarea>
+            <div class="joinSend"><a href="#" id="JoinSubmitButton" class="joinButton" name="submitButton" value="send">Send</a>  <a href="#" id="contactGroupLeaderBack">返回</a>
+             </div>
+        </form>
+    </div>
+    <a id="return_top" href="#" title="回到顶部" class="none"></a>
     <div class="groupWarpOuter">
         <div class="groupWarp">
             <!-- basic group infomation -->
@@ -203,9 +214,12 @@
                 <!-- information card -->
                 <div class="infoCard" id="groupOptionShow1">
                     <div id="groupName">Kyleslight的同好会
-                        <p id="IDVaule">(000001)</p>
+                        <p id="IDVaule"></p>
                     </div>
-                    <img id="groupCardImage" src="{{ static_url("css/image/forumTest.jpg") }}" />
+                    <div class="groupBannerBox">
+                        <img id="groupBanner" src="{{ static_url("css/image/banner.jpg") }}" />
+                    </div>
+                    <!-- <img id="groupCardImage" src="{{ static_url("css/image/forumTest.jpg") }}" /> -->
                     <div id="groupDetail">
                         <div id="groupIntro" class="groupDetailItem">
                             <span class="introWord">简介：</span>一个Kyleslight建立的方便交流的同好会，嗯，是一个正常的社团啦
@@ -241,6 +255,11 @@
                             <span class="introWord">签名：</span>
                             <p id="Motto">西十二自习室欢迎你</p>
                         </div>
+                    </div>
+                    <div id="groupMoreDetail">
+                        嗯，kyleslight的同好会，顾名思义，就是kyleslight创立的用作圈子内交流的一个地方<br>
+                        在这里，每天都会有很多有意思的事情（是吗）<br>
+                        总之就是这样，嗯
                     </div>
                     <a href="#" class="optionBack">返回</a>
                 </div>
@@ -605,13 +624,21 @@
 
             </div>
             <div id="communicationWrapOuter">
+                <div id="messageTemp">
+                </div>
                 <div id="communicationWrap">
                     <div id="communicationBackgroud">
                         <form id="communicationData" method="post">
                             <a href="#" id="changeSendState">切换至话题模式</a>
                             <div class="chatSend">
-                                <textarea id="chatData" class="input" type="text" name="chatConData" placeholder=""></textarea>
-                                <a href="#" id="chatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
+                                <div class="normalChatSend">
+                                    <textarea id="chatData" class="input" type="text" name="chatConData" placeholder=""></textarea>
+                                    <a href="#" id="chatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
+                                </div>
+                                <div class="expandChatSend">
+                                    <textarea id="expandChatData" class="input" type="text" name="expandChatData" placeholder=""></textarea>
+                                    <a href="#" id="expandChatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
+                                </div>
                             </div>
                             <div class="topicSend">
                                 <input id="topicTitle" class="input" type="text" name="topicTitle" placeholder="话题标题" />
@@ -622,7 +649,7 @@
                         <div id="communicationConWrap">
                             <div class="communication" id="communication">
                                 <li id="testTopic" class="topicOutter">
-                                    <a class="userImage" href='#'><img src='static/css/image/test.png'/></a>
+                                    <a class="userImage" href='#'><img src='#'/></a>
                                     <div class='talkMain'>
                                         <div class="talkAction"><a class='userName' href='#'>Kyleslight</a> 发起了话题 <span class='talkTitle'>
                                             <a href="groupTest.html" target="_blank">这是一个测试用的话题</a>
@@ -637,7 +664,7 @@
 
                                 </li>
                                 <li id='groupWelcomeChat' class="chat">
-                                    <a class="userImage" href='#'><img src='static/css/image/test.png'/></a>
+                                    <a class="userImage" href='#'><img src='#'/></a>
                                     <div class='talkMain'>
                                         <div class='userName'><a href='#'>Kyleslight</a></div>
                                         <div class='timeShow'>
@@ -681,8 +708,12 @@
     </script>
     <script type="text/javascript">
         var editor = new UE.ui.Editor();
-        textarea: '#topicData';
+        // textarea: '#topicData';
         editor.render('topicData');
+
+        var smallerEditor = new UE.ui.Editor({ toolbars:[['Paragraph','RowSpacing','FontFamily','FontSize']],initialFrameWidth:769,pasteplain:true});
+            
+        smallerEditor.render('expandChatData');
     </script>
 </body>
 

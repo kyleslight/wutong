@@ -38,3 +38,15 @@ class GroupModel:
         select = 'SELECT f_get_member_info_j(%s, %s)'
         return self.db.getjson(select, gid, uid)
 
+    def get_group_bulletins(self, gid, size, offset):
+        select = 'SELECT f_group_bulletins_j(%s, %s, %s)'
+        bulletins = self.db.getjson(select, gid, size, offset)
+        return bulletins
+
+    def do_insert_bulletin(self, gid, uid, content, title):
+        select = 'SELECT f_insert_group_bulletin(%s, %s, %s, %s)'
+        return self.db.getfirstfield(select, gid, uid, content, title)
+
+    def update_group_info(self, gid, founder, name, intro, motton):
+        select = 'SELECT f_update_group_info(%s, %s, %s, %s, %s)'
+        return self.db.execute(select, gid, founder, name, intro, motton)

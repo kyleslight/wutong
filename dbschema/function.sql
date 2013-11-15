@@ -184,6 +184,42 @@ AS $$
     RETURNING id;
 $$ LANGUAGE SQL;
 
+DROP FUNCTION IF EXISTS f_group_bulletins_j(integer, integer, integer);
+CREATE FUNCTION f_group_bulletins_j(integer, integer, integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(gm))
+      FROM (SELECT id, gid, uid,
+                   content, title, submit_time
+              FROM "group_bulletin"
+             WHERE gid = $1
+             ORDER BY id DESC
+             LIMIT $2
+            OFFSET $3) gm;
+$$ LANGUAGE SQL;
+
+DROP FUNCTION IF EXISTS f_insert_group_bulletin(integer, integer, varchar, varchar);
+CREATE FUNCTION f_insert_group_bulletin(integer, integer, varchar, varchar)
+  RETURNS integer
+AS $$
+    INSERT INTO "group_bulletin"
+           (gid, uid, content, title)
+    VALUES ($1, $2, $3, $4)
+    RETURNING id;
+$$ LANGUAGE SQL;
+
+DROP FUNCTION IF EXISTS f_update_group_info(integer, varchar, varchar, varchar, varchar);
+CREATE FUNCTION f_update_group_info(integer, varchar, varchar, varchar, varchar)
+  RETURNS void
+AS $$
+    UPDATE "group"
+       SET name=$3,
+           intro=$4,
+           motton=$5
+      WHERE gid = $1
+        AND founder = $2
+$$ LANGUAGE SQL;
+
 CREATE OR REPLACE FUNCTION f_delete_user() RETURNS trigger AS
 $$
 BEGIN

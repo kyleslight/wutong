@@ -6,6 +6,10 @@ var elapseTime = 4500;
 var shortElapseTime=4000;
 var _showwel_flag = true;
 var _last_post_id;
+var userInfo=[{"userName":"","userId":0}];
+
+// get unsync information
+unsycUser();
 
 $(document).ready(function(){
     // navrighton effect
@@ -119,6 +123,24 @@ $(document).ready(function(){
 
 });
 
+function unsycUser(){
+    // get user infomation
+    $.ajax({
+        url:"/u/info",
+        type:"GET",
+        dataType:"json",
+        async:false,
+        success:function(data){
+            userInfo[0].userName = data.penname;
+            userInfo[0].userId = data.uid;
+            $(".navrightoff").fadeOut(10,function(){
+                $(".navrighton").fadeIn(10);
+                $("#usernameHover").text(userInfo[0].userName);
+            });
+        }
+    })
+}
+
 // function for login and register
 function loginBoxShow(){
     $("#loginBox").show().css("opacity","0");
@@ -186,6 +208,7 @@ function loginSubmit(){
                     loginBoxFade();
                 });
             } else if (response == "failed") {
+                // tremble("#loginBox");
             	$("#loginBox").addClass("littleTremble");
             	setTimeout(function(){
             		$("#loginBox").removeClass("littleTremble");
@@ -194,6 +217,7 @@ function loginSubmit(){
             }
         });
 }
+
 
 function registerSubmit(){
     var registerUsername=$("#registerUsername").val();

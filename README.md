@@ -20,5 +20,6 @@ postgresql-contrib-9.2
 
 #运行   
 \#运行梧桐，默认url为：127.0.0.1:8888  
+`memcached`
 `python model/test_model.py`  
 `python main.py`  
