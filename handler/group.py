@@ -51,7 +51,6 @@ class MessageHandler(GroupBaseHandler, WebSocketHandler):
         for member in MessageHandler.members[self.gid]:
             member.send_message(message)
 
-    # message_id
     def save_message(self, message):
         return self.model.do_insert_message(
                 self.gid,
@@ -72,7 +71,7 @@ class MessageHandler(GroupBaseHandler, WebSocketHandler):
         MessageHandler.members[self.gid].remove(self)
 
     def on_message(self, message):
-        uid = self.get_user_id()
+        uid = self.is_authenticated()
         if not self.get_member_info(uid):
             return
         message = json_decode(message)

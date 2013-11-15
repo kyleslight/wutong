@@ -1,21 +1,26 @@
 from tornado.web import RequestHandler
 from model import user, group
+from lib.session import Session
 
 class BaseHandler(RequestHandler):
 
-    def get_user_id(self):
-        return self.get_secure_cookie("uid")
+    def __init__(self, *args, **kwargs):
+        super(BaseHandler, self).__init__(*args, **kwargs)
+        self.session = Session(self)
+
+    def on_finish(self):
+        self.session.save()
+
+    def is_authenticated(self):
+        return self.session.load().get("uid")
 
     def get_current_user(self):
-        uid = self.get_user_id()
-        user_info = self.usermodel.get_user_info_by_uid(uid)
+        user_info = self.usermodel.get_user_info_by_uid(self.user_id)
         return user_info
 
-    def get(self):
-        self.write_error(403)
-
-    def post(self):
-        self.write_error(403)
+    @property
+    def user_id(self):
+        return self.session.get("uid")
 
     @property
     def db(self):

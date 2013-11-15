@@ -3,6 +3,7 @@
 from os import path, environ
 from uuid import uuid5, NAMESPACE_OID
 from tornado.options import define, options
+from lib.session import Session
 
 define("host", default="localhost", type=str)
 define("port", default=8888, type=int)
@@ -27,6 +28,7 @@ settings = dict(
     )
 
 settings["cookie_secret"] = str(uuid5(NAMESPACE_OID, settings["sitename"]))
+settings["session_secret"] = str(uuid5(NAMESPACE_OID, settings["sitename"]))
 
 if settings["debug"]:
     options.dbname += "_test"
@@ -34,3 +36,5 @@ settings["dsn"] = "dbname=%s user=%s password=%s host=%s port=%s" % (
                        options.dbname, options.dbuser, options.dbpasswd,
                        options.dbhost, options.dbport
                     )
+
+Session.register(settings["session_secret"])
