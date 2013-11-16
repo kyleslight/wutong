@@ -309,7 +309,7 @@ textarea,input{
 	color: #030;
 }
 
-#groupCardImage{
+/*#groupCardImage{
 	float: left;
 	width: 180px;
 	height: 180px;
@@ -317,6 +317,26 @@ textarea,input{
 	border: 2px solid #777;
 	margin-left: 5px;
 	margin-right: 40px;
+}*/
+#groupDetail{
+	margin-left: 5px;
+}
+#groupMoreDetail{
+	border-top:1px dashed #CCC;
+	border-bottom: 1px dashed #CCC;
+	margin-left: 5px;
+	margin-top: 10px;
+	padding:10px 0;
+}
+#groupBanner{
+	margin-top: 10px;
+	margin-left: -15px;
+	margin-right: -15px;
+	margin-bottom: 30px;
+	width: 958px;
+	max-height: 200px;
+	border-top:1px solid #CCC;
+	border-bottom:1px solid #CCC;
 }
 
 /*Member*/
@@ -745,6 +765,9 @@ div.input.edui-default{
 	border-bottom-left-radius: 7px;
 	border-bottom-right-radius: 7px;
 }
+#messageTemp{
+	display: none;
+}
 li.chat{
 	list-style: none;
 	float: left;
@@ -767,7 +790,7 @@ li.topicOutter{
 	padding-bottom: 5px;
 	border-bottom: 2px solid #CCC;
 	border-radius: 7px;
-	background: rgba(0,0,0,0.1);
+	background: rgba(104,128,0,0.3);
 }
 .userName{
 	display: inline;

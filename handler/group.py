@@ -26,6 +26,7 @@ class GroupBaseHandler(BaseHandler):
             messages = []
         return messages
 
+<<<<<<< HEAD
 class GroupInfoHandler(GroupBaseHandler):
 
     def get(self,gid):
@@ -46,6 +47,8 @@ class JoinInHandler(GroupBaseHandler):
         uid = self.get_argument("uid", None)
         gid = self.get_argument("gid", None)
         self.model.do_user_join_group(gid, uid)
+=======
+>>>>>>> 44aa07d308756235c936cfcd9ca53f8b8f728029
 
 class IndexHandler(GroupBaseHandler):
 
@@ -73,7 +76,6 @@ class MessageHandler(GroupBaseHandler, WebSocketHandler):
         for member in MessageHandler.members[self.gid]:
             member.send_message(message)
 
-    # message_id
     def save_message(self, message):
         return self.model.do_insert_message(
                 self.gid,
@@ -94,7 +96,7 @@ class MessageHandler(GroupBaseHandler, WebSocketHandler):
         MessageHandler.members[self.gid].remove(self)
 
     def on_message(self, message):
-        uid = self.get_user_id()
+        uid = self.is_authenticated()
         if not self.get_member_info(uid):
             return
         message = json_decode(message)
@@ -102,8 +104,60 @@ class MessageHandler(GroupBaseHandler, WebSocketHandler):
         message_id = self.save_message(message)
         self.send_message_to_all(message_id)
 
+
 class TopicHandler(GroupBaseHandler):
 
     def get(self, topic_id):
         self.render("groupTest.html")
 
+
+class GroupinfoHandler(GroupBaseHandler):
+
+    def get(self, gid):
+        group_info = self.model.get_group_info(gid)
+        group_info = json_encode(group_info)
+        self.write(group_info)
+
+    @authenticated
+    def post(self, gid):
+        name = self.get_argument("groupname", None)
+        intro = self.get_argument("groupintro", None)
+        motton = self.get_argument("groupmotton", None)
+        user = self.get_current_user()
+        founder = user["penname"]
+        self.model.update_group_info(gid, founder, name, intro, motton)
+
+
+class JoinHandler(GroupBaseHandler):
+
+    def post(self):
+        uid = self.get_argument("uid", None)
+        gid = self.get_argument("gid", None)
+        self.model.do_user_join_group(gid, uid)
+
+
+class GroupUserInfoHandler(GroupBaseHandler):
+
+    def post(self):
+        uid = self.get_argument("uid", None)
+        gid = self.get_argument("gid", None)
+        member_info = self.model.get_member_info(gid, uid)
+        member_info = json_encode(member_info)
+        self.write(member_info)
+
+class GroupBulletinHandler(GroupBaseHandler):
+
+    def get(self, gid):
+        bulletins = self.model.get_group_bulletins(gid, 6, 0)
+        while bulletins:
+            self.write(bulletins.pop())
+
+    def post(self, gid):
+        content = self.get_argument("content", None)
+        title = self.get_argument("title", None)
+        self.do_insert_bulletin(gid, self.user_id, content, title)
+
+class GroupMembersHandler(GroupBaseHandler):
+
+    def get(self, gid):
+        pass

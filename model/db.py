@@ -108,10 +108,10 @@ class Connection:
 
     def getjson(self, sql, *args):
         result = self.getfirstfield(sql, *args)
-        if result:
+        if isinstance(result, basestring):
             return json_decode(result)
         else:
-            return None
+            return result
 
     def execute(self, sql, *args):
         if not args: args = None

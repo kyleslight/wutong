@@ -116,6 +116,13 @@ class TestGroupModel(TestModel):
                     title=self.message["title"]
                 )
             self.assertIsInstance(mid, int)
+            bid = self.model.do_insert_bulletin(
+                    gid=gid,
+                    uid=self.uid,
+                    content=self.message["content"],
+                    title=self.message["title"]
+                )
+            self.assertIsInstance(bid, int)
 
         msg = self.model.get_group_message(mid)
         self.assertIsNotNone(msg)
@@ -123,6 +130,15 @@ class TestGroupModel(TestModel):
         self.assertIsInstance(msgs, list)
         mem = self.model.get_member_info(gid, self.uid)
         self.assertIsNotNone(mem)
+        buls = self.model.get_group_bulletins(gid, 6, 0)
+        self.assertIsInstance(buls, list)
+        self.model.update_group_info(
+                gid,
+                founder=self.group["founder"],
+                name=self.group["name"]+"update",
+                intro=self.group["intro"]+"update",
+                motton=self.group["motton"]+"update"
+            )
 
 def suite():
     suite = unittest.TestSuite()

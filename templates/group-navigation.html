@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <title>小组导航 - 梧桐</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="zh-CN" />
+    <meta name="Keywords" content="梧桐 文章 浏览 撰写 创作 小组" />
+    <meta name="Description" content="梧桐小组" />
+    <link rel="stylesheet" href="{{ static_url("css/base.css") }}" type="text/css" />
+    <link rel="stylesheet" href="{{ static_url("css/group-navigation.css") }}" type="text/css" />
+    <link rel="stylesheet" href="{{ static_url("css/animation.css") }}" type="text/css" />
+    <!-- <link rel="stylesheet" href="{{ static_url("css/shCoreEclipse.css") }}" type="text/css" /> -->
+</head>
+
+<body>
+    <!-- header -->
+    <div class="header" id="header">
+        <div class="navcontainer">
+            <div class="navigation" id="navigation">
+                <div id="navLogo">
+                    <a href="#">
+                        <img id="logo" src="{{ static_url("css/image/logo.png") }}">
+                    </a>
+                </div>
+                <div class="navLeft">
+                    <a id="browse" href="#">
+                        <li>浏览</li>
+                    </a>
+                    <a id="article" href="write.html">
+                        <li>文章</li>
+                    </a>
+                    <a id="fragment" href="#">
+                        <li>小品</li>
+                    </a>
+                    <a id="group" href="#">
+                        <li id="thisPage">小组</li>
+                    </a>
+                </div>
+                <div class="navrighton">
+                    <a href="#">
+                        <li id="username">
+                            <span id="usernameHover" href="#"></span>
+                            <div class="userExpand">
+                                <div id="myHomepage">我的主页</div>
+                                <div id="logout">登出</div>
+                            </div>
+                        </li>
+                    </a>
+                    <div class="navrightonOption">
+
+                        <a id="message" href="#">
+                            <li>消息<span id="msgNum">19</span></li>
+                        </a>
+                        <a id="setting" href="#">
+                            <li>设置</li>
+                        </a>
+                    </div>
+                </div>
+                <div class="navrightoff">
+
+                    <a id="login" href="#">
+                        <li>登入</li>
+                    </a>
+
+
+                    <a id="register" href="#">
+                        <li>注册</li>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- login box -->
+    <div id="lrBoxWrap">
+        <div class="lrBox" id="loginBox">
+            <form id="loginForm" name="loginForm" action="#" method="post">
+                <div class="loginList"><span class="inputTip">用户名/邮箱</span>
+                    <input class="input" id="loginUsername" type="text" name="username" placeholder="用户名/邮箱" />
+                </div>
+                <div class="loginList"><span class="inputTip">密码</span>
+                    <input class="input" id="loginPassword" type="password" name="password" placeholder="密码" />
+                </div>
+                <div id="loginListlast" class="loginList"><a href="#" id="loginSubmitButton" class="formButton" name="submitButton" value="登陆">登入</a>  <a href="#" id="loginBack">返回</a>
+                </div>
+            </form>
+        </div>
+        <div class="lrBox" id="registerBox">
+            <form id="registerForm" name="registerForm" action="#" method="post">
+                <div class="registerList"><span class="inputTip">用户名</span>
+                    <input class="input" id="registerUsername" type="text" name="username" placeholder="用户名" />
+                </div>
+                <div class="registerList"><span class="inputTip">邮箱</span>
+                    <input class="input" id="registerEmail" type="text" name="email" placeholder="邮箱" />
+                </div>
+                <div class="registerList"><span class="inputTip">密码</span>
+                    <input class="input" id="registerPassword" type="password" name="password" placeholder="密码" />
+                </div>
+                <div class="registerList"><span class="inputTip">重复密码</span>
+                    <input class="input" id="registerRepassword" type="password" name="repassword" placeholder="重复密码" />
+                </div>
+                <div id="registerListLast" class="registerList"><a href="#" id="registerSubmitButton" class="formButton" name="submitButton" value="注册">注册</a>  <a href="#" id="registerBack">返回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <a id="return_top" href="#" title="回到顶部" class="none"></a>
+    <div class="groupNavWrap">
+        <div class="userGroupInfo">
+            <img class="userImg" src="" />
+            <div class="userName"></div>
+            <div class="myGroup">
+                <div class="myGroupTitle">我的小组</div>
+                <a class="myGroupListWrap" href="#"><li class="myGroupList"></li></a>
+                <a class="myGroupListWrap" href="#"><li class="myGroupList"></li></a>
+                <a class="myGroupListWrap" href="#"><li class="myGroupList"></li></a>
+                <a class="myGroupListWrap" href="#"><li class="myGroupList"></li></a>
+                <a class="myGroupListWrap" href="#"><li class="myGroupList"></li></a>
+                <a class="myGroupListWrap" href="#"><li class="myGroupList"></li></a>
+                <a href="#" id="myGroupMore">更多小组</a>
+                <a href="#" id="createGroup">创建小组</a>
+            </div>
+        </div>
+        <div class="groupMainWrap">
+            <div class="groupExplanation">
+                这里是梧桐小组，一个让你与他人共同分享与交流兴趣的地方。
+            </div>
+        </div>
+    </div>
+    <div class="footer" id="footer">
+                <p class="f1">&nbsp;&nbsp;&nbsp;&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
+    </div>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>-->
+    <!--<script type="text/javascript" charset="utf-8">window.UEDITOR_HOME_URL = "{{ static_url("ueditor/")}}";</script>-->
+    <script type="text/javascript" src="{{ static_url("js/jquery.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/group-navigation.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/header.js") }}"></script>
+    <!--<script type="text/javascript" src="{{ static_url("js/shCore.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/allhl.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("ueditor/ueditor.config.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("ueditor/ueditor.all.min.js") }}"></script>
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+    <script type="text/javascript">
+        var editor = new UE.ui.Editor();
+        // textarea: '#topicData';
+        editor.render('topicData');
+
+        var smallerEditor = new UE.ui.Editor({ toolbars:[['Paragraph','RowSpacing','FontFamily','FontSize']],initialFrameWidth:769,pasteplain:true});
+            
+        smallerEditor.render('expandChatData');
+    </script>-->
+</body>
+
+</html>

@@ -4,7 +4,7 @@
 from tornado import escape
 from tornado.web import authenticated
 from base import BaseHandler
-from lib.util import createpasswd
+from lib.session import Session
 
 class UserBaseHandler(BaseHandler):
 
@@ -13,8 +13,7 @@ class UserBaseHandler(BaseHandler):
         return self.usermodel
 
     def set_authenticated(self, uid):
-        # 15 days relogin
-        self.set_secure_cookie("uid", str(uid), expires_days=15, httponly=True)
+        self.session["uid"] = uid
 
 
 class LoginHandler(UserBaseHandler):
@@ -38,7 +37,7 @@ class LoginHandler(UserBaseHandler):
 class LogoutHandler(UserBaseHandler):
 
     def post(self):
-        self.clear_cookie("uid")
+        self.session.clear()
 
 
 class RegisterHandler(UserBaseHandler):
