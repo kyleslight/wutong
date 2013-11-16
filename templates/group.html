@@ -105,6 +105,17 @@
             </form>
         </div>
     </div>
+    <div class="groupPrompt">
+        <p class="groupPromptPublic">这是一个公开的小组，你可以点击 <a id="publicJoin" class="joinButton" href="#"> 我喜欢 </a>加入它!</p>
+        <p class="groupPromptPrivate">这是一个私人的小组，你可以  <a id="privateJoin" class="joinButton" href="#"> 联系该小组组长 </a>来加入它!</p>
+        <form id="contactGroupLeader" name="contactGroupLeader" action="#" method="post">
+            <p>组长 <span id="groupLeadrerName">Kyleslight</span> :</p>
+            <textarea class="input" id="contactGroupLeaderCon" type="text" name="contactGroupLeaderCon" placeholder="向组长提出申请"></textarea>
+            <div class="joinSend"><a href="#" id="JoinSubmitButton" class="joinButton" name="submitButton" value="send">Send</a>  <a href="#" id="contactGroupLeaderBack">返回</a>
+             </div>
+        </form>
+    </div>
+    <a id="return_top" href="#" title="回到顶部" class="none"></a>
     <div class="groupWarpOuter">
         <div class="groupWarp">
             <!-- basic group infomation -->
@@ -610,8 +621,14 @@
                         <form id="communicationData" method="post">
                             <a href="#" id="changeSendState">切换至话题模式</a>
                             <div class="chatSend">
-                                <textarea id="chatData" class="input" type="text" name="chatConData" placeholder=""></textarea>
-                                <a href="#" id="chatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
+                                <div class="normalChatSend">
+                                    <textarea id="chatData" class="input" type="text" name="chatConData" placeholder=""></textarea>
+                                    <a href="#" id="chatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
+                                </div>
+                                <div class="expandChatSend">
+                                    <textarea id="expandChatData" class="input" type="text" name="expandChatData" placeholder=""></textarea>
+                                    <a href="#" id="expandChatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
+                                </div>
                             </div>
                             <div class="topicSend">
                                 <input id="topicTitle" class="input" type="text" name="topicTitle" placeholder="话题标题" />
@@ -681,8 +698,11 @@
     </script>
     <script type="text/javascript">
         var editor = new UE.ui.Editor();
-        textarea: '#topicData';
+        // textarea: '#topicData';
         editor.render('topicData');
+
+        var smallerEditor = new UE.ui.Editor({ toolbars:[['Paragraph','RowSpacing','FontFamily','FontSize']],initialFrameWidth:769});
+        smallerEditor.render('expandChatData');
     </script>
 </body>
 

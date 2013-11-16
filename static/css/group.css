@@ -71,6 +71,60 @@ textarea,input{
 	display: none;
 }
 
+.groupPrompt{
+	/*width: 960px;*/
+	margin: 0 auto;
+	text-align: center;
+	clear: both;
+	width: 100%;
+	background:rgba(102,136,0,0.1);
+	padding-top: 1px;
+	border-bottom: 1px solid #CCC;
+}
+
+.groupPrompt a.joinButton{
+	background: #680;
+	color: white;
+	padding:5px 10px;
+	border-radius: 7px;
+	margin: 0 10px;
+	transition: 2s;
+	-moz-transition:2s;
+	-webkit-transition:2s;
+	-o-transition:2s;
+}
+.groupPrompt a.joinButton:hover{
+	color: white;
+	background: #c1d739;
+}
+.groupPromptPrivate{
+	display: none;
+}
+#contactGroupLeader{
+	display: none;
+}
+#contactGroupLeaderCon{
+	float: none;
+	width: 600px;
+	margin: 0 auto;
+}
+.joinSend{
+	/*clear: both;*/
+	float: none;
+	width: 600px;
+	min-height: 30px;
+	margin: 0 auto;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+#JoinSubmitButton{
+	margin-left: 40px;
+	width: 162px;
+	height: 30px;
+}
+#contactGroupLeaderBack{
+	float: right;
+}
 
 /*group infomation*/
 .groupInfo{
@@ -99,12 +153,16 @@ textarea,input{
 .groupTitle{
 	float: left;
 	font-size: 50px;
+	width: 960px;
 }
 
 .groupTitle a{
 	color: #BBB;
 	transition: 2s;
+	-moz-transition:2s;transition: 2s;
 	-moz-transition:2s;
+	-webkit-transition:2s;
+	-o-transition:2s;
 	-webkit-transition:2s;
 	-o-transition:2s;
 }
@@ -176,6 +234,7 @@ textarea,input{
 .bulletinInline:hover{
 	color: white;
 	background: #680;
+	box-shadow: 2px 2px 3px #AAA;
 }
 
 .bulletinUserImage{
@@ -611,6 +670,11 @@ textarea,input{
 	width: 960px;
 }
 
+.expandChatSend{
+	display: none;
+	margin-top: 15px;
+}
+
 #chatData{
 	float: left;
 	height: 30px;
@@ -625,12 +689,21 @@ textarea,input{
 	border:1px solid darkred;
 }
 
-
 #chatSubmitButton{
 	border-radius: 5px;
 	margin-left: 27px;
 	margin-top: 15px;
 	float: left;
+}
+
+#expandChatSubmitButton{
+	border-radius: 5px;
+	margin-top: 7px;
+	margin-left: 35px;
+}
+
+.input.edui-default{
+	width: 762px;
 }
 
 .topicSend{
@@ -691,7 +764,7 @@ li.topicOutter{
 	margin-left: -40px;
 	margin-bottom: 3px;
 	padding-top: 5px;
-	padding-bottom: 8px;
+	padding-bottom: 5px;
 	border-bottom: 2px solid #CCC;
 	border-radius: 7px;
 	background: rgba(0,0,0,0.1);
@@ -706,12 +779,23 @@ li.topicOutter{
 	width: 950px;
 	margin-top: 0px;
 }
+.talkMain a{
+	color: #777;
+	transition: 2s;
+	-moz-transition:2s;
+	-webkit-transition:2s;
+	-o-transition:2s;
+}
+.talkMain a:hover{
+	color: #680;
+}
 
 /*chat&topic content*/
 .talkContent{
 	word-break:break-all;
 	font-size: 0.9em;
 	clear: both;
+	margin-top: 5px;
 }
 .talkContent a{
 	color: #680;
@@ -742,6 +826,12 @@ li.topicOutter{
 	font-size: 0.8em;
 	color: #777;
 	padding-top: 11px;
+}
+
+.topicTalkContent p{
+	/*padding-top: 11px;*/
+	margin: 0;
+	color: #777;
 }
 
 /*topic show in inner layer*/

@@ -26,10 +26,32 @@ class GroupBaseHandler(BaseHandler):
             messages = []
         return messages
 
+class GroupInfoHandler(GroupBaseHandler):
+
+    def get(self,gid):
+        group_info = json_encode(self.model.get_group_info(gid))
+        self.write(group_info)
+
+class GroupUserInfoHandler(GroupBaseHandler):
+
+    def post(self,group_id):
+        uid = self.get_argument("uid", None)
+        gid = self.get_argument("gid", None)
+        group_user_info = json_encode(self.model.get_member_info(gid,uid))
+        self.write(group_user_info) 
+
+class JoinInHandler(GroupBaseHandler):
+
+    def post(self, group_id):
+        uid = self.get_argument("uid", None)
+        gid = self.get_argument("gid", None)
+        self.model.do_user_join_group(gid, uid)
+
 class IndexHandler(GroupBaseHandler):
 
     def get(self, gid):
         self.render("group.html")
+
 
 class MessageHandler(GroupBaseHandler, WebSocketHandler):
     members = dict()

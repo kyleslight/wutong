@@ -246,7 +246,7 @@ textarea{
 	height: 0px;
 	background:rgba(102,136,0,0.1);
 	border-bottom: 1px solid #CCC;
-	margin-bottom: 20px;
+	/*margin-bottom: 20px;*/
 }
 #lrBoxWrap .input{
 	width: 300px;
@@ -353,6 +353,20 @@ textarea{
 
 .none{
 	display: none;
+}
+
+/*return to top button*/
+#return_top{
+	width: 73px;
+	height: 73px;
+	position:absolute;
+	right: 20px;
+	z-index: 999;
+	background: url('{{ static_url("css/image/top.png") }}') 0px 0px no-repeat;
+	_position:absolute;
+}
+#return_top:hover{
+	background: url('{{ static_url("css/image/top.png") }}') 0px -74px no-repeat;
 }
 
 /*page footer*/

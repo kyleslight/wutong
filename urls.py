@@ -13,5 +13,8 @@ urls = [
         (r"/g/(\w+)", group.IndexHandler),
         (r"/g/(\w+)/message", group.MessageHandler),
         (r"/topic/(\w+)", group.TopicHandler),
+        (r"/g/(\w+)/groupUserInfo",group.GroupUserInfoHandler),
+        (r"/g/(\w+)/groupInfo",group.GroupInfoHandler),
+        (r"/g/(\w+)/groupJoinIn",group.JoinInHandler)
         # (r"/.*", base.BaseHandler),
     ]

@@ -5,11 +5,22 @@ var activeIndex=-1;
 var elapseTime = 4500;
 var shortElapseTime=4000;
 var _showwel_flag = true;
+var userInfo=[{"userName":"","userId":0}];
+var groupInfo=[{"groupName":"","groupId":0}];
+var groupUserInfo=[{"is_leader":false,"is_subleader":false,"is_member":false,"join_time":null}];
 
 // TODO: refactor, package as a function. this statement should run at first
+location.pathname;
+match = "/g/\d+";
 var url = "ws://" + location.host + location.pathname + "/message";
+console.log(url);
 var msg_socket = new WebSocket(url);
 msg_socket.onclose = function() {};
+
+// get unsync information
+unsycUser();
+// get group unsync information
+unsyncGroup();
 
 $(document).ready(function(){
     //check sex of the member
@@ -19,15 +30,28 @@ $(document).ready(function(){
             $("#groupMotto").css({"margin-top":"2px"});
     }
 
-    $.getJSON("/u/info", function (data) {
-        var username;
-        username = data.penname;
-        $(".navrightoff").fadeOut(10,function(){
-            $(".navrighton").fadeIn(10);
-            $("#username").children().val(username);
-            $("#usernameHover").text(username);
-        });
-    });
+    // join group
+    $("#publicJoin").click(function(){
+    	alert(userInfo[0].userId);
+    	$.ajax({
+			url:location.pathname + "/groupJoinIn",
+			type:"POST",
+			data:{
+				uid:userInfo[0].userId,
+				gid:groupInfo[0].groupId
+			},
+			success:function(data){
+	        	alert("You have joined this group");
+	        	$(".groupPrompt").slideUp();
+			}
+		});
+    	return false;
+    })
+    $("#privateJoin").click(function(){
+    	// contact the group leader
+
+    })
+
 
     // groupItem
     $(".groupOptions a").click(function(){
@@ -132,6 +156,10 @@ $(document).ready(function(){
     $("#topicSubmitButton").click(function(){
         submitTopicData();
         return false;
+    });
+    $("#expandChatSubmitButton").click(function(){
+    	submitExpandChatData();
+    	return false;
     })
     //for quick submit
     $(window).keyup(function(e){
@@ -171,30 +199,115 @@ $(document).ready(function(){
             return;
 
         item.submit_time = item.submit_time.toString().substring(5,19);
-        // TODO: 通过title判断是否为topic
-        var condata = '<li id="topic_"'+item.id+' class="topicOutter">'
-                    + '<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
-                    + '<div class="talkMain"><div class="talkAction">'
-                    + '<a class="userName" href="#">'+item.user.penname+'</a> 发起了话题 <span class="talkTitle">'
-                    + '<a href="/topic/'+item.id+'" target="_blank">'+item.title+'</a></span></div>'
-                    + "<div class='timeShow'>"+item.submit_time+"</div>"
-                    + "<div class='topicTalkContent'>"+item.content+"</div></div></li>";
+        if (!item.title) {
+	        // TODO: 通过title判断是否为topic
+	        var condata = '<li id="topic_"'+item.id+' class="chat">'
+	                    + 	'<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
+	                    + 	'<div class="talkMain">'
+	                    + 		'<a class="userName" href="#">'+item.user.penname+'</a>'
+	                    + 		'<div class="timeShow">'+item.submit_time+"</div>"
+	                    + 		'<div class="talkContent">'+item.content+'</div>'
+	                    +	'</div>'
+	                    +'</li>';
 
-        $("#communication").prepend(condata);
-        removeMessage();
+	        $("#communication").prepend(condata);
+	        removeMessage();
+	    }else{
+	    	var condata = '<li id="topic_"'+item.id+' class="topicOutter">'
+	                    + '<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
+	                    + '<div class="talkMain"><div class="talkAction">'
+	                    + '<a class="userName" href="#">'+item.user.penname+'</a> 发起了话题 <span class="talkTitle">'
+	                    + '<a href="/topic/'+item.id+'" target="_blank">'+item.title+'</a></span></div>'
+	                    + "<div class='timeShow'>"+item.submit_time+"</div>"
+	                    + "<div class='topicTalkContent'>"+item.content+"</div></div></li>";
+
+	        $("#communication").prepend(condata);
+	        removeMessage();
+	    }
     }
 });
 
+function unsycUser(){
+    // get user infomation
+    $.ajax({
+        url:"/u/info",
+        type:"GET",
+        dataType:"json",
+        async:false,
+        success:function(data){
+            userInfo[0].userName = data.penname;
+            userInfo[0].userId = data.uid;
+            $(".navrightoff").fadeOut(10,function(){
+                $(".navrighton").fadeIn(10);
+                $("#usernameHover").text(userInfo[0].userName);
+            });
+        }
+    })
+}
+
+function unsyncGroup(){
+	// get group infomation
+	$.ajax({
+		url:location.pathname+"/groupInfo",
+		type: "GET",
+		dataType:"json",
+		async: false,
+		success:function(data){
+			groupInfo[0].groupName = data.name;
+			groupInfo[0].groupId = data.gid;
+			if(data.publicity){
+				$(".groupPromptPrivate").css({"display":"none"});
+				$("#contactGroupLeader").css({"display":"none"});
+			}else{
+				$(".groupPromptPublic").css({"display":"none"});
+			}
+			$('#groupTitleName').text(groupInfo[0].groupName);
+		}
+	});
+	// get group-user infomation
+	$.ajax({
+		url:location.pathname+"/groupUserInfo",
+		type: "POST",
+		dataType:"json",
+		async: false,
+		data:{
+			uid:userInfo[0].userId,
+			gid:groupInfo[0].groupId
+		},
+		success:function(data){
+			if(data.is_member){
+				$(".groupPrompt").css({"display":"none"});
+			}			
+		}
+	});
+}
+
 // function for submit data
 function submitChatData(){
+	chatCon=$("#chatData").val();
     if($("#chatData").val().length>1000){
         alert("请保持字数在1000字以内");
         return;
     }
-    chatCon=$("#chatData").val().httpHtml();
+    if(chatCon=="<ex>"){
+    	$(".normalChatSend").slideUp(500,function(){
+    		$("#edui65").width(762);
+    		$("#edui65").css({"margin-right":"0"});
+            $(".expandChatSend").slideDown(1000);
+        });
+        $("#chatData").val("");
+        return;
+    }
+    chatCon=chatCon.replace(/</g,"&lt").replace(/>/g,"&gt");
     chatCon=chatCon.toString().replace(/(\r)*\n/g,"<br />").replace(/\s/g," ");
+    chatCon=chatCon.httpHtml();
+    // alert(chatCon);
     if(chatCon.length==0){
-        alert("Please input content");
+    	$("#communicationData").addClass("littleTremble");
+        setTimeout(function(){
+    		$("#communicationData").removeClass("littleTremble");
+    	},1000);
+        // alert("Please input content");
         return;
     }
     var thedata=$(".communication").children().size();
@@ -213,26 +326,55 @@ function submitChatData(){
     msg_socket.send(message);
 }
 
-function submitTopicData(){
-    var topicCon=$("#topicData").val();
-    if (topicCon.length==0) {
-        alert("Please input content");
+function submitExpandChatData(){
+	var expandChatCon=$("#expandChatData").val();
+
+	if(expandChatCon=="<p>&lt;fl&gt;</p>"){
+		$(".expandChatSend").slideUp(1000,function(){
+            $(".normalChatSend").slideDown(500);
+        });
+        $(window.frames["ueditor_1"].document).find("body.view").html("");
+		return;
+	}
+	if (expandChatCon.length==0) {
+        $("#communicationData").addClass("littleTremble");
+        setTimeout(function(){
+    		$("#communicationData").removeClass("littleTremble");
+    	},1000);
         return;
     };
-    $.ajax({
-        type:"POST",
-        dataType:"json",
-        url:"/test",
-        timeout:80000,
-        data:{
-            option: "send_topic",
-            content:topicCon
-        },
-        success:function(data,textStatus){
-            // $("body.view").html()="";
-        }
-    });
+
+    // send message to server, TODO: please refactor
+    message = {
+        "content": expandChatCon,
+    };
+    message = JSON.stringify(message);
+    msg_socket.send(message);
+
+    $(window.frames["ueditor_1"].document).find("body.view").html("");
+    return false;
+}
+
+function submitTopicData(){
+	var topicTitle=$('#topicTitle').val();
+    var topicCon=$("#topicData").val();
+    if (topicCon.length==0||topicTitle.length==0) {
+        $("#communicationData").addClass("littleTremble");
+        setTimeout(function(){
+    		$("#communicationData").removeClass("littleTremble");
+    	},1000);
+        return;
+    };
+    message = {
+    	option:"send_topic",
+    	title:topicTitle,
+        content: topicCon,
+    };
+    message = JSON.stringify(message);
+    msg_socket.send(message);
+
     $(window.frames["ueditor_0"].document).find("body.view").html("");
+    $("#topicTitle").val("");
     return false;
 }
 

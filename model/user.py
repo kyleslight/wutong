@@ -23,7 +23,7 @@ class UserModel:
 
     def get_user_info_by_uid(self, uid):
         select = 'SELECT f_get_user_info_j(%s)'
-        user_info = self.db.getjson(select, uid)
+        user_info = self.db.getfirstfield(select, uid)
         return user_info
 
     def get_score_by_uid(self, uid):
