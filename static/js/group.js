@@ -274,9 +274,7 @@ function unsyncGroup(){
 			gid:groupInfo[0].groupId
 		},
 		success:function(data){
-			if(data.is_member){
-				$(".groupPrompt").css({"display":"none"});
-			}
+			$(".groupPrompt").css({"display":"none"});
 		}
 	});
 }
