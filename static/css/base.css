@@ -362,11 +362,11 @@ textarea{
 	position:absolute;
 	right: 20px;
 	z-index: 999;
-	background: url('http://localhost:8888/static/css/image/top.png") }}') 0px 0px no-repeat;
+	background: url('http://localhost:8888/static/css/image/top.png') 0px 0px no-repeat;
 	_position:absolute;
 }
 #return_top:hover{
-	background: url('http://localhost:8888/static/css/image/top.png") }}') 0px -74px no-repeat;
+	background: url('http://localhost:8888/static/css/image/top.png') 0px -74px no-repeat;
 }
 
 /*page footer*/

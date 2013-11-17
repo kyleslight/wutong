@@ -14,6 +14,25 @@ var isRegisterRepasswordFocus=false;
 unsycUser();
 
 $(document).ready(function(){
+    // return to top icon show
+    $(window).scroll(function(){
+        var top=$(window).scrollTop();
+        if(top>200){
+            var realHeight=(top+(window.screen.availHeight)/2)+'px';
+            $('#return_top').removeClass('none');
+            $('#return_top').stop();
+            $('#return_top').animate({top:realHeight},500);
+        }
+        else{
+            $('#return_top').addClass('none');
+        }
+        return false;
+    })
+    // return to top
+    $("#return_top").click(function(){
+        $('html,body').animate({scrollTop:0},1000);
+        return false;
+    });
     // navrighton effect
     $("#username").mouseover(function(){
         $(this).css("background","white");

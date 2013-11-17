@@ -217,7 +217,7 @@ $(document).ready(function(){
         if (!item.title) {
 	        // TODO: 通过title判断是否为topic
 	        var condata = '<li id="topic_'+item.id+'" class="chat">'
-	                    + 	'<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
+	                    + '<a class="userImage" href="#"><img src='+userImageUrl+'/></a>'
 	                    + 	'<div class="talkMain">'
 	                    + 		'<a class="userName" href="#">'+item.user.penname+'</a>'
 	                    + 		'<div class="timeShow">'+item.submit_time+"</div>"
