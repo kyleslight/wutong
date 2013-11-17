@@ -894,3 +894,66 @@ li.topicInner{
 	color: white;
 }
 
+/*topic tag*/
+.topicTag{
+	position: fixed;
+	left: 0px;
+	top: 30%;
+	z-index: 999999;
+}
+
+.topicTagList{
+	/*float: left;*/
+	display: block;
+	width: 80px;
+	height: 17px;
+	overflow:hidden;
+	text-overflow:clip;
+	text-align: center;
+	margin-bottom: 13px;
+	background: #680;
+	color: white;
+	padding:6px 7px;
+	border-radius: 7px;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	line-height: 21px;
+	opacity: 0.4;
+	border:1px solid #CCC;
+	border-left: 0px;
+}
+.topicTagList a{
+	color: white;
+}
+.topicTagList:hover{
+	color: white;
+	width: auto;
+	opacity: 0.9;
+	box-shadow: 0 0 10px #680;
+}
+.topicTagClone{
+	position: absolute;
+	width: 100%;
+	left: 0px;
+	top: 230px;
+	opacity: 0;
+	z-index: -1;
+}
+.topicTagCloneList{
+	display: inline-block;
+	height: 17px;
+	width: auto;
+	text-align: center;
+	margin-bottom: 13px;
+	background: #680;
+	color: white;
+	padding:6px 7px;
+	border-radius: 7px;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	line-height: 21px;
+	opacity: 0.4;
+	border:1px solid #CCC;
+	border-left: 0px;
+}
+

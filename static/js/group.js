@@ -70,7 +70,7 @@ $(document).ready(function(){
             }
             if (isOtherOptionShow) {
                 $("#groupOptionShow"+activeIndex).removeClass("active").addClass("outOfView");
-                $("#groupOptionShow"+activeIndex).animate({left:"-960px"},1500,function(){
+                $("#groupOptionShow"+activeIndex).animate({left:"-9topicTagList60px"},1500,function(){
                     $(this).slideUp(400);
                     $("#groupOptionShow"+indexOfDetailItem).addClass("prepare").css("left","960px").show(function(){
                         var prepareHeight=$(this).height()+25+"px";
@@ -136,6 +136,15 @@ $(document).ready(function(){
         $(this).children("div.memberDetail").slideUp(50);
         $(this).css({"background-color":"rgba(255,255,255,0.5)","color":"black"});
         return false;
+    })
+    // topic tag width change
+    $("li.topicTagList").mouseover(function(){
+    	var indexOfTopicTag=$(".topicTagList").index(this);
+    	var tempTopicTagWidth=$(".topicTagCloneList").eq(indexOfTopicTag).width()+40+"px";
+    	$(this).animate({width:tempTopicTagWidth},150);
+    })
+    $("li.topicTagList").mouseleave(function(){
+    	$(this).animate({width:"80px"},100);
     })
     // change send state
     $("#changeSendState").click(function(){
@@ -417,6 +426,14 @@ function renderMaleAndFemale(){
 function clickTopicTitle(topic_id){
 	alert(topic_id);
 	$('html,body').animate({scrollTop:0},1000);
+	return false;
+}
+
+function closeTopicTagList(topic_tag_id){
+	// alert(indexOfTopicTag);
+	var closeTopicTagId="#topic"+topic_tag_id+"Tag";
+	$(".topicTag").find(closeTopicTagId).parent().remove();
+	$(".topicTagClone").find(closeTopicTagId).parent().remove();
 	return false;
 }
 
