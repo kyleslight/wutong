@@ -50,6 +50,12 @@ $(document).ready(function(){
 
     })
 
+    $("#topic236Title").click(function(){
+        alert(1);
+        var topicId=$(this).attr("id");
+        return false;
+    });
+
     // groupItem
     $(".groupOptions a").click(function(){
         if (_showwel_flag == true){
@@ -211,8 +217,7 @@ $(document).ready(function(){
         if (!item.title) {
 	        // TODO: 通过title判断是否为topic
 	        var condata = '<li id="topic_'+item.id+'" class="chat">'
-	                    // + 	'<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
-	                    + 	'<a class="userImage" href="#"><img src='+userImageUrl+'/></a>'
+	                    + 	'<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
 	                    + 	'<div class="talkMain">'
 	                    + 		'<a class="userName" href="#">'+item.user.penname+'</a>'
 	                    + 		'<div class="timeShow">'+item.submit_time+"</div>"
@@ -271,7 +276,7 @@ function unsyncGroup(){
 		success:function(data){
 			if(data.is_member){
 				$(".groupPrompt").css({"display":"none"});
-			}			
+			}
 		}
 	});
 }

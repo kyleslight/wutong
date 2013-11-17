@@ -21,22 +21,22 @@ class GroupModel:
 
     def get_group_info(self, gid):
         select = 'SELECT f_get_group_info_j(%s)'
-        group_info = self.db.getfirstfield(select, gid)
+        group_info = self.db.getjson(select, gid)
         return group_info
 
     def get_group_message(self, message_id):
         select = 'SELECT f_get_group_message_j(%s)'
-        message = self.db.getfirstfield(select, message_id)
+        message = self.db.getjson(select, message_id)
         return message
 
     def get_group_messages(self, gid, size, offset):
         select = 'SELECT f_get_group_messages_j(%s, %s, %s)'
-        messages = self.db.getfirstfield(select, gid, size, offset)
+        messages = self.db.getjson(select, gid, size, offset)
         return messages
 
     def get_member_info(self, gid, uid):
         select = 'SELECT f_get_member_info_j(%s, %s)'
-        return self.db.getfirstfield(select, gid, uid)
+        return self.db.getjson(select, gid, uid)
 
     def get_group_bulletins(self, gid, size, offset):
         select = 'SELECT f_group_bulletins_j(%s, %s, %s)'

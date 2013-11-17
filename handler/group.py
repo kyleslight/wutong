@@ -26,19 +26,6 @@ class GroupBaseHandler(BaseHandler):
             messages = []
         return messages
 
-class GroupInfoHandler(GroupBaseHandler):
-
-    def get(self,gid):
-        group_info = json_encode(self.model.get_group_info(gid))
-        self.write(group_info)
-
-class JoinInHandler(GroupBaseHandler):
-
-    def post(self, group_id):
-        uid = self.get_argument("uid", None)
-        gid = self.get_argument("gid", None)
-        self.model.do_user_join_group(gid, uid)
-
 class IndexHandler(GroupBaseHandler):
 
     def get(self, gid):
