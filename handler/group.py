@@ -73,8 +73,6 @@ class MessageHandler(GroupBaseHandler, WebSocketHandler):
 
     def on_message(self, message):
         uid = self.is_authenticated()
-        print('-' * 80)
-        print(uid)
         if not self.get_member_info(uid):
             return
         message = json_decode(message)
@@ -112,7 +110,6 @@ class GroupinfoHandler(GroupBaseHandler):
         founder = user["penname"]
         self.model.update_group_info(gid, founder, name, intro, motton)
 
-# 1 arg
 class GroupUserInfoHandler(GroupBaseHandler):
 
     def post(self):

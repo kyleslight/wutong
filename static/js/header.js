@@ -290,7 +290,7 @@ function unsyncGroup(){
         success:function(data){
             if(data.is_member){
                 $(".groupPrompt").css({"display":"none"});
-            }           
+            }
         }
     });
 }
