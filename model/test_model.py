@@ -44,7 +44,7 @@ class TestModel(unittest.TestCase):
         pass
 
     def do_test_db(self):
-        dirpath = "../dbschema/"
+        dirpath = "dbschema/"
 
         self.assertEqual(self.db.getfirstfield('SELECT 1'), 1)
         self.assertEqual(self.db.getjson("SELECT '1'"), 1)

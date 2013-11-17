@@ -51,16 +51,12 @@ $(document).ready(function(){
     	// contact the group leader
 
     })
-<<<<<<< HEAD
 
-=======
     $("#topic236Title").click(function(){
         alert(1);
         var topicId=$(this).attr("id");
         return false;
     });
->>>>>>> 44aa07d308756235c936cfcd9ca53f8b8f728029
-
 
     // groupItem
     $(".groupOptions a").click(function(){
@@ -210,11 +206,7 @@ $(document).ready(function(){
         item.submit_time = item.submit_time.toString().substring(5,19);
         if (!item.title) {
 	        // TODO: 通过title判断是否为topic
-<<<<<<< HEAD
-	        var condata = '<li id="topic_"'+item.id+' class="chat">'
-=======
 	        var condata = '<li id="topic_'+item.id+'" class="chat">'
->>>>>>> 44aa07d308756235c936cfcd9ca53f8b8f728029
 	                    + 	'<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
 	                    + 	'<div class="talkMain">'
 	                    + 		'<a class="userName" href="#">'+item.user.penname+'</a>'
@@ -226,15 +218,7 @@ $(document).ready(function(){
 	        $("#communication").prepend(condata);
 	        removeMessage();
 	    }else{
-<<<<<<< HEAD
-	    	var condata = '<li id="topic_"'+item.id+' class="topicOutter">'
-	                    + '<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
-	                    + '<div class="talkMain"><div class="talkAction">'
-	                    + '<a class="userName" href="#">'+item.user.penname+'</a> 发起了话题 <span class="talkTitle">'
-	                    + '<a href="/topic/'+item.id+'" target="_blank">'+item.title+'</a></span></div>'
-	                    + "<div class='timeShow'>"+item.submit_time+"</div>"
-	                    + "<div class='topicTalkContent'>"+item.content+"</div></div></li>";
-=======
+
             tempTopicContent=$("#messageTemp").html(item.content).eq(0).children().eq(0);
 	    	var condata = '<li id="topic_'+item.id+'" class="topicOutter">'
 	                    + '<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
@@ -243,7 +227,6 @@ $(document).ready(function(){
 	                    + '<a href="#" id="topic'+item.id+'Title" class="talkTitle">'+item.title+'</a></div>'
 	                    + "<div class='timeShow'>"+item.submit_time+"</div>"
 	                    + "<div class='topicTalkContent'>"+tempTopicContent.html().toString()+"</div></div></li>";
->>>>>>> 44aa07d308756235c936cfcd9ca53f8b8f728029
 
 	        $("#communication").prepend(condata);
 	        removeMessage();
@@ -302,7 +285,7 @@ function unsyncGroup(){
 		success:function(data){
 			if(data.is_member){
 				$(".groupPrompt").css({"display":"none"});
-			}			
+			}
 		}
 	});
 }
@@ -316,29 +299,10 @@ function submitChatData(){
     }
     if(chatCon=="<ex>"){
     	$(".normalChatSend").slideUp(500,function(){
-<<<<<<< HEAD
-    		$("#edui65").width(762);
-    		$("#edui65").css({"margin-right":"0"});
+
             $(".expandChatSend").slideDown(1000);
         });
         $("#chatData").val("");
-        return;
-    }
-    chatCon=chatCon.replace(/</g,"&lt").replace(/>/g,"&gt");
-    chatCon=chatCon.toString().replace(/(\r)*\n/g,"<br />").replace(/\s/g," ");
-    chatCon=chatCon.httpHtml();
-    // alert(chatCon);
-    if(chatCon.length==0){
-    	$("#communicationData").addClass("littleTremble");
-        setTimeout(function(){
-    		$("#communicationData").removeClass("littleTremble");
-    	},1000);
-        // alert("Please input content");
-=======
-            $(".expandChatSend").slideDown(1000);
-        });
-        $("#chatData").val("");
->>>>>>> 44aa07d308756235c936cfcd9ca53f8b8f728029
         return;
     }
     if(chatCon.length==0||chatCon.toString().replace(/(\r)*\n/g,"").replace(/\s/g,"").length==0){
