@@ -53,8 +53,8 @@ class Session(dict):
 
     def clear(self):
         super(Session, self).clear()
-        self.request_handler.clear_cookie("ssid")
-        self.request_handler.clear_cookie("verf")
+        # self.request_handler.clear_cookie("ssid")
+        # self.request_handler.clear_cookie("verf")
         mc = self._get_memclient()
         mc.delete(self.ssid)
 

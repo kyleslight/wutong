@@ -17,8 +17,6 @@ console.log(url);
 var msg_socket = new WebSocket(url);
 msg_socket.onclose = function() {};
 
-// get unsync information
-unsycUser();
 // get group unsync information
 unsyncGroup();
 
@@ -32,10 +30,10 @@ $(document).ready(function(){
 
     // join group
     $("#publicJoin").click(function(){
-    	alert(userInfo[0].userId);
     	$.ajax({
-			url:location.pathname + "/groupJoinIn",
+			url:location.pathname + "/groupJoin",
 			type:"POST",
+			dataType:"json",
 			data:{
 				uid:userInfo[0].userId,
 				gid:groupInfo[0].groupId
@@ -51,16 +49,6 @@ $(document).ready(function(){
     	// contact the group leader
 
     })
-<<<<<<< HEAD
-
-=======
-    $("#topic236Title").click(function(){
-        alert(1);
-        var topicId=$(this).attr("id");
-        return false;
-    });
->>>>>>> 44aa07d308756235c936cfcd9ca53f8b8f728029
-
 
     // groupItem
     $(".groupOptions a").click(function(){
@@ -71,6 +59,9 @@ $(document).ready(function(){
             }, shortElapseTime);
             checkIsOtherOptionShow();
             var indexOfDetailItem=$(".groupOptions a").index($(this));
+            switch(indexOfDetailItem){
+            	case(0):unsyncGroupBulletin();break;
+            }
             if (isOtherOptionShow) {
                 $("#groupOptionShow"+activeIndex).removeClass("active").addClass("outOfView");
                 $("#groupOptionShow"+activeIndex).animate({left:"-960px"},1500,function(){
@@ -206,16 +197,22 @@ $(document).ready(function(){
             item = JSON.parse(data);
         else
             return;
-
+        // test userImage
+        var homeUrl="http://localhost:8888/static/css/image/";
+        var userImageUrl;
+        switch(item.user.uid){
+        	case 0:userImageUrl=homeUrl+"test11.jpg";break;
+        	case 1:userImageUrl=homeUrl+"test12.png";break;
+        	case 2:userImageUrl=homeUrl+"test1.png";break;
+        	case 3:userImageUrl=homeUrl+"test.png";break;
+        	default:userImageUrl=homeUrl+"test7.jpg";break;
+    	}
         item.submit_time = item.submit_time.toString().substring(5,19);
         if (!item.title) {
 	        // TODO: 通过title判断是否为topic
-<<<<<<< HEAD
-	        var condata = '<li id="topic_"'+item.id+' class="chat">'
-=======
 	        var condata = '<li id="topic_'+item.id+'" class="chat">'
->>>>>>> 44aa07d308756235c936cfcd9ca53f8b8f728029
-	                    + 	'<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
+	                    // + 	'<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
+	                    + 	'<a class="userImage" href="#"><img src='+userImageUrl+'/></a>'
 	                    + 	'<div class="talkMain">'
 	                    + 		'<a class="userName" href="#">'+item.user.penname+'</a>'
 	                    + 		'<div class="timeShow">'+item.submit_time+"</div>"
@@ -226,49 +223,21 @@ $(document).ready(function(){
 	        $("#communication").prepend(condata);
 	        removeMessage();
 	    }else{
-<<<<<<< HEAD
-	    	var condata = '<li id="topic_"'+item.id+' class="topicOutter">'
-	                    + '<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
-	                    + '<div class="talkMain"><div class="talkAction">'
-	                    + '<a class="userName" href="#">'+item.user.penname+'</a> 发起了话题 <span class="talkTitle">'
-	                    + '<a href="/topic/'+item.id+'" target="_blank">'+item.title+'</a></span></div>'
-	                    + "<div class='timeShow'>"+item.submit_time+"</div>"
-	                    + "<div class='topicTalkContent'>"+item.content+"</div></div></li>";
-=======
             tempTopicContent=$("#messageTemp").html(item.content).eq(0).children().eq(0);
 	    	var condata = '<li id="topic_'+item.id+'" class="topicOutter">'
-	                    + '<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
+	                    // + '<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
+	                    + '<a class="userImage" href="#"><img src='+userImageUrl+'/></a>'
 	                    + '<div class="talkMain"><div class="talkAction">'
 	                    + '<a class="userName" href="#">'+item.user.penname+'</a> 发起了话题 '
-	                    + '<a href="#" id="topic'+item.id+'Title" class="talkTitle">'+item.title+'</a></div>'
+	                    + '<a href="javascript:void(0)" id="topic'+item.id+'Title" class="talkTitle" onclick="clickTopicTitle('+item.id+')" >'+item.title+'</a></div>'
 	                    + "<div class='timeShow'>"+item.submit_time+"</div>"
 	                    + "<div class='topicTalkContent'>"+tempTopicContent.html().toString()+"</div></div></li>";
->>>>>>> 44aa07d308756235c936cfcd9ca53f8b8f728029
-
 	        $("#communication").prepend(condata);
 	        removeMessage();
 	    }
     }
 
 });
-
-function unsycUser(){
-    // get user infomation
-    $.ajax({
-        url:"/u/info",
-        type:"GET",
-        dataType:"json",
-        async:false,
-        success:function(data){
-            userInfo[0].userName = data.penname;
-            userInfo[0].userId = data.uid;
-            $(".navrightoff").fadeOut(10,function(){
-                $(".navrighton").fadeIn(10);
-                $("#usernameHover").text(userInfo[0].userName);
-            });
-        }
-    })
-}
 
 function unsyncGroup(){
 	// get group infomation
@@ -307,6 +276,19 @@ function unsyncGroup(){
 	});
 }
 
+function unsyncGroupBulletin(){
+	// get group bulletin
+	$.ajax({
+		url:location.pathname+"/bulletin",
+		type: "GET",
+		dataType:"json",
+		async: false,
+		success:function(data){
+			console.log(data);
+		}
+	});
+}
+
 // function for submit data
 function submitChatData(){
 	chatCon=$("#chatData").val();
@@ -316,9 +298,6 @@ function submitChatData(){
     }
     if(chatCon=="<ex>"){
     	$(".normalChatSend").slideUp(500,function(){
-<<<<<<< HEAD
-    		$("#edui65").width(762);
-    		$("#edui65").css({"margin-right":"0"});
             $(".expandChatSend").slideDown(1000);
         });
         $("#chatData").val("");
@@ -334,11 +313,7 @@ function submitChatData(){
     		$("#communicationData").removeClass("littleTremble");
     	},1000);
         // alert("Please input content");
-=======
-            $(".expandChatSend").slideDown(1000);
-        });
         $("#chatData").val("");
->>>>>>> 44aa07d308756235c936cfcd9ca53f8b8f728029
         return;
     }
     if(chatCon.length==0||chatCon.toString().replace(/(\r)*\n/g,"").replace(/\s/g,"").length==0){
@@ -349,16 +324,12 @@ function submitChatData(){
         // alert("Please input content");
         return;
     }
-    chatCon=chatCon.replace(/</g,"&lt").replace(/>/g,"&gt");
-    chatCon=chatCon.toString().replace(/(\r)*\n/g,"<br />").replace(/\s/g," ");
-    chatCon=chatCon.httpHtml();
-    // alert(chatCon);
-    var thedata=$(".communication").children().size();
-    if (thedata>30) {
-        for (var i =30; i < thedata; i++) {
-            $("#communication").children("li").eq(i).remove();
-        }
-    }
+    // var thedata=$(".communication").children().size();
+    // if (thedata>30) {
+    //     for (var i =30; i < thedata; i++) {
+    //         $("#communication").children("li").eq(i).remove();
+    //     }
+    // }
 
     $("#chatData").val("");
     // send message to server, TODO: please refactor
@@ -371,8 +342,7 @@ function submitChatData(){
 
 function submitExpandChatData(){
 	var expandChatCon=$("#expandChatData").val();
-
-	if(expandChatCon=="<p>&lt;fl&gt;</p>"){
+	if(expandChatCon=="<p>&lt;fl&gt;</p>"||expandChatCon=="&lt;fl&gt;"){
 		$(".expandChatSend").slideUp(1000,function(){
             $(".normalChatSend").slideDown(500);
         });
@@ -439,6 +409,12 @@ function renderMaleAndFemale(){
             $(this).css("color","pink");
         }
     })
+}
+
+function clickTopicTitle(topic_id){
+	alert(topic_id);
+	$('html,body').animate({scrollTop:0},1000);
+	return false;
 }
 
 String.prototype.httpHtml = function(){

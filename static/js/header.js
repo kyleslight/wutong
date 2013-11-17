@@ -6,7 +6,9 @@ var elapseTime = 4500;
 var shortElapseTime=4000;
 var _showwel_flag = true;
 var _last_post_id;
-var userInfo=[{"userName":"","userId":0}];
+// var userInfo=[{"userName":"","userId":0}];
+var isLoginPasswordFocus=false;
+var isRegisterRepasswordFocus=false;
 
 // get unsync information
 unsycUser();
@@ -41,13 +43,17 @@ $(document).ready(function(){
     });
     // quick login
     $("#loginPassword").focus(function(){
+        isLoginPasswordFocus=true;
         $(window).keyup(function(e){
             var keyCode=e.keyCode;
-            if (keyCode==13) {
+            if (keyCode==13&&isLoginPasswordFocus) {
                 loginSubmit();
             }
             return false;
         });
+    })
+    $("#loginPassword").blur(function(){
+        isLoginPasswordFocus=false;
     })
 
     $("#registerSubmitButton").click(function() {
@@ -55,13 +61,17 @@ $(document).ready(function(){
     });
     // quick register
     $("#registerRepassword").focus(function(){
+        isRegisterRepasswordFocus=true;
         $(window).keyup(function(e){
             var keyCode=e.keyCode;
-            if (keyCode==13) {
+            if (keyCode==13&&isRegisterRepasswordFocus) {
                 registerSubmit();
             }
             return false;
         });
+    })
+    $("#registerRepassword").blur(function(){
+        isRegisterRepasswordFocus=false;
     })
     // logout
     $("#logout").click(function(){
@@ -122,24 +132,6 @@ $(document).ready(function(){
     });
 
 });
-
-function unsycUser(){
-    // get user infomation
-    $.ajax({
-        url:"/u/info",
-        type:"GET",
-        dataType:"json",
-        async:false,
-        success:function(data){
-            userInfo[0].userName = data.penname;
-            userInfo[0].userId = data.uid;
-            $(".navrightoff").fadeOut(10,function(){
-                $(".navrighton").fadeIn(10);
-                $("#usernameHover").text(userInfo[0].userName);
-            });
-        }
-    })
-}
 
 // function for login and register
 function loginBoxShow(){
@@ -207,13 +199,13 @@ function loginSubmit(){
                     $("#usernameHover").text(username);
                     loginBoxFade();
                 });
+                unsycUser();
+                unsyncGroup();
             } else if (response == "failed") {
-                // tremble("#loginBox");
             	$("#loginBox").addClass("littleTremble");
             	setTimeout(function(){
             		$("#loginBox").removeClass("littleTremble");
             	},1000);
-                // alert("loginfailed");
             }
         });
 }
@@ -247,3 +239,59 @@ function testTremble(){
 	setTimeout(function(){$("#msgNum").removeClass("tremble");},2000)
 	setTimeout(function(){testTremble()},10000);
 }
+
+function unsycUser(){
+    // get user infomation
+    $.ajax({
+        url:"/u/info",
+        type:"GET",
+        dataType:"json",
+        async:false,
+        success:function(data){
+            userInfo[0].userName = data.penname;
+            userInfo[0].userId = data.uid;
+            $(".navrightoff").fadeOut(10,function(){
+                $(".navrighton").fadeIn(10);
+                $("#usernameHover").text(userInfo[0].userName);
+            });
+        }
+    })
+}
+
+function unsyncGroup(){
+    // get group infomation
+    $.ajax({
+        url:location.pathname+"/groupInfo",
+        type: "GET",
+        dataType:"json",
+        async: false,
+        success:function(data){
+            groupInfo[0].groupName = data.name;
+            groupInfo[0].groupId = data.gid;
+            if(data.publicity){
+                $(".groupPromptPrivate").css({"display":"none"});
+                $("#contactGroupLeader").css({"display":"none"});
+            }else{
+                $(".groupPromptPublic").css({"display":"none"});
+            }
+            $('#groupTitleName').text(groupInfo[0].groupName);
+        }
+    });
+    // get group-user infomation
+    $.ajax({
+        url:location.pathname+"/groupUserInfo",
+        type: "POST",
+        dataType:"json",
+        async: false,
+        data:{
+            uid:userInfo[0].userId,
+            gid:groupInfo[0].groupId
+        },
+        success:function(data){
+            if(data.is_member){
+                $(".groupPrompt").css({"display":"none"});
+            }           
+        }
+    });
+}
+

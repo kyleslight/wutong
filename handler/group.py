@@ -26,20 +26,11 @@ class GroupBaseHandler(BaseHandler):
             messages = []
         return messages
 
-<<<<<<< HEAD
 class GroupInfoHandler(GroupBaseHandler):
 
     def get(self,gid):
         group_info = json_encode(self.model.get_group_info(gid))
         self.write(group_info)
-
-class GroupUserInfoHandler(GroupBaseHandler):
-
-    def post(self,group_id):
-        uid = self.get_argument("uid", None)
-        gid = self.get_argument("gid", None)
-        group_user_info = json_encode(self.model.get_member_info(gid,uid))
-        self.write(group_user_info) 
 
 class JoinInHandler(GroupBaseHandler):
 
@@ -47,8 +38,6 @@ class JoinInHandler(GroupBaseHandler):
         uid = self.get_argument("uid", None)
         gid = self.get_argument("gid", None)
         self.model.do_user_join_group(gid, uid)
-=======
->>>>>>> 44aa07d308756235c936cfcd9ca53f8b8f728029
 
 class IndexHandler(GroupBaseHandler):
 
@@ -97,6 +86,8 @@ class MessageHandler(GroupBaseHandler, WebSocketHandler):
 
     def on_message(self, message):
         uid = self.is_authenticated()
+        print('-' * 80)
+        print(uid)
         if not self.get_member_info(uid):
             return
         message = json_decode(message)
@@ -110,6 +101,13 @@ class TopicHandler(GroupBaseHandler):
     def get(self, topic_id):
         self.render("groupTest.html")
 
+
+class JoinHandler(GroupBaseHandler):
+
+    def post(self):
+        uid = self.get_argument("uid", None)
+        gid = self.get_argument("gid", None)
+        self.model.do_user_join_group(gid, uid)
 
 class GroupinfoHandler(GroupBaseHandler):
 
@@ -127,15 +125,7 @@ class GroupinfoHandler(GroupBaseHandler):
         founder = user["penname"]
         self.model.update_group_info(gid, founder, name, intro, motton)
 
-
-class JoinHandler(GroupBaseHandler):
-
-    def post(self):
-        uid = self.get_argument("uid", None)
-        gid = self.get_argument("gid", None)
-        self.model.do_user_join_group(gid, uid)
-
-
+# 1 arg
 class GroupUserInfoHandler(GroupBaseHandler):
 
     def post(self):

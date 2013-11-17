@@ -13,12 +13,9 @@ urls = [
         (r"/g/(\w+)", group.IndexHandler),
         (r"/g/\w+/groupUserInfo",group.GroupUserInfoHandler),
         (r"/g/(\w+)/groupInfo",group.GroupinfoHandler),
-        (r"/g/(\w+)/groupJoinIn",group.JoinHandler),
+        (r"/g/\w+/groupJoin",group.JoinHandler),
         (r"/g/(\w+)/message", group.MessageHandler),
         (r"/g/(\w+)/bulletin", group.GroupBulletinHandler),
         (r"/topic/(\w+)", group.TopicHandler),
-        (r"/g/(\w+)/groupUserInfo",group.GroupUserInfoHandler),
-        (r"/g/(\w+)/groupInfo",group.GroupInfoHandler),
-        (r"/g/(\w+)/groupJoinIn",group.JoinInHandler)
         # (r"/.*", base.BaseHandler),
     ]
