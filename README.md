@@ -11,9 +11,9 @@ postgresql-contrib-9.2
 
 #安装  
 创建数据库wutong  
-`createdb wutong  
+```createdb wutong  
 createdb wutong_test  
-psql wutong`  
+psql wutong```  
 `CREATE EXTENSION pgcrypto;`  
 `psql wutong_test`  
 `CREATE EXTENSION pgcrypto;`  
