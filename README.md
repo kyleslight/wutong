@@ -3,7 +3,6 @@
 文章分享网站  
 
 #依赖  
-python3
 python-tornado  
 python-psycopg2  
 postgresql-9.2  
@@ -20,5 +19,5 @@ postgresql-contrib-9.2
 #运行   
 运行梧桐，默认url为：127.0.0.1:8888  
 `memcached`  
-`python model/test_model.py`  
+`python test/models.py`  
 `python main.py`  
