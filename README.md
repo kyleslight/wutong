@@ -3,8 +3,7 @@
 文章分享网站  
 
 #依赖  
-python2.7  
-[python-memcached](https://github.com/linsomniac/python-memcached)    
+python3
 python-tornado  
 python-psycopg2  
 postgresql-9.2  
