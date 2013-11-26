@@ -682,7 +682,8 @@ textarea,input{
 	border-bottom-right-radius: 5px;
 	border-bottom: 2px solid #CCC;
 	/*background: rgba(0,0,0,0.9);*/
-	background:black;
+	/*background:black;*/
+	background: #010101;
 
 }
 
@@ -790,7 +791,7 @@ li.topicOutter{
 	padding-bottom: 5px;
 	border-bottom: 2px solid #CCC;
 	border-radius: 7px;
-	background: rgba(104,128,0,0.3);
+	background: rgba(100,138,0,0.2);
 }
 .userName{
 	display: inline;
@@ -898,12 +899,11 @@ li.topicInner{
 .topicTag{
 	position: fixed;
 	left: 0px;
-	top: 30%;
+	top: 230px;
 	z-index: 999999;
 }
 
 .topicTagList{
-	/*float: left;*/
 	display: block;
 	width: 80px;
 	height: 17px;
@@ -913,7 +913,7 @@ li.topicInner{
 	margin-bottom: 13px;
 	background: #680;
 	color: white;
-	padding:6px 7px;
+	padding:6px 0px;
 	border-radius: 7px;
 	border-top-left-radius: 0px;
 	border-bottom-left-radius: 0px;

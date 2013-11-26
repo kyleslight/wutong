@@ -50,12 +50,6 @@ $(document).ready(function(){
 
     })
 
-    $("#topic236Title").click(function(){
-        alert(1);
-        var topicId=$(this).attr("id");
-        return false;
-    });
-
     // groupItem
     $(".groupOptions a").click(function(){
         if (_showwel_flag == true){
@@ -136,15 +130,6 @@ $(document).ready(function(){
         $(this).children("div.memberDetail").slideUp(50);
         $(this).css({"background-color":"rgba(255,255,255,0.5)","color":"black"});
         return false;
-    })
-    // topic tag width change
-    $("li.topicTagList").mouseover(function(){
-    	var indexOfTopicTag=$(".topicTagList").index(this);
-    	var tempTopicTagWidth=$(".topicTagCloneList").eq(indexOfTopicTag).width()+40+"px";
-    	$(this).animate({width:tempTopicTagWidth},150);
-    })
-    $("li.topicTagList").mouseleave(function(){
-    	$(this).animate({width:"80px"},100);
     })
     // change send state
     $("#changeSendState").click(function(){
@@ -237,15 +222,17 @@ $(document).ready(function(){
 	        $("#communication").prepend(condata);
 	        removeMessage();
 	    }else{
-            tempTopicContent=$("#messageTemp").html(item.content).eq(0).children().eq(0);
+	    	var itemTitle="'"+item.title+"'";
+            tempTopicContent=$("#messageTemp").html(item.content).eq(0);
+            // .children().eq(0);
 	    	var condata = '<li id="topic_'+item.id+'" class="topicOutter">'
 	                    // + '<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
 	                    + '<a class="userImage" href="#"><img src='+userImageUrl+'/></a>'
 	                    + '<div class="talkMain"><div class="talkAction">'
 	                    + '<a class="userName" href="#">'+item.user.penname+'</a> 发起了话题 '
-	                    + '<a href="javascript:void(0)" id="topic'+item.id+'Title" class="talkTitle" onclick="clickTopicTitle('+item.id+')" >'+item.title+'</a></div>'
+	                    + '<a href="javascript:void(0)" id="topic'+item.id+'Title" class="talkTitle" onclick="clickTopicTitle('+item.id+','+itemTitle+')" >'+item.title+'</a></div>'
 	                    + "<div class='timeShow'>"+item.submit_time+"</div>"
-	                    + "<div class='topicTalkContent'>"+tempTopicContent.html().toString()+"</div></div></li>";
+	                    + "<div class='topicTalkContent'>"+tempTopicContent.html()+"</div></div></li>";
 	        $("#communication").prepend(condata);
 	        removeMessage();
 	    }
@@ -423,18 +410,42 @@ function renderMaleAndFemale(){
     })
 }
 
-function clickTopicTitle(topic_id){
-	alert(topic_id);
-	$('html,body').animate({scrollTop:0},1000);
+function clickTopicTitle(topic_id,topic_title){
+	
+	// alert(topic_id);
+	var addTopicTag=
+			'<li class="topicTagList" onmouseover="topicTagMouseOver('+topic_id+')" onmouseleave="topicTagMouseLeave('+topic_id+')">'
+		+		'<a href="javascript:void(0)" id="topic'+ topic_id+ 'Tag" >'+topic_title+'</a> | '
+		+		'<a href="#" class="closeTopicTagList" onclick="closeTopicTagList('+ topic_id+ ')">X</a>'
+		+	'</li>';
+	$(".topicTag").append(addTopicTag);
+	var addTopicCloneTag=
+			'<div class="topicTagCloneList">'
+		+		'<a href="javascript:void(0)" id="topic'+topic_id+'Tag" >'+topic_title+'</a> | '
+		+		'<a href="#">X</a>'
+		+	'</div>';
+	$(".topicTagClone").append(addTopicCloneTag);
+	// $('html,body').animate({scrollTop:0},1000);
 	return false;
 }
 
-function closeTopicTagList(topic_tag_id){
+function closeTopicTagList(topic_id){
 	// alert(indexOfTopicTag);
-	var closeTopicTagId="#topic"+topic_tag_id+"Tag";
+	var closeTopicTagId="#topic"+topic_id+"Tag";
 	$(".topicTag").find(closeTopicTagId).parent().remove();
 	$(".topicTagClone").find(closeTopicTagId).parent().remove();
 	return false;
+}
+
+function topicTagMouseOver(topic_id){
+	var topicTagOverId="#topic"+topic_id+"Tag";
+	var tempTopicTagWidth=$(".topicTagClone").find(topicTagOverId).parent().width()+40+"px";
+	$(".topicTag").find(topicTagOverId).parent().animate({width:tempTopicTagWidth},100);
+}
+
+function topicTagMouseLeave(topic_id){
+	var topicTagLeaveId="#topic"+topic_id+"Tag";
+	$(".topicTag").find(topicTagLeaveId).parent().animate({width:"80px"},100);
 }
 
 String.prototype.httpHtml = function(){

@@ -27,15 +27,18 @@
                     <a id="browse" href="#">
                         <li>浏览</li>
                     </a>
-                    <a id="article" href="write.html">
-                        <li>文章</li>
-                    </a>
-                    <a id="fragment" href="#">
-                        <li>小品</li>
+                    <a id="create" href="create.html">
+                        <li>创作</li>
                     </a>
                     <a id="group" href="#">
                         <li id="thisPage">小组</li>
                     </a>
+                </div>
+                <div id="searchBox">
+                    <form id="searchData" action="/search" name="searchData" target="_blank">
+                        <input name="keyWord" type="text" class="input" id="keyWord" autocomplete="on" accesskey="s" x-webkit-speech x-webkit-grammar="builtin:translate" />
+                        <a href="#" type="submit" id="searchSubmitButton" class="formButton">搜索</a>
+                    </form>
                 </div>
                 <div class="navrighton">
                     <a href="#">
@@ -43,6 +46,8 @@
                             <span id="usernameHover" href="#"></span>
                             <div class="userExpand">
                                 <div id="myHomepage">我的主页</div>
+                                <div id="myCollection">我的收藏</div>
+                                <div id="myNote">我的便笺</div>
                                 <div id="logout">登出</div>
                             </div>
                         </li>
@@ -58,16 +63,12 @@
                     </div>
                 </div>
                 <div class="navrightoff">
-
                     <a id="login" href="#">
                         <li>登入</li>
                     </a>
-
-
                     <a id="register" href="#">
                         <li>注册</li>
                     </a>
-
                 </div>
             </div>
         </div>
@@ -105,6 +106,60 @@
             </form>
         </div>
     </div>
+    <div class="myNoteWrap">
+        <div class="myNote">
+            <div class="myNoteListWrapOutter">
+                <a href="#" id="addNote" class="myNoteList">add a note</a>
+                <div class="myNoteListWrap">
+                    <a href="#" class="myNoteList">the first note</a>
+                    <a href="#" class="myNoteList">the second note</a>
+                    <a href="#" class="myNoteList">the third note</a>
+                    <a href="#" class="myNoteList">the fourth note</a>
+                    <a href="#" class="myNoteList">the fifth note</a>
+                    <a href="#" class="myNoteList">the sixth note</a>
+                    <a href="#" class="myNoteList">the seventh note</a>
+                    <a href="#" class="myNoteList">the first note</a>
+                    <a href="#" class="myNoteList">the second note</a>
+                    <a href="#" class="myNoteList">the third note</a>
+                    <a href="#" class="myNoteList">the fourth note</a>
+                    <a href="#" class="myNoteList">the fifth note</a>
+                    <a href="#" class="myNoteList">the sixth note</a>
+                    <a href="#" class="myNoteList">the seventh note</a>
+                    <a href="#" class="myNoteList">the first note</a>
+                    <a href="#" class="myNoteList">the second note</a>
+                    <a href="#" class="myNoteList">the third note</a>
+                    <a href="#" class="myNoteList">the fourth note</a>
+                    <a href="#" class="myNoteList">the fifth note</a>
+                    <a href="#" class="myNoteList">the sixth note</a>
+                    <a href="#" class="myNoteList">the seventh note</a>
+                </div>
+            </div>
+            <div class="myCurrentNoteArea">
+                <div class="myCurrentNoteHeader">
+                    <input class="myCurrentNoteTitle" value="the first note">
+                    <div class="myCurrentNoteTime">10-22 12:30</div>
+                </div>
+                <textarea class="myCurrentNoteContent">
+                    摇晃得可真厉害。
+                    在几十年、甚或几百年前曾经铺设柏油的道路，如今变成了不见半点人影的荒废道路，自左右两侧涌入的杂草与血管般的草根，让这里逐渐形成一片混沌的样貌。
+                    货物拖车漫不经心地踏过这样不成道路的道路。
+                    乘坐的感觉只能用一句非常糟糕来形容。
+                    每当车子越过障碍物时，就会造成货架上些许冲击……然后再进一步传到和货架上的木箱待在一起的我身上。
+                    我埋怨着原以为在货架上旅行很优雅的自己，实在太愚蠢了。
+                    难得有机会可以在花朵恣意绽满的街道上旅行，但由于屁股实在太过疼痛，根本无心去欣赏。
+                    心情上则近似于多娜多娜（Donna，Donna）。（注：知名世界民谣，歌词描述一头即将被卖到市场去的小牛，旋律温馨中带着悲伤。）
+                    「倘若乖乖坐在副驾驶座的话……不。」
+                    我喃喃自语，但旋即否定了自己的想法。坐在副驾驶座，就意味着必须面临坐在驾驶座的商队队长单方面的问话。对于怕生而且一紧张脑袋就一片空白的我而言，那段时间内应该会磨损削薄我的神经。
+                </textarea>
+                <div class="myCurrentNoteOption">
+                    <a href="#" id="deleteCurrentNote" class="formButton">删除</a>
+                    <a href="#" id="saveCurrentNote" class="formButton">保存</a>
+                </div>
+                <a href="#" id="myNoteBack">返回</a>
+            </div>
+        </div>
+    </div>
+    <a id="return_top" href="#" title="回到顶部" class="none"></a>
     <div class="groupPrompt">
         <p class="groupPromptPublic">这是一个公开的小组，你可以点击 <a id="publicJoin" class="joinButton" href="#"> 我喜欢 </a>加入它!</p>
         <p class="groupPromptPrivate">这是一个私人的小组，你可以  <a id="privateJoin" class="joinButton" href="#"> 联系该小组组长 </a>来加入它!</p>
@@ -115,23 +170,10 @@
              </div>
         </form>
     </div>
-    <a id="return_top" href="#" title="回到顶部" class="none"></a>
     <!-- topic tag list -->
     <div class="topicTag">
-        <li class="topicTagList"><a href="javascript:void(0)" id="topic101Tag" >啊~啊~啊~现在是试音时间</a> | <a href="#" class="closeTopicTagList" onclick="closeTopicTagList(101)">X</a></li>
-        <li class="topicTagList"><a href="javascript:void(0)" id="topic102Tag" >测试sS用的话题1aaaaaaaaaaaaaaaaaaaaaa</a> | <a href="#" class="closeTopicTagList" onclick="closeTopicTagList(102)">X</a></li>
-        <li class="topicTagList"><a href="javascript:void(0)" id="topic103Tag" >测试用的话题2</a> | <a href="#" class="closeTopicTagList" onclick="closeTopicTagList(103)">X</a></li>
-        <li class="topicTagList"><a href="javascript:void(0)" id="topic104Tag" >测试用的话题3</a> | <a href="#" class="closeTopicTagList" onclick="closeTopicTagList(104)">X</a></li>
-        <li class="topicTagList"><a href="javascript:void(0)" id="topic105Tag" >测试用的话题4</a> | <a href="#" class="closeTopicTagList" onclick="closeTopicTagList(105)">X</a></li>
-        <li class="topicTagList"><a href="javascript:void(0)" id="topic106Tag" >测试用的话题5</a> | <a href="#" class="closeTopicTagList" onclick="closeTopicTagList(106)">X</a></li>
     </div>
     <div class="topicTagClone">
-        <div class="topicTagCloneList"><a href="javascript:void(0)" id="topic101Tag" >啊~啊~啊~现在是试音时间</a> | <a href="#">X</a></div>
-        <div class="topicTagCloneList"><a href="javascript:void(0)" id="topic102Tag" >测试sS用的话题1aaaaaaaaaaaaaaaaaaaaaa</a> | <a href="#">X</a></div>
-        <div class="topicTagCloneList"><a href="javascript:void(0)" id="topic103Tag" >测试用的话题2</a> | <a href="#">X</a></div>
-        <div class="topicTagCloneList"><a href="javascript:void(0)" id="topic104Tag" >测试用的话题3</a> | <a href="#">X</a></div>
-        <div class="topicTagCloneList"><a href="javascript:void(0)" id="topic105Tag" >测试用的话题4</a> | <a href="#">X</a></div>
-        <div class="topicTagCloneList"><a href="javascript:void(0)" id="topic106Tag" >测试用的话题5</a> | <a href="#">X</a></div>
     </div>
     <div class="groupWarpOuter">
         <div class="groupWarp">
@@ -649,7 +691,7 @@
                             <a href="#" id="changeSendState">切换至话题模式</a>
                             <div class="chatSend">
                                 <div class="normalChatSend">
-                                    <textarea id="chatData" class="input" type="text" name="chatConData" placeholder=""></textarea>
+                                    <textarea id="chatData" class="input" type="text" name="chatConData" placeholder="" accesskey="c" onfocus='this.style.posHeight=this.scrollHeight' onpropertychange='this.style.posHeight=this.scrollHeight'></textarea>
                                     <a href="#" id="chatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
                                 </div>
                                 <div class="expandChatSend">

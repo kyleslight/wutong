@@ -150,6 +150,18 @@ $(document).ready(function(){
         return false;
     });
 
+    // my note
+    $("#myNote").click(function(){
+        $(".myNoteWrap").animate({height:400},function(){
+            $(".myNote").fadeIn(500);
+        });
+    });
+    $("#myNoteBack").click(function(){
+        $(".myNote").fadeOut(500,function(){
+            $(".myNoteWrap").animate({height:0});
+        });
+    })
+
 });
 
 // function for login and register

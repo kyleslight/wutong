@@ -21,10 +21,12 @@ img{
 input{
 	border: 1px solid #680;
 	background: white !important;
+	outline: none;
 }
 textarea{
 	border: 1px solid #680;
 	margin-top: 20px;
+	outline: none;
 }
 
 .input{
@@ -128,6 +130,61 @@ textarea{
 	float: left;
 }
 
+#searchBox{
+	float: left;
+	margin-left: 10px;
+}
+
+#searchData{
+	float: left;
+	opacity: 0.95;
+/*	transition: 4s;
+	-moz-transition: 4s;
+	-webkit-transition: 4s;
+	-o-transition: 4s;*/
+}
+#searchData:hover{
+	opacity: 1.0;
+}
+
+#keyWord{
+	width: 200px;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	border: 1px solid white;
+	margin-top: 19px;
+	font-weight: 900;
+	color: #777;
+	opacity: 0.5;
+	transition: 2s;
+	-moz-transition: 2s;
+	-webkit-transition: 2s;
+	-o-transition: 2s;
+}
+#keyWord:focus{
+	border: 1px solid white;
+	opacity: 1;
+}
+
+#searchSubmitButton{
+	width: 40px;
+	background: #680;
+	margin-top: 19px;
+	padding:5px 0 0 5px;
+	line-height: 20px;
+	height: 25px;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+	border: 1px solid white;
+	opacity: 0.5;
+	/*border-left: 0;*/
+}
+#searchSubmitButton:hover{
+	background: #c1d739;
+	color: white;
+	opacity: 1;
+}
+
 /*default display none*/
 .navrighton{
 	float: right;
@@ -163,7 +220,7 @@ textarea{
 	position: relative;
 	margin: 0 auto;
 	display: none;
-	margin-top: 26px;
+	margin-top: 29px;
 	background:white;
 	z-index: 100;
 	border-left: 1px solid #CCC;
@@ -174,7 +231,7 @@ textarea{
 }
 
 .userExpand div{
-	padding: 5px 10px;
+	padding: 3px 10px;
 	text-align: center;
 	border-top: 2px solid rgba(102,136,0,0.9);
 	color: #680;
@@ -351,6 +408,98 @@ textarea{
 	background: #c1d739;
 }
 
+.myNoteWrap{
+	width: 1060px;
+	margin: 0 auto;
+}
+
+.myNote{
+	margin-top: 20px;
+	border-radius: 7px;
+	background: white;
+	padding: 10px;
+	height: 350px;
+	float: left;
+	box-shadow: 0 0 20px #680;
+	display: none;
+}
+
+.myNoteListWrapOutter{
+	float: left;
+	width: 130px;
+	overflow: hidden;
+}
+#addNote{
+	margin-bottom: 5px;
+}
+.myNoteListWrap{
+	padding-top: 5px;
+	float: left;
+	width: 145px;
+	overflow: auto;
+	height: 317px;
+	border-top: 1px dashed #680;
+}
+.myNoteList{
+	display: block;
+	list-style-type: decimal;
+	height: 18px;
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+	padding: 4px;
+}
+.myNoteList:hover{
+	background: #680;
+	color: white;
+	font-weight: 900;
+	padding-left: 10px;
+}
+.myCurrentNoteArea{
+	float: left;
+	width: 898px;
+	padding-left: 10px;
+	border-left: 2px solid #680;
+	height: 350px;
+}
+.myCurrentNoteHeader{
+	width: 898px;
+	float: left;
+}
+.myCurrentNoteTitle{
+	float: left;
+	width: 795px;
+	outline: none;
+	font-size: 25px;
+	color: #030;
+	border:0;
+}
+.myCurrentNoteTime{
+	float: left;
+	width: 100px;
+	margin-top: 12px;
+}
+.myCurrentNoteContent{
+	width: 890px;
+	float: left;
+	height: 280px;
+	margin-top: 2px;
+	resize:none;
+	border: 0;
+	outline: none;
+}
+.myCurrentNoteOption a{
+	width: 45px;
+	padding:3px 5px;
+	height: 19px;
+	margin-top: 5px;
+	margin-left: 10px;
+	text-align: center;
+}
+#myNoteBack{
+	float: right;
+	margin-right: 30px;
+	margin-top: 5px;
+}
 .none{
 	display: none;
 }
