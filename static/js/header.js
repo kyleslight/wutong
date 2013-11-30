@@ -149,10 +149,22 @@ $(document).ready(function(){
         isRegisterBox=false;
         return false;
     });
-
+    // my collection
+    var numOfCollectionList=1;
+    var heightOfMycollection=123+numOfCollectionList*55;
+    $("#myCollection").click(function(){
+        $(".myCollectionWarp").animate({height:heightOfMycollection},function(){
+            $(".myCollection").fadeIn(500);
+        });
+    });
+    $("#myCollectionBack").click(function(){
+        $(".myCollection").fadeOut(500,function(){
+            $(".myCollectionWarp").animate({height:0});
+        });
+    })
     // my note
     $("#myNote").click(function(){
-        $(".myNoteWrap").animate({height:400},function(){
+        $(".myNoteWrap").animate({height:415},function(){
             $(".myNote").fadeIn(500);
         });
     });
@@ -160,8 +172,37 @@ $(document).ready(function(){
         $(".myNote").fadeOut(500,function(){
             $(".myNoteWrap").animate({height:0});
         });
-    })
+    });
 
+    var numOfMessageList=0;
+    var heightOfMyMessage=0;
+    // my message
+    $("#message").click(function(){
+        numOfMessageList=$(".activeMessagePart").children("li").size()+1;
+        heightOfMyMessage=56+numOfMessageList*60;
+        $(".myMessageWarp").animate({height:heightOfMyMessage},function(){
+            $(".myMessage").fadeIn(500);
+        });
+        var activeIndexOfMessagePart=$(".myMessagePartContent").index($(".activeMessagePart"));
+        $(".myMessagePartButton").eq(activeIndexOfMessagePart).css("color","#680");
+    })
+    $("#myMessageBack").click(function(){
+        $(".myMessage").fadeOut(500,function(){
+            $(".myMessageWarp").animate({height:0});
+        });
+    })
+    $(".myMessagePartButton").click(function(){
+        $(".myMessagePartButton").css("color","#444");
+        $(this).css("color","#680");
+        var indexOfMessagePartButton=$(".myMessagePartButton").index($(this));
+        var activeIndexOfMessagePart=$(".myMessagePartContent").index($(".activeMessagePart"));
+        $(".myMessagePartContent").eq(activeIndexOfMessagePart).removeClass("activeMessagePart").slideUp(500,function(){
+        });
+        $(".myMessagePartContent").eq(indexOfMessagePartButton).slideDown(500).addClass("activeMessagePart");
+        numOfMessageList=$(".activeMessagePart").children("li").size()+1;
+        heightOfMyMessage=56+numOfMessageList*60;
+        $(".myMessageWarp").animate({height:heightOfMyMessage});
+    })
 });
 
 // function for login and register

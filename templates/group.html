@@ -7,12 +7,12 @@
     <meta http-equiv="Content-Language" content="zh-CN" />
     <meta name="Keywords" content="梧桐 文章 浏览 撰写 创作 小组" />
     <meta name="Description" content="梧桐小组" />
+    <link rel="shortcut icon" href="{{ static_url("css/image/favicon.ico") }}" />
     <link rel="stylesheet" href="{{ static_url("css/base.css") }}" type="text/css" />
     <link rel="stylesheet" href="{{ static_url("css/group.css") }}" type="text/css" />
     <link rel="stylesheet" href="{{ static_url("css/animation.css") }}" type="text/css" />
     <link rel="stylesheet" href="{{ static_url("css/shCoreEclipse.css") }}" type="text/css" />
 </head>
-
 <body>
     <!-- header -->
     <div class="header" id="header">
@@ -24,10 +24,10 @@
                     </a>
                 </div>
                 <div class="navLeft">
-                    <a id="browse" href="#">
+                    <a id="browse" href="/browse.html">
                         <li>浏览</li>
                     </a>
-                    <a id="create" href="create.html">
+                    <a id="create" href="/create.html">
                         <li>创作</li>
                     </a>
                     <a id="group" href="#">
@@ -36,7 +36,7 @@
                 </div>
                 <div id="searchBox">
                     <form id="searchData" action="/search" name="searchData" target="_blank">
-                        <input name="keyWord" type="text" class="input" id="keyWord" autocomplete="on" accesskey="s" x-webkit-speech x-webkit-grammar="builtin:translate" />
+                        <input name="keyWord" type="text" class="input" id="keyWord" autocomplete="on" accesskey="s" placeholder="寻找作品，成员，小组" x-webkit-speech x-webkit-grammar="builtin:translate" />
                         <a href="#" type="submit" id="searchSubmitButton" class="formButton">搜索</a>
                     </form>
                 </div>
@@ -106,6 +106,139 @@
             </form>
         </div>
     </div>
+    <!-- my message -->
+    <div class="myMessageWarp">
+        <div class="myMessage">
+            <div class="myMessagePart">
+                <a id="siteBulletinButton" class="myMessagePartButton" href="#">全站公告<span id="siteBulletinNum">1</span></a>
+                <a id="replyButton" class="myMessagePartButton" href="#">回复<span id="replyNum">5</span></a>
+                <a id="opusPushButton" class="myMessagePartButton" href="#">推送<span id="opusPushNum">12</span></a>
+                <a id="PMButton" class="myMessagePartButton" href="#">私信<span id="PMNum">1</span></a>                
+            </div>
+            <div class="myMessageContent">
+                <div class="siteBulletin myMessagePartContent activeMessagePart">
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">第六次团队大会</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ
+                        </div>
+                    </li>
+                </div>
+                <div class="reply myMessagePartContent">
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageAddress">Kyleslight的同好会>>一个测试用的话题A>>一个测试用的话题B</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">既然是测试用的话题的话就不要那么认真了嘛</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            既然是测试用的话题的话就不要那么认真了嘛<br/>对吧
+                        </div>
+                    </li>
+                </div>
+                <div class="opusPush myMessagePartContent">
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">Unity 3D的互动应用</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
+                        </div>
+                    </li>
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">Unity 3D的互动应用</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
+                        </div>
+                    </li>
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">Unity 3D的互动应用</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
+                        </div>
+                    </li>
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">Unity 3D的互动应用</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
+                        </div>
+                    </li>`
+                </div>
+                <div class="PMPush myMessagePartContent">
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageAddress">这是一个测试用的私信</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">这是一个测试用的私信啊</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            这是一个测试用的私信啊<br/>对吧
+                        </div>
+                    </li>
+                </div>
+            </div>
+            <a href="#" id="myMessageBack">返回</a>
+        </div>
+    </div>
+    <!-- my collection -->
+    <div class="myCollectionWarp">
+        <div class="myCollection">
+            <div class="myCollectionClass">
+                <a id="myOpusCollectionButton" class="myCollectionClassButton" href="#">作品</a>
+                <a id="myTopicCollectionButton" class="myCollectionClassButton" href="#">话题</a>
+                <a id="myCollectionFliter" class="myCollectionClassButton" href="#">筛选器</a>
+            </div>
+            <div class="myOpusCollection">
+                <li class="myCollectionList">
+                <a href="#"><img class="myCollectionAuthorImage" src="{{ static_url("css/image/test.png") }}" /></a>
+                    <div class="myCollectionRow">                        
+                        <a href="#" class="myCollectionTitle">基于Unity3D的互动应用</a><a class="myCollectionAuthor" href="#">Kyleslight</a>
+                    </div>
+                    <div class="myCollectionRow">
+                        <div class="myCollectionTag"><a href="#">aaa</a><a href="#">bbb</a><a href="#">ccc</a></div>
+                        <span class="myCollectionTime">收藏时间 : 11-11 11:11</span>
+                    </div>
+                </li>
+            </div>
+            <div class="myTopicCollection">
+            </div>
+            <div class="myCollectionPageTurning"><a href="#">上一页 </a> <a href="#"> 下一页</a></div>
+            <a href="#" id="myCollectionBack">返回</a>
+        </div>
+    </div>
+    <!-- my note -->
     <div class="myNoteWrap">
         <div class="myNote">
             <div class="myNoteListWrapOutter">
@@ -159,6 +292,7 @@
             </div>
         </div>
     </div>
+    <!-- return to top -->
     <a id="return_top" href="#" title="回到顶部" class="none"></a>
     <div class="groupPrompt">
         <p class="groupPromptPublic">这是一个公开的小组，你可以点击 <a id="publicJoin" class="joinButton" href="#"> 我喜欢 </a>加入它!</p>
@@ -202,7 +336,7 @@
                     <div class='groupOptionItem'>作品</div>
                 </a>
                 <a href="#">
-                    <div class='groupOptionItem'>话题</div>
+                    <div class='groupOptionItem'>计划</div>
                 </a>
                 <a href="#">
                     <div class='groupOptionItem'>设置</div>
@@ -708,7 +842,7 @@
                         <div id="communicationConWrap">
                             <div class="communication" id="communication">
                                 <li id="testTopic" class="topicOutter">
-                                    <a class="userImage" href='#'><img src='#'/></a>
+                                    <a class="userImage" href='#'><img src='{{ static_url("css/image/forumTest.jpg") }}'/></a>
                                     <div class='talkMain'>
                                         <div class="talkAction"><a class='userName' href='#'>Kyleslight</a> 发起了话题 <span class='talkTitle'>
                                             <a href="groupTest.html" target="_blank">这是一个测试用的话题</a>
@@ -723,7 +857,7 @@
 
                                 </li>
                                 <li id='groupWelcomeChat' class="chat">
-                                    <a class="userImage" href='#'><img src='#'/></a>
+                                    <a class="userImage" href='#'><img src='{{ static_url("css/image/forumTest.jpg") }}'/></a>
                                     <div class='talkMain'>
                                         <div class='userName'><a href='#'>Kyleslight</a></div>
                                         <div class='timeShow'>
