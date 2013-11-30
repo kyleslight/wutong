@@ -57,7 +57,6 @@ class MessageHandler(GroupBaseHandler, WebSocketHandler):
                 self.gid,
                 message["uid"],
                 message["content"],
-                message.get("title", None),
                 message.get("reply_id", None),
             )
 

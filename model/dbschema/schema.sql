@@ -19,7 +19,7 @@ CREATE TABLE "user" (
 DROP TABLE IF EXISTS "user_info" CASCADE;
 CREATE TABLE "user_info" (
     id serial PRIMARY KEY,
-    uid serial REFERENCES "user"(uid),
+    uid serial REFERENCES "user"(uid) NOT NULL,
     realname varchar(32),
     -- 男true 女false
     sex bool,
@@ -77,8 +77,8 @@ CREATE TABLE "group" (
 DROP TABLE IF EXISTS "user_title" CASCADE;
 CREATE TABLE "user_title" (
     id serial PRIMARY KEY,
-    uid serial REFERENCES "user"(uid),
-    name varchar(20),
+    uid serial REFERENCES "user"(uid) NOT NULL,
+    name varchar(20) NOT NULL,
     create_time timestamp NOT NULL DEFAULT now()
 );
 
@@ -86,8 +86,8 @@ CREATE TABLE "user_title" (
 DROP TABLE IF EXISTS "article_user" CASCADE;
 CREATE TABLE "article_user" (
     id serial PRIMARY KEY,
-    aid serial REFERENCES "article"(aid),
-    uid serial REFERENCES "user"(uid),
+    aid serial REFERENCES "article"(aid) NOT NULL,
+    uid serial REFERENCES "user"(uid) NOT NULL,
     -- 用户对文章的评分
     score int,
     is_author bool NOT NULL DEFAULT true,
@@ -103,8 +103,8 @@ CREATE TABLE "article_user" (
 DROP TABLE IF EXISTS "article_comment" CASCADE;
 CREATE TABLE "article_comment" (
     id serial PRIMARY KEY,
-    aid serial REFERENCES "article"(aid),
-    uid serial REFERENCES "user"(uid),
+    aid serial REFERENCES "article"(aid) NOT NULL,
+    uid serial REFERENCES "user"(uid) NOT NULL,
     content varchar(200) NOT NULL,
     -- 侧评
     is_side bool NOT NULL,
@@ -118,8 +118,8 @@ CREATE TABLE "article_comment" (
 DROP TABLE IF EXISTS "article_appositeness" CASCADE;
 CREATE TABLE "article_appositeness" (
     id serial PRIMARY KEY,
-    aid serial REFERENCES "article"(aid),
-    name varchar(20),
+    aid serial REFERENCES "article"(aid) NOT NULL,
+    name varchar(20) NOT NULL,
     create_time timestamp NOT NULL DEFAULT now()
 );
 
@@ -127,8 +127,8 @@ CREATE TABLE "article_appositeness" (
 DROP TABLE IF EXISTS "article_tag" CASCADE;
 CREATE TABLE "article_tag" (
     id serial PRIMARY KEY,
-    aid serial REFERENCES "article"(aid),
-    name varchar(20),
+    aid serial REFERENCES "article"(aid) NOT NULL,
+    name varchar(20) NOT NULL,
     create_time timestamp NOT NULL DEFAULT now()
 );
 
@@ -136,8 +136,8 @@ CREATE TABLE "article_tag" (
 DROP TABLE IF EXISTS "article_honor" CASCADE;
 CREATE TABLE "article_honor" (
     id serial PRIMARY KEY,
-    aid serial REFERENCES "article"(aid),
-    name varchar(20),
+    aid serial REFERENCES "article"(aid) NOT NULL,
+    name varchar(20) NOT NULL,
     create_time timestamp NOT NULL DEFAULT now()
 );
 
@@ -145,8 +145,8 @@ CREATE TABLE "article_honor" (
 DROP TABLE IF EXISTS "article_view" CASCADE;
 CREATE TABLE "article_view" (
     id serial PRIMARY KEY,
-    aid serial REFERENCES "article"(aid),
-    uid serial REFERENCES "user"(uid),
+    aid serial REFERENCES "article"(aid) NOT NULL,
+    uid serial REFERENCES "user"(uid) NOT NULL,
     view_time timestamp NOT NULL DEFAULT now()
 );
 
@@ -154,8 +154,8 @@ CREATE TABLE "article_view" (
 DROP TABLE IF EXISTS "group_user" CASCADE;
 CREATE TABLE "group_user" (
     id serial PRIMARY KEY,
-    gid serial REFERENCES "group"(gid),
-    uid serial REFERENCES "user"(uid),
+    gid serial REFERENCES "group"(gid) NOT NULL,
+    uid serial REFERENCES "user"(uid) NOT NULL,
     -- 组长
     is_leader bool NOT NULL DEFAULT false,
     -- 副组长
@@ -169,10 +169,22 @@ CREATE TABLE "group_user" (
 DROP TABLE IF EXISTS "group_bulletin" CASCADE;
 CREATE TABLE "group_bulletin" (
     id serial PRIMARY KEY,
-    gid serial REFERENCES "group"(gid),
-    uid serial REFERENCES "user"(uid),
-    content varchar(400) NOT NULL,
-    title varchar(50) NOT NULL,
+    gid serial REFERENCES "group"(gid) NOT NULL,
+    uid serial REFERENCES "user"(uid) NOT NULL,
+    content varchar(400000) NOT NULL,
+    title varchar(5000) NOT NULL,
+    submit_time timestamp NOT NULL DEFAULT now()
+);
+
+-- 小组topic
+DROP TABLE IF EXISTS "group_topic" CASCADE;
+CREATE TABLE "group_topic" (
+    id serial PRIMARY KEY,
+    gid serial REFERENCES "group"(gid) NOT NULL,
+    uid serial REFERENCES "user"(uid) NOT NULL,
+    content varchar(400000) NOT NULL,
+    title varchar(5000),
+    reply_id integer REFERENCES "group_topic"(id),
     submit_time timestamp NOT NULL DEFAULT now()
 );
 
@@ -180,10 +192,9 @@ CREATE TABLE "group_bulletin" (
 DROP TABLE IF EXISTS "group_message" CASCADE;
 CREATE TABLE "group_message" (
     id serial PRIMARY KEY,
-    gid serial REFERENCES "group"(gid),
-    uid serial REFERENCES "user"(uid),
-    content varchar(400) NOT NULL,
-    title varchar(50),
-    reply_id integer,
+    gid serial REFERENCES "group"(gid) NOT NULL,
+    uid serial REFERENCES "user"(uid) NOT NULL,
+    content varchar(400000) NOT NULL,
+    reply_id integer REFERENCES "group_topic"(id),
     submit_time timestamp NOT NULL DEFAULT now()
 );
