@@ -17,10 +17,10 @@ console.log(url);
 var msg_socket = new WebSocket(url);
 msg_socket.onclose = function() {};
 
-// get group unsync information
-unsyncGroup();
-
 $(document).ready(function(){
+    // get group unsync information
+    unsyncGroup();
+
     //check sex of the member
     renderMaleAndFemale();
     var groupMottoPrimaryWidth=$("#groupMotto").width();
@@ -33,7 +33,6 @@ $(document).ready(function(){
     	$.ajax({
 			url:location.pathname + "/groupJoin",
 			type:"POST",
-			dataType:"json",
 			data:{
 				uid:userInfo[0].userId,
 				gid:groupInfo[0].groupId
@@ -411,7 +410,7 @@ function renderMaleAndFemale(){
 }
 
 function clickTopicTitle(topic_id,topic_title){
-	
+
 	// alert(topic_id);
 	var addTopicTag=
 			'<li class="topicTagList" onmouseover="topicTagMouseOver('+topic_id+')" onmouseleave="topicTagMouseLeave('+topic_id+')">'

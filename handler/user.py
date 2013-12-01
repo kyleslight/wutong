@@ -3,8 +3,9 @@
 
 from tornado import escape
 from tornado.web import authenticated
-from base import BaseHandler
 from lib.session import Session
+from lib import sendmail
+from base import BaseHandler
 
 class UserBaseHandler(BaseHandler):
 
@@ -17,6 +18,10 @@ class UserBaseHandler(BaseHandler):
 
 
 class LoginHandler(UserBaseHandler):
+
+    def get(self):
+        # @authenticated will call this function
+        pass
 
     def post(self):
         account = self.get_argument("username", None)
@@ -38,6 +43,7 @@ class LogoutHandler(UserBaseHandler):
 
     def post(self):
         self.session.clear()
+        self.write("success")
 
 
 class RegisterHandler(UserBaseHandler):
@@ -49,8 +55,7 @@ class RegisterHandler(UserBaseHandler):
 
         hashuid = self.do_register(email=email, penname=penname, password=password)
         if hashuid:
-            self.write("success")
-            self.send_mail(hashuid)
+            self.send_mail(email, hashuid)
         else:
             self.write("failed")
 
@@ -58,9 +63,15 @@ class RegisterHandler(UserBaseHandler):
         hashuid = self.model.do_register(email=email, password=password, penname=penname)
         return hashuid
 
-    def send_mail(self, hashuid):
-        url = "http://localhost:8888/account/check?r=" + hashuid
-        self.write(url)
+    def send_mail(self, email, hashuid):
+        title = u"欢迎加入梧桐"
+        content = u"{url}".format(
+            url = "http://localhost:8888/account/check?r=" + hashuid
+        )
+        if sendmail.send(title, content, email):
+            self.write("success")
+        else:
+            self.write("failed")
 
 
 class UserinfoHandler(UserBaseHandler):
@@ -83,6 +94,7 @@ class CheckMailHandler(UserBaseHandler):
             self.write("success")
         else:
             self.write("error")
+        self.redirect("/")
 
     def check_mail(self, hashuid):
         return self.model.do_activate_by_hashuid(hashuid)
@@ -91,4 +103,4 @@ class CheckMailHandler(UserBaseHandler):
 class HomeHandler(UserBaseHandler):
 
     def get(self):
-        pass
+        self.write("user home")

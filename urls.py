@@ -3,7 +3,9 @@
 
 from handler import base, group, user
 
+# TODO
 urls = [
+        (r"/", user.HomeHandler),
         (r"/u/home/(\w+)", user.HomeHandler),
         (r"/u/info", user.UserinfoHandler),
         (r"/login", user.LoginHandler),
@@ -17,5 +19,4 @@ urls = [
         (r"/g/(\w+)/message", group.MessageHandler),
         (r"/g/(\w+)/bulletin", group.GroupBulletinHandler),
         (r"/topic/(\w+)", group.TopicHandler),
-        # (r"/.*", base.BaseHandler),
     ]

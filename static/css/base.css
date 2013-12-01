@@ -7,11 +7,11 @@ body{
 a{
 	color:#444;
 	text-decoration:none;
-}	
+}
 a:hover{
 	color:#c1d739;
 	text-decoration:none;
-} 
+}
 p{
 	color: black;
 }
@@ -240,7 +240,7 @@ li img:hover{
 	position: relative;
 	margin: 0 auto;
 	display: none;
-	margin-top: 29px;
+	margin-top: 26px;
 	background:white;
 	z-index: 100;
 	border-left: 1px solid #CCC;
@@ -288,7 +288,7 @@ li img:hover{
 	line-height: 13px;
 	border-radius: 4px;
 	float: right;
-	margin-top: -5px;	
+	margin-top: -5px;
 	transition: 2s;
 	-moz-transition:2s;
 	-webkit-transition:2s;
@@ -298,7 +298,7 @@ li img:hover{
 /*tremble effect*/
 .tremble{
 	animation: tremble 0.7s;
-	-moz-animation: tremble 0.7s;	
+	-moz-animation: tremble 0.7s;
 	-webkit-animation: tremble 0.7s;
 	-o-animation: tremble 0.7s;
 	box-shadow: 0px 0px 20px white;
@@ -306,7 +306,7 @@ li img:hover{
 
 .littleTremble{
 	animation: littleTremble 0.7s;
-	-moz-animation: littleTremble 0.7s;	
+	-moz-animation: littleTremble 0.7s;
 	-webkit-animation: littleTremble 0.7s;
 	-o-animation: littleTremble 0.7s;
 	box-shadow: 0px 0px 20px darkred;
@@ -423,7 +423,7 @@ li img:hover{
 	-webkit-transition:2s;
 	-o-transition:2s;
 }
-.formButton:hover{	
+.formButton:hover{
 	color: white;
 	background: #c1d739;
 }

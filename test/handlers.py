@@ -1,24 +1,53 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from util import path
 import unittest
 import requests
+from util import path
+
 
 class TestHandlerBase(unittest.TestCase):
 
-    def setup(self):
-        do_something()
+    def setUp(self):
+        self.url = "http://localhost:8888"
+        self.register_user = {
+            "username": "test",
+            "password": "test",
+            "email": "test@wutong.com",
+        }
+        self.user = {
+            "username": "wutong",
+            "password": "wutong",
+            "email": "user1@wutong.com",
+        }
 
     def tearDown(self):
         pass
 
-    def do_something()
+
+class TestUserHandler(TestHandlerBase):
+
+    def test(self):
+        req = requests.post(self.url + "/register", data=self.register_user)
+        self.assertEquals(req.text, "success")
+        req = requests.post(self.url + "/login", data=self.user)
+        self.assertEquals(req.text, "success")
+        cookies = req.cookies
+        req = requests.get(self.url + "/u/info", cookies=cookies)
+        self.assertIsInstance(req.json(), dict)
+        req = requests.post(self.url + "/logout", cookies=cookies)
+        self.assertEquals(req.text, "success")
+
+
+class TestGroupHandler(TestHandlerBase):
+
+    def test(self):
         pass
 
 def suite():
     suite = unittest.TestSuite()
-    # TODO
+    suite.addTest(TestUserHandler("test"))
+    suite.addTest(TestGroupHandler("test"))
     return suite
 
 def main():
