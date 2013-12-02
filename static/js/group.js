@@ -18,10 +18,10 @@ var msg_socket = new WebSocket(url);
 msg_socket.onclose = function() {};
 
 
-
 $(document).ready(function(){
-	// get group unsync information
-	unsyncGroup();
+    // get group unsync information
+    unsyncGroup();
+
     //check sex of the member
     renderMaleAndFemale();
     var groupMottoPrimaryWidth=$("#groupMotto").width();
@@ -411,7 +411,7 @@ function renderMaleAndFemale(){
 }
 
 function clickTopicTitle(topic_id,topic_title){
-	
+
 	// alert(topic_id);
 	var addTopicTag=
 			'<li class="topicTagList" onmouseover="topicTagMouseOver('+topic_id+')" onmouseleave="topicTagMouseLeave('+topic_id+')">'

@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 # @Last Modified: 2013-11-10 14:29:17
 
-import logging
-from datetime import datetime
 from tornado.web import authenticated
 from tornado.websocket import WebSocketHandler
 from tornado.escape import json_encode, json_decode, to_basestring
@@ -92,6 +90,7 @@ class JoinHandler(GroupBaseHandler):
         uid = self.get_argument("uid", None)
         gid = self.get_argument("gid", None)
         self.model.do_user_join_group(gid, uid)
+        self.write("success")
 
 class GroupinfoHandler(GroupBaseHandler):
 

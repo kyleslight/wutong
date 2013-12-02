@@ -14,6 +14,7 @@ var isRegisterRepasswordFocus=false;
 unsycUser();
 
 $(document).ready(function(){
+    $(".preload").removeClass("preload");
     // return to top icon show
     $(window).scroll(function(){
         var top=$(window).scrollTop();

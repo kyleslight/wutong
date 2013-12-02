@@ -2,6 +2,7 @@ var isloadbox=false;
 var isregisterbox=false;
 var _showwel_flag = true;
 var elapseTime = 5000;
+
 $(document).ready(function(){
     $.getJSON("/u/info", function (data) {
         var username;

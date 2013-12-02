@@ -7,6 +7,7 @@ class BaseHandler(RequestHandler):
     def __init__(self, *args, **kwargs):
         super(BaseHandler, self).__init__(*args, **kwargs)
         self.session = Session(self)
+        self.db = self.application.db
 
     def on_finish(self):
         self.session.save()
@@ -21,10 +22,6 @@ class BaseHandler(RequestHandler):
     @property
     def user_id(self):
         return self.session.get("uid")
-
-    @property
-    def db(self):
-        return self.application.db
 
     @property
     def usermodel(self):

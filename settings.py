@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from os import path, environ
+from os import path, getenv
 from uuid import uuid5, NAMESPACE_OID
 from tornado.options import define, options
 from lib.session import Session
@@ -8,11 +8,11 @@ from lib.session import Session
 define("host", default="localhost", type=str)
 define("port", default=8888, type=int)
 define("debug", default=True, type=bool)
-define("dbname", default=environ.get("WUTONG_DB", "wutong"), type=str)
-define("dbhost", default=environ.get("WUTONG_HOST", "localhost"), type=str)
-define("dbport", default=environ.get("WUTONG_PORT", 5432), type=str)
-define("dbuser", default=environ.get("WUTONG_USER", "wutong"), type=str)
-define("dbpasswd", default=environ.get("WUTONG_PASSWD", "wutong"), type=str)
+define("dbname", default=getenv("WUTONG_DB", "wutong"), type=str)
+define("dbhost", default=getenv("WUTONG_DB_HOST", "localhost"), type=str)
+define("dbport", default=getenv("WUTONG_DB_PORT", 5432), type=str)
+define("dbuser", default=getenv("WUTONG_DB_USER", "wutong"), type=str)
+define("dbpasswd", default=getenv("WUTONG_DB_PASSWD", "wutong"), type=str)
 options.parse_command_line()
 
 settings = dict(
