@@ -240,7 +240,7 @@ li img:hover{
 	position: relative;
 	margin: 0 auto;
 	display: none;
-	margin-top: 29px;
+	margin-top: 26px;
 	background:white;
 	z-index: 100;
 	border-left: 1px solid #CCC;
@@ -422,7 +422,7 @@ li img:hover{
 	-moz-transition:2s;
 	-webkit-transition:2s;
 	-o-transition:2s;
-}
+}技术
 .formButton:hover{	
 	color: white;
 	background: #c1d739;
@@ -480,15 +480,15 @@ li img:hover{
 	float: left;
 	padding: 5px;
 	border-radius: 2px;
-	transition: 0.5s;
-	-moz-transition:0.5s;
-	-webkit-transition:0.5s;
-	-o-transition:0.5s;
+	transition: 0.2s;
+	-moz-transition:0.2s;
+	-webkit-transition:0.2s;
+	-o-transition:0.2s;
 }
 .myMessagePartInline:hover{
 	color: white;
-	background: #680;
-	box-shadow: 2px 2px 3px #AAA;
+	background:#680;
+	/*box-shadow: 0 0 10px #AAA;*/
 }
 .myMessageUserImage{
 	width: 50px;
@@ -512,7 +512,8 @@ li img:hover{
 	float: left;
 	margin-top: 10px;
 	width: 900px;
-	color: #AAA;
+	color: #CCC;
+	font-size: 0.8em;
 }
 .myMessagePartExpand{
 	float: left;

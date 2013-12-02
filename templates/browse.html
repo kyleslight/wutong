@@ -249,31 +249,80 @@
     <!-- main view -->
 	<div class="mainViewWarp">
         <div class="mainView">
-            <!-- <div class="opusType">
-                <a href="#">文章</a>
-            </div> -->
+            <div class="opusType">
+                <a href="#" class="speOpusTypeItem" >special~</a>
+                <a href="#" class="opusTypeItem speOpusTypeItem" >special~</a>
+                <a href="#" class="opusTypeItem activeOpusTypeItem">文章</a>
+                <a href="#" class="opusTypeItem">片段</a>
+                <a href="#" class="opusTypeItem">摄影</a>
+                <a href="#" class="opusTypeItem">绘画</a>
+                <a href="#" class="opusTypeItem">音乐</a>
+                <a href="#" class="opusTypeItem">视频</a>
+                <a href="#" class="opusTypeItem">项目</a>
+                <a href="#" class="opusTypeItem speOpusTypeItem" >special~</a>
+                <a href="#" class="speOpusTypeItem" >special~</a>
+            </div>
             <div class="opusFliter">
                 <a href="#" id="byTime"></a>
             </div>
             <div class="opusClass">
-                <div class="opusClassTitle">文章</div>
-                <a href="#" class="opusFirstClassItem">学科</a>
-                <a href="#" class="opusFirstClassItem">技术</a>
-                <a href="#" class="opusFirstClassItem">教程</a>
-                <a href="#" class="opusFirstClassItem">文学</a>
-                <a href="#" class="opusFirstClassItem">日常</a>
-                <a href="#" class="opusFirstClassItem">随笔</a>
-                <a href="#" class="opusFirstClassItem">娱乐</a>
-                <a href="#" class="opusFirstClassItem">杂</a>
+                <div class="opusClassDivision">
+                    <a href="#" class="opusClassItem activeOpusClassItem">综合</a>
+                    <a href="#" class="opusClassItem">学科</a>
+                    <a href="#" class="opusClassItem">技术</a>
+                    <a href="#" class="opusClassItem">教程</a>
+                    <a href="#" class="opusClassItem">文学</a>
+                    <a href="#" class="opusClassItem">发现</a>
+                    <a href="#" class="opusClassItem">日常</a>
+                    <a href="#" class="opusClassItem">随笔</a>
+                    <a href="#" class="opusClassItem">娱乐</a>
+                    <a href="#" class="opusClassItem">杂</a>
+                </div>
             </div>
-            <div class="opusTagBox">
+            <div class="opus">
+                <li class="opusShow article">
+                    <img src="{{ static_url("css/image/test.png") }}" class="opusAluthorImage">
+                    <div class="opusBasicInfo">                        
+                        <a href="#" class="opusTitle">odC VOL.I chapter5</a><br/>
+                        <a href="#" class="opusAuthor">Kyleslight</a>
+                        <div class="opusBrief">
+                            家里的一切还是如常，没有什么值得多解释或者提及的东西。除了水槽里面的那条鱼的斑纹似乎变得更艳丽一些了。
+                            在那一晚，我做了一个梦。周围很黑，四处没有一个人。就像是夏日寂寥的夜里的枝丫上的阵阵蝉鸣以及露水从叶片上滑落掉进水洼里发出并不那么清脆的一响。我只是走在这大街上，一路走下去，不知走了多远 ...
+                        </div>
+                        <div class="opusTag">Tags： <a href="#">文学</a><a href="#">长篇小说</a><a href="#">odC</a><a href="#">依诺</a>
+                        </div>
+                        <div class="opusTime">2-14 13:18</div>
+                    </div>                   
+                </li>
+                <li class="opusShow article">
+                    <img src="{{ static_url("css/image/test7.jpg") }}" class="opusAluthorImage">
+                    <div class="opusBasicInfo">                        
+                        <a href="#" class="opusTitle">Ubuntu下使用MentoHUST代替锐捷认证上网</a><br/>
+                        <a href="#" class="opusAuthor">Longerhead</a>
+                        <div class="opusBrief">
+                            Linux版锐捷客户端不少，但都大同小异，不能通过锐捷的客户端校验。Linux版MentoHUST是一个在Linux下与锐捷兼容性很好的认证客户端，方便使用Linux和锐捷的同学使用校园网。在成员kkHAIKE的努力下，MentoHUST现已支持锐捷的V3客户端校验算法，亦即MentoHUST已完全兼容锐捷所有版本（不论是否开启了变态的V3算法）...
+                        </div>
+                        <div class="opusTag">Tags： 
+                            <a href="#">技术</a>
+                            <a href="#">Linux</a>
+                            <a href="#">MentoHust</a>
+                            <a href="#">Ubuntu</a>
+                            <a href="#">锐捷安装失败</a>
+                            <a href="#">认证客户端</a>
+                            <a href="#">校园网</a>
+                        </div>
+                        <div class="opusTime">2-12 18:27</div>
+                    </div>
+                </li>
+            </div>
+            <!-- <div class="opusTagBox">
                 <a href="#" class="opusTag">pyhton</a>
                 <a href="#" class="opusTag">Ubuntu</a>
                 <a href="#" class="opusTag">aaa</a>
                 <a href="#" class="opusTag">bbb</a>
                 <a href="#" class="opusTag">ccc</a>
                 <a href="#" class="opusTag">ddd</a>
-            </div>
+            </div> -->
         </div>
     </div>
 	<div class="footer" id="footer">
