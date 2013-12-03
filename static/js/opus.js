@@ -2,8 +2,8 @@ var isloadbox=false;
 var isregisterbox=false;
 var _showwel_flag = true;
 var elapseTime = 5000;
+
 $(document).ready(function(){
-    // basic
     $.getJSON("/u/info", function (data) {
         var username;
         console.log(data);
@@ -55,15 +55,6 @@ $(document).ready(function(){
         return false;
     })
 
-    $(".opusTypeItem").click(function(){
-        $(".opusTypeItem").css({"color":"#555","font-size":"20px"});
-        $(this).css({"color":"#680","font-size":"35px"});
-    })
-
-    $(".opusClassItem").click(function(){
-        $(".activeOpusClassItem").removeClass("activeOpusClassItem");
-        $(this).addClass("activeOpusClassItem");
-    })
 
 });
 

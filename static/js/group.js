@@ -198,7 +198,7 @@ $(document).ready(function(){
         else
             return;
         // test userImage
-        var homeUrl="http://localhost:8888/static/css/image/";
+        var homeUrl="http://202.114.20.78:8000/static/css/image/";
         var userImageUrl;
         switch(item.user.uid){
         	case 0:userImageUrl=homeUrl+"test11.jpg";break;
