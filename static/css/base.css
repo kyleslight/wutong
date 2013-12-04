@@ -4,12 +4,22 @@ body{
   	margin: 0;
   	background: url('image/bg.png');
 }
+.preload a,img,div{
+	transition: none !important;
+	-moz-transition:none !important;
+	-webkit-transition:none !important;
+	-o-transition:none !important;
+}
 a{
 	color:#444;
 	text-decoration:none;
+	transition: 0.5s;
+	-moz-transition:0.5s;
+	-webkit-transition:0.5s;
+	-o-transition:0.5s;
 }
 a:hover{
-	color:#c1d739;
+	color:#680;
 	text-decoration:none;
 }
 p{
@@ -157,10 +167,6 @@ li img:hover{
 #searchData{
 	float: left;
 	opacity: 0.95;
-/*	transition: 4s;
-	-moz-transition: 4s;
-	-webkit-transition: 4s;
-	-o-transition: 4s;*/
 }
 #searchData:hover{
 	opacity: 1.0;
@@ -172,7 +178,7 @@ li img:hover{
 	border-bottom-right-radius: 0;
 	border: 1px solid white;
 	margin-top: 19px;
-	font-weight: 600;
+	font-weight: 500;
 	height: 16px;
 	color: #777;
 	opacity: 0.5;
@@ -423,7 +429,7 @@ li img:hover{
 	-webkit-transition:2s;
 	-o-transition:2s;
 }
-.formButton:hover{
+.formButton:hover{	
 	color: white;
 	background: #c1d739;
 }
@@ -440,7 +446,8 @@ li img:hover{
 	padding: 10px;
 	background: white;
 	border-radius: 7px;
-	box-shadow: 0 0 20px #680;
+	border:1px solid #AAA;
+	/*box-shadow: 0 0 20px #680;*/
 }
 .myMessagePart{
 	text-align: center;
@@ -480,15 +487,15 @@ li img:hover{
 	float: left;
 	padding: 5px;
 	border-radius: 2px;
-	transition: 0.5s;
-	-moz-transition:0.5s;
-	-webkit-transition:0.5s;
-	-o-transition:0.5s;
+	transition: 0.2s;
+	-moz-transition:0.2s;
+	-webkit-transition:0.2s;
+	-o-transition:0.2s;
 }
 .myMessagePartInline:hover{
 	color: white;
-	background: #680;
-	box-shadow: 2px 2px 3px #AAA;
+	background:#680;
+	/*box-shadow: 0 0 10px #AAA;*/
 }
 .myMessageUserImage{
 	width: 50px;
@@ -512,7 +519,8 @@ li img:hover{
 	float: left;
 	margin-top: 10px;
 	width: 900px;
-	color: #AAA;
+	color: #CCC;
+	font-size: 0.8em;
 }
 .myMessagePartExpand{
 	float: left;
@@ -533,7 +541,7 @@ li img:hover{
 
 /*my note*/
 .myNoteWrap{
-	width: 1060px;
+	width: 1062px;
 	margin: 0 auto;
 }
 
@@ -544,7 +552,8 @@ li img:hover{
 	padding: 10px;
 	height: 350px;
 	float: left;
-	box-shadow: 0 0 20px #680;
+	border:1px solid #AAA;
+	/*box-shadow: 0 0 20px #680;*/
 	display: none;
 }
 
@@ -636,7 +645,7 @@ li img:hover{
 	background: white;
 	border-radius: 7px;
 	border:1px solid #AAA;
-	box-shadow: 0 0 20px #680;
+	/*box-shadow: 0 0 20px #680;*/
 	display: none;
 }
 .myCollectionClass{
@@ -731,6 +740,10 @@ li img:hover{
 	z-index: 999;
 	background: url('http://localhost:8888/static/css/image/top.png') 0px 0px no-repeat;
 	_position:absolute;
+	transition: none;
+	-moz-transition:none;
+	-webkit-transition:none;
+	-o-transition:none;
 }
 #return_top:hover{
 	background: url('http://localhost:8888/static/css/image/top.png') 0px -74px no-repeat;

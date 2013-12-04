@@ -1,0 +1,428 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>阅读 - 梧桐</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Language" content="zh-CN" />
+		<meta name="Keywords" content="梧桐 文章 浏览 撰写 创作 小组" />
+		<meta name="Description" content="梧桐阅读" />
+        <link rel="shortcut icon" href="{{ static_url("css/image/favicon.ico") }}" />
+		<link rel="stylesheet" href="{{ static_url("css/base.css") }}" type="text/css" />
+    	<link rel="stylesheet" href="{{ static_url("css/opus.css") }}" type="text/css" />
+    	<link rel="stylesheet" href="{{ static_url("css/animation.css") }}" type="text/css" />
+    	<link rel="stylesheet" href="{{ static_url("css/shCoreEclipse.css") }}" type="text/css" />
+	</head>
+	<body class="preload">
+<!-- header -->
+    <div class="header" id="header">
+        <div class="navcontainer">
+            <div class="navigation" id="navigation">
+                <div id="navLogo">
+                    <a href="#">
+                        <img id="logo" src="{{ static_url("css/image/logo.png") }}">
+                    </a>
+                </div>
+                <div class="navLeft">
+                    <a id="browse" href="/browse.html">
+                        <li>浏览</li>
+                    </a>
+                    <a id="create" href="/create.html">
+                        <li>创作</li>
+                    </a>
+                    <a id="group" href="/g/1">
+                        <li>小组</li>
+                    </a>
+                </div>
+                <div id="searchBox">
+                    <form id="searchData" action="/search" name="searchData" target="_blank">
+                        <input name="keyWord" type="text" class="input" id="keyWord" autocomplete="on" accesskey="s" placeholder="寻找作品，成员，小组" x-webkit-speech x-webkit-grammar="builtin:translate" />
+                        <a href="#" type="submit" id="searchSubmitButton" class="formButton">搜索</a>
+                    </form>
+                </div>
+                <div class="navrighton">
+                    <a href="#">
+                        <li id="username">
+                            <span id="usernameHover" href="#"></span>
+                            <div class="userExpand">
+                                <div id="myHomepage">我的主页</div>
+                                <div id="myCollection">我的收藏</div>
+                                <div id="myNote">我的便笺</div>
+                                <div id="logout">登出</div>
+                            </div>
+                        </li>
+                    </a>
+                    <div class="navrightonOption">
+
+                        <a id="message" href="#">
+                            <li>消息<span id="msgNum">19</span></li>
+                        </a>
+                        <a id="setting" href="#">
+                            <li>设置</li>
+                        </a>
+                    </div>
+                </div>
+                <div class="navrightoff">
+                    <a id="login" href="#">
+                        <li>登入</li>
+                    </a>
+                    <a id="register" href="#">
+                        <li>注册</li>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- login box -->
+    <div id="lrBoxWrap">
+        <div class="lrBox" id="loginBox">
+            <form id="loginForm" name="loginForm" action="#" method="post">
+                <div class="loginList"><span class="inputTip">用户名/邮箱</span>
+                    <input class="input" id="loginUsername" type="text" name="username" placeholder="用户名/邮箱" />
+                </div>
+                <div class="loginList"><span class="inputTip">密码</span>
+                    <input class="input" id="loginPassword" type="password" name="password" placeholder="密码" />
+                </div>
+                <div id="loginListlast" class="loginList"><a href="#" id="loginSubmitButton" class="formButton" name="submitButton" value="登陆">登入</a>  <a href="#" id="loginBack">返回</a>
+                </div>
+            </form>
+        </div>
+        <div class="lrBox" id="registerBox">
+            <form id="registerForm" name="registerForm" action="#" method="post">
+                <div class="registerList"><span class="inputTip">用户名</span>
+                    <input class="input" id="registerUsername" type="text" name="username" placeholder="用户名" />
+                </div>
+                <div class="registerList"><span class="inputTip">邮箱</span>
+                    <input class="input" id="registerEmail" type="text" name="email" placeholder="邮箱" />
+                </div>
+                <div class="registerList"><span class="inputTip">密码</span>
+                    <input class="input" id="registerPassword" type="password" name="password" placeholder="密码" />
+                </div>
+                <div class="registerList"><span class="inputTip">重复密码</span>
+                    <input class="input" id="registerRepassword" type="password" name="repassword" placeholder="重复密码" />
+                </div>
+                <div id="registerListLast" class="registerList"><a href="#" id="registerSubmitButton" class="formButton" name="submitButton" value="注册">注册</a>  <a href="#" id="registerBack">返回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- my message -->
+    <div class="myMessageWarp">
+        <div class="myMessage">
+            <div class="myMessagePart">
+                <a id="siteBulletinButton" class="myMessagePartButton" href="#">全站公告<span id="siteBulletinNum">1</span></a>
+                <a id="replyButton" class="myMessagePartButton" href="#">回复<span id="replyNum">5</span></a>
+                <a id="opusPushButton" class="myMessagePartButton" href="#">推送<span id="opusPushNum">12</span></a>
+                <a id="PMButton" class="myMessagePartButton" href="#">私信<span id="PMNum">1</span></a>                
+            </div>
+            <div class="myMessageContent">
+                <div class="siteBulletin myMessagePartContent activeMessagePart">
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">第六次团队大会</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ
+                        </div>
+                    </li>
+                </div>
+                <div class="reply myMessagePartContent">
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageAddress">Kyleslight的同好会>>一个测试用的话题A>>一个测试用的话题B</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">既然是测试用的话题的话就不要那么认真了嘛</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            既然是测试用的话题的话就不要那么认真了嘛<br/>对吧
+                        </div>
+                    </li>
+                </div>
+                <div class="opusPush myMessagePartContent">
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">Unity 3D的互动应用</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
+                        </div>
+                    </li>
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">Unity 3D的互动应用</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
+                        </div>
+                    </li>
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">Unity 3D的互动应用</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
+                        </div>
+                    </li>
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">Unity 3D的互动应用</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
+                        </div>
+                    </li>`
+                </div>
+                <div class="PMPush myMessagePartContent">
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageAddress">这是一个测试用的私信</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">这是一个测试用的私信啊</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            这是一个测试用的私信啊<br/>对吧
+                        </div>
+                    </li>
+                </div>
+            </div>
+            <a href="#" id="myMessageBack">返回</a>
+        </div>
+    </div>
+    <!-- my collection -->
+    <div class="myCollectionWarp">
+        <div class="myCollection">
+            <div class="myCollectionClass">
+                <a id="myOpusCollectionButton" class="myCollectionClassButton" href="#">作品</a>
+                <a id="myTopicCollectionButton" class="myCollectionClassButton" href="#">话题</a>
+                <a id="myCollectionFliter" class="myCollectionClassButton" href="#">筛选器</a>
+            </div>
+            <div class="myOpusCollection">
+                <li class="myCollectionList">
+                <a href="#"><img class="myCollectionAuthorImage" src="{{ static_url("css/image/test.png") }}" /></a>
+                    <div class="myCollectionRow">                        
+                        <a href="#" class="myCollectionTitle">基于Unity3D的互动应用</a><a class="myCollectionAuthor" href="#">Kyleslight</a>
+                    </div>
+                    <div class="myCollectionRow">
+                        <div class="myCollectionTag"><a href="#">aaa</a><a href="#">bbb</a><a href="#">ccc</a></div>
+                        <span class="myCollectionTime">收藏时间 : 11-11 11:11</span>
+                    </div>
+                </li>
+            </div>
+            <div class="myTopicCollection">
+            </div>
+            <div class="myCollectionPageTurning"><a href="#">上一页 </a> <a href="#"> 下一页</a></div>
+            <a href="#" id="myCollectionBack">返回</a>
+        </div>
+    </div>
+    <!-- my note -->
+    <div class="myNoteWrap">
+        <div class="myNote">
+            <div class="myNoteListWrapOutter">
+                <a href="#" id="addNote" class="myNoteList">add a note</a>
+                <div class="myNoteListWrap">
+                    <a href="#" class="myNoteList">the first note</a>
+                    <a href="#" class="myNoteList">the second note</a>
+                    <a href="#" class="myNoteList">the third note</a>
+                    <a href="#" class="myNoteList">the fourth note</a>
+                    <a href="#" class="myNoteList">the fifth note</a>
+                    <a href="#" class="myNoteList">the sixth note</a>
+                    <a href="#" class="myNoteList">the seventh note</a>
+                    <a href="#" class="myNoteList">the first note</a>
+                    <a href="#" class="myNoteList">the second note</a>
+                    <a href="#" class="myNoteList">the third note</a>
+                    <a href="#" class="myNoteList">the fourth note</a>
+                    <a href="#" class="myNoteList">the fifth note</a>
+                    <a href="#" class="myNoteList">the sixth note</a>
+                    <a href="#" class="myNoteList">the seventh note</a>
+                    <a href="#" class="myNoteList">the first note</a>
+                    <a href="#" class="myNoteList">the second note</a>
+                    <a href="#" class="myNoteList">the third note</a>
+                    <a href="#" class="myNoteList">the fourth note</a>
+                    <a href="#" class="myNoteList">the fifth note</a>
+                    <a href="#" class="myNoteList">the sixth note</a>
+                    <a href="#" class="myNoteList">the seventh note</a>
+                </div>
+            </div>
+            <div class="myCurrentNoteArea">
+                <div class="myCurrentNoteHeader">
+                    <input class="myCurrentNoteTitle" value="the first note">
+                    <div class="myCurrentNoteTime">10-22 12:30</div>
+                </div>
+                <textarea class="myCurrentNoteContent">
+                    摇晃得可真厉害。
+                    在几十年、甚或几百年前曾经铺设柏油的道路，如今变成了不见半点人影的荒废道路，自左右两侧涌入的杂草与血管般的草根，让这里逐渐形成一片混沌的样貌。
+                    货物拖车漫不经心地踏过这样不成道路的道路。
+                    乘坐的感觉只能用一句非常糟糕来形容。
+                    每当车子越过障碍物时，就会造成货架上些许冲击……然后再进一步传到和货架上的木箱待在一起的我身上。
+                    我埋怨着原以为在货架上旅行很优雅的自己，实在太愚蠢了。
+                    难得有机会可以在花朵恣意绽满的街道上旅行，但由于屁股实在太过疼痛，根本无心去欣赏。
+                    心情上则近似于多娜多娜（Donna，Donna）。（注：知名世界民谣，歌词描述一头即将被卖到市场去的小牛，旋律温馨中带着悲伤。）
+                    「倘若乖乖坐在副驾驶座的话……不。」
+                    我喃喃自语，但旋即否定了自己的想法。坐在副驾驶座，就意味着必须面临坐在驾驶座的商队队长单方面的问话。对于怕生而且一紧张脑袋就一片空白的我而言，那段时间内应该会磨损削薄我的神经。
+                </textarea>
+                <div class="myCurrentNoteOption">
+                    <a href="#" id="deleteCurrentNote" class="formButton">删除</a>
+                    <a href="#" id="saveCurrentNote" class="formButton">保存</a>
+                </div>
+                <a href="#" id="myNoteBack">返回</a>
+            </div>
+        </div>
+    </div>
+    <!-- return to top -->
+    <a id="return_top" href="#" title="回到顶部" class="none"></a>
+    <div class="read">
+        <div class="readMain">
+            <div class="opusBasicInfo">
+                <div class="firstLine">
+                    <div class="opusTime">2-14 13:18</div><span class="opusAuthor">by  <a href="#">hsy505</a></span>
+                </div>
+                <div class="authorBasicInfo">
+                    <p class="">作者信息</p>
+                    <img src="{{ static_url("css/image/testGeek.jpg") }}" class="opusAluthorImage">
+                    <a href="#" class="opusAuthor">hsy505</a>
+                    <p class="authorMotto"></p>
+                </div>                     
+                <div class="opusTitle"><div class="opusMainTitle">404 not found 背后的布道师</div><div class="opusSubtitle"></div></div>
+                <div class="opusDescription">
+                    栏目中我们介绍了风格迥异的极客人物，他们利用不同的网络技术来解决自己学习工作中产生的问题亦或者为了满足自己的娱乐需求。极客公园认为「极客人物」不仅仅会为自己服务，也并非只是孤胆英雄，他们可能是一支团队，并能够利用自己的余热向社会公益问道解惑。
+                </div>
+                <div class="opusAppositeness">适合：产品观察家；IT技术爱好者</div>
+            </div>
+            <div class="opusMain">
+                <p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    2013 年 5 月 12 日，济南市一个 8 岁的小女孩钰钰失踪，父母立即报了案，腾讯 404 公益页面上很快挂出失踪信息。9 天后，钰钰的尸体被警察在一个树林找到，她的妈妈听到噩耗后哭倒在床上久久不能站立。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    <a href="http://www.geekpark.net/read/view/170500" style="color: rgb(16, 158, 255); text-decoration: none; -webkit-tap-highlight-color: rgb(255, 94, 153); outline: none;">404 公益页面</a>的志愿者 lily 在网上搜索到该事件的报道，得知这个女孩已经是该家庭失去的第二个孩子，“如果能再早一点找到她就好了。”
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    当用户因为点击错误链接或权限问题被拒绝访问时，一般浏览器默认会跳转到 404 页面。这个历史遗留问题的体验并不友好，腾讯技术公益团队引用<a href="http://www.baobeihuijia.com/" style="color: rgb(16, 158, 255); text-decoration: none; -webkit-tap-highlight-color: rgb(255, 94, 153); outline: none;">宝贝回家寻子网</a>的数据将这个冷冰冰的页面替换成了走失儿童的信息提示页。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    从 404 公益页面第一版上线，到第二版开放 API 接口及分享路径，仅用了不到 24 小时。页面第一次上线时，所带来的用户访问流量让合作伙伴宝贝回家寻子网几乎瘫痪。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    为了解决这种让人心碎的故事。腾讯技术公益团队开始在公司内推动互联网产品无障碍化，让特殊用户群体也能享受到使用软件的权利。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    一次培训期间，stone 与同住的 twinsen 就一个哲学问题争论了整个通宵，虽然没分出对错，却因此发现双方共同的梦想——“为公益做点事儿”。于是，stone 和外表粗犷内心细腻的 twinsen 成了挚友，另一个合伙人 tea 在一场技术比赛中被“相中”。三人一起携手做公益项目，并力推“404 公益”，帮助家庭找回失散的儿童。腾讯技术公益团队最初则由这三个热血青年组建而成。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    随后这支团队变得更加壮大。rizen 和 jolt 都是最早参与 QQ 空间的无障碍优化的员工；曾利用业余时间为盲人投诉最大的一个大型外部网站开发了一套无障碍化方案的 tamino 和 hank 负责网站通用无障碍引擎主力开发。beta 和与 scorpion 一起用了一个通宵的时间完成了 404 的核心框架。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255); text-align: center;">
+    <img src="http://geekpark-img.qiniudn.com/uploads/reading/seed/0eead0264614c32327e3ecd4b0a2673b.jpg" alt="" width="2613" height="2040" style="font-family: inherit; font-size: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; line-height: inherit; vertical-align: baseline; max-width: 650px; height: auto;"/>&nbsp;
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    集结完成的技术公益团队开始向 404 页面以及无障碍页面发起挑战。
+</p>
+<h2 style="margin: 15px 0px 15px; padding: 5px 0px; border-width: 0px 0px 0px 15px;; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 18px; line-height: inherit; vertical-align: baseline; color: rgb(51, 51, 51); white-space: normal; background-color: rgb(255, 255, 255);">
+    从零开始
+</h2>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    技术公益团队的第一个项目始于 2009 年。一个偶然机会，stone 接触到盲人群体，从此开始推动产品针对特殊用户群体的可访问性，把使用互联网的权利还给盲人，并进行 QQ 邮箱、QQ 空间等产品的无障碍化改造，让盲人可以通过读屏软件流畅使用互联网产品。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    前期的工作辛苦而漫长，这份“工作”没有 KPI，他们耐心收集盲人用户的反馈，利用夜晚和节假日时间整理一个个琐碎需求，反馈给产品团队，跟踪改进。“每一个细小的改变都给他们带来实质性的帮助，让我们很有动力。”
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    2012 年 6 月 26 日，“腾讯信息无障碍联盟”成立，正式推动公司产品无障碍化，通过产品志愿参与的方式，将“无障碍化”推广到公司 20 多个产品中。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    2012 年 11 月初，腾讯网新版底层页中加入了无障碍元素，多方打听，得知是一名前端开发人员 rocky 所做，他的想法很简单：“我们曾经都抱怨过不平等，所以我们应该在能创造的环境中，力所能及地创造公平氛围，让更多用户都能访问我们的产品。”找到志同道合者，技术公益团队二话不说就把 rocky 给“收编”了。不过，项目落地过程仍然有不小的困难，“产品是否做无障碍化是一个模糊的选择。我们能做到的，就是多呼吁，多影响。”
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    之后，团队又积极联合更多业界同行，推动整个互联网行业的产品无障碍化，终于在今年 11 月 11 日成立了“中国信息无障碍产品联盟”。为了快速大面积的推动互联网无障碍化进程，rizen 等无障碍团队的技术骨干发起了“互联网通用无障碍解决方案”开源项目，尝试为所有“有障碍”的网站提供一个通用的智能优化方案，以及方便志愿者快速的对已有的网站进行快速的无障碍化改造。
+</p>
+<h2 style="margin: 15px 0px 15px; padding: 5px 0px;font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 18px; line-height: inherit; vertical-align: baseline; color: rgb(51, 51, 51); white-space: normal; background-color: rgb(255, 255, 255);">
+    技术改变公益
+</h2>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    对于极客而言，除了有一颗热诚的心，还得对技术有灵敏的嗅觉以及执行能力。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    <a href="http://geekpark-img.qiniudn.com/uploads/reading/seed/21a6677736d2b5c097893f77143718b7.png" target="_blank" style="color: rgb(16, 158, 255); text-decoration: none; -webkit-tap-highlight-color: rgb(255, 94, 153); outline: none;"><img src="http://geekpark-img.qiniudn.com/uploads/reading/seed/21a6677736d2b5c097893f77143718b7.png?imageView/2/w/620/q/100" alt="" width="763" height="558" style="margin: 0px auto; padding: 0px; border: 0px; font-family: inherit; font-size: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; line-height: inherit; vertical-align: baseline; max-width: 650px; height: auto; display: block;"/></a>
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    无障碍通用引擎的工作机制为：有一个后台管理端和一个服务器，服务器上放着一些策略文件，还有一个主脚本引擎，主脚本引擎是在访问任何网站的时候自动被激活的用户脚本，对于不支持用户脚本的浏览器也只要点收藏夹的一个按钮，拉一个 js 用户脚本进来，js 引擎进来之后，会驱动整个页面元素的扫描，在扫描的过程中将策略拉过来，告诉他扫到什么样的节点该补充什么样信息，扫完后把信息补完，然后读屏软件、可读屏的浏览器或可读屏的操作系统在这个页面的标签节点属性满足这些要求之后便能更好地读屏，让视障用户来经过 TAB 切换或纯键盘就能直接访问。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    一方面，残障用户可以在现在没有实现无障碍的网站上加入这个通用引擎，使现在网站使用的无障碍化。另一方面，网站或浏览器的开发者，也可以直接将这个通用引擎嵌入产品，通过这种方式，就不需要盲人用户自己操作，就能实现产品的无障碍。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    为了提高失踪儿童的找回率，QQ 空间 404 页面还根据失踪儿童的走失地点等信息，定向投放给用户。比如今天北京走失了一个小孩，就将这个小孩的信息定向投放北京地区，持续 1~3 天，北京地区用户在这 1~3 天内不再随机看到其他地区失踪儿童信息，但其他地区用户还是看到轮流显示的失踪儿童信息。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    每天约有 85 万人看到失踪儿童信息，其中大部分会通过社交网络将这些信息进行分享，分享到 QQ 空间的内容占所有分享内容的 53.55%，其次是 QQ，分享占比为 24.95%，剩下的依次为腾讯微博 (15.61%)，新浪微博 (4.29%)，人人网 (0.92%)，开心网 (0.67%)。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    今年 1 月开始接入其他网站，10 个月来已有 1000 个网站接入。其中应用宝，中国寿光网、AcFun 弹幕视频网、面包网、奇热网、开心集品等 9 家网站对失踪儿童信息的传播超过了 100 万次。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    宝贝回家网一共提供了 288 名失踪儿童信息，通过 QQ 空间 6 亿多网友的扩散和传播，失踪儿童被找到的机会大大提高，目前已找回 18 名，找回率已达 6.25% 而中国失踪儿童找回率<a href="http://club.kdnet.net/dispbbs.asp?id=9653928&boardid=1" style="color: rgb(16, 158, 255); text-decoration: none; -webkit-tap-highlight-color: rgb(255, 94, 153); outline: none;">大概为 0.1%</a>。
+</p>
+<p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
+    在国内，大型互联网公司互相掐架屡见不鲜，时间久之，起诉成了日常习惯，却对提高互联网技术以及改善生活水平没有推进作用。我们的空气还是如此糟糕，交通依然拥堵。就像极客公园发起的「创新者联盟」，希望联合互联网圈内优秀的产品人，一起推动中国的科技创新一样。为何国内这些巨头们不能联合起来为公益做些事情？
+</p>
+            </div> 
+            <div class="opusSideComment">
+                
+            </div>
+            <div class="opusSuffixes">
+                <div class="opusReference">原文地址：<a href="#">http://www.geekpark.net/read/view/194303</a></div>
+                <div class="opusTag">Tags： <a href="#">技术</a><a href="#">2013极客人物</a><a href="#">404</a></div>
+                <div class="opusSeries">所属文辑其他文章：<a href="#">可检测用户情绪面部识别软件下月发布</a><a href="#">豆瓣的口袋里藏着什么“东西”</a>  <a href="#">老鲍有话说</a></div>
+                <div class="opusData">
+                    <div class="opusViewed">浏览：19102</div>
+                    <div class="opusGrade">得分：8.5</div>
+                    <div class="opusCollected">收藏：102</div>
+                    <div class="opusForwarded">转发：378</div>
+                </div>
+                <div class="opusComment"></div>
+            </div>    
+        </div>
+    </div>
+	<!--<script type="text/javascript"> var editor = CKEDITOR.replace('textArea');  </script>-->
+	<div class="footer" id="footer">
+				<p class="f1">&nbsp;&nbsp;&nbsp;&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
+	</div>
+	<script type="text/javascript" src="{{ static_url("js/jquery.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/opus.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/header.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/shCore.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/allhl.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("ueditor/ueditor.config.write.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("ueditor/ueditor.all.min.js") }}"></script>
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+    <script type="text/javascript">
+        var editor = new UE.ui.Editor();
+        textarea: '#textArea';
+        editor.render('textArea');
+    </script>
+	</body>
+</html>
