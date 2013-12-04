@@ -291,7 +291,7 @@ SELECT t.*, u.penname, u.avatar
 
 CREATE OR REPLACE VIEW group_bulletin_v
   AS
-SELECT gb.*, u.penname
+SELECT gb.*, u.penname, u.avatar
   FROM group_bulletin gb,
        user_info_v u
  WHERE gb.uid = u.uid;
@@ -598,7 +598,7 @@ AS $$
     SELECT array_to_json(array_agg(j))
       FROM (
             SELECT *
-              FROM group_bulletin
+              FROM group_bulletin_v
              WHERE gid = $1
              ORDER BY id DESC
              LIMIT $2

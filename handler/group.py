@@ -62,6 +62,17 @@ class IndexHandler(GroupBaseHandler):
         group_info = self.model.get_group_info(gid)
         return self.render_string("modules/group_info.html", group_info=group_info)
 
+    def get_render_bulletins(self, gid):
+        bulletins = self.model.get_bulletins(gid, 6, 0)
+        print(bulletins[0])
+
+        redrs = []
+        for blt in bulletins:
+            redr = self.render_string("modules/bulletin.html", bulletin=blt)
+            redrs.append(redr)
+
+        return redrs
+
     def get(self, gid):
         try:
             gid = int(gid)
@@ -70,7 +81,8 @@ class IndexHandler(GroupBaseHandler):
             return
         comms = self.get_render_communications(gid)
         group_info = self.get_render_group_info(gid)
-        self.render("group.html", communications=comms, group_info=group_info)
+        bulletins = self.get_render_bulletins(gid)
+        self.render("group.html", bulletins=bulletins, communications=comms, group_info=group_info)
 
 
 class MessageHandler(GroupBaseHandler, WebSocketHandler):

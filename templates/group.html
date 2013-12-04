@@ -345,62 +345,9 @@
             <div class="groupItem">
                 <!-- bulletin -->
                 <div class="bulletin" id="groupOptionShow0">
-                    <li class="bulletinList">
-                        <a href="#" class="bulletinInline">
-                            <img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
-                            <div class="bulletinTitle">第六次团队大会</div>
-                            <div class="bulletinUserName">Kyleslight</div>
-                            <div class="bulletinTime">10-23 20:56</div>
-                        </a>
-                        <div id="bulletinConActive" class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
-                    </li>
-                    <li class="bulletinList">
-                        <a href="#" class="bulletinInline">
-                            <img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
-                            <div class="bulletinTitle">第六次团队大会</div>
-                            <div class="bulletinUserName">Kyleslight</div>
-                            <div class="bulletinTime">10-23 20:56</div>
-                        </a>
-                        <div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
-                    </li>
-                    <li class="bulletinList">
-                        <a href="#" class="bulletinInline">
-                            <img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
-                            <div class="bulletinTitle">第六次团队大会</div>
-                            <div class="bulletinUserName">Kyleslight</div>
-                            <div class="bulletinTime">10-23 20:56</div>
-                        </a>
-                        <div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
-                    </li>
-                    <li class="bulletinList">
-                        <a href="#" class="bulletinInline">
-                            <img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
-                            <div class="bulletinTitle">第六次团队大会</div>
-                            <div class="bulletinUserName">Kyleslight</div>
-                            <div class="bulletinTime">10-23 20:56</div>
-                        </a>
-                        <div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
-                    </li>
-                    <li class="bulletinList">
-                        <a href="#" class="bulletinInline">
-                            <img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
-                            <div class="bulletinTitle">第六次团队大会</div>
-                            <div class="bulletinUserName">Kyleslight</div>
-                            <div class="bulletinTime">10-23 20:56</div>
-                        </a>
-                        <div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
-                    </li>
-                    <li class="bulletinList">
-                        <a href="#" class="bulletinInline">
-                            <img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
-                            <div class="bulletinTitle">第六次团队大会</div>
-                            <div class="bulletinUserName">Kyleslight</div>
-                            <div class="bulletinTime">10-23 20:56</div>
-                        </a>
-                        <div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
-                    </li>
-
-                    <br>
+                    {% for blt in bulletins %}
+                    {% raw blt %}
+                    {% end %}
                     <div id="bulletinOption"><a href="#" id="unfold">展开前6条</a>  <a href="#" id="bulletinBack" class="optionBack">返回</a>
                     </div>
                 </div>
