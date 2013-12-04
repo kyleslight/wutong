@@ -27,13 +27,14 @@ class LoginHandler(UserBaseHandler):
         account = self.get_argument("username", None)
         password = self.get_argument("password", None)
 
-        if self.do_login(account, password):
+        uid = self.do_login(account, password)
+        if uid:
             self.write("success")
         else:
             self.write("failed")
 
     def do_login(self, account, password):
-        user_id = self.model.do_login_by_account_and_password(account=account, password=password)
+        user_id = self.model.do_login(account=account, password=password)
         if user_id:
             self.set_authenticated(user_id)
         return user_id
@@ -53,14 +54,14 @@ class RegisterHandler(UserBaseHandler):
         password = self.get_argument("password", None)
         email = self.get_argument("email", None)
 
-        hashuid = self.do_register(email=email, penname=penname, password=password)
+        hashuid = self.do_register(email, penname, password)
         if hashuid:
             self.send_mail(email, hashuid)
         else:
             self.write("failed")
 
-    def do_register(self, email, password, penname):
-        hashuid = self.model.do_register(email=email, password=password, penname=penname)
+    def do_register(self, email, penname, password):
+        hashuid = self.model.do_register(email, penname, password)
         return hashuid
 
     def send_mail(self, email, hashuid):
@@ -97,7 +98,7 @@ class CheckMailHandler(UserBaseHandler):
         self.redirect("/")
 
     def check_mail(self, hashuid):
-        return self.model.do_activate_by_hashuid(hashuid)
+        return self.model.do_activate(hashuid)
 
 
 class HomeHandler(UserBaseHandler):

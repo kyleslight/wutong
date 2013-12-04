@@ -1,0 +1,45 @@
+<div id="groupName">{{ group_info["name"] }}
+    <p id="IDVaule"></p>
+</div>
+<div class="groupBannerBox">
+    <img id="groupBanner" src={{ group_info["banner"] }} />
+</div>
+<div id="groupDetail">
+    <div id="groupIntro" class="groupDetailItem">
+        <span class="introWord">简介：</span>{{ group_info["intro"] }}
+    </div>
+
+    <div id="groupFounder" class="groupDetailItem">
+        <span class="introWord">创建：</span>
+        <p id="Founder">{{ group_info["founder"] }}</p>创立于
+        <p id="foundTime">{{ group_info["foundtime"] }}</p>
+    </div>
+
+    <div id="groupAdmin" class="groupDetailItem">
+        <span class="introWord">组长：</span>
+        <p id="administrator">{{ group_info["leader"] }}</p>
+    </div>
+
+    <div id="groupMemberNum" class="groupDetailItem">
+        <span class="introWord">成员数：</span>
+        <p id="memberNum">{{ group_info["member_number"] }}</p>
+    </div>
+
+    <div id="groupGPA" class="groupDetailItem">
+        <span class="introWord">平均文章得分：</span>
+        <p id="GPA">95.36</p>
+    </div>
+
+    <div id="groupRank" class="groupDetailItem">
+        <span class="introWord">小组排名：</span>
+        <p id="RANK">23</p>
+    </div>
+
+    <div id="groupInfoMotto" class="groupDetailItem">
+        <span class="introWord">签名：</span>
+        <p id="Motto">{{ group_info["motton"] }}</p>
+    </div>
+</div>
+<div id="groupMoreDetail">
+    {{ group_info["description"] }}
+</div>

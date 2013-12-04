@@ -241,23 +241,23 @@ $(document).ready(function(){
 
 function unsyncGroup(){
 	// get group infomation
-	$.ajax({
-		url:location.pathname+"/groupInfo",
-		type: "GET",
-		dataType:"json",
-		async: false,
-		success:function(data){
-			groupInfo[0].groupName = data.name;
-			groupInfo[0].groupId = data.gid;
-			if(data.publicity){
-				$(".groupPromptPrivate").css({"display":"none"});
-				$("#contactGroupLeader").css({"display":"none"});
-			}else{
-				$(".groupPromptPublic").css({"display":"none"});
-			}
-			$('#groupTitleName').text(groupInfo[0].groupName);
-		}
-	});
+	// $.ajax({
+	// 	url:location.pathname+"/groupInfo",
+	// 	type: "GET",
+	// 	dataType:"json",
+	// 	async: false,
+	// 	success:function(data){
+	// 		groupInfo[0].groupName = data.name;
+	// 		groupInfo[0].groupId = data.gid;
+	// 		if(data.publicity){
+	// 			$(".groupPromptPrivate").css({"display":"none"});
+	// 			$("#contactGroupLeader").css({"display":"none"});
+	// 		}else{
+	// 			$(".groupPromptPublic").css({"display":"none"});
+	// 		}
+	// 		$('#groupTitleName').text(groupInfo[0].groupName);
+	// 	}
+	// });
 	// get group-user infomation
 	$.ajax({
 		url:location.pathname+"/groupUserInfo",

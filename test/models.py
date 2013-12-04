@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from util import path
+from util import path, is_debug
 import unittest
 from model.db import Pool
 from model.user import UserModel
 from model.group import GroupModel
 
-# TODO: 异常测试
+
 class TestModelBase(unittest.TestCase):
 
     def setUp(self):
@@ -21,8 +21,8 @@ class TestModelBase(unittest.TestCase):
                 "email": "user1@wutong.com",
                 "penname": "wutong",
                 "password": "wutong",
-                "realname": "wu xiao tong",
-                "sex": True, # man
+                "realname": u"吴大桐",
+                "sex": u"男",
                 "intro": "intro1",
                 "motton": "motton1",
                 "avatar": "/image/user1.png",
@@ -31,8 +31,8 @@ class TestModelBase(unittest.TestCase):
                 "email": "user2@wutong.com",
                 "penname": "user2",
                 "password": "user2",
-                "realname": "wu er tong",
-                "sex": False, # man
+                "realname": u"吴小桐",
+                "sex": u"女",
                 "intro": "intro2",
                 "motton": "motton2",
                 "avatar": "/image/user2.png",
@@ -41,26 +41,24 @@ class TestModelBase(unittest.TestCase):
         self.groups = [
             {
                 "name": "group1",
-                "founder": self.users[0]["penname"],
                 "intro": "intro1",
                 "motton": "motton1",
-                "publicity": True,
+                "is_public": True,
             },
             {
                 "name": "group2",
-                "founder": self.users[1]["penname"],
                 "intro": "intro2",
                 "motton": "motton2",
-                "publicity": False,
+                "is_public": False,
             },
         ]
         self.bulletin = {
-            "content": "bulletin content",
             "title": "bulletin title",
+            "content": "bulletin content",
         }
         self.topic = {
-            "content": "topic content",
             "title": "topic title",
+            "content": "topic content",
         }
         self.message = {
             "content": "message content",
@@ -69,6 +67,7 @@ class TestModelBase(unittest.TestCase):
 
 
 class TestDBModel(TestModelBase):
+
     def test(self):
         self.assertEqual(self.db.getfirstfield('SELECT 1'), 1)
         self.assertEqual(self.db.getjson("SELECT '1'"), 1)
@@ -77,13 +76,6 @@ class TestDBModel(TestModelBase):
         dirpath = path("model/dbschema/")
         sql = open(dirpath + "schema.sql", "r").read()
         self.assertTrue(self.db.execute(sql))
-        sql = open(dirpath + "function.sql", "r").read()
-        self.assertTrue(self.db.execute(sql))
-        self.db.execute('DELETE FROM "group_user" *')
-        self.db.execute('DELETE FROM "group_topic" *')
-        self.db.execute('DELETE FROM "group_message" *')
-        self.db.execute('DELETE FROM "group" *')
-        self.db.execute('DELETE FROM "user" *')
 
 
 class TestUserModel(TestModelBase):
@@ -93,113 +85,116 @@ class TestUserModel(TestModelBase):
         self.model = UserModel(self.db)
         self.db.execute('DELETE FROM "user" *')
 
-    def test(self):
-        for user in self.users:
-            hashuid = self.model.do_register(
-                    email=user["email"],
-                    penname=user["penname"],
-                    password=user["password"]
-                )
-            self.assertIsNotNone(hashuid)
-            uid = self.model.do_activate_by_hashuid(hashuid)
-            self.assertIsInstance(uid, int)
-            uid = self.model.get_uid_by_account(user["penname"])
-            self.assertIsInstance(uid, int)
-            uid = self.model.do_login_by_account_and_password(
-                    account=user["email"],
-                    password=user["password"]
-                )
-            self.assertIsInstance(uid, int)
-            user_info = self.model.get_user_info_by_uid(uid)
-            self.assertIsNotNone(user_info)
-            score = self.model.get_score_by_uid(uid)
-            self.assertIsInstance(score, (int, float))
-
     def tearDown(self):
+        if is_debug():
+            return
         self.db.execute('DELETE FROM "user" *')
+
+    def test(self):
+        user = self.users[1]
+        hashuid = self.model.do_register(
+                email=user["email"],
+                penname=user["penname"],
+                password=user["password"]
+            )
+        self.assertIsInstance(hashuid, basestring)
+        uid = self.model.do_activate(hashuid)
+        self.assertIsInstance(uid, int)
+        uid = self.model.get_uid(user["penname"])
+        self.assertIsInstance(uid, int)
+        uid = self.model.do_login(
+                account=user["email"],
+                password=user["password"]
+            )
+        self.assertIsInstance(uid, int)
+        user_info = self.model.get_user_info(uid)
+        self.assertIsNotNone(user_info)
 
 
 class TestGroupModel(TestModelBase):
 
     def setUp(self):
         super(TestGroupModel, self).setUp()
-        self.db.execute('DELETE FROM "group" *')
         self.model = GroupModel(self.db)
         usermodel = UserModel(self.db)
-        user = self.users[0]
-        hashuid = usermodel.do_register(
-                email=user["email"],
-                penname=user["penname"],
-                password=user["password"]
-            )
-        self.uid = usermodel.do_activate_by_hashuid(hashuid)
-        self.assertIsInstance(self.uid, int)
-        self.founder = user["penname"]
+        self.db.execute('DELETE FROM "user" *')
+        self.db.execute('DELETE FROM "group" *')
+
+        self.uids = []
+        for user in self.users:
+            hashuid = usermodel.do_register(
+                    email=user["email"],
+                    penname=user["penname"],
+                    password=user["password"]
+                )
+            uid = usermodel.do_activate(hashuid)
+            self.uids.append(usermodel.get_uid(user["email"]))
+
+        self.assertIsInstance(self.uids[0], int)
+
+    def tearDown(self):
+        if is_debug():
+            return
+        self.db.execute('DELETE FROM "user" *')
+        self.db.execute('DELETE FROM "group" *')
 
     def test(self):
+        uid = self.uids[0]
         for group in self.groups:
             gid = self.model.do_create(
+                    uid=uid,
                     name=group["name"],
-                    founder=group["founder"],
                     intro=group["intro"],
-                    motton=group["motton"]
+                    motton=group["motton"],
+                    is_public=group["is_public"]
                 )
             self.assertIsInstance(gid, int)
-            res = self.model.do_user_join_group(gid=gid, uid=self.uid)
-            self.assertTrue(res)
+        res = self.model.do_join_group(gid=gid, uid=self.uids[1])
+        self.assertTrue(res)
 
-        # TODO: delete this
         gid = 1
         for i in xrange(7):
-            tid = self.model.do_insert_topic(
+            tid = self.model.do_create_topic(
                     gid=gid,
-                    uid=self.uid,
-                    content=self.topic["content"],
+                    uid=uid,
                     title=self.topic["title"],
+                    content=self.topic["content"]
                 )
-            mid = self.model.do_insert_message(
+            self.assertIsInstance(tid, int)
+            id = self.model.do_create_chat(
                     gid=gid,
-                    uid=self.uid,
+                    uid=uid,
                     content=self.message["content"],
                     reply_id=tid
                 )
-            self.assertIsInstance(mid, int)
-            bid = self.model.do_insert_bulletin(
+            self.assertIsInstance(id, int)
+            bid = self.model.do_create_bulletin(
                     gid=gid,
-                    uid=self.uid,
+                    uid=uid,
                     content=self.bulletin["content"],
                     title=self.bulletin["title"]
                 )
             self.assertIsInstance(bid, int)
 
         for i in xrange(30):
-            mid = self.model.do_insert_message(
+            mid = self.model.do_create_chat(
                     gid=gid,
-                    uid=self.uid,
-                    content=self.message["content"],
+                    uid=uid,
+                    content=self.message["content"]
                 )
             self.assertIsInstance(mid, int)
 
-        msg = self.model.get_group_message(mid)
-        self.assertIsNotNone(msg)
-        msgs = self.model.get_group_messages(gid, 30, 0)
-        self.assertIsInstance(msgs, list)
-        tpc = self.model.get_group_topic(tid)
-        self.assertIsNotNone(tpc)
-        tpcs = self.model.get_group_topics(gid, 30, 0)
+        chats = self.model.get_chats(gid, 30, 0)
+        self.assertIsInstance(chats, list)
+        tpc = self.model.get_topic(tid)
+        self.assertIsInstance(tpc, dict)
+        tpcs = self.model.get_topics(gid, 30, 0)
         self.assertIsInstance(tpcs, list)
-        mem = self.model.get_member_info(gid, self.uid)
-        self.assertIsNotNone(mem)
-        buls = self.model.get_group_bulletins(gid, 6, 0)
+        mem = self.model.get_member_info(gid, uid)
+        self.assertIsInstance(mem, dict)
+        buls = self.model.get_bulletins(gid, 6, 0)
         self.assertIsInstance(buls, list)
-        for group in self.groups:
-            self.model.update_group_info(
-                    gid,
-                    founder=group["founder"],
-                    name=group["name"]+"update",
-                    intro=group["intro"]+"update",
-                    motton=group["motton"]+"update"
-                )
+
 
 def suite():
     suite = unittest.TestSuite()

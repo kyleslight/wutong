@@ -1,0 +1,21 @@
+<li id={{ topic["tid"] }} class="topicOutter">
+    <a class="userImage" href='#'>
+        <img src='{{ topic["avatar"] }}' />
+    </a>
+    <div class='talkMain'>
+        <div class="talkAction">
+            <a class='userName' href='#'>{{ topic["penname"] }}</a>
+             发起了话题
+            <span class='talkTitle'>
+                <a href="/t/{{ topic["tid"] }}" target="_blank">{{ topic["title"] }}</a>
+            </span>
+        </div>
+        <div class='timeShow'>
+            {{ topic["submit_time"] }}
+        </div>
+        <div class='topicTalkContent'>
+            {{ topic["content"] }}
+        </div>
+    </div>
+</li>
+

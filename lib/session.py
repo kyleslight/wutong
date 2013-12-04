@@ -9,8 +9,6 @@ class Session(dict):
 
     class SessionNotRegisterError(Exception):
         pass
-    class SessionInvalidError(Exception):
-        pass
     class ConnectMemcachedServerError(Exception):
         pass
 
@@ -62,19 +60,22 @@ class Session(dict):
     def _get_ssid_and_verf(self, request_handler):
         ssid = request_handler.get_secure_cookie("ssid")
         verf = request_handler.get_secure_cookie("verf")
+
+        if verf != self._generate_verf(ssid):
+            request_handler.clear_cookie("ssid")
+            request_handler.clear_cookie("verf")
+            ssid = verf = None
         if not (ssid and verf):
             ssid = self._generate_ssid()
             verf = self._generate_verf(ssid)
             request_handler.set_secure_cookie("ssid", ssid, Session.expires_days)
             request_handler.set_secure_cookie("verf", verf, Session.expires_days)
-        elif verf != self._generate_verf(ssid):
-            request_handler.clear_cookie("ssid")
-            request_handler.clear_cookie("verf")
-            raise Session.SessionInvalidError()
         return ssid, verf
 
     def _generate_ssid(self):
         return hashlib.sha256(Session.secret + str(uuid.uuid4())).hexdigest()
 
     def _generate_verf(self, ssid):
+        if not ssid:
+            return None
         return hmac.new(ssid, Session.secret, hashlib.sha256).hexdigest()

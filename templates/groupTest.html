@@ -607,21 +607,19 @@
 
             </div>
             <span class='topicLocation'>
-                >><a href="#">这是一个测试用的话题</a>
+            {% for tpc in topic_paths %}
+                >><a href="/t/{{ tpc["tid"] }}">{{ tpc["tid"] }}</a>
+            {% end %}
             </span>
             <li class="topicInner">
-                <a class="userImage" href='#'><img src='static/css/image/test.png'/></a>
+                <a class="userImage" href='#'><img src={{ topic["avatar"] }}/></a>
                 <div class='talkMain'>
-                    <div class="userName"><a href='#'>Kyleslight</a></div>
+                    <div class="userName"><a href='#'>{{ topic["penname"] }}</a></div>
                     <div class='timeShow'>
-                        --:--
+                        {{ topic["submit_time"] }}
                     </div>
                     <div class='talkContent'>
-                        这里是测试用的话题这里是测试用的话题<br/>
-                        这里是测试用的话题这里是测试用的话题<br/>
-                        这里是测试用的话题这里是测试用的话题<br/>
-                        这里是测试用的话题这里是测试用的话题<br/>
-                        这里是测试用的话题这里是测试用的话题<br/>
+                        {{ topic["content"] }}
                     </div>
                 </div>
             </li>
@@ -642,23 +640,9 @@
                         </form>
                         <div id="communicationConWrap">
                             <div class="communication" id="communication">
-                            <li class="chat">
-                                    <a class="userImage" href='#'><img src='static/css/image/test.png'/></a>
-                                    <div class='talkMain'>
-                                        <div class='userName'><a href='#'>Loggerhead</a></div>
-                                        <div class='timeShow'>
-                                            --:--
-                                        </div>
-                                        <div class='talkContent'>
-                                            这里是回复测试用话题这里是回复测试用话题<br/>
-                                            这里是回复测试用话题这里是回复测试用话题<br/>
-                                            这里是回复测试用话题这里是回复测试用话题<br/>
-                                            这里是回复测试用话题这里是回复测试用话题<br/>
-                                            这里是回复测试用话题这里是回复测试用话题
-                                        </div>
-                                    </div>
-
-                                </li>
+                                {% for comm in communications %}
+                                    {% raw comm %}
+                                {% end %}
                             </div>
                         </div>
                     </div>

@@ -16,7 +16,7 @@ class BaseHandler(RequestHandler):
         return self.session.load().get("uid")
 
     def get_current_user(self):
-        user_info = self.usermodel.get_user_info_by_uid(self.user_id)
+        user_info = self.usermodel.get_user_info(self.user_id)
         return user_info
 
     @property

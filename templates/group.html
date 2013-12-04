@@ -113,7 +113,7 @@
                 <a id="siteBulletinButton" class="myMessagePartButton" href="#">全站公告<span id="siteBulletinNum">1</span></a>
                 <a id="replyButton" class="myMessagePartButton" href="#">回复<span id="replyNum">5</span></a>
                 <a id="opusPushButton" class="myMessagePartButton" href="#">推送<span id="opusPushNum">12</span></a>
-                <a id="PMButton" class="myMessagePartButton" href="#">私信<span id="PMNum">1</span></a>                
+                <a id="PMButton" class="myMessagePartButton" href="#">私信<span id="PMNum">1</span></a>
             </div>
             <div class="myMessageContent">
                 <div class="siteBulletin myMessagePartContent activeMessagePart">
@@ -223,7 +223,7 @@
             <div class="myOpusCollection">
                 <li class="myCollectionList">
                 <a href="#"><img class="myCollectionAuthorImage" src="{{ static_url("css/image/test.png") }}" /></a>
-                    <div class="myCollectionRow">                        
+                    <div class="myCollectionRow">
                         <a href="#" class="myCollectionTitle">基于Unity3D的互动应用</a><a class="myCollectionAuthor" href="#">Kyleslight</a>
                     </div>
                     <div class="myCollectionRow">
@@ -406,54 +406,7 @@
                 </div>
                 <!-- information card -->
                 <div class="infoCard" id="groupOptionShow1">
-                    <div id="groupName">Kyleslight的同好会
-                        <p id="IDVaule"></p>
-                    </div>
-                    <div class="groupBannerBox">
-                        <img id="groupBanner" src="{{ static_url("css/image/banner.jpg") }}" />
-                    </div>
-                    <!-- <img id="groupCardImage" src="{{ static_url("css/image/forumTest.jpg") }}" /> -->
-                    <div id="groupDetail">
-                        <div id="groupIntro" class="groupDetailItem">
-                            <span class="introWord">简介：</span>一个Kyleslight建立的方便交流的同好会，嗯，是一个正常的社团啦
-                        </div>
-
-                        <div id="groupFounder" class="groupDetailItem">
-                            <span class="introWord">创建：</span>
-                            <p id="Founder">Kyleslight</p>创立于
-                            <p id="foundTime">2013年12月13日</p>
-                        </div>
-
-                        <div id="groupAdmin" class="groupDetailItem">
-                            <span class="introWord">组长：</span>
-                            <p id="administrator">Kyleslight</p>
-                        </div>
-
-                        <div id="groupMemberNum" class="groupDetailItem">
-                            <span class="introWord">成员数：</span>
-                            <p id="memberNum">68</p>
-                        </div>
-
-                        <div id="groupGPA" class="groupDetailItem">
-                            <span class="introWord">平均文章得分：</span>
-                            <p id="GPA">95.36</p>
-                        </div>
-
-                        <div id="groupRank" class="groupDetailItem">
-                            <span class="introWord">小组排名：</span>
-                            <p id="RANK">23</p>
-                        </div>
-
-                        <div id="groupInfoMotto" class="groupDetailItem">
-                            <span class="introWord">签名：</span>
-                            <p id="Motto">西十二自习室欢迎你</p>
-                        </div>
-                    </div>
-                    <div id="groupMoreDetail">
-                        嗯，kyleslight的同好会，顾名思义，就是kyleslight创立的用作圈子内交流的一个地方<br>
-                        在这里，每天都会有很多有意思的事情（是吗）<br>
-                        总之就是这样，嗯
-                    </div>
+                    {% raw group_info %}
                     <a href="#" class="optionBack">返回</a>
                 </div>
                 <!-- member -->
@@ -841,42 +794,9 @@
                         </form>
                         <div id="communicationConWrap">
                             <div class="communication" id="communication">
-                                <li id="testTopic" class="topicOutter">
-                                    <a class="userImage" href='#'><img src='{{ static_url("css/image/forumTest.jpg") }}'/></a>
-                                    <div class='talkMain'>
-                                        <div class="talkAction"><a class='userName' href='#'>Kyleslight</a> 发起了话题 <span class='talkTitle'>
-                                            <a href="groupTest.html" target="_blank">这是一个测试用的话题</a>
-                                        </span></div>
-                                        <div class='timeShow'>
-                                            --:--
-                                        </div>
-                                        <div class='topicTalkContent'>
-                                            这是一个测试用的话题这是一个测试用的话题这是一个测试用的话题这是一个测试用的话题...
-                                        </div>
-                                    </div>
-
-                                </li>
-                                <li id='groupWelcomeChat' class="chat">
-                                    <a class="userImage" href='#'><img src='{{ static_url("css/image/forumTest.jpg") }}'/></a>
-                                    <div class='talkMain'>
-                                        <div class='userName'><a href='#'>Kyleslight</a></div>
-                                        <div class='timeShow'>
-                                            --:--
-                                        </div>
-                                        <div class='talkContent'>
-                                            <br/>
-                                            首先欢迎来到梧桐小组<br/><br/>
-                                            能在第一页看到这条消息，这代表着这个小组应该还刚刚创建。这样一条消息是为或许是第一次使用梧桐小组，或许是初创立新小组的你准备的，用来帮助你更好地使用梧桐小组。它不能被编辑，也不能被回复。<br/><br/>
-                                            小组是梧桐为方便共同兴趣爱好者交流的平台。在这里，你可以与志同道合者通过即时消息互相沟通，也可以通过创建话题的形式更有效更有针对性地进行讨论，同时又不妨碍到其他人的话题。<br/>要了解更多有关小组即时消息与话题的构架，请参考我们的<a href="#"> 梧桐指南 </a><br/><br/>如果你是来到小组的新人，可以通过<a href="#"> 快速了解小组 </a>来了解小组的概况与基本使用。
-                                            <br/><br/>
-                                            了解<a href="#"> 梧桐规则 </a>有助于你更好地使用它同时也方便小组的其他成员。
-
-                                            <br/><br/>
-                                            嗯，那么就开始一段在梧桐小组的难忘旅程吧 : )<br/><br/>
-                                        </div>
-                                    </div>
-
-                                </li>
+                                {% for comm in communications %}
+                                    {% raw comm %}
+                                {% end %}
                             </div>
                         </div>
                     </div>
@@ -885,7 +805,7 @@
         </div>
     </div>
     <div class="footer" id="footer">
-                <p class="f1">&nbsp;&nbsp;&nbsp;&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
+        <p class="f1">&nbsp;&nbsp;&nbsp;&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
     </div>
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>-->
     <!--<script type="text/javascript" charset="utf-8">window.UEDITOR_HOME_URL = "{{ static_url("ueditor/")}}";</script>-->
