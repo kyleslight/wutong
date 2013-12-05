@@ -55,6 +55,11 @@ $(document).ready(function(){
         return false;
     })
 
+    $(".opusCommentIntro a").click(function(){
+        $(this).text("底部评论列表");
+        $(".opusCommentList").show();
+        return false;
+    })
 
 });
 
