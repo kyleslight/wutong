@@ -334,13 +334,13 @@
     <script type="text/javascript" src="{{ static_url("js/header.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/shCore.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/allhl.js") }}"></script>
-    <script type="text/javascript" src="{{ static_url("ueditor/ueditor.config.write.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("ueditor/ueditor.config.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("ueditor/ueditor.all.min.js") }}"></script>
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
     <script type="text/javascript">
-        var editor = new UE.ui.Editor();
+        var editor = new UE.ui.Editor({toolbars: [["fullscreen","undo","redo","link","insertimage","blockquote","insertcode","bold","italic","forecolor","inserttable","fontsize"]],initialFrameWidth:1060});
         textarea: '#textArea';
         editor.render('textArea');
     </script>

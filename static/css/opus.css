@@ -20,12 +20,12 @@
 }
 .opusTime{
 	color: #AAA;
-	float: right;
-	margin-left: 40px;
+	float: left;
+	margin-right: 40px;
 }
 .opusAuthor{
 	color: #AAA;
-	float: right;
+	float: left;
 }
 .opusAuthor a{
 	color: #777;
@@ -34,6 +34,18 @@
 }
 .opusAuthor a:hover{
 	color: #680;
+}
+.opusData{
+	float: right;
+	display: inline;
+	text-align: center;
+	color: #DDD;
+	font-size: 0.8em;
+}
+.opusData div{
+	/*float: left;*/
+	display: inline;
+	margin-right: 20px;
 }
 .authorBasicInfo{
 	float: left;
@@ -101,9 +113,10 @@
 }
 
 .opusSuffixes{
-	float: left;
+	/*float: left;*/
 	padding: 20px;
 	color: #777;
+	font-size: 0.9em;
 }
 .opusTag{
 	margin-top: 10px;
@@ -119,22 +132,77 @@
 .opusSeries a{
 	margin-right: 10px;
 }
-.opusData{
-	float: left;
+.opusComment{
+	/*float: left;*/
 	text-align: center;
-	/*background: rgba(0,0,0,0.1);*/
-	border-radius: 4px;
-	margin-top: 20px;
-	padding:10px;
-	width: 958px;
+	/*width: 1020px;*/
+	padding: 20px 0;
+	padding-bottom: 0;
+	margin-top: 60px;
+	border-top:1px solid lightblue;
+}
+.opusComment a{
+	/*color: rgba(16,158,255,0.7);*/
 	color: lightblue;
 	font-size: 1.5em;
-	font-weight: 900;
+	/*font-weight: 900;*/
 }
-.opusData div{
-	/*float: left;*/
+
+.opusCommentList{
+	border-bottom: 1px solid lightblue;
+	text-align: left;
+	list-style: none;
+	float: left;
+	width: 980px;
+	margin-bottom: 3px;
+	padding-top: 10px;
+	padding-bottom: 8px;
+	background: white;
+	display: none;
+}
+.opusCommentPosition{
+	float: right;
+	text-align: right;
+	color: #AAA;
+	margin-left: 20px;
+}
+.userImage img{
+	float: left;
+	width: 40px;
+	height: 40px;
+}
+.userName{
 	display: inline;
-	margin-right: 30px;
+	font-size: 0.9em;
+}
+.opusCommentMain{
+	float: left;
+	width: 900px;
+	margin-top: 0px;
+}
+.opusCommentMain a{
+	color: #777;
+	font-size: 1em;
+	transition: 2s;
+	-moz-transition:2s;
+	-webkit-transition:2s;
+	-o-transition:2s;
+}
+.opusCommentMain a:hover{
+	color: #680;
+}
+.opusCommentListFirstLine{
+	float: left;
+	width: 900px;
+}
+.opusCommentContent{
+	margin-top: 25px;
+}
+.timeShow{
+	float: right;
+	font-size: 0.8em;
+	margin-right: 20px;
+	display: inline;
 }
 
 

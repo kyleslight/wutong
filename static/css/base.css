@@ -13,10 +13,6 @@ body{
 a{
 	color:#444;
 	text-decoration:none;
-	transition: 0.5s;
-	-moz-transition:0.5s;
-	-webkit-transition:0.5s;
-	-o-transition:0.5s;
 }
 a:hover{
 	color:#680;
@@ -445,9 +441,9 @@ li img:hover{
 	margin-top: 20px;
 	padding: 10px;
 	background: white;
-	border-radius: 7px;
-	border:1px solid #AAA;
-	/*box-shadow: 0 0 20px #680;*/
+	/*border-radius: 7px;*/
+	/*border:1px solid #AAA;*/
+	box-shadow: 0 0 20px white;
 }
 .myMessagePart{
 	text-align: center;
@@ -547,14 +543,15 @@ li img:hover{
 
 .myNote{
 	margin-top: 20px;
-	border-radius: 7px;
+	/*border-radius: 7px;*/
 	background: white;
 	padding: 10px;
 	height: 350px;
 	float: left;
-	border:1px solid #AAA;
-	/*box-shadow: 0 0 20px #680;*/
+	/*border:1px solid #AAA;*/
+	box-shadow: 0 0 20px white;
 	display: none;
+	margin-bottom: 20px;
 }
 
 .myNoteListWrapOutter{
@@ -640,13 +637,14 @@ li img:hover{
 }
 .myCollection{
 	float: left;
-	width: 1060px;
+	width: 1062px;
 	margin-top: 20px;
 	background: white;
-	border-radius: 7px;
-	border:1px solid #AAA;
-	/*box-shadow: 0 0 20px #680;*/
+	/*border-radius: 7px;*/
+	/*border:1px solid #AAA;*/
+	box-shadow: 0 0 20px white;
 	display: none;
+	margin-bottom: 20px;
 }
 .myCollectionClass{
 	width: 1030px;

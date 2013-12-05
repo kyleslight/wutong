@@ -223,17 +223,18 @@ $(document).ready(function(){
 	        removeMessage();
 	    }else{
 	    	var itemTitle="'"+item.title+"'";
-            tempTopicContent=$("#messageTemp").html(item.content).eq(0);
+            // tempTopicContent=$("#messageTemp").html(item.content).eq(0);
             // .children().eq(0);
 	    	var condata = '<li id="topic_'+item.id+'" class="topicOutter">'
 	                    // + '<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
 	                    + '<a class="userImage" href="#"><img src='+userImageUrl+'/></a>'
 	                    + '<div class="talkMain"><div class="talkAction">'
 	                    + '<a class="userName" href="#">'+item.user.penname+'</a> 发起了话题 '
-	                    + '<a href="javascript:void(0)" id="topic'+item.id+'Title" class="talkTitle" onclick="clickTopicTitle('+item.id+','+itemTitle+')" >'+item.title+'</a></div>'
+	                    + '<a href="'+'/t/'+item.id+'" id="topic'+item.id+'Title" class="talkTitle">'+item.title+'</a></div>'
 	                    + "<div class='timeShow'>"+item.submit_time+"</div>"
-	                    + "<div class='topicTalkContent'>"+tempTopicContent.html()+"</div></div></li>";
+	                    + "<div class='topicTalkContent'>"+item.content+"</div></div></li>";
 	        $("#communication").prepend(condata);
+	        console.log(item.content);
 	        removeMessage();
 	    }
     }
@@ -323,12 +324,6 @@ function submitChatData(){
         // alert("Please input content");
         return;
     }
-    // var thedata=$(".communication").children().size();
-    // if (thedata>30) {
-    //     for (var i =30; i < thedata; i++) {
-    //         $("#communication").children("li").eq(i).remove();
-    //     }
-    // }
 
     $("#chatData").val("");
     // send message to server, TODO: please refactor
@@ -408,44 +403,6 @@ function renderMaleAndFemale(){
             $(this).css("color","pink");
         }
     })
-}
-
-function clickTopicTitle(topic_id,topic_title){
-
-	// alert(topic_id);
-	var addTopicTag=
-			'<li class="topicTagList" onmouseover="topicTagMouseOver('+topic_id+')" onmouseleave="topicTagMouseLeave('+topic_id+')">'
-		+		'<a href="javascript:void(0)" id="topic'+ topic_id+ 'Tag" >'+topic_title+'</a> | '
-		+		'<a href="#" class="closeTopicTagList" onclick="closeTopicTagList('+ topic_id+ ')">X</a>'
-		+	'</li>';
-	$(".topicTag").append(addTopicTag);
-	var addTopicCloneTag=
-			'<div class="topicTagCloneList">'
-		+		'<a href="javascript:void(0)" id="topic'+topic_id+'Tag" >'+topic_title+'</a> | '
-		+		'<a href="#">X</a>'
-		+	'</div>';
-	$(".topicTagClone").append(addTopicCloneTag);
-	$('html,body').animate({scrollTop:0},1000);
-	return false;
-}
-
-function closeTopicTagList(topic_id){
-	// alert(indexOfTopicTag);
-	var closeTopicTagId="#topic"+topic_id+"Tag";
-	$(".topicTag").find(closeTopicTagId).parent().remove();
-	$(".topicTagClone").find(closeTopicTagId).parent().remove();
-	return false;
-}
-
-function topicTagMouseOver(topic_id){
-	var topicTagOverId="#topic"+topic_id+"Tag";
-	var tempTopicTagWidth=$(".topicTagClone").find(topicTagOverId).parent().width()+40+"px";
-	$(".topicTag").find(topicTagOverId).parent().animate({width:tempTopicTagWidth},100);
-}
-
-function topicTagMouseLeave(topic_id){
-	var topicTagLeaveId="#topic"+topic_id+"Tag";
-	$(".topicTag").find(topicTagLeaveId).parent().animate({width:"80px"},100);
 }
 
 String.prototype.httpHtml = function(){

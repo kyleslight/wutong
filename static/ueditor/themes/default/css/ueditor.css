@@ -131,7 +131,7 @@ div.edui-box {
 }
 /*UI工具栏、编辑区域、底部*/
 .edui-default .edui-editor {
-    border: 1px solid #680;
+    /*border: 1px solid #680;*/
     border-top: 0px;
     background-color: white;
     position: relative;
