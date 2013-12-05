@@ -42,11 +42,8 @@ urls = [
     (r"/register", user.RegisterHandler),
     (r"/account/check", user.CheckMailHandler),
     (r"/g/(\w+)", group.IndexHandler),
-    (r"/g/\w+/groupUserInfo",group.GroupUserInfoHandler),
-    (r"/g/(\w+)/groupInfo",group.GroupinfoHandler),
     (r"/g/\w+/groupJoin",group.JoinHandler),
     (r"/g/(\w+)/message", group.MessageHandler),
-    (r"/g/(\w+)/bulletin", group.GroupBulletinHandler),
     (r"/t/(\w+)", group.TopicHandler),
 ]
 
