@@ -438,12 +438,14 @@ li img:hover{
 .myMessage{
 	display: none;
 	float: left;
+	width: 1039px;
 	margin-top: 20px;
 	padding: 10px;
 	background: white;
 	/*border-radius: 7px;*/
-	/*border:1px solid #AAA;*/
-	box-shadow: 0 0 20px white;
+	border:1px solid #CCC;
+	box-shadow: 0 0 20px #CCC;
+	margin-bottom: 20px;
 }
 .myMessagePart{
 	text-align: center;
@@ -544,12 +546,13 @@ li img:hover{
 .myNote{
 	margin-top: 20px;
 	/*border-radius: 7px;*/
+	width: 1039px;
 	background: white;
 	padding: 10px;
 	height: 350px;
 	float: left;
-	/*border:1px solid #AAA;*/
-	box-shadow: 0 0 20px white;
+	border:1px solid #CCC;
+	box-shadow: 0 0 20px #CCC;
 	display: none;
 	margin-bottom: 20px;
 }
@@ -586,7 +589,7 @@ li img:hover{
 }
 .myCurrentNoteArea{
 	float: left;
-	width: 898px;
+	width: 897px;
 	padding-left: 10px;
 	border-left: 2px solid #680;
 	height: 350px;
@@ -637,12 +640,12 @@ li img:hover{
 }
 .myCollection{
 	float: left;
-	width: 1062px;
+	width: 1059px;
 	margin-top: 20px;
 	background: white;
 	/*border-radius: 7px;*/
-	/*border:1px solid #AAA;*/
-	box-shadow: 0 0 20px white;
+	border:1px solid #CCC;
+	box-shadow: 0 0 20px #CCC;
 	display: none;
 	margin-bottom: 20px;
 }
@@ -752,8 +755,10 @@ li img:hover{
 	clear:both;
 	background:transparent;
 	margin:0 auto;
-	margin-top: 2px;
+	margin-top: 20px;
+	padding-top: 20px;
 	line-height:30px;
+	/*text-align:center;*/
 }
 .footer a{
 	color: ForestGreen;
@@ -764,6 +769,6 @@ li img:hover{
 .f1{
 	margin:0 auto;
 	color:black;
-	min-width:760px;
-	text-align:center;
+	width: 100%;
+	text-align: center;
 }

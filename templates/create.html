@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
-		<title>写文章 - 梧桐</title>
+		<title>创作 - 梧桐</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta http-equiv="Content-Language" content="zh-CN" />
 		<meta name="Keywords" content="梧桐 文章 浏览 撰写 创作 小组" />
@@ -327,7 +327,7 @@
 	</div>
 	<!--<script type="text/javascript"> var editor = CKEDITOR.replace('textArea');  </script>-->
 	<div class="footer" id="footer">
-				<p class="f1">&nbsp;&nbsp;&nbsp;&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
+				<p class="f1">&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
 	</div>
 	<script type="text/javascript" src="{{ static_url("js/jquery.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/create.js") }}"></script>
@@ -340,7 +340,7 @@
         SyntaxHighlighter.all();
     </script>
     <script type="text/javascript">
-        var editor = new UE.ui.Editor({toolbars: [["fullscreen","undo","redo","link","insertimage","blockquote","insertcode","bold","italic","forecolor","inserttable","fontsize"]],initialFrameWidth:1060});
+        var editor = new UE.ui.Editor({toolbars: [["undo","redo","bold","italic","fontsize","forecolor","inserttable","link","insertimage","blockquote","insertcode"]],initialFrameWidth:1060,initialFrameHeight:600});
         textarea: '#textArea';
         editor.render('textArea');
     </script>
