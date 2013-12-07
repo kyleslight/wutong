@@ -22,13 +22,13 @@ class MessageBaseHandler(BaseHandler):
         self._gid = value
 
     @property
-    def tid(self):
+    def reply_id(self):
         if not hasattr(self, "_tid"):
-            self._tid = None
+            return None
         return self._tid
 
-    @gid.setter
-    def tid(self, value):
+    @reply_id.setter
+    def reply_id(self, value):
         self._tid = value
 
     def get_group_info(self, gid):
@@ -67,14 +67,14 @@ class MessageBaseHandler(BaseHandler):
                 self.user_id,
                 message["title"],
                 message["content"],
-                self.tid
+                self.reply_id
             )
         else:
             id = self.model.do_create_chat(
                 self.gid,
                 self.user_id,
                 message["content"],
-                self.tid
+                self.reply_id
             )
         return id
 
@@ -213,6 +213,7 @@ class TopicMessageHandler(MessageSocketHandler):
 
     def open(self, tid):
         self.id = tid
+        self.reply_id = tid
         self.gid = self.get_topic(tid)["gid"]
         self.add()
 
