@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+import tornado.testing
 import requests
 from util import path
 

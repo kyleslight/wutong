@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-class GroupModel:
+class GroupModel(object):
 
     def __init__(self, db):
         self.db = db
@@ -10,6 +10,21 @@ class GroupModel:
         select = 'SELECT get_group_info(%s)'
         group_info = self.db.getjson(select, gid)
         return group_info
+
+    def get_message(self, message_id):
+        select = 'SELECT get_group_message(%s)'
+        message = self.db.getjson(select, message_id)
+        return message
+
+    def get_group_messages(self, gid, limit, offset):
+        select = 'SELECT get_group_messages(%s, %s, %s)'
+        messages = self.db.getjson(select, gid, limit, offset)
+        return messages
+
+    def get_topic_messages(self, tid, limit, offset):
+        select = 'SELECT get_topic_messages(%s, %s, %s)'
+        messages = self.db.getjson(select, tid, limit, offset)
+        return messages
 
     def get_chats(self, gid, limit, offset):
         select = 'SELECT get_group_chats(%s, %s, %s)'

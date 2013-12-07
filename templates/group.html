@@ -345,15 +345,15 @@
             <div class="groupItem">
                 <!-- bulletin -->
                 <div class="bulletin" id="groupOptionShow0">
-                    {% for blt in bulletins %}
-                        {% raw blt %}
+                    {% for bulletin in bulletins %}
+                        {% module MyModule("bulletin.html", bulletin=bulletin) %}
                     {% end %}
                     <div id="bulletinOption"><a href="#" id="unfold">展开前6条</a>  <a href="#" id="bulletinBack" class="optionBack">返回</a>
                     </div>
                 </div>
                 <!-- information card -->
                 <div class="infoCard" id="groupOptionShow1">
-                    {% raw group_info %}
+                    {% module MyModule("group_info.html", group_info=group_info) %}
                     <a href="#" class="optionBack">返回</a>
                 </div>
                 <!-- member -->
@@ -740,8 +740,8 @@
                         </form>
                         <div id="communicationConWrap">
                             <div class="communication" id="communication">
-                                {% for comm in communications %}
-                                    {% raw comm %}
+                                {% for msg in messages %}
+                                    {% module MyModule("message.html", message=msg) %}
                                 {% end %}
                             </div>
                         </div>

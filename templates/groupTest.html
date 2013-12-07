@@ -803,8 +803,8 @@
 
             </div>
             <span class='topicLocation'>
-            {% for tpc in topic_paths %}
-                >><a href="/t/{{ tpc["tid"] }}">{{ tpc["tid"] }}</a>
+            {% for topic in ancestor_topics %}
+                >><a href="/t/{{ topic["tid"] }}">{{ topic["title"] }}</a>
             {% end %}
             </span>
             <li class="topicInner">
@@ -815,7 +815,7 @@
                         {{ topic["submit_time"] }}
                     </div>
                     <div class='talkContent'>
-                        {{ topic["content"] }}
+                        {% raw topic["content"] %}
                     </div>
                 </div>
             </li>
@@ -836,8 +836,8 @@
                         </form>
                         <div id="communicationConWrap">
                             <div class="communication" id="communication">
-                                {% for comm in communications %}
-                                    {% raw comm %}
+                                {% for msg in messages %}
+                                    {% module MyModule("message.html", message=msg) %}
                                 {% end %}
                             </div>
                         </div>

@@ -3,7 +3,7 @@
         <img class='bulletinUserImage' src={{ bulletin["avatar"] }} />
         <div class="bulletinTitle">{{ bulletin["title"] }}</div>
         <div class="bulletinUserName">{{ bulletin["penname"] }}</div>
-        <div class="bulletinTime">{{ bulletin["submit_time"] }}</div>
+        <div class="bulletinTime">{{ prettytime(bulletin["submit_time"]) }}</div>
     </a>
     <div id="bulletinConActive" class="bulletinCon">
         {{ bulletin["content"] }}

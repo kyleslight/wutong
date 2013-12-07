@@ -1,37 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from os import path, getenv
-from uuid import uuid5, NAMESPACE_OID
+import os
+import uuid
 from tornado.options import define, options
-from lib.session import Session
+from tornado.web import TemplateModule, RequestHandler
 from handler import base, group, user
+import lib.util
+from lib.session import Session
+from lib.util import encodestr, str2datetime, prettytime
 
-
-define("host", default="localhost", type=str)
-define("port", default=8888, type=int)
-define("debug", default=True, type=bool)
-define("dbname", default=getenv("WUTONG_DB", "wutong"), type=str)
-define("dbhost", default=getenv("WUTONG_DB_HOST", "localhost"), type=str)
-define("dbport", default=getenv("WUTONG_DB_PORT", 5432), type=str)
-define("dbuser", default=getenv("WUTONG_DB_USER", "wutong"), type=str)
-define("dbpasswd", default=getenv("WUTONG_DB_PASSWD", "wutong"), type=str)
-options.parse_command_line()
-
-settings = dict(
-    sitename=u"梧桐".encode("utf8"),
-    template_path=path.join(path.dirname(__file__), "templates"),
-    static_path=path.join(path.dirname(__file__), "static"),
-    xsrf_cookies=False,
-    login_url="/login",
-    host=options.host,
-    port=options.port,
-    debug=options.debug,
-)
-
-settings["cookie_secret"] = str(uuid5(NAMESPACE_OID, settings["sitename"]))
-settings["session_secret"] = str(uuid5(NAMESPACE_OID, settings["cookie_secret"]))
-Session.register(settings["session_secret"])
 
 urls = [
     (r"/", user.HomeHandler),
@@ -41,26 +19,67 @@ urls = [
     (r"/logout", user.LogoutHandler),
     (r"/register", user.RegisterHandler),
     (r"/account/check", user.CheckMailHandler),
-    (r"/g/(\w+)", group.IndexHandler),
-    (r"/g/\w+/groupJoin",group.JoinHandler),
-    (r"/g/(\w+)/message", group.MessageHandler),
-    (r"/t/(\w+)", group.TopicHandler),
+    (r"/g/(\d+)", group.GroupIndexHandler),
+    (r"/t/(\d+)", group.TopicIndexHandler),
+    (r"/g/(\d+)/message", group.GroupMessageHandler),
+    (r"/t/(\d+)/message", group.TopicMessageHandler),
+    (r"/g/(\d+)/groupJoin",group.JoinHandler),
 ]
 
 
-if settings["debug"]:
-    options.dbname += "_test"
+define("host", default="localhost", type=str)
+define("port", default=8888, type=int)
+define("debug", default=True, type=bool)
+define("dbname", default=os.getenv("WUTONG_DB", "wutong"), type=str)
+define("dbhost", default=os.getenv("WUTONG_DB_HOST", "localhost"), type=str)
+define("dbport", default=os.getenv("WUTONG_DB_PORT", 5432), type=str)
+define("dbuser", default=os.getenv("WUTONG_DB_USER", "wutong"), type=str)
+define("dbpasswd", default=os.getenv("WUTONG_DB_PASSWD", "wutong"), type=str)
+options.parse_command_line()
 
-    from tornado.web import RequestHandler
+if options.debug:
     class DebugHandler(RequestHandler):
         def get(self, subpath):
             self.render(subpath)
 
     urls.append((r"/(.*)", DebugHandler))
+    options.dbname += "_test"
+else:
+    urls.append((r".*", base.BaseHandler))
+
+class MyModule(TemplateModule):
+    def render(self, path, **kwargs):
+        path = os.path.join("modules", path)
+        return super(MyModule, self).render(path, **kwargs)
 
 
-settings["dsn"] = "dbname=" + options.dbname      \
-                + " user=" + options.dbuser       \
-                + " password=" + options.dbpasswd \
-                + " host=" + options.dbhost       \
-                + " port=" + str(options.dbport)
+settings = dict(
+    sitename=u"梧桐".encode("utf8"),
+    template_path=os.path.join(os.path.dirname(__file__), "templates"),
+    static_path=os.path.join(os.path.dirname(__file__), "static"),
+    xsrf_cookies=False,
+    login_url="/login",
+    host=options.host,
+    port=options.port,
+    debug=options.debug,
+    cookie_secret=str(options.debug or uuid.uuid1().hex),
+    session_secret=str(options.debug or uuid.uuid4().hex),
+    encrypt_url="encrypt.wutong.com",
+    ui_modules={
+        "MyModule": MyModule,
+    },
+    ui_methods = {
+        "encodestr": lambda h, x: encodestr(x),
+        "str2datetime": lambda h, x: str2datetime(x),
+        "prettytime": lambda h, x: prettytime(x),
+    },
+    dsn="dbname=" + options.dbname      \
+       +" user=" + options.dbuser       \
+       +" password=" + options.dbpasswd \
+       +" host=" + options.dbhost       \
+       +" port=" + str(options.dbport)
+)
+
+
+Session.register(settings["session_secret"])
+lib.util.encrypt_url = settings.get("encrypt_url")

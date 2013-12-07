@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Last Modified time: 2013-11-10 10:20:57
+# @Last Modified time: 2013-12-06 23:16:55
 
-import logging
+import os
+import uuid
 from hashlib import sha1
-from uuid import uuid3, NAMESPACE_X500
+from datetime import datetime
+from tornado.web import create_signed_value, decode_signed_value
+
 
 def hexstring(salt, string):
     hexstr = sha1((salt + string).encode("utf-8"))
@@ -12,37 +15,32 @@ def hexstring(salt, string):
     hexstr = str(hexstr.hexdigest())
     return hexstr
 
-def createpasswd(value):
-    value = str(value).encode("utf-8")
-    salt = str(uuid3(NAMESPACE_X500, value).hex)
-    enpasswd = hexstring(salt, value)
-    enpasswd += salt
-    while len(enpasswd) < 128:
-        enpasswd += str(sha1(enpasswd).hexdigest())
-    enpasswd = enpasswd[:128]
-    return enpasswd
+encrypt_url = None
+def _secret_and_name():
+    url = encrypt_url or "secret.wutong.com"
+    secret = uuid.uuid5(uuid.NAMESPACE_URL, url).hex
+    name = uuid.uuid3(uuid.NAMESPACE_URL, url).hex
+    return secret, name
 
-def log(*objs, **kwargs):
-    sepsort = kwargs.get("sep", '-')
-    seplen = kwargs.get("length", 40)
+def encodestr(s):
+    secret, name = _secret_and_name()
+    return create_signed_value(secret, name, s)
 
-    if sepsort == "number":
-        sep = '0'
+def decodestr(encrpstr):
+    secret, name = _secret_and_name()
+    return decode_signed_value(secret, name, encrpstr)
+
+def str2datetime(s):
+    return datetime.strptime(s, "%Y-%m-%d %H:%M:%S.%f")
+
+def prettytime(dt):
+    if isinstance(dt, basestring):
+        dt = str2datetime(dt)
+    dtdate = dt.date()
+    now = datetime.now()
+    nowdate = now.date()
+
+    if nowdate == dtdate:
+         return dt.strftime("%H:%M:%S")
     else:
-        sep = sepsort
-    if not objs:
-        logging.info(sep * seplen)
-        return
-
-    cnt = 0
-    for obj in objs:
-        cnt += 1
-
-        if sepsort == "number":
-            sep = str(cnt)
-        logging.info(sep * seplen)
-        if hasattr(obj, "__name__"):
-            msg = obj.__name__
-        else:
-            msg = str(obj)
-        logging.info(msg)
+         return dt.strftime("%Y-%m-%d %H:%M")

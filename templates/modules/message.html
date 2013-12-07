@@ -1,0 +1,38 @@
+{% if message["title"] %}
+<li id="topic_{{ message["id"] }}" class="topicOutter">
+    <a class="userImage" href='#'>
+        <img src='{{ message["avatar"] }}' />
+    </a>
+    <div class='talkMain'>
+        <div class="talkAction">
+            <a class='userName' href='/u/{{ message["penname"] }}'>{{ message["penname"] }}</a>
+             发起了话题
+            <span class='talkTitle'>
+                <a href="/t/{{ message["id"] }}" target="_blank">{{ message["title"] }}</a>
+            </span>
+        </div>
+        <div class='timeShow'>
+            {{ prettytime(message["last_reply_time"]) }}
+        </div>
+        <div class='topicTalkContent'>
+            {% raw message["content"] %}
+        </div>
+    </div>
+</li>
+{% else %}
+<li id="chat_{{ message["id"] }}" class="chat">
+    <a class="userImage" href='#'>
+        <img src={{ message["avatar"] }} />
+    </a>
+    <div class='talkMain'>
+        <div class='userName'><a href='#'>{{ message["penname"] }}</a>
+        </div>
+        <div class='timeShow'>
+            {{ prettytime(message["last_reply_time"]) }}
+        </div>
+        <div class='talkContent'>
+            {% raw message["content"] %}
+        </div>
+    </div>
+</li>
+{% end %}

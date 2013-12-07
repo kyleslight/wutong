@@ -9,11 +9,7 @@ var userInfo=[{"userName":"","userId":0}];
 var groupInfo=[{"groupName":"","groupId":0}];
 var groupUserInfo=[{"is_leader":false,"is_subleader":false,"is_member":false,"join_time":null}];
 
-// TODO: refactor, package as a function. this statement should run at first
-location.pathname;
-match = "/g/\d+";
 var url = "ws://" + location.host + location.pathname + "/message";
-console.log(url);
 var msg_socket = new WebSocket(url);
 msg_socket.onclose = function() {};
 
@@ -192,75 +188,15 @@ $(document).ready(function(){
 
     msg_socket.onmessage = function(e) {
         var data = e.data;
-        var item;
-        if (data)
-            item = JSON.parse(data);
-        else
+        if (!data)
             return;
-        // test userImage
-        var homeUrl="http://202.114.20.78:8000/static/css/image/";
-        var userImageUrl;
-        switch(item.user.uid){
-        	case 0:userImageUrl=homeUrl+"test11.jpg";break;
-        	case 1:userImageUrl=homeUrl+"test12.png";break;
-        	case 2:userImageUrl=homeUrl+"test1.png";break;
-        	case 3:userImageUrl=homeUrl+"test.png";break;
-        	default:userImageUrl=homeUrl+"test7.jpg";break;
-    	}
-        item.submit_time = item.submit_time.toString().substring(5,19);
-        if (!item.title) {
-	        // TODO: 通过title判断是否为topic
-	        var condata = '<li id="topic_'+item.id+'" class="chat">'
-	                    + '<a class="userImage" href="#"><img src='+userImageUrl+'/></a>'
-	                    + 	'<div class="talkMain">'
-	                    + 		'<a class="userName" href="#">'+item.user.penname+'</a>'
-	                    + 		'<div class="timeShow">'+item.submit_time+"</div>"
-	                    + 		'<div class="talkContent">'+item.content+'</div>'
-	                    +	'</div>'
-	                    +'</li>';
-
-	        $("#communication").prepend(condata);
-	        removeMessage();
-	    }else{
-	    	var itemTitle="'"+item.title+"'";
-            // tempTopicContent=$("#messageTemp").html(item.content).eq(0);
-            // .children().eq(0);
-	    	var condata = '<li id="topic_'+item.id+'" class="topicOutter">'
-	                    // + '<a class="userImage" href="#"><img src="'+item.user.avatar+'"/></a>'
-	                    + '<a class="userImage" href="#"><img src='+userImageUrl+'/></a>'
-	                    + '<div class="talkMain"><div class="talkAction">'
-	                    + '<a class="userName" href="#">'+item.user.penname+'</a> 发起了话题 '
-	                    + '<a href="'+'/t/'+item.id+'" id="topic'+item.id+'Title" class="talkTitle">'+item.title+'</a></div>'
-	                    + "<div class='timeShow'>"+item.submit_time+"</div>"
-	                    + "<div class='topicTalkContent'>"+item.content+"</div></div></li>";
-	        $("#communication").prepend(condata);
-	        console.log(item.content);
-	        removeMessage();
-	    }
+        $("#communication").prepend(data);
+        removeMessage();
     }
 
 });
 
 function unsyncGroup(){
-	// get group infomation
-	// $.ajax({
-	// 	url:location.pathname+"/groupInfo",
-	// 	type: "GET",
-	// 	dataType:"json",
-	// 	async: false,
-	// 	success:function(data){
-	// 		groupInfo[0].groupName = data.name;
-	// 		groupInfo[0].groupId = data.gid;
-	// 		if(data.publicity){
-	// 			$(".groupPromptPrivate").css({"display":"none"});
-	// 			$("#contactGroupLeader").css({"display":"none"});
-	// 		}else{
-	// 			$(".groupPromptPublic").css({"display":"none"});
-	// 		}
-	// 		$('#groupTitleName').text(groupInfo[0].groupName);
-	// 	}
-	// });
-	// get group-user infomation
 	$.ajax({
 		url:location.pathname+"/groupUserInfo",
 		type: "POST",
@@ -284,7 +220,6 @@ function unsyncGroupBulletin(){
 		dataType:"json",
 		async: false,
 		success:function(data){
-			console.log(data);
 		}
 	});
 }

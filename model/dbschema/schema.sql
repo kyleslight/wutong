@@ -42,7 +42,7 @@ DROP TABLE IF EXISTS article CASCADE;
 CREATE TABLE article (
     aid serial PRIMARY KEY,
     -- 创建者
-    uid serial REFERENCES "user"(uid) NOT NULL,
+    uid integer REFERENCES "user"(uid) NOT NULL,
     title varchar(500) NOT NULL,
     mainbody varchar(272629) NOT NULL,
     subtitle varchar(500),
@@ -64,7 +64,7 @@ CREATE TABLE article (
 DROP TABLE IF EXISTS article_history CASCADE;
 CREATE TABLE article_history (
     id serial PRIMARY KEY,
-    aid serial REFERENCES article(aid) NOT NULL,
+    aid integer REFERENCES article(aid) NOT NULL,
     title varchar(500) NOT NULL,
     mainbody varchar(272629) NOT NULL,
     subtitle varchar(500),
@@ -80,7 +80,7 @@ DROP TABLE IF EXISTS "group" CASCADE;
 CREATE TABLE "group" (
     gid serial PRIMARY KEY,
     -- 创建者
-    uid serial REFERENCES "user"(uid) NOT NULL,
+    uid integer REFERENCES "user"(uid) NOT NULL,
     name varchar(32) NOT NULL,
     intro varchar(200),
     motton varchar(100),
@@ -100,8 +100,8 @@ CREATE TABLE "group" (
 DROP TABLE IF EXISTS group_user CASCADE;
 CREATE TABLE group_user (
     guid serial PRIMARY KEY,
-    gid serial REFERENCES "group"(gid) NOT NULL,
-    uid serial REFERENCES "user"(uid) NOT NULL,
+    gid integer REFERENCES "group"(gid) NOT NULL,
+    uid integer REFERENCES "user"(uid) NOT NULL,
     -- 组长
     is_leader bool NOT NULL DEFAULT false,
     -- 副组长
@@ -116,8 +116,8 @@ CREATE TABLE group_user (
 DROP TABLE IF EXISTS article_user CASCADE;
 CREATE TABLE article_user (
     auid serial PRIMARY KEY,
-    aid serial REFERENCES article(aid) NOT NULL,
-    uid serial REFERENCES "user"(uid) NOT NULL,
+    aid integer REFERENCES article(aid) NOT NULL,
+    uid integer REFERENCES "user"(uid) NOT NULL,
     -- 用户对文章的评分
     score int CHECK (score >= 0),
     -- 合作编辑
@@ -133,14 +133,17 @@ CREATE TABLE article_user (
 
 -- 小组topic
 DROP TABLE IF EXISTS topic CASCADE;
+DROP SEQUENCE IF EXISTS message_seq CASCADE;
+CREATE SEQUENCE message_seq;
 CREATE TABLE topic (
-    tid serial PRIMARY KEY,
-    gid serial REFERENCES "group"(gid) NOT NULL,
-    uid serial REFERENCES "user"(uid) NOT NULL,
-    title varchar(5000),
+    tid integer PRIMARY KEY DEFAULT nextval('message_seq'),
+    gid integer REFERENCES "group"(gid) NOT NULL,
+    uid integer REFERENCES "user"(uid) NOT NULL,
     content varchar(400000) NOT NULL,
     reply_id integer REFERENCES topic(tid),
     submit_time timestamp NOT NULL DEFAULT now(),
+    last_reply_time timestamp,
+    title varchar(5000),
     level int CHECK (level BETWEEN 0 AND 3) DEFAULT 0
 );
 
@@ -149,7 +152,7 @@ CREATE TABLE topic (
 DROP TABLE IF EXISTS user_title CASCADE;
 CREATE TABLE user_title (
     id serial PRIMARY KEY,
-    uid serial REFERENCES "user"(uid) NOT NULL,
+    uid integer REFERENCES "user"(uid) NOT NULL,
     name varchar(20) NOT NULL,
     create_time timestamp NOT NULL DEFAULT now()
 );
@@ -159,8 +162,8 @@ CREATE TABLE user_title (
 DROP TABLE IF EXISTS article_comment CASCADE;
 CREATE TABLE article_comment (
     id serial PRIMARY KEY,
-    aid serial REFERENCES article(aid) NOT NULL,
-    uid serial REFERENCES "user"(uid) NOT NULL,
+    aid integer REFERENCES article(aid) NOT NULL,
+    uid integer REFERENCES "user"(uid) NOT NULL,
     content varchar(200) NOT NULL,
     -- 段落id
     paragraph_id varchar(50),
@@ -174,7 +177,7 @@ CREATE TABLE article_comment (
 DROP TABLE IF EXISTS article_appositeness CASCADE;
 CREATE TABLE article_appositeness (
     id serial PRIMARY KEY,
-    aid serial REFERENCES article(aid) NOT NULL,
+    aid integer REFERENCES article(aid) NOT NULL,
     name varchar(20) NOT NULL,
     create_time timestamp NOT NULL DEFAULT now()
 );
@@ -184,7 +187,7 @@ CREATE TABLE article_appositeness (
 DROP TABLE IF EXISTS article_tag CASCADE;
 CREATE TABLE article_tag (
     id serial PRIMARY KEY,
-    aid serial REFERENCES article(aid) NOT NULL,
+    aid integer REFERENCES article(aid) NOT NULL,
     name varchar(20) NOT NULL,
     create_time timestamp NOT NULL DEFAULT now()
 );
@@ -194,7 +197,7 @@ CREATE TABLE article_tag (
 DROP TABLE IF EXISTS article_honor CASCADE;
 CREATE TABLE article_honor (
     id serial PRIMARY KEY,
-    aid serial REFERENCES article(aid) NOT NULL,
+    aid integer REFERENCES article(aid) NOT NULL,
     name varchar(20) NOT NULL,
     create_time timestamp NOT NULL DEFAULT now()
 );
@@ -204,8 +207,8 @@ CREATE TABLE article_honor (
 DROP TABLE IF EXISTS article_view CASCADE;
 CREATE TABLE article_view (
     id serial PRIMARY KEY,
-    aid serial REFERENCES article(aid) NOT NULL,
-    uid serial REFERENCES "user"(uid) NOT NULL,
+    aid integer REFERENCES article(aid) NOT NULL,
+    uid integer REFERENCES "user"(uid) NOT NULL,
     view_time timestamp NOT NULL DEFAULT now()
 );
 
@@ -214,8 +217,8 @@ CREATE TABLE article_view (
 DROP TABLE IF EXISTS group_bulletin CASCADE;
 CREATE TABLE group_bulletin (
     id serial PRIMARY KEY,
-    gid serial REFERENCES "group"(gid) NOT NULL,
-    uid serial REFERENCES "user"(uid) NOT NULL,
+    gid integer REFERENCES "group"(gid) NOT NULL,
+    uid integer REFERENCES "user"(uid) NOT NULL,
     title varchar(5000) NOT NULL,
     content varchar(400000) NOT NULL,
     submit_time timestamp NOT NULL DEFAULT now()
@@ -224,9 +227,9 @@ CREATE TABLE group_bulletin (
 
 DROP TABLE IF EXISTS group_chat CASCADE;
 CREATE TABLE group_chat (
-    id serial PRIMARY KEY,
-    gid serial REFERENCES "group"(gid) NOT NULL,
-    uid serial REFERENCES "user"(uid) NOT NULL,
+    id integer PRIMARY KEY DEFAULT nextval('message_seq'),
+    gid integer REFERENCES "group"(gid) NOT NULL,
+    uid integer REFERENCES "user"(uid) NOT NULL,
     content varchar(400000) NOT NULL,
     reply_id integer REFERENCES topic(tid),
     submit_time timestamp NOT NULL DEFAULT now()
@@ -273,20 +276,32 @@ SELECT g.*,
    AND gm.is_leader;
 
 
+CREATE OR REPLACE VIEW group_topic_v
+  AS
+SELECT u.penname, u.avatar, t.*
+  FROM topic t,
+       user_info_v u
+ WHERE t.uid = u.uid;
+
+
 CREATE OR REPLACE VIEW group_chat_v
   AS
-SELECT gc.*, u.penname, u.avatar
+SELECT u.penname, u.avatar, gc.*
   FROM group_chat gc,
        user_info_v u
  WHERE gc.uid = u.uid;
 
 
-CREATE OR REPLACE VIEW group_topic_v
+CREATE OR REPLACE VIEW group_message_v
   AS
-SELECT t.*, u.penname, u.avatar
-  FROM topic t,
-       user_info_v u
- WHERE t.uid = u.uid;
+SELECT *,
+       submit_time AS "last_reply_time",
+       NULL AS "title",
+       NULL AS "level"
+  FROM group_chat_v gc
+ UNION
+SELECT *
+  FROM group_topic_v gc;
 
 
 CREATE OR REPLACE VIEW group_bulletin_v
@@ -589,6 +604,68 @@ AS $$
 $$ LANGUAGE SQL;
 
 
+CREATE OR REPLACE FUNCTION get_topic_messages(
+    topic_id_i integer,
+    limit_i integer,
+    offset_i integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(j))
+      FROM (
+            SELECT *
+              FROM group_message_v
+             WHERE reply_id = $1
+             ORDER BY last_reply_time DESC
+             LIMIT $2
+            OFFSET $3) j;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_group_message(msg_id_i integer)
+  RETURNS json
+AS $$
+    SELECT row_to_json(j.*)
+      FROM (
+            SELECT *
+              FROM group_message_v
+             WHERE id = $1) j;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_group_messages(
+    group_id_i integer,
+    limit_i integer,
+    offset_i integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(j))
+      FROM (
+            SELECT *
+              FROM group_message_v
+             WHERE gid = $1
+             ORDER BY last_reply_time DESC
+             LIMIT $2
+            OFFSET $3) j;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_topic_messages(
+    topic_id_i integer,
+    limit_i integer,
+    offset_i integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(j))
+      FROM (
+            SELECT *
+              FROM group_message_v
+             WHERE reply_id = $1
+             ORDER BY last_reply_time DESC
+             LIMIT $2
+            OFFSET $3) j;
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION get_group_bulletins(
     gid_i integer,
     limit_i integer,
@@ -665,6 +742,32 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION topic_after_t()
+  RETURNS trigger
+AS $$
+BEGIN
+    IF (TG_OP = 'INSERT') THEN
+        UPDATE topic SET last_reply_time = now() WHERE tid = NEW.tid;
+        RETURN NEW;
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION group_chat_after_t()
+  RETURNS trigger
+AS $$
+BEGIN
+    IF (TG_OP = 'INSERT') THEN
+        UPDATE topic SET last_reply_time = now() WHERE tid = NEW.reply_id;
+        RETURN NEW;
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+
 CREATE OR REPLACE FUNCTION group_before_t()
   RETURNS trigger
 AS $$
@@ -732,6 +835,14 @@ CREATE TRIGGER article_before_t BEFORE DELETE OR UPDATE ON article
 DROP TRIGGER IF EXISTS topic_before_t ON topic;
 CREATE TRIGGER topic_before_t BEFORE DELETE ON topic
    FOR EACH ROW EXECUTE PROCEDURE topic_before_t();
+
+DROP TRIGGER IF EXISTS topic_after_t ON topic;
+CREATE TRIGGER topic_after_t AFTER INSERT ON topic
+   FOR EACH ROW EXECUTE PROCEDURE topic_after_t();
+
+DROP TRIGGER IF EXISTS group_chat_after_t ON group_chat;
+CREATE TRIGGER group_chat_after_t AFTER INSERT ON group_chat
+   FOR EACH ROW EXECUTE PROCEDURE group_chat_after_t();
 
 DROP TRIGGER IF EXISTS group_before_t ON "group";
 CREATE TRIGGER group_before_t BEFORE DELETE ON "group"
