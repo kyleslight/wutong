@@ -1,17 +1,22 @@
 .read{
 	width: 1060px;
 	margin: 0 auto;
+	/*border-top: 1px solid #AAA;*/
 }
 .readMain{
 	float: left;
 	background: white;
 	padding: 20px;
-	box-shadow: 0 0 20px white;
+	box-shadow: 0 0 20px #CCC;
+	/*margin-top: 20px;*/
+	border:1px solid #CCC;
+	border-top: 0;
 }
 
 .opusBasicInfo{
 	float: left;
 	padding: 20px;
+	width: 950px;
 	/*border: 1px solid #AAA;*/
 }
 .firstLine{
@@ -153,7 +158,7 @@
 	text-align: left;
 	list-style: none;
 	float: left;
-	width: 980px;
+	width: 978px;
 	margin-bottom: 3px;
 	padding-top: 10px;
 	padding-bottom: 8px;
@@ -203,6 +208,36 @@
 	font-size: 0.8em;
 	margin-right: 20px;
 	display: inline;
+}
+
+.floatReadMain{
+	position: relative;
+	width:1000px;
+}
+.opusSideCommentWrap{
+	display: none;
+	position: fixed;
+	right: 0;
+}
+.opusSideComment{
+	background: rgba(0,0,0,0.3);
+	border-top: 1px solid #AAA;
+	overflow: auto;
+}
+.opusSideCommentList{
+	float: left;
+	width: 280px;
+}
+.paraNum{
+	float: right;
+	position: relative;
+	font-size: 0.8em;
+	font-weight: normal;
+	color: white;
+	background: #680;
+	border-radius: 7px;
+	padding: 0 5px;
+	line-height: 15px;
 }
 
 

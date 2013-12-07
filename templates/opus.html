@@ -24,7 +24,7 @@
                 </div>
                 <div class="navLeft">
                     <a id="browse" href="/browse.html">
-                        <li>浏览</li>
+                        <li id="thisPage">浏览</li>
                     </a>
                     <a id="create" href="/create.html">
                         <li>创作</li>
@@ -292,7 +292,7 @@
         </div>
     </div>
     <!-- return to top -->
-    <a id="return_top" href="#" title="回到顶部" class="none"></a>
+<!--     <a id="return_top" href="#" title="回到顶部" class="none"></a> -->
     <div class="read">
         <div class="readMain">
             <div class="opusBasicInfo">
@@ -316,6 +316,7 @@
                     栏目中我们介绍了风格迥异的极客人物，他们利用不同的网络技术来解决自己学习工作中产生的问题亦或者为了满足自己的娱乐需求。极客公园认为「极客人物」不仅仅会为自己服务，也并非只是孤胆英雄，他们可能是一支团队，并能够利用自己的余热向社会公益问道解惑。
                 </div>
                 <div class="opusAppositeness">适合：产品观察家；IT技术爱好者</div>
+                <a href="#" id="expandSideComment">展开侧评</a>
             </div>
             <div class="opusMain">
                 <p style="margin-top: 20px; margin-bottom: 20px; padding: 0px; border: 0px; font-family: &#39;Microsoft Yahei&#39;, &#39;Helvetica Neue&#39;, &#39;Luxi Sans&#39;, &#39;DejaVu Sans&#39;, Tahoma, &#39;Hiragino Sans GB&#39;, STHeiti; font-size: 15px; line-height: 25px; vertical-align: baseline; color: rgb(68, 68, 68); white-space: normal; background-color: rgb(255, 255, 255);">
@@ -394,9 +395,6 @@
     在国内，大型互联网公司互相掐架屡见不鲜，时间久之，起诉成了日常习惯，却对提高互联网技术以及改善生活水平没有推进作用。我们的空气还是如此糟糕，交通依然拥堵。就像极客公园发起的「创新者联盟」，希望联合互联网圈内优秀的产品人，一起推动中国的科技创新一样。为何国内这些巨头们不能联合起来为公益做些事情？
 </p>
             </div> 
-            <div class="opusSideComment">
-                
-            </div>
             <div class="opusSuffixes">
                 <div class="opusReference">参考来源：<a href="#">http://www.geekpark.net/read/view/194303</a></div>
                 <div class="opusTag">Tags： <a href="#">技术</a><a href="#">2013极客人物</a><a href="#">404</a></div>
@@ -450,12 +448,16 @@
 
                     </li>
                 </div>
-            </div>    
+            </div>
         </div>
+        <div class="opusSideCommentWrap">
+            <div class="opusSideComment">
+            </div>
+        </div> 
     </div>
 	<!--<script type="text/javascript"> var editor = CKEDITOR.replace('textArea');  </script>-->
 	<div class="footer" id="footer">
-				<p class="f1">&nbsp;&nbsp;&nbsp;&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
+				<p class="f1">&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
 	</div>
 	<script type="text/javascript" src="{{ static_url("js/jquery.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/opus.js") }}"></script>
