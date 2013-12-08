@@ -17,6 +17,8 @@ $(document).ready(function(){
         });
     });
 
+    $(".opusMain").children().addClass("opusMainChildren");
+
     // $("#return_top").click(function(){
     //     $('html,body').animate({scrollTop:0},300);
     //     return false;
@@ -116,6 +118,8 @@ $(document).ready(function(){
         var indexOfPara=$(".sideCommentView").index($(this)).toString();
         $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
         $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
+        $(".opusMain").children().css({"color":"rgb(68,68,68)","opacity":"1.0"});
+        $(".opusMain").children().eq(indexOfPara).css({"color":"#680","opacity":"0.7"});
         if ($(".opusSideCommentList"+indexOfPara).css("display")!="none") {
             var offsetHeightOfSideCommnetChild=$(".opusSideCommentList"+indexOfPara).eq(0).position().top + $(".opusSideComment").scrollTop();
             $(".opusSideComment").animate({scrollTop:+offsetHeightOfSideCommnetChild});

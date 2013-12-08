@@ -302,6 +302,13 @@
 	font-size: 1em;
 }
 
+.opusMainChildren{
+	transition: 1s;
+	-moz-transition:1s;
+	-webkit-transition:1s;
+	-o-transition:1s;
+}
+
 .noTransition,.noTransition li{
 	transition: none !important;
 	-moz-transition:none !important;
