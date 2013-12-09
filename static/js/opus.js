@@ -2,7 +2,7 @@ var isloadbox=false;
 var isregisterbox=false;
 var _showwel_flag = true;
 var elapseTime = 5000;
-var topOfSight=100;
+var topOfSight=150;
 
 $(document).ready(function(){
     init();
@@ -56,22 +56,34 @@ $(document).ready(function(){
                 var heightOfOpusMainChild=$(".opusMain").children().eq(i).height();
                 if(
                 (
-                   ( (offsetHeightOfOpusMainChild>=(top+topOfSight)&&offsetHeightOfOpusMainChild<(top+topOfSight+20)) )||
-                   ( (offsetHeightOfOpusMainChild<=(top+topOfSight)&&((offsetHeightOfOpusMainChild+heightOfOpusMainChild))>(top+topOfSight+20) )) 
-                )&&($(".opusSideCommentList"+i).css("display")!="none")
+                   ( (offsetHeightOfOpusMainChild>=(top+topOfSight)&&offsetHeightOfOpusMainChild<(top+topOfSight+60)) )||
+                   ( (offsetHeightOfOpusMainChild<=(top+topOfSight)&&((offsetHeightOfOpusMainChild+heightOfOpusMainChild))>(top+topOfSight+5) )) 
+                )
+                &&($(".opusSideCommentList"+i).css("display")!="none")
                    ){
                     $(".opusSideComment").stop();
-                    $(".opusMain").children().css({"color":"rgb(68,68,68)","opacity":"1.0"});
-                    $(".opusMain").children().eq(i).css({"color":"#680","opacity":"0.7"});
+                    $(".activeOpusPara").removeClass("activeOpusPara");
+                    $(".opusMain").children().eq(i).addClass("activeOpusPara");
                     var heightOfSideCommnetChild=$(".opusSideCommentList"+i).eq(0).position().top + $(".opusSideComment").scrollTop();
                     $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
                     $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
                     $(".opusSideComment").children((".opusSideCommentList"+i)).addClass("activeOpusSideCommentList");
                     $(".opusSideCommentList"+i).eq(0).removeClass("activeOpusSideCommentList").addClass("activeOpusSideCommentNav");
                     $(".opusSideComment").animate({scrollTop:heightOfSideCommnetChild},1000);
-                }
+                }else if (
+                    (
+                        ( (offsetHeightOfOpusMainChild>=(top+topOfSight)&&offsetHeightOfOpusMainChild<(top+topOfSight+60)) )||
+                        ( (offsetHeightOfOpusMainChild<=(top+topOfSight)&&((offsetHeightOfOpusMainChild+heightOfOpusMainChild))>(top+topOfSight+5) )) 
+                    )
+                        &&($(".opusSideCommentList"+i).css("display")=="none")
+                    ) {
+                    $(".activeOpusPara").removeClass("activeOpusPara");
+                    $(".opusMain").children().eq(i).addClass("activeOpusPara");
+                    $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
+                    $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
+                };
             };
-        };  
+        };
         $(".nullOpusSideCommentNav").css("display","none");
         return false;
     })
@@ -104,12 +116,12 @@ $(document).ready(function(){
 
     $(".opusMain").children().mouseover(function(){
         if ($(".opusSideCommentWrap").css("display")!="none"){
-            $(this).children(".sideCommentView,.sideCommentEdit").fadeIn(50);
+            $(this).children(".sideCommentView,.sideCommentEdit").fadeIn(100);
         }
     });
     $(".opusMain").children().mouseleave(function(){
         if ($(".opusSideCommentWrap").css("display")!="none"){
-            $(this).children(".sideCommentView,.sideCommentEdit").fadeOut(50);
+            $(this).children(".sideCommentView,.sideCommentEdit").fadeOut(10);
         }
     })
 
@@ -118,8 +130,8 @@ $(document).ready(function(){
         var indexOfPara=$(".sideCommentView").index($(this)).toString();
         $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
         $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
-        $(".opusMain").children().css({"color":"rgb(68,68,68)","opacity":"1.0"});
-        $(".opusMain").children().eq(indexOfPara).css({"color":"#680","opacity":"0.7"});
+        $(".activeOpusPara").removeClass("activeOpusPara");
+        $(".opusMain").children().eq(indexOfPara).addClass("activeOpusPara");
         if ($(".opusSideCommentList"+indexOfPara).css("display")!="none") {
             var offsetHeightOfSideCommnetChild=$(".opusSideCommentList"+indexOfPara).eq(0).position().top + $(".opusSideComment").scrollTop();
             $(".opusSideComment").animate({scrollTop:+offsetHeightOfSideCommnetChild});
@@ -138,7 +150,7 @@ $(document).ready(function(){
 
 function init(){
     for(var i=0;i<25;i++){
-        var numOfComment=Math.floor(3*Math.random());
+        var numOfComment=Math.floor(100*Math.random());
         var appNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" >'
                     +'第'+i+'段评论('+'<span class="numOfParaComent">'+numOfComment+'</span>'+')'
                     +'</li>';
@@ -195,22 +207,32 @@ function visibleHeght(){
 }
 
 function expandSideComment(){
+    var top=$(window).scrollTop();
     $(".opusSideCommentWrap").removeClass("noTransition");
     $(".readMain").addClass("floatReadMain");
     $(".read").css({"width":"100%"});
-    var widthOfSideComment=($(window).width()-$(".floatReadMain").width()-42);
+    var widthOfSideComment=($(window).width()-$(".floatReadMain").width()-47);
     $(".opusSideComment").css({"height":(visibleHeght()+"px"),"width":widthOfSideComment+"px"});
-    $(".opusSideCommentList").css({"width":(widthOfSideComment-40)+"px"});
+    $(".opusSideCommentList").css({"width":(widthOfSideComment-45)+"px"});
     $(".opusSideCommentWrap").fadeIn();
     $("#expandSideComment").text("收起侧评");
+    $('html,body').animate({scrollTop:top},10);
 }
 
 function foldSideComment(){
+    // $(".opusMainChildren").removeClass("activeOpusPara");
+    // $(".opusMainChildren").css({"color":"rgb(68,68,68)","opacity":"1.0"});
+    // $(".activeOpusPara").removeClass("activeOpusPara");
+    // $(".activeOpusPara").css({"color":"rgb(68,68,68)","opacity":"1.0"});
+    $(".activeOpusPara").removeClass("activeOpusPara");
+    $(".opusMain").children().removeClass("activeOpusPara");
+    $(".opusMain").children().css({"color":"rgb(68,68,68)","opacity":"1.0"});
+    var top=$(window).scrollTop();
     $(".opusSideCommentWrap").addClass("noTransition");
     $(".opusSideCommentWrap").fadeOut();
     $(".readMain").removeClass("floatReadMain");
     $(".read").css({"width":"1060px"});
-    $(".opusMain").children().css({"color":"rgb(68,68,68)","opacity":"1.0"});
+    $('html,body').animate({scrollTop:top},10);
     $(".sideCommentView,.sideCommentEdit").hide();
     $("#expandSideComment").text("展开侧评");
 }

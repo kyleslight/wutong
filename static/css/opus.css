@@ -220,12 +220,15 @@
 .opusSideComment{
 	background: rgba(0,0,0,0.1);
 	overflow: auto;
+	padding-right: 5px;
 }
-.opusPara{
-	transition: 1s;
-	-moz-transition:1s;
-	-webkit-transition:1s;
-	-o-transition:1s;
+
+.activeOpusPara{
+	/*color: #680 !important;*/
+	/*opacity: 0.5;*/
+	box-shadow: 0 0 20px 1px #AAA;
+	/*background: rgba(102,136,0,0.4) !important;*/
+	/*background: rgba(0,0,0,0.03) !important;*/
 }
 .opusSideCommentList{
 	margin: 0 auto;
@@ -266,10 +269,10 @@
 }
 .sideCommentView,.sideCommentEdit{
 	float: right;
-	font-size: 0.8em;
+	font-size: 12px;
 	left: 900px;
-	font-weight: normal !important;
-	color: #CCC !important;
+	font-weight: normal;
+	color: #CCC;
 	line-height: 15px;
 	display: none;
 	z-index: 100;
