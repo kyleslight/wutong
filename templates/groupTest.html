@@ -24,13 +24,13 @@
                     </a>
                 </div>
                 <div class="navLeft">
-                    <a id="browse" href="/browse.html">
+                    <a id="browse" href="/browse.html" accesskey="b">
                         <li>浏览</li>
                     </a>
-                    <a id="create" href="/create.html">
+                    <a id="create" href="/create.html" accesskey="w">
                         <li>创作</li>
                     </a>
-                    <a id="group" href="#">
+                    <a id="group" href="#" accesskey="g">
                         <li id="thisPage">小组</li>
                     </a>
                 </div>
@@ -41,9 +41,9 @@
                     </form>
                 </div>
                 <div class="navrighton">
-                    <a href="#">
+                    <a href="#" >
                         <li id="username">
-                            <span id="usernameHover" href="#"></span>
+                            <span id="usernameHover" href="#" accesskey="h"></span>
                             <div class="userExpand">
                                 <div id="myHomepage">我的主页</div>
                                 <div id="myCollection">我的收藏</div>
@@ -63,10 +63,10 @@
                     </div>
                 </div>
                 <div class="navrightoff">
-                    <a id="login" href="#">
+                    <a id="login" href="#" accesskey="i">
                         <li>登入</li>
                     </a>
-                    <a id="register" href="#">
+                    <a id="register" href="#" accesskey="r">
                         <li>注册</li>
                     </a>
                 </div>
@@ -821,18 +821,26 @@
                 </div>
             </li>
             <div id="communicationWrapOuter">
+                <div id="messageTemp">
+                </div>
                 <div id="communicationWrap">
                     <div id="communicationBackgroud">
                         <form id="communicationData" method="post">
                             <a href="#" id="changeSendState">切换至话题模式</a>
                             <div class="chatSend">
-                                <textarea id="chatData" class="input" type="text" name="chatConData" placeholder=""></textarea>
-                                <a href="#" id="chatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
+                                <div class="normalChatSend">
+                                    <textarea id="chatData" class="input" type="text" name="chatConData" placeholder="" accesskey="c" onfocus='this.style.posHeight=this.scrollHeight' onpropertychange='this.style.posHeight=this.scrollHeight'></textarea>
+                                    <a href="#" id="chatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
+                                </div>
+                                <div class="expandChatSend">
+                                    <textarea id="expandChatData" class="input" type="text" name="expandChatData" placeholder=""></textarea>
+                                    <a href="#" id="expandChatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
+                                </div>
                             </div>
                             <div class="topicSend">
                                 <input id="topicTitle" class="input" type="text" name="topicTitle" placeholder="话题标题" />
                                 <a href="#" id="topicSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~(发送话题)">发送</a>
-                                <textarea id="topicData" class="input" type="text" name="topicData" placeholder=""></textarea>
+                                <textarea id="topicData" class="input" type="text" name="topicData" placeholder="" accesskey="t"></textarea>
                             </div>
                         </form>
                         <div id="communicationConWrap">

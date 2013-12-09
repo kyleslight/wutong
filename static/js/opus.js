@@ -110,7 +110,22 @@ $(document).ready(function(){
         if ($(".opusSideCommentWrap").css("display")=="none") {
             expandSideComment();
         }else{
-            foldSideComment();
+            // foldSideComment();
+            $(".opusMainChildren").removeClass("activeOpusPara");
+    $(".opusMainChildren").css({"color":"rgb(68,68,68)","opacity":"1.0"});
+    // $(".activeOpusPara").removeClass("activeOpusPara");
+    // $(".activeOpusPara").css({"color":"rgb(68,68,68)","opacity":"1.0"});
+    $(".activeOpusPara").removeClass("activeOpusPara");
+    $(".opusMain").children().removeClass("activeOpusPara");
+    $(".opusMain").children().css({"color":"rgb(68,68,68)","opacity":"1.0"});
+    var top=$(window).scrollTop();
+    $(".opusSideCommentWrap").addClass("noTransition");
+    $(".opusSideCommentWrap").fadeOut();
+    $(".readMain").removeClass("floatReadMain");
+    $(".read").css({"width":"1060px"});
+    $('html,body').animate({scrollTop:top},10);
+    $(".sideCommentView,.sideCommentEdit").hide();
+    $("#expandSideComment").text("展开侧评");
         }
     })
 
