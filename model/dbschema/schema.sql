@@ -301,7 +301,7 @@ SELECT *,
   FROM group_chat_v gc
  UNION
 SELECT *
-  FROM group_topic_v gc;
+  FROM group_topic_v gt;
 
 
 CREATE OR REPLACE VIEW group_bulletin_v

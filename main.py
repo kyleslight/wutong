@@ -19,15 +19,7 @@ if __name__ == "__main__":
     if settings["debug"]:
         import __builtin__
         import q
-        from logging import info as p
         __builtin__.__dict__['q'] = q
-        __builtin__.__dict__['p'] = p
-
-        class RouteHandler(RequestHandler):
-            def get(self, filename):
-                self.render(filename)
-
-        urls.append((r"/(.*)", RouteHandler))
     try:
         main()
     except KeyboardInterrupt as e:

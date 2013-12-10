@@ -216,5 +216,3 @@ class TopicMessageHandler(MessageSocketHandler):
         self.reply_id = tid
         self.gid = self.get_topic(tid)["gid"]
         self.add()
-
-

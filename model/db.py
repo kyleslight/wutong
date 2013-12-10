@@ -1,3 +1,4 @@
+# !/usr/bin/env python
 # encoding=utf8
 import uuid
 import psycopg2
@@ -5,8 +6,8 @@ import logging
 from psycopg2.extensions import TRANSACTION_STATUS_IDLE
 from tornado.escape import json_decode
 
-class Pool:
 
+class Pool:
     @classmethod
     def instance(cls, dsn=None, min_size=1, max_size=10000):
         if not hasattr(cls, "_instance"):
@@ -32,11 +33,11 @@ class Pool:
     def getjson(self, sql, *args):
         return self._get_connection().getjson(sql, *args)
 
-    def getitem(self, sql, *args):
-        return self._get_connection().getitem(sql, *args)
+    def getrow(self, sql, *args):
+        return self._get_connection().getrow(sql, *args)
 
-    def getitems(self, sql, *args):
-        return self._get_connection().getitems(sql, *args)
+    def getrows(self, sql, *args):
+        return self._get_connection().getrows(sql, *args)
 
     def release(self):
         count_busy = 0
@@ -69,7 +70,6 @@ class Pool:
 
 
 class Connection:
-
     def __init__(self, dsn):
         self.cnn = psycopg2.connect(dsn=dsn)
         self.cur = self.cnn.cursor()
@@ -87,7 +87,7 @@ class Connection:
         return self.cnn.isexecuting() or (self.cnn.closed == 0 and
                self.cnn.get_transaction_status() != TRANSACTION_STATUS_IDLE)
 
-    def getitems(self, sql, *args):
+    def getrows(self, sql, *args):
         self.execute(sql, *args)
         try:
             result = self.cur.fetchall()
@@ -95,7 +95,7 @@ class Connection:
             result = [[None]]
         return result
 
-    def getitem(self, sql, *args):
+    def getrow(self, sql, *args):
         self.execute(sql, *args)
         try:
             result = self.cur.fetchone()
@@ -104,7 +104,7 @@ class Connection:
         return result
 
     def getfirstfield(self, sql, *args):
-        return self.getitem(sql, *args)[0]
+        return self.getrow(sql, *args)[0]
 
     def getjson(self, sql, *args):
         result = self.getfirstfield(sql, *args)
@@ -125,4 +125,3 @@ class Connection:
             result = False
         self.cnn.commit()
         return result
-
