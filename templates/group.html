@@ -766,7 +766,7 @@
         SyntaxHighlighter.all();
     </script>
     <script type="text/javascript">
-        var editor = new UE.ui.Editor();
+        var editor = new UE.ui.Editor({pasteplain:true});
         editor.render('topicData');
         var smallerEditor = new UE.ui.Editor({ toolbars:[['Paragraph','RowSpacing','FontFamily','FontSize']],initialFrameWidth:769,pasteplain:true});
         smallerEditor.render('expandChatData');

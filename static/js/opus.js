@@ -150,7 +150,7 @@ $(document).ready(function(){
 
 function init(){
     for(var i=0;i<25;i++){
-        var numOfComment=Math.floor(100*Math.random());
+        var numOfComment=Math.floor(20*Math.random());
         var appNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" >'
                     +'第'+i+'段评论('+'<span class="numOfParaComent">'+numOfComment+'</span>'+')'
                     +'</li>';
@@ -216,19 +216,20 @@ function expandSideComment(){
     $(".opusSideCommentList").css({"width":(widthOfSideComment-45)+"px"});
     $(".opusSideCommentWrap").fadeIn();
     $("#expandSideComment").text("收起侧评");
-    $('html,body').animate({scrollTop:top},10);
+    $('html,body').animate({scrollTop:top},1000);
+    // $('html,body').scrollTop(top);
 }
 
 function foldSideComment(){
     $("#expandSideComment").text("展开侧评");
-    $(".opusSideCommentWrap").fadeOut();
+    $(".opusSideCommentWrap").fadeOut(50);
     $(".activeOpusPara").removeClass("activeOpusPara");
     $(".opusMain").children().removeClass("activeOpusPara");
     $(".opusMain").children().css({"color":"rgb(68,68,68)","opacity":"1.0"});
     var top=$(window).scrollTop();    
     $(".readMain").removeClass("floatReadMain");
     $(".read").css({"width":"1060px"});
-    $('html,body').animate({scrollTop:top},1000,function(){
+    $('html,body').animate({scrollTop:top},500,function(){
         $(".activeOpusPara").removeClass("activeOpusPara");
     });
     $(".sideCommentView,.sideCommentEdit").hide();
