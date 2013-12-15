@@ -52,14 +52,17 @@ textarea,input{
 }
 
 .groupPrompt{
-	/*width: 960px;*/
+	width: 1060px;
 	margin: 0 auto;
 	text-align: center;
 	clear: both;
 	width: 100%;
-	background:rgba(102,136,0,0.1);
+	/*background:rgba(102,136,0,0.1);*/
+	background: white;
 	padding-top: 1px;
 	border-bottom: 1px solid #CCC;
+	/*margin-top: 20px;*/
+	/*box-shadow: 0 0 20px #CCC;*/
 }
 
 .groupPrompt a.joinButton{

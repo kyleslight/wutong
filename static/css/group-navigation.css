@@ -1,0 +1,199 @@
+.groupNavWarp{
+	width: 1062px;
+	margin: 0 auto;
+}
+.groupNav{
+	float: left;
+	width: 1060px;
+}
+
+.userGroupInfo{
+	width: 200px;
+	float: left;
+	/*background: rgba(0,0,0,0.1);*/
+	background: white;
+	padding: 20px;
+	border-right: 1px solid #CCC;
+	margin-left: 4px;
+	/*margin-top: 60px;*/
+}
+
+.userImg img{
+	width: 100px;
+	height: 100px;
+	border-radius: 7px;
+	float: left;
+	margin: 0 50px;
+	display: block;
+	border: 1px solid #AAA;
+}
+.userImg img:hover{
+	box-shadow: 0 0 10px #CCC;
+}
+.userName{
+	float: left;
+	display: block;
+	text-align: center;
+	width: 200px;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	color: #777;
+}
+
+.myGroup{
+	float: left;
+	width: 200px;
+	margin-top: 20px;
+	text-align: center;
+	background: rgba(0,0,255,0.03);
+	margin:0 -20px;
+	padding: 20px;
+	border-top: 1px solid #CCC;
+}
+.myGroupTitle{
+	font-size: 1.5em;
+	margin-bottom: 10px;
+}
+.myGroupList{
+	list-style: none;
+	background: white;
+	color: black;
+	/*background: #680;
+	color: white;*/
+	margin-bottom: 7px;
+	padding: 5px;
+	border-radius: 2px;
+	box-shadow: 0 0 10px #DDD;
+	transition: 0.2s;
+	-moz-transition:0.2s;
+	-webkit-transition:0.2s;
+	-o-transition:0.2s
+}
+.myGroupList:hover{
+	/*background: #c1d739;*/
+	/*background: white;
+	color: black;*/
+	background: #680;
+	color: white;
+	box-shadow: 0 0 10px #777;
+}
+#createGroup{
+	margin-top: 20px;
+	display: block;
+	padding: 5px;
+	color: #680;
+	font-size: 1.1em;
+}
+#createGroup:hover{
+	color: #680;
+	font-weight: 600;
+}
+
+.groupTagArea{
+	border-top: 1px solid #CCC;
+	padding: 20px;
+	background: white;
+	margin: 0 -20px;
+	float: left;
+	text-align: center;
+}
+.groupTagTitle{
+	font-size: 1.5em;
+	margin-bottom: 10px;
+}
+.groupTagClass{
+	display: block;
+	margin-top: 15px;
+	margin-bottom: 10px;
+}
+.groupTag{
+	margin-right: 15px;
+	font-size: 0.9em;
+}
+
+.groupMainWrap{
+	width: 815px;
+	float: left;
+	/*padding-left: 5px;*/
+	/*border-left: 5px solid #680;*/
+}
+.groupExplanation{
+	float: left;
+	width: 795px;
+	background: white;
+	font-size: 2.5em;
+	padding: 10px;
+}
+.groupDynamic{
+	float: left;
+	padding: 10px;
+	/*background: rgba(0,0,0,0.05);*/
+	background: rgba(255,255,255,0.7);
+}
+.groupDynamicHeader{
+	font-size: 1.5em;
+	/*font-weight: 900;*/
+	margin-bottom: 10px;
+	display: block;
+	color: #999;
+	text-align: center;
+	background: rgba(255,255,255,0.1);
+}
+.groupDynamicList{
+	float: left;
+	width: 795px;
+	list-style: none;
+	margin-bottom: 7px;
+	background: white;
+	padding-top: 10px;
+	padding-bottom: 5px;
+	border-radius: 4px;
+	border-bottom: 2px solid #AAA;
+}
+.groupDynamicAuthorImg img{
+	margin-top: 14px;
+	margin-left: 15px;
+	border: 1px solid #AAA;
+}
+.groupDynamicContent{
+	float: left;
+	width: 700px;
+}
+.groupDynamicTitle{
+	float: left;
+	font-size: 1.5em;
+	/*font-weight: 650;*/
+	margin-right: 10px;
+	color: black;
+	/*max-width: 550px;*/
+}
+.groupDynamicInfo{
+	font-size: 0.9em;
+	color: #444;
+	float: left;
+	margin-top: 5px;
+	display: block;
+	width: 700px;
+	margin-bottom: 5px;
+}
+.groupDynamicFrom{
+	display: inline;
+	margin-left: 20px;
+}
+.groupDynamicMemberNum{
+	margin-left: 20px;
+}
+.groupDynamicBrief{
+	float: left;
+	width: 700px;
+	font-size: 0.9em;
+	color: #999;
+	margin-top: 5px;
+	border-left: 3px solid #680;
+	padding-left: 5px;
+}
+.groupDynamicDetal{
+	float: right;
+	font-size: 0.8em;
+	color: #444;
+}
