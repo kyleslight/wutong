@@ -287,7 +287,41 @@
 	z-index: 100;
 	margin-right: 10px;
 }
-
+.sideCommentEditBox{
+	position: absolute;
+	padding: 10px;
+	width: 944px;
+	background: rgba(0,0,0,0.8);
+	margin-left: 20px;
+	display: none;
+	z-index: 1000;
+	border-radius: 2px;
+	/*box-shadow: 0 0 0 10px rgba(0,0,0,0.8);*/
+	border: 1px solid #777;
+	border-radius: 4px;
+}
+#sideCommentEditData{
+	margin-left: -1px;
+	width: 940px;
+	min-height: 70px;
+	margin-top: 0;
+	resize:none;
+	border-radius: 2px;
+	outline:transparent;
+}
+.sideCommentEditOption{
+	float: right;
+	margin-top: 5px;
+	/*margin-right: 40px;*/
+}
+.sideCommentEditOption a{
+	margin-right: 20px;
+	padding: 5px;
+	color: white;
+}
+.sideCommentEditOption a:hover{
+	color: #680;
+}
 #expandSideComment{
 	position: fixed;
 	left: 0;
