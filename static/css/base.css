@@ -737,7 +737,7 @@ li img:hover{
 }
 
 /*return to top button*/
-#return_top{
+/*#return_top{
 	width: 73px;
 	height: 73px;
 	position:absolute;
@@ -752,7 +752,7 @@ li img:hover{
 }
 #return_top:hover{
 	background: url('http://localhost:8888/static/css/image/top.png') 0px -74px no-repeat;
-}
+}*/
 
 /*page footer*/
 .footer{

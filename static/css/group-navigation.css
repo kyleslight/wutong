@@ -1,10 +1,14 @@
 .groupNavWarp{
-	width: 1062px;
+	width: 1102px;
 	margin: 0 auto;
 }
 .groupNav{
 	float: left;
 	width: 1060px;
+	padding: 20px;
+	background: rgba(255,255,255,0.5);
+	border-radius: 7px;
+	margin-top: 20px;
 }
 
 .userGroupInfo{
@@ -13,9 +17,10 @@
 	/*background: rgba(0,0,0,0.1);*/
 	background: white;
 	padding: 20px;
-	border-right: 1px solid #CCC;
+	/*border-right: 1px solid #CCC;*/
+	border-radius: 4px;
 	margin-left: 4px;
-	/*margin-top: 60px;*/
+	margin-top: 47px;
 }
 
 .userImg img{
@@ -45,7 +50,7 @@
 	width: 200px;
 	margin-top: 20px;
 	text-align: center;
-	background: rgba(0,0,255,0.03);
+	background: rgba(0,0,0,0.1);
 	margin:0 -20px;
 	padding: 20px;
 	border-top: 1px solid #CCC;
@@ -128,7 +133,7 @@
 	float: left;
 	padding: 10px;
 	/*background: rgba(0,0,0,0.05);*/
-	background: rgba(255,255,255,0.7);
+	/*background: rgba(255,255,255,0.7);*/
 }
 .groupDynamicHeader{
 	font-size: 1.5em;
@@ -137,7 +142,7 @@
 	display: block;
 	color: #999;
 	text-align: center;
-	background: rgba(255,255,255,0.1);
+	
 }
 .groupDynamicList{
 	float: left;
