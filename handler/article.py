@@ -1,107 +1,60 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from tornado import escape
 from tornado.web import authenticated
-from lib.session import Session
-from lib import sendmail
 from base import BaseHandler
 
-class UserBaseHandler(BaseHandler):
 
+class ArticleBaseHandler(BaseHandler):
     @property
     def model(self):
-        return self.usermodel
+        return self.articlemodel
 
-    def set_authenticated(self, uid):
-        self.session["uid"] = uid
+    def create_article(self, title, mainbody, subtitle=None,
+                       description=None, suit_for=None, reference=None,
+                       partner=None, tags=None):
+        article_id =  self.model.do_create(self.user_id, title, mainbody, subtitle,
+                                           description, suit_for, reference)
+        return article_id
 
 
-class LoginHandler(UserBaseHandler):
+class BrowseArticleHandler(ArticleBaseHandler):
+    def get_article_list(self, sort, page_id=0):
+        article_list = self.model.get_article_list(sort, 30, page_id)
+        return article_list or []
 
+    def get(self, sort=None):
+        article_list = self.get_article_list(sort, 0)
+        self.render('browse.html', article_list=article_list)
+
+
+class OpusHandler(ArticleBaseHandler):
+    def get_article(self, article_id):
+        article = self.model.get_article_info(article_id)
+        return article
+
+    def get(self, article_id):
+        article = self.get_article(article_id)
+        self.render('opus.html', article=article)
+
+
+class CreateArticleHandler(ArticleBaseHandler):
     def get(self):
-        # @authenticated will call this function
-        pass
-
-    def post(self):
-        account = self.get_argument("username", None)
-        password = self.get_argument("password", None)
-
-        uid = self.do_login(account, password)
-        if uid:
-            self.write("success")
-        else:
-            self.write("failed")
-
-    def do_login(self, account, password):
-        user_id = self.model.do_login(account=account, password=password)
-        if user_id:
-            self.set_authenticated(user_id)
-        return user_id
-
-
-class LogoutHandler(UserBaseHandler):
-
-    def post(self):
-        self.session.clear()
-        self.write("success")
-
-
-class RegisterHandler(UserBaseHandler):
-
-    def post(self):
-        penname = self.get_argument("username", None)
-        password = self.get_argument("password", None)
-        email = self.get_argument("email", None)
-
-        hashuid = self.do_register(email, penname, password)
-        if hashuid:
-            self.send_mail(email, hashuid)
-        else:
-            self.write("failed")
-
-    def do_register(self, email, penname, password):
-        hashuid = self.model.do_register(email, penname, password)
-        return hashuid
-
-    def send_mail(self, email, hashuid):
-        title = u"欢迎加入梧桐"
-        content = u"{url}".format(
-            url = "http://localhost:8888/account/check?r=" + hashuid
-        )
-        if sendmail.send(title, content, email):
-            self.write("success")
-        else:
-            self.write("failed")
-
-
-class UserinfoHandler(UserBaseHandler):
+        self.render('create.html')
 
     @authenticated
-    def get(self):
-        userinfo = self.get_current_user()
-        userinfo["register_date"] = str(userinfo["register_date"])
-        userinfo = escape.json_encode(userinfo)
-        self.write(userinfo)
+    def post(self):
+        title = self.get_argument('title')
+        mainbody = self.get_argument('textArea')
+        subtitle = self.get_argument('subtitle')
+        description = self.get_argument('describe')
+        suit_for = self.get_argument('suit')
+        reference = self.get_argument('reference')
 
+        # article_user
+        partner = self.get_argument('partner')
+        tags = self.get_argument('tags')
+        article_id = self.create_article(title, mainbody, subtitle, description,
+                                         suit_for, reference, partner, tags)
+        self.redirect('/a/%s' % article_id)
 
-class CheckMailHandler(UserBaseHandler):
-
-    def get(self):
-        hashuid = self.get_argument("r", None)
-        uid = self.check_mail(hashuid)
-        if uid:
-            self.set_authenticated(uid)
-            self.write("success")
-        else:
-            self.write("error")
-        self.redirect("/")
-
-    def check_mail(self, hashuid):
-        return self.model.do_activate(hashuid)
-
-
-class HomeHandler(UserBaseHandler):
-
-    def get(self):
-        self.write("user home")

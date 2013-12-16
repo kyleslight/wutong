@@ -47,16 +47,20 @@ CREATE TABLE article (
     mainbody varchar(272629) NOT NULL,
     subtitle varchar(500),
     -- 描述
-    desciption varchar(1000),
-    -- 参考
+    description varchar(1000),
+    -- 适合
+    suit_for varchar(1000),
+    -- 参考来源
     reference varchar(1000),
     -- 系列
     series varchar(500),
-    -- 资源url
-    resource varchar(255),
+    -- 资源
+    resource varchar(2550),
+    type varchar(36) CHECK (type IN ('综合', '杂', NULL)),
     submit_time timestamp NOT NULL DEFAULT now(),
+    last_modify_time timestamp,
     -- 公开性
-    is_public bool NOT NULL DEFAULT true,
+    is_public varchar(18) CHECK (is_public IN ('不公开', '不推送', '推送')),
     is_deleted bool NOT NULL DEFAULT false
 );
 
@@ -68,7 +72,8 @@ CREATE TABLE article_history (
     title varchar(500) NOT NULL,
     mainbody varchar(272629) NOT NULL,
     subtitle varchar(500),
-    desciption varchar(1000),
+    description varchar(1000),
+    suit_for varchar(1000),
     reference varchar(1000),
     series varchar(500),
     resource varchar(255),
@@ -248,7 +253,7 @@ SELECT u.*
 
 CREATE OR REPLACE VIEW article_info_v
   AS
-SELECT a.*, u.penname AS author
+SELECT a.*, u.avatar, u.penname AS author
   FROM article a,
        "user" u
  WHERE a.uid = u.uid;
@@ -316,7 +321,7 @@ SELECT gb.*, u.penname, u.avatar
 -- function
 --------------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION get_uid(account_s varchar)
+CREATE OR REPLACE FUNCTION get_uid(_account varchar)
   RETURNS integer
 AS $$
     SELECT uid
@@ -327,7 +332,7 @@ AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION get_user_permission(uid_i integer)
+CREATE OR REPLACE FUNCTION get_user_permission(_uid integer)
   RETURNS json
 AS $$
     SELECT row_to_json(j.*)
@@ -340,7 +345,7 @@ AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION get_user_info(uid_i integer)
+CREATE OR REPLACE FUNCTION get_user_info(_uid integer)
   RETURNS json
 AS $$
     SELECT row_to_json(j.*)
@@ -353,13 +358,13 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION do_register_user(
-    email_s varchar,
-    penname_s varchar,
-    password_s varchar)
+    _email varchar,
+    _penname varchar,
+    _password varchar)
   RETURNS varchar AS
 $$
 DECLARE
-    hashuid_s varchar;
+    _hashuid varchar;
 BEGIN
     PERFORM uid
        FROM "user"
@@ -374,13 +379,13 @@ BEGIN
     VALUES (
         $1, $2, crypt($3, gen_salt('bf')))
     RETURNING md5(CAST(uid AS varchar))
-    INTO hashuid_s;
-    RETURN hashuid_s;
+    INTO _hashuid;
+    RETURN _hashuid;
 END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION do_activate_user(hashuid_s varchar)
+CREATE OR REPLACE FUNCTION do_activate_user(_hashuid varchar)
   RETURNS integer AS
 $$
     UPDATE "user"
@@ -392,8 +397,8 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION do_login_user(
-    account_s varchar,
-    password_s varchar)
+    _account varchar,
+    _password varchar)
   RETURNS integer
 AS $$
     SELECT uid
@@ -410,8 +415,8 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_group_permission(
-    gid_i integer,
-    uid_i integer)
+    _gid integer,
+    _uid integer)
   RETURNS json
 AS $$
     SELECT row_to_json(j.*)
@@ -456,8 +461,8 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION join_group(
-    gid_i integer,
-    uid_i integer)
+    _gid integer,
+    _uid integer)
   RETURNS integer
 AS $$
     INSERT INTO group_user (gid, uid) VALUES ($1, $2)
@@ -466,8 +471,8 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_group_member_info(
-    gid_i integer,
-    uid_i integer)
+    _gid integer,
+    _uid integer)
   RETURNS json
 AS $$
     SELECT row_to_json(j.*)
@@ -481,9 +486,9 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_group_chats(
-    gid_i integer,
-    limit_i integer,
-    offset_i integer)
+    _gid integer,
+    _limit integer,
+    _offset integer)
   RETURNS json
 AS $$
     SELECT array_to_json(array_agg(aj))
@@ -499,7 +504,7 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_group_chat(
-    id_i integer)
+    _id integer)
   RETURNS json
 AS $$
     SELECT row_to_json(j.*)
@@ -512,11 +517,11 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION create_topic(
-    gid_i integer,
-    uid_i integer,
-    title_s varchar,
-    content_s varchar,
-    reply_id_i integer)
+    _gid integer,
+    _uid integer,
+    _title varchar,
+    _content varchar,
+    _reply_id integer)
   RETURNS integer
 AS $$
     INSERT INTO topic (
@@ -527,9 +532,9 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_topics(
-    gid_i integer,
-    limit_i integer,
-    offset_i integer)
+    _gid integer,
+    _limit integer,
+    _offset integer)
   RETURNS json
 AS $$
     SELECT array_to_json(array_agg(j))
@@ -544,7 +549,7 @@ AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION get_topic(tid_i integer)
+CREATE OR REPLACE FUNCTION get_topic(_tid integer)
   RETURNS json
 AS $$
     SELECT row_to_json(j.*)
@@ -557,9 +562,9 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_topic_topics(
-    reply_id_i integer,
-    limit_i integer,
-    offset_i integer)
+    _reply_id integer,
+    _limit integer,
+    _offset integer)
   RETURNS json
 AS $$
     SELECT array_to_json(array_agg(j))
@@ -574,9 +579,9 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_topic_chats(
-    reply_id_i integer,
-    limit_i integer,
-    offset_i integer)
+    _reply_id integer,
+    _limit integer,
+    _offset integer)
   RETURNS json
 AS $$
     SELECT array_to_json(array_agg(j))
@@ -591,8 +596,8 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION create_group_chat(
-    gid_i integer,
-    uid_i integer,
+    _gid integer,
+    _uid integer,
     content varchar,
     reply_id integer)
   RETURNS integer
@@ -605,9 +610,9 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_topic_messages(
-    topic_id_i integer,
-    limit_i integer,
-    offset_i integer)
+    _topic_id integer,
+    _limit integer,
+    _offset integer)
   RETURNS json
 AS $$
     SELECT array_to_json(array_agg(j))
@@ -621,7 +626,7 @@ AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION get_group_message(msg_id_i integer)
+CREATE OR REPLACE FUNCTION get_group_message(_msg_id integer)
   RETURNS json
 AS $$
     SELECT row_to_json(j.*)
@@ -633,9 +638,9 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_group_messages(
-    group_id_i integer,
-    limit_i integer,
-    offset_i integer)
+    _group_id integer,
+    _limit integer,
+    _offset integer)
   RETURNS json
 AS $$
     SELECT array_to_json(array_agg(j))
@@ -650,9 +655,9 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_topic_messages(
-    topic_id_i integer,
-    limit_i integer,
-    offset_i integer)
+    _topic_id integer,
+    _limit integer,
+    _offset integer)
   RETURNS json
 AS $$
     SELECT array_to_json(array_agg(j))
@@ -667,9 +672,9 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_group_bulletins(
-    gid_i integer,
-    limit_i integer,
-    offset_i integer)
+    _gid integer,
+    _limit integer,
+    _offset integer)
   RETURNS json
 AS $$
     SELECT array_to_json(array_agg(j))
@@ -685,16 +690,80 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION create_group_bulletin(
-    gid_i integer,
-    uid_i integer,
-    title_s varchar,
-    content_s varchar)
+    _gid integer,
+    _uid integer,
+    _title varchar,
+    _content varchar)
   RETURNS integer
 AS $$
     INSERT INTO group_bulletin (
         gid, uid, title, content)
     VALUES ($1, $2, $3, $4)
     RETURNING id;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION create_article(
+    _uid integer,
+    _title varchar,
+    _mainbody varchar,
+    _subtitle varchar DEFAULT NULL,
+    _description varchar DEFAULT NULL,
+    _suit_for varchar DEFAULT NULL,
+    _reference varchar DEFAULT NULL,
+    _series varchar DEFAULT NULL,
+    _resource varchar DEFAULT NULL,
+    _is_public varchar DEFAULT '推送')
+  RETURNS integer
+AS $$
+    INSERT INTO article (
+        uid, title, mainbody, subtitle,
+        description, suit_for, reference,
+        series, resource, is_public)
+    VALUES (
+        $1, $2, $3, $4,
+        $5, $6, $7, $8,
+        $9, $10)
+    RETURNING aid;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_article_info(aid integer)
+  RETURNS json
+AS $$
+    SELECT row_to_json(j.*)
+      FROM (
+            SELECT *
+              FROM article_info_v
+             WHERE aid = $1
+        ) j;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_article_list(
+    _sort varchar,
+    _limit integer,
+    _offset integer)
+  RETURNS json AS
+$$
+    SELECT array_to_json(array_agg(aj.*))
+      FROM (
+            SELECT a.aid, a.title,
+                   a.description, a.submit_time,
+                   u.avatar, u.penname AS "author",
+                   array_to_json(
+                     array(
+                           SELECT row_to_json(j.*)
+                             FROM (
+                                   SELECT id, name
+                                     FROM article_tag at
+                                    WHERE a.aid = at.aid
+                                ) j
+                        )) AS "tags"
+              FROM article a,
+                   user_info_v u
+             WHERE a.uid = u.uid
+         ) aj;
 $$ LANGUAGE SQL;
 
 
@@ -714,10 +783,10 @@ BEGIN
     ELSIF (TG_OP = 'UPDATE') THEN
         INSERT INTO article_history (
             aid, title, mainbody, subtitle,
-            desciption, reference, series, resource)
+            description, reference, series, resource)
         SELECT aid, title,
                mainbody, subtitle,
-               desciption, reference,
+               description, reference,
                series, resource
           FROM article
          WHERE aid = OLD.aid;

@@ -24,8 +24,8 @@ class LoginHandler(UserBaseHandler):
         pass
 
     def post(self):
-        account = self.get_argument("username", None)
-        password = self.get_argument("password", None)
+        account = self.get_argument("username")
+        password = self.get_argument("password")
 
         uid = self.do_login(account, password)
         if uid:
@@ -50,9 +50,9 @@ class LogoutHandler(UserBaseHandler):
 class RegisterHandler(UserBaseHandler):
 
     def post(self):
-        penname = self.get_argument("username", None)
-        password = self.get_argument("password", None)
-        email = self.get_argument("email", None)
+        penname = self.get_argument("username")
+        password = self.get_argument("password")
+        email = self.get_argument("email")
 
         hashuid = self.do_register(email, penname, password)
         if hashuid:
@@ -88,7 +88,7 @@ class UserinfoHandler(UserBaseHandler):
 class CheckMailHandler(UserBaseHandler):
 
     def get(self):
-        hashuid = self.get_argument("r", None)
+        hashuid = self.get_argument("r")
         uid = self.check_mail(hashuid)
         if uid:
             self.set_authenticated(uid)

@@ -5,7 +5,7 @@ import os
 import uuid
 from tornado.options import define, options
 from tornado.web import TemplateModule, RequestHandler
-from handler import base, group, user
+from handler import base, group, user, article
 import lib.util
 from lib.session import Session
 from lib.util import encodestr, str2datetime, prettytime
@@ -20,10 +20,13 @@ urls = [
     (r"/register", user.RegisterHandler),
     (r"/account/check", user.CheckMailHandler),
     (r"/g/(\d+)", group.GroupIndexHandler),
-    (r"/t/(\d+)", group.TopicIndexHandler),
     (r"/g/(\d+)/message", group.GroupMessageHandler),
+    (r"/g/(\d+)/groupJoin", group.JoinHandler),
+    (r"/t/(\d+)", group.TopicIndexHandler),
     (r"/t/(\d+)/message", group.TopicMessageHandler),
-    (r"/g/(\d+)/groupJoin",group.JoinHandler),
+    (r"/a/(\d+)", article.OpusHandler),
+    (r"/a/browse", article.BrowseArticleHandler),
+    (r"/a/create", article.CreateArticleHandler),
 ]
 
 
