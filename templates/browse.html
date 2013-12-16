@@ -112,7 +112,7 @@
                 <a id="siteBulletinButton" class="myMessagePartButton" href="#">全站公告<span id="siteBulletinNum">1</span></a>
                 <a id="replyButton" class="myMessagePartButton" href="#">回复<span id="replyNum">5</span></a>
                 <a id="opusPushButton" class="myMessagePartButton" href="#">推送<span id="opusPushNum">12</span></a>
-                <a id="PMButton" class="myMessagePartButton" href="#">私信<span id="PMNum">1</span></a>                
+                <a id="PMButton" class="myMessagePartButton" href="#">私信<span id="PMNum">1</span></a>
             </div>
             <div class="myMessageContent">
                 <div class="siteBulletin myMessagePartContent activeMessagePart">
@@ -186,7 +186,7 @@
             <div class="myOpusCollection">
                 <li class="myCollectionList">
                 <a href="#"><img class="myCollectionAuthorImage" src="{{ static_url("css/image/test.png") }}" /></a>
-                    <div class="myCollectionRow">                        
+                    <div class="myCollectionRow">
                         <a href="#" class="myCollectionTitle">基于Unity3D的互动应用</a><a class="myCollectionAuthor" href="#">Kyleslight</a>
                     </div>
                     <div class="myCollectionRow">
@@ -278,53 +278,9 @@
                 </div>
             </div>
             <div class="opus">
-                <li class="opusShow article">
-                    <img src="{{ static_url("css/image/test.png") }}" class="opusAluthorImage">
-                    <div class="opusBasicInfo">                        
-                        <a href="#" class="opusTitle" accesskey="1">odC VOL.I chapter5</a><br/>
-                        <a href="#" class="opusAuthor">Kyleslight</a>
-                        <div class="opusBrief">
-                            家里的一切还是如常，没有什么值得多解释或者提及的东西。除了水槽里面的那条鱼的斑纹似乎变得更艳丽一些了。
-                            在那一晚，我做了一个梦。周围很黑，四处没有一个人。就像是夏日寂寥的夜里的枝丫上的阵阵蝉鸣以及露水从叶片上滑落掉进水洼里发出并不那么清脆的一响。我只是走在这大街上，一路走下去，不知走了多远 ...
-                        </div>
-                        <div class="opusTag">Tags： <a href="#">文学</a><a href="#">长篇小说</a><a href="#">odC</a><a href="#">依诺</a>
-                        </div>
-                        <div class="opusTime">2-14 13:18</div>
-                    </div>                   
-                </li>
-                <li class="opusShow article">
-                    <img src="{{ static_url("css/image/test7.jpg") }}" class="opusAluthorImage">
-                    <div class="opusBasicInfo">                        
-                        <a href="#" class="opusTitle" accesskey="2">Ubuntu下使用MentoHUST代替锐捷认证上网</a><br/>
-                        <a href="#" class="opusAuthor">Longerhead</a>
-                        <div class="opusBrief">
-                            Linux版锐捷客户端不少，但都大同小异，不能通过锐捷的客户端校验。Linux版MentoHUST是一个在Linux下与锐捷兼容性很好的认证客户端，方便使用Linux和锐捷的同学使用校园网。在成员kkHAIKE的努力下，MentoHUST现已支持锐捷的V3客户端校验算法，亦即MentoHUST已完全兼容锐捷所有版本（不论是否开启了变态的V3算法）...
-                        </div>
-                        <div class="opusTag">Tags： 
-                            <a href="#">技术</a>
-                            <a href="#">Linux</a>
-                            <a href="#">MentoHust</a>
-                            <a href="#">Ubuntu</a>
-                            <a href="#">锐捷安装失败</a>
-                            <a href="#">认证客户端</a>
-                            <a href="#">校园网</a>
-                        </div>
-                        <div class="opusTime">2-12 18:27</div>
-                    </div>
-                </li>
-                <li class="opusShow article">
-                    <img src="{{ static_url("css/image/testGeek.jpg") }}" class="opusAluthorImage">
-                    <div class="opusBasicInfo">                        
-                        <a href="/opus.html" class="opusTitle" accesskey="3">404 not found 背后的布道师</a><br/>
-                        <a href="#" class="opusAuthor">hsy505</a>
-                        <div class="opusBrief">
-                            栏目中我们介绍了风格迥异的极客人物，他们利用不同的网络技术来解决自己学习工作中产生的问题亦或者为了满足自己的娱乐需求。极客公园认为「极客人物」不仅仅会为自己服务，也并非只是孤胆英雄，他们可能是一支团队，并能够利用自己的余热向社会公益问道解惑。
-                        </div>
-                        <div class="opusTag">Tags： <a href="#">技术</a><a href="#">2013极客人物</a><a href="#">404</a>
-                        </div>
-                        <div class="opusTime">2-14 13:18</div>
-                    </div>                   
-                </li>
+            {% for aitem in article_list %}
+                {% module MyModule('article_list.html', article_list=aitem) %}
+            {% end %}
             </div>
             <!-- <div class="opusTagBox">
                 <a href="#" class="opusTag">pyhton</a>

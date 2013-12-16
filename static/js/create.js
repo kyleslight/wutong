@@ -20,12 +20,6 @@ $(document).ready(function(){
         return false;
     });
     $("#artsubmitButton").click(function(){
-        // with(this){
-            with(arttitle){
-                alert(value);
-                return false;
-            }
-        // }
         var theForm=document.getElementById("textdata");
         theForm.submit();
     })

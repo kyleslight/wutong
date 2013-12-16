@@ -89,7 +89,7 @@ class JoinHandler(MessageBaseHandler):
         return self.model.do_join_group(gid, uid)
 
     def post(self, gid):
-        uid = self.get_argument("uid", None)
+        uid = self.get_argument("uid")
         gid = self.get_argument("gid", gid)
         if self.join_group(gid, uid):
             self.write("success")

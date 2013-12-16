@@ -112,7 +112,7 @@
                 <a id="siteBulletinButton" class="myMessagePartButton" href="#">全站公告<span id="siteBulletinNum">1</span></a>
                 <a id="replyButton" class="myMessagePartButton" href="#">回复<span id="replyNum">5</span></a>
                 <a id="opusPushButton" class="myMessagePartButton" href="#">推送<span id="opusPushNum">12</span></a>
-                <a id="PMButton" class="myMessagePartButton" href="#">私信<span id="PMNum">1</span></a>                
+                <a id="PMButton" class="myMessagePartButton" href="#">私信<span id="PMNum">1</span></a>
             </div>
             <div class="myMessageContent">
                 <div class="siteBulletin myMessagePartContent activeMessagePart">
@@ -222,7 +222,7 @@
             <div class="myOpusCollection">
                 <li class="myCollectionList">
                 <a href="#"><img class="myCollectionAuthorImage" src="{{ static_url("css/image/test.png") }}" /></a>
-                    <div class="myCollectionRow">                        
+                    <div class="myCollectionRow">
                         <a href="#" class="myCollectionTitle">基于Unity3D的互动应用</a><a class="myCollectionAuthor" href="#">Kyleslight</a>
                     </div>
                     <div class="myCollectionRow">
@@ -294,7 +294,7 @@
     <!-- return to top -->
     <a id="return_top" href="#" title="回到顶部" class="none"></a>
 	<div class="write">
-		<form id="textdata" name="textdata" action="wutongshow.php" method="post">
+		<form id="textdata" name="textdata" action="/a/create" method="post">
 			<div class="maindata">
 				<div id="formlistfirst" class="formlist"><span class="inputTip"><a href="#" title="标题说明">标题</a></span>  <input id="arttitle" class="input" type="text" name="title" placeholder="填写标题" /></div>
 				<div class="formlisttip" id="formlisttip1"></div>
@@ -308,7 +308,7 @@
 				<div class="formlist"><span class="inputTip"><a href="#" title="适合说明">适合</a></span>  <input class="input" type="text" name="suit" placeholder="这里注明适合人群，人群之间用';'隔开（可选）" /></div>
 				<div class="formlisttip" id="formlisttip4">适合用于提示读者类别。<br/>例如当文章涉及专业性较强的领域时可能需要读者满足一定条件才能没有障碍地阅读。<br/>一篇Python的建站指南可能需要读者具有一定Python编程基础与网站开发基础，作者可以这样写：<br/>具有Python编程经验;具有网站开发经验;<br/>在另外一些情况下，作者可能需要对读者进行一些提示，例如文章的内容涉及剧透，或者有不适内容希望拒绝一部分读者。<br/>请注意，“适合”仅作为一种提示，并没有阻止读者继续浏览的绝对权力。</div>
 
-				
+
 				<div id="speformlist" class="formlist"><span id="speinputtip" class="inputTip"><a href="#" title="正文说明">正文</a></span></div>
 				<div class="formlisttip" id="formlisttip5">这里只是对正文编辑的部分提示，如果需要较为系统的帮助请参考我们的 <a href="#" target="_blank">梧桐指南</a><br/>1.正文编辑对文章内容没有任何限定，但这并不意味着任何人可以随意创作可能让他人感到不适的文章。创作前请确保你的文章不属于无效文章的范畴。<br/>2.可部分引用其他文献，但请确保作品的原创性。<br/>3.富文本编辑器目前支持表格创建，图片本地上传，代码块创建，合理运用这些工具可能为你的文章增色。<br/>4.需要应用公式编辑可以在 <a href="http://www.codecogs.com/latex/eqneditor.php" target="_blank">在线Latex公式编辑器</a> 创建公式gif图片，将图拖拽至你正在编辑的地方即可。<br/>5.需要应用在线图表编辑可以在<a href='http://www.onlinecharttool.com/' target="_blank"> 在线图表编辑器 </a>创建图表，将图拖拽至你正在编辑的地方即可。<br/>6.目前富文本编辑器在全屏的时候可能会出现滚动条不能滚动问题，可调整浏览器大小解决。</div>
 				<div class="formlist"><textarea id="textArea" name="textArea" cols="100" rows="14">正文从这里开始</textarea></div>

@@ -2,7 +2,7 @@ import os
 from tornado.web import RequestHandler
 from tornado.websocket import WebSocketHandler
 from lib.session import Session
-from model import user, group
+from model import user, group, article
 import lib.util
 
 class BaseHandler(RequestHandler):
@@ -19,6 +19,9 @@ class BaseHandler(RequestHandler):
         user_info = self.usermodel.get_user_info(self.user_id)
         return user_info
 
+    def get_argument(self, name, default=None):
+        return super(BaseHandler, self).get_argument(name, default)
+
     @property
     def user_id(self):
         return self.session.get("uid")
@@ -34,6 +37,12 @@ class BaseHandler(RequestHandler):
         if not hasattr(self, "_groupmodel"):
             self._groupmodel = group.GroupModel(self.db)
         return self._groupmodel
+
+    @property
+    def articlemodel(self):
+        if not hasattr(self, "_articlemodel"):
+            self._articlemodel = article.ArticleModel(self.db)
+        return self._articlemodel
 
     def get_module_path(self):
         module_path = os.path.join(self.get_template_path(), "modules")
