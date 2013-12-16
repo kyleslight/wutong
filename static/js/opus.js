@@ -177,6 +177,7 @@ $(document).ready(function(){
     $("#sideCommentEditSend").click(function(){
         var contentOfEdittingSideComment=$("#sideCommentEditData").val();
         console.log(contentOfEdittingSideComment);
+        return false;
     })
 
 });
@@ -250,7 +251,7 @@ function expandSideComment(){
     $(".opusSideCommentList").css({"width":(widthOfSideComment-45)+"px"});
     $(".opusSideCommentWrap").fadeIn();
     $("#expandSideComment").text("收起侧评");
-    $('html,body').animate({scrollTop:top},1000);
+    $('html,body').animate({scrollTop:top},10);
     // $('html,body').scrollTop(top);
 }
 

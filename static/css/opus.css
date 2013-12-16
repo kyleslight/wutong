@@ -77,7 +77,8 @@
 	margin-top: 5px;
 }
 .opusDescription{
-	float: left;
+	/*float: left;*/
+	clear: both;
 	border-left: 5px solid #680;
 	padding-left: 10px;
 	color: #777;
@@ -93,7 +94,8 @@
 }
 
 .opusMain{
-	float: left;
+	/*float: left;*/
+	clear: both;
 	padding: 20px;
 }
 .opusMain img{

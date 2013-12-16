@@ -20,7 +20,7 @@
 	/*border-right: 1px solid #CCC;*/
 	border-radius: 4px;
 	margin-left: 4px;
-	margin-top: 47px;
+	/*margin-top: 47px;*/
 }
 
 .userImg img{
@@ -49,8 +49,7 @@
 	float: left;
 	width: 200px;
 	margin-top: 20px;
-	text-align: center;
-	background: rgba(0,0,0,0.1);
+	background: rgba(102,136,0,0.7);
 	margin:0 -20px;
 	padding: 20px;
 	border-top: 1px solid #CCC;
@@ -58,39 +57,38 @@
 .myGroupTitle{
 	font-size: 1.5em;
 	margin-bottom: 10px;
+	color: white;
 }
 .myGroupList{
 	list-style: none;
-	background: white;
-	color: #222;
-	/*background: #680;
-	color: white;*/
-	margin-bottom: 7px;
-	padding: 5px;
-	border-radius: 2px;
-	box-shadow: 0 0 10px #DDD;
+	margin-bottom: 17px;
+	padding: 10px;
+	border-radius: 4px;
+	background: rgba(255,255,255,0.92);
+	color: #680;
+	border: 1px solid rgba(102,136,0,0.7);
 	transition: 0.2s;
 	-moz-transition:0.2s;
 	-webkit-transition:0.2s;
 	-o-transition:0.2s
 }
 .myGroupList:hover{
-	/*background: #c1d739;*/
-	/*background: white;
-	color: black;*/
-	background: #680;
-	color: white;
-	box-shadow: 0 0 10px #777;
+	background: white;
+	/*background: rgba(102,136,0,0.8);*/
+	/*background: rgba(255,255,255,0.8);*/
+	color: #8A2;
+	border: 1px solid transparent;
+	/*box-shadow: 0 0 5px 0px white;*/
 }
 #createGroup{
 	margin-top: 20px;
 	display: block;
 	padding: 5px;
-	color: #680;
+	color: #DDD;
 	font-size: 1.1em;
 }
 #createGroup:hover{
-	color: #680;
+	color: white;
 	font-weight: 600;
 }
 
@@ -100,7 +98,7 @@
 	background: white;
 	margin: 0 -20px;
 	float: left;
-	text-align: center;
+	/*text-align: center;*/
 }
 .groupTagTitle{
 	font-size: 1.5em;
@@ -114,6 +112,8 @@
 .groupTag{
 	margin-right: 15px;
 	font-size: 0.9em;
+	margin-bottom: 10px;
+	line-height: 40px;
 }
 
 .groupMainWrap{
@@ -132,8 +132,7 @@
 .groupDynamic{
 	float: left;
 	padding: 10px;
-	/*background: rgba(0,0,0,0.05);*/
-	/*background: rgba(255,255,255,0.7);*/
+	margin-left: 20px;
 }
 .groupDynamicHeader{
 	font-size: 1.5em;
@@ -146,14 +145,14 @@
 }
 .groupDynamicList{
 	float: left;
-	width: 795px;
+	width: 775px;
 	list-style: none;
-	margin-bottom: 7px;
+	margin-bottom: 12px;
 	background: white;
 	padding-top: 10px;
 	padding-bottom: 5px;
 	border-radius: 4px;
-	border-bottom: 2px solid #AAA;
+	border-bottom: 2px solid #680;
 }
 .groupDynamicAuthorImg img{
 	margin-top: 14px;
@@ -162,7 +161,7 @@
 }
 .groupDynamicContent{
 	float: left;
-	width: 700px;
+	width: 680px;
 }
 .groupDynamicTitle{
 	float: left;
@@ -190,14 +189,15 @@
 }
 .groupDynamicBrief{
 	float: left;
-	width: 700px;
-	font-size: 0.9em;
+	width: 650px;
+	font-size: 0.8em;
 	color: #999;
 	margin-top: 5px;
 	border-left: 3px solid #680;
 	padding-left: 5px;
 }
 .groupDynamicDetal{
+	margin-right: 20px;
 	float: right;
 	font-size: 0.8em;
 	color: #444;
