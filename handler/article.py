@@ -29,14 +29,20 @@ class BrowseArticleHandler(ArticleBaseHandler):
 
 
 class OpusHandler(ArticleBaseHandler):
+    def get_article(self, article_id):
+        article = self.model.get_article_info(article_id)
+        return article
+
     def get(self, article_id):
-        self.render('opus.html')
+        article = self.get_article(article_id)
+        self.render('opus.html', article=article)
 
 
 class CreateArticleHandler(ArticleBaseHandler):
     def get(self):
         self.render('create.html')
 
+    @authenticated
     def post(self):
         title = self.get_argument('title')
         mainbody = self.get_argument('textArea')

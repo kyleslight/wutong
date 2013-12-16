@@ -137,7 +137,7 @@ class TopicIndexHandler(MessageBaseHandler):
         bulletins = self.get_bulletins(self.gid)
         messages = self.get_topic_messages(tid)
         self.render(
-                "groupTest.html",
+                "topic.html",
                 ancestor_topics=ancestor_topics.__reversed__(),
                 topic=self.topic,
                 bulletins=bulletins,

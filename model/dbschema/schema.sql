@@ -253,7 +253,7 @@ SELECT u.*
 
 CREATE OR REPLACE VIEW article_info_v
   AS
-SELECT a.*, u.penname AS author
+SELECT a.*, u.avatar, u.penname AS author
   FROM article a,
        "user" u
  WHERE a.uid = u.uid;
@@ -725,6 +725,18 @@ AS $$
         $5, $6, $7, $8,
         $9, $10)
     RETURNING aid;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_article_info(aid integer)
+  RETURNS json
+AS $$
+    SELECT row_to_json(j.*)
+      FROM (
+            SELECT *
+              FROM article_info_v
+             WHERE aid = $1
+        ) j;
 $$ LANGUAGE SQL;
 
 
