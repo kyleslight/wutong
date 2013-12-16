@@ -1,0 +1,44 @@
+<div class="opusBasicInfo">
+    <div class="firstLine">
+        <div class="opusTime">{{ prettytime(article["submit_time"]) }}</div>
+        <span class="opusAuthor">by <a href="#">{{ article["author"] }}</a></span>
+        <div class="opusData">
+            <div class="opusViewed">浏览：19102</div>
+            <div class="opusGrade">得分：8.5</div>
+            <div class="opusCollected">收藏：102</div>
+            <div class="opusForwarded">转发：378</div>
+        </div>
+    </div>
+    <div class="authorBasicInfo">
+        <p class="">作者信息</p>
+        <img src={{ article["avatar"] }} class="opusAluthorImage">
+        <a href="#" class="opusAuthor">{{ article["author"] }}</a>
+        <p class="authorMotto"></p>
+    </div>
+    <div class="opusTitle">
+        <div class="opusMainTitle">{{ article["title"] }}</div>
+        <div class="opusSubtitle">{{ article["subtitle"] }}</div>
+    </div>
+    <div class="opusDescription">
+        {{ article["description"] }}
+    </div>
+    <div class="opusAppositeness">适合：{{ article["suit_for"] }}</div>
+</div>
+
+<div class="opusMain">
+    {% raw article["mainbody"] %}
+</div>
+
+<div class="opusSuffixes">
+    <div class="opusReference">参考来源：<a href="#">{{ article["reference"] }}</a>
+    </div>
+    <div class="opusTag">Tags： <a href="#">技术</a><a href="#">2013极客人物</a><a href="#">404</a>
+    </div>
+    <div class="opusSeries">所属文辑其他文章：
+        <a href="#">other1</a>
+        <a href="#">other2</a>
+    </div>
+    <div class="opusComment">
+        <div class="opusCommentIntro"><a href="#">收起底部评论</a></div>
+    </div>
+</div>

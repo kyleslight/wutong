@@ -1,0 +1,19 @@
+<li class="opusShow article">
+    <img src={{ article_list["avatar"] }} class="opusAluthorImage">
+    <div class="opusBasicInfo">
+        <a href="/a/{{ article_list["aid"] }}" class="opusTitle" accesskey={{ article_list["aid"] }}>
+            {{ article_list["title"] }}
+        </a>
+        <br/>
+        <a href="#" class="opusAuthor">{{ article_list["author"] }}</a>
+        <div class="opusBrief">
+            {{ article_list["description"] }}
+        </div>
+        <div class="opusTag">Tags：
+        {% for tag in article_list["tags"] %}
+            <a href="/tag/{{ tag["id"] }}">{{ tag["name"] }}</a>
+        {% end %}
+        </div>
+        <div class="opusTime">{{ prettytime(article_list["submit_time"]) }}</div>
+    </div>
+</li>
