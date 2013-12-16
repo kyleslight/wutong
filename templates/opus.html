@@ -29,7 +29,7 @@
                     <a id="create" href="/create.html" accesskey="w">
                         <li>创作</li>
                     </a>
-                    <a id="group" href="/g/1" accesskey="g">
+                    <a id="group" href="/group-navigation.html" accesskey="g">
                         <li>小组</li>
                     </a>
                 </div>
@@ -296,6 +296,10 @@
     <div class="read">
         <div class="readMain">
             <a href="#" id="expandSideComment" accesskey="+">展开侧评</a>
+            <div class="sideCommentEditBox">
+                <textarea id="sideCommentEditData" placeholder="编辑侧评"></textarea>
+                <div class="sideCommentEditOption"><a href="#" id="sideCommentEditBack">返回</a><a href="#" id="sideCommentEditSend">发送</a></div>
+            </div>
             <div class="opusBasicInfo">
                 <div class="firstLine">
                     <div class="opusTime">2-14 13:18</div><span class="opusAuthor">by  <a href="#">hsy505</a></span>
@@ -465,15 +469,15 @@
     <script type="text/javascript" src="{{ static_url("js/header.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/shCore.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/allhl.js") }}"></script>
-    <script type="text/javascript" src="{{ static_url("ueditor/ueditor.config.write.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("ueditor/ueditor.config.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("ueditor/ueditor.all.min.js") }}"></script>
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
-    <script type="text/javascript">
-        var editor = new UE.ui.Editor();
-        textarea: '#textArea';
-        editor.render('textArea');
-    </script>
+    // <script type="text/javascript">
+    //     var editor = new UE.ui.Editor();
+    //     // textarea: '#textArea';
+    //     editor.render('textArea');
+    // </script>
 	</body>
 </html>

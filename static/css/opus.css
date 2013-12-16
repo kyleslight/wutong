@@ -224,17 +224,21 @@
 }
 
 .activeOpusPara{
-	/*color: #680 !important;*/
+	color: #680 !important;
 	/*opacity: 0.5;*/
-	box-shadow: 0 0 20px 1px #AAA;
+	/*box-shadow: 0 0 20px 1px #AAA;*/
 	/*background: rgba(102,136,0,0.4) !important;*/
 	/*background: rgba(0,0,0,0.03) !important;*/
+}
+.activeOpusPara img{
+	box-shadow: 0 0 20px 3px #680;
 }
 .opusSideCommentList{
 	margin: 0 auto;
 	margin-top: 10px;
 	list-style: none;
-	background: rgba(255,255,255,0.8);
+	/*background: rgba(255,255,255,0.8);*/
+	background: rgba(0,0,0,0.2);
 	border-radius: 4px;
 	padding: 5px;
 	font-size: 0.9em;
@@ -245,7 +249,8 @@
 	box-shadow: 0 0 10px #AAA;
 }
 .opusSideCommentNav{
-	background: black;
+	/*background: black;*/
+	background: rgba(0,0,0,0.5);
 	color: white;
 	box-shadow: 0 0 10px #AAA;
 	font-size: 1.2em;
@@ -258,15 +263,19 @@
 .opusSideCommentListUserName{
 	color: #680;
 }
-.activeOpusSideCommentList{
-	background: rgba(102,136,0,0.3);
+
+.activeOpusSideCommentNav{
+	/*background: rgba(102,136,0,1);*/
+	background: #680;
 	color: white;
+}
+.activeOpusSideCommentList{
+	/*background: rgba(102,136,0,0.3);*/
+	background: white;
+	color: black;
 	box-shadow: 0 0 10px #AAA;
 }
-.activeOpusSideCommentNav{
-	background: rgba(102,136,0,1);
-	color: white;
-}
+
 .sideCommentView,.sideCommentEdit{
 	float: right;
 	font-size: 12px;
@@ -278,7 +287,41 @@
 	z-index: 100;
 	margin-right: 10px;
 }
-
+.sideCommentEditBox{
+	position: absolute;
+	padding: 10px;
+	width: 944px;
+	background: rgba(0,0,0,0.8);
+	margin-left: 20px;
+	display: none;
+	z-index: 1000;
+	border-radius: 2px;
+	/*box-shadow: 0 0 0 10px rgba(0,0,0,0.8);*/
+	border: 1px solid #777;
+	border-radius: 4px;
+}
+#sideCommentEditData{
+	margin-left: -1px;
+	width: 940px;
+	min-height: 70px;
+	margin-top: 0;
+	resize:none;
+	border-radius: 2px;
+	outline:transparent;
+}
+.sideCommentEditOption{
+	float: right;
+	margin-top: 5px;
+	/*margin-right: 40px;*/
+}
+.sideCommentEditOption a{
+	margin-right: 20px;
+	padding: 5px;
+	color: white;
+}
+.sideCommentEditOption a:hover{
+	color: #680;
+}
 #expandSideComment{
 	position: fixed;
 	left: 0;

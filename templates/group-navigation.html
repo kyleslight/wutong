@@ -7,13 +7,13 @@
     <meta http-equiv="Content-Language" content="zh-CN" />
     <meta name="Keywords" content="梧桐 文章 浏览 撰写 创作 小组" />
     <meta name="Description" content="梧桐小组" />
+    <link rel="shortcut icon" href="{{ static_url("css/image/favicon.ico") }}" />
     <link rel="stylesheet" href="{{ static_url("css/base.css") }}" type="text/css" />
     <link rel="stylesheet" href="{{ static_url("css/group-navigation.css") }}" type="text/css" />
     <link rel="stylesheet" href="{{ static_url("css/animation.css") }}" type="text/css" />
-    <!-- <link rel="stylesheet" href="{{ static_url("css/shCoreEclipse.css") }}" type="text/css" /> -->
 </head>
 
-<body>
+<body class="preload">
     <!-- header -->
     <div class="header" id="header">
         <div class="navcontainer">
@@ -24,25 +24,30 @@
                     </a>
                 </div>
                 <div class="navLeft">
-                    <a id="browse" href="#">
+                    <a id="browse" href="/browse.html" accesskey="b">
                         <li>浏览</li>
                     </a>
-                    <a id="article" href="write.html">
-                        <li>文章</li>
+                    <a id="create" href="/create.html" accesskey="w">
+                        <li>创作</li>
                     </a>
-                    <a id="fragment" href="#">
-                        <li>小品</li>
-                    </a>
-                    <a id="group" href="#">
+                    <a id="group" href="/group-navigation.html" accesskey="g">
                         <li id="thisPage">小组</li>
                     </a>
                 </div>
+                <div id="searchBox">
+                    <form id="searchData" action="/search" name="searchData" target="_blank">
+                        <input name="keyWord" type="text" class="input" id="keyWord" autocomplete="on" accesskey="s" placeholder="寻找作品，成员，小组" x-webkit-speech x-webkit-grammar="builtin:translate" />
+                        <a href="#" type="submit" id="searchSubmitButton" class="formButton">搜索</a>
+                    </form>
+                </div>
                 <div class="navrighton">
-                    <a href="#">
+                    <a href="#" >
                         <li id="username">
-                            <span id="usernameHover" href="#"></span>
+                            <span id="usernameHover" href="#" accesskey="h"></span>
                             <div class="userExpand">
                                 <div id="myHomepage">我的主页</div>
+                                <div id="myCollection">我的收藏</div>
+                                <div id="myNote">我的便笺</div>
                                 <div id="logout">登出</div>
                             </div>
                         </li>
@@ -58,16 +63,12 @@
                     </div>
                 </div>
                 <div class="navrightoff">
-
-                    <a id="login" href="#">
+                    <a id="login" href="#" accesskey="i">
                         <li>登入</li>
                     </a>
-
-
-                    <a id="register" href="#">
+                    <a id="register" href="#" accesskey="r">
                         <li>注册</li>
                     </a>
-
                 </div>
             </div>
         </div>
@@ -105,26 +106,365 @@
             </form>
         </div>
     </div>
-    <a id="return_top" href="#" title="回到顶部" class="none"></a>
-    <div class="groupNavWrap">
-        <div class="userGroupInfo">
-            <img class="userImg" src="" />
-            <div class="userName"></div>
-            <div class="myGroup">
-                <div class="myGroupTitle">我的小组</div>
-                <a class="myGroupListWrap" href="#"><li class="myGroupList"></li></a>
-                <a class="myGroupListWrap" href="#"><li class="myGroupList"></li></a>
-                <a class="myGroupListWrap" href="#"><li class="myGroupList"></li></a>
-                <a class="myGroupListWrap" href="#"><li class="myGroupList"></li></a>
-                <a class="myGroupListWrap" href="#"><li class="myGroupList"></li></a>
-                <a class="myGroupListWrap" href="#"><li class="myGroupList"></li></a>
-                <a href="#" id="myGroupMore">更多小组</a>
-                <a href="#" id="createGroup">创建小组</a>
+    <!-- my message -->
+    <div class="myMessageWarp">
+        <div class="myMessage">
+            <div class="myMessagePart">
+                <a id="siteBulletinButton" class="myMessagePartButton" href="#">全站公告<span id="siteBulletinNum">1</span></a>
+                <a id="replyButton" class="myMessagePartButton" href="#">回复<span id="replyNum">5</span></a>
+                <a id="opusPushButton" class="myMessagePartButton" href="#">推送<span id="opusPushNum">12</span></a>
+                <a id="PMButton" class="myMessagePartButton" href="#">私信<span id="PMNum">1</span></a>
+            </div>
+            <div class="myMessageContent">
+                <div class="siteBulletin myMessagePartContent activeMessagePart">
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">第六次团队大会</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ
+                        </div>
+                    </li>
+                </div>
+                <div class="reply myMessagePartContent">
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageAddress">Kyleslight的同好会>>一个测试用的话题A>>一个测试用的话题B</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">既然是测试用的话题的话就不要那么认真了嘛</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            既然是测试用的话题的话就不要那么认真了嘛<br/>对吧
+                        </div>
+                    </li>
+                </div>
+                <div class="opusPush myMessagePartContent">
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">Unity 3D的互动应用</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
+                        </div>
+                    </li>
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">Unity 3D的互动应用</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
+                        </div>
+                    </li>
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">Unity 3D的互动应用</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
+                        </div>
+                    </li>
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageTitle">Unity 3D的互动应用</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
+                        </div>
+                    </li>`
+                </div>
+                <div class="PMPush myMessagePartContent">
+                    <li class="myMessagePartList">
+                        <a href="#" class="myMessagePartInline">
+                            <img class='myMessageUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="myMessageAddress">这是一个测试用的私信</div>
+                            <div class="myMessageUserName">Kyleslight</div>
+                            <div class="myMessageTime">10-23 20:56</div>
+                            <div class="myMessagBrief">这是一个测试用的私信啊</div>
+                        </a>
+                        <div class="myMessagePartExpand">
+                            这是一个测试用的私信啊<br/>对吧
+                        </div>
+                    </li>
+                </div>
+            </div>
+            <a href="#" id="myMessageBack">返回</a>
+        </div>
+    </div>
+    <!-- my collection -->
+    <div class="myCollectionWarp">
+        <div class="myCollection">
+            <div class="myCollectionClass">
+                <a id="myOpusCollectionButton" class="myCollectionClassButton" href="#">作品</a>
+                <a id="myTopicCollectionButton" class="myCollectionClassButton" href="#">话题</a>
+                <a id="myCollectionFliter" class="myCollectionClassButton" href="#">筛选器</a>
+            </div>
+            <div class="myOpusCollection">
+                <li class="myCollectionList">
+                <a href="#"><img class="myCollectionAuthorImage" src="{{ static_url("css/image/test.png") }}" /></a>
+                    <div class="myCollectionRow">
+                        <a href="#" class="myCollectionTitle">基于Unity3D的互动应用</a><a class="myCollectionAuthor" href="#">Kyleslight</a>
+                    </div>
+                    <div class="myCollectionRow">
+                        <div class="myCollectionTag"><a href="#">aaa</a><a href="#">bbb</a><a href="#">ccc</a></div>
+                        <span class="myCollectionTime">收藏时间 : 11-11 11:11</span>
+                    </div>
+                </li>
+            </div>
+            <div class="myTopicCollection">
+            </div>
+            <div class="myCollectionPageTurning"><a href="#">上一页 </a> <a href="#"> 下一页</a></div>
+            <a href="#" id="myCollectionBack">返回</a>
+        </div>
+    </div>
+    <!-- my note -->
+    <div class="myNoteWrap">
+        <div class="myNote">
+            <div class="myNoteListWrapOutter">
+                <a href="#" id="addNote" class="myNoteList">add a note</a>
+                <div class="myNoteListWrap">
+                    <a href="#" class="myNoteList">the first note</a>
+                    <a href="#" class="myNoteList">the second note</a>
+                    <a href="#" class="myNoteList">the third note</a>
+                    <a href="#" class="myNoteList">the fourth note</a>
+                    <a href="#" class="myNoteList">the fifth note</a>
+                    <a href="#" class="myNoteList">the sixth note</a>
+                    <a href="#" class="myNoteList">the seventh note</a>
+                    <a href="#" class="myNoteList">the first note</a>
+                    <a href="#" class="myNoteList">the second note</a>
+                    <a href="#" class="myNoteList">the third note</a>
+                    <a href="#" class="myNoteList">the fourth note</a>
+                    <a href="#" class="myNoteList">the fifth note</a>
+                    <a href="#" class="myNoteList">the sixth note</a>
+                    <a href="#" class="myNoteList">the seventh note</a>
+                    <a href="#" class="myNoteList">the first note</a>
+                    <a href="#" class="myNoteList">the second note</a>
+                    <a href="#" class="myNoteList">the third note</a>
+                    <a href="#" class="myNoteList">the fourth note</a>
+                    <a href="#" class="myNoteList">the fifth note</a>
+                    <a href="#" class="myNoteList">the sixth note</a>
+                    <a href="#" class="myNoteList">the seventh note</a>
+                </div>
+            </div>
+            <div class="myCurrentNoteArea">
+                <div class="myCurrentNoteHeader">
+                    <input class="myCurrentNoteTitle" value="the first note">
+                    <div class="myCurrentNoteTime">10-22 12:30</div>
+                </div>
+                <textarea class="myCurrentNoteContent">
+                    摇晃得可真厉害。
+                    在几十年、甚或几百年前曾经铺设柏油的道路，如今变成了不见半点人影的荒废道路，自左右两侧涌入的杂草与血管般的草根，让这里逐渐形成一片混沌的样貌。
+                    货物拖车漫不经心地踏过这样不成道路的道路。
+                    乘坐的感觉只能用一句非常糟糕来形容。
+                    每当车子越过障碍物时，就会造成货架上些许冲击……然后再进一步传到和货架上的木箱待在一起的我身上。
+                    我埋怨着原以为在货架上旅行很优雅的自己，实在太愚蠢了。
+                    难得有机会可以在花朵恣意绽满的街道上旅行，但由于屁股实在太过疼痛，根本无心去欣赏。
+                    心情上则近似于多娜多娜（Donna，Donna）。（注：知名世界民谣，歌词描述一头即将被卖到市场去的小牛，旋律温馨中带着悲伤。）
+                    「倘若乖乖坐在副驾驶座的话……不。」
+                    我喃喃自语，但旋即否定了自己的想法。坐在副驾驶座，就意味着必须面临坐在驾驶座的商队队长单方面的问话。对于怕生而且一紧张脑袋就一片空白的我而言，那段时间内应该会磨损削薄我的神经。
+                </textarea>
+                <div class="myCurrentNoteOption">
+                    <a href="#" id="deleteCurrentNote" class="formButton">删除</a>
+                    <a href="#" id="saveCurrentNote" class="formButton">保存</a>
+                </div>
+                <a href="#" id="myNoteBack">返回</a>
             </div>
         </div>
-        <div class="groupMainWrap">
-            <div class="groupExplanation">
-                这里是梧桐小组，一个让你与他人共同分享与交流兴趣的地方。
+    </div>
+    <!-- return to top -->
+    <a id="return_top" href="#" title="回到顶部" class="none"></a>
+    <div class="groupNavWarp">
+        <div class="groupNav">
+            <div class="userGroupInfo">
+                <a class="userImg" href="#"><img src="{{ static_url("css/image/test.png") }}" /></a>
+                <a class="userName" href="#">Kyleslight</a>
+                <div class="myGroup">
+                    <div class="myGroupTitle">我的小组</div>
+                    <a class="myGroupListWrap" href="/g/1"><li class="myGroupList">Kyleslight的同好会</li></a>
+                    <a class="myGroupListWrap" href="#"><li class="myGroupList">循环性情绪低落症侯群</li></a>
+                    <a class="myGroupListWrap" href="#"><li class="myGroupList">华中科技大学</li></a>
+                    <a class="myGroupListWrap" href="#"><li class="myGroupList">谁来阻止我吃东西的手谁来阻止我吃东西的手</li></a>
+                    <a class="myGroupListWrap" href="#"><li class="myGroupList">手绘旅行</li></a>
+                    <a class="myGroupListWrap" href="#"><li class="myGroupList">烧耳机</li></a>
+                    <!-- <a href="#" id="myGroupMore">更多小组</a> -->
+                    <a href="#" id="createGroup"> + 创建小组</a>
+                </div>
+                <div class="groupTagArea">
+                    <div class="groupTagTitle">推荐Tag</div>
+                    <h class="groupTagClass">兴趣»</h>
+                    <a href="#" class="groupTag">旅行</a>
+                    <a href="#" class="groupTag">摄影</a>
+                    <a href="#" class="groupTag">影视</a>
+                    <a href="#" class="groupTag">音乐</a>
+                    <a href="#" class="groupTag">文学</a>
+                    <a href="#" class="groupTag">游戏</a>
+                    <a href="#" class="groupTag">动漫</a>
+                    <a href="#" class="groupTag">运动</a>
+                    <a href="#" class="groupTag">戏曲</a>
+                    <a href="#" class="groupTag">桌游</a>
+                    <h class="groupTagClass">学术»</h>
+                    <a href="#" class="groupTag">人文</a>
+                    <a href="#" class="groupTag">社科</a>
+                    <a href="#" class="groupTag">自然</a>
+                    <a href="#" class="groupTag">建筑</a>
+                    <a href="#" class="groupTag">国学</a>
+                    <a href="#" class="groupTag">语言</a>
+                    <a href="#" class="groupTag">宗教</a>
+                    <a href="#" class="groupTag">哲学</a>
+                    <a href="#" class="groupTag">软件</a>
+                    <a href="#" class="groupTag">硬件</a>
+                    <a href="#" class="groupTag">互联网</a>
+                    <h class="groupTagClass">技术»</h>
+                    <a href="#" class="groupTag">C语言</a>
+                    <a href="#" class="groupTag">Twitter</a>
+                    <a href="#" class="groupTag">印象笔记</a>
+                    <a href="#" class="groupTag">kindle</a>
+                    <a href="#" class="groupTag">Python初学者</a>
+                    <a href="#" class="groupTag">Calibre</a>
+                    <a href="#" class="groupTag">信息安全</a>
+                    <a href="#" class="groupTag">从零开始玩耳机</a>
+                </div>
+            </div>
+            <div class="groupMainWrap">
+                <!-- <div class="groupExplanation">
+                    这里是梧桐小组，一个让你与他人共同分享与交流兴趣的地方。
+                </div> -->
+                <div class="groupDynamic">
+                    <h class="groupDynamicHeader">小组动态»</h>
+                    <li class="groupDynamicList">
+                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
+                        <div class="groupDynamicContent">
+                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
+                            <div class="groupDynamicInfo">
+                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
+                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
+                            </div>
+                            <div class="groupDynamicBrief">
+                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
+                            </div>
+                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
+                        </div>
+                    </li>
+                    <li class="groupDynamicList">
+                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test13.png") }}"></a>
+                        <div class="groupDynamicContent">
+                            <a href="#" class="groupDynamicTitle">自学心得（zz我一个非数学的学长写的）</a>
+                            <div class="groupDynamicInfo">
+                                <a href="#" class="groupDynamicAuthor">loggerhead</a>
+                                <div class="groupDynamicFrom">来自 <a href="#">纯数学</a> 小组<span class="groupDynamicMemberNum">326</span>人参与</div>
+                            </div>
+                            <div class="groupDynamicBrief">
+                                这篇文章的作者是一个非数学专业的自学心的 作者分享了自学中的一些个人的见解 或许对很多科班数学的朋友并不适用 由于并未得本人允许就转载了 所以评价时请注意各位的言语 对于对作者的人身攻击我不加通知的删除了 请原谅...
+                            </div>
+                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
+                        </div>
+                    </li>
+                    <li class="groupDynamicList">
+                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
+                        <div class="groupDynamicContent">
+                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
+                            <div class="groupDynamicInfo">
+                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
+                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
+                            </div>
+                            <div class="groupDynamicBrief">
+                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
+                            </div>
+                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
+                        </div>
+                    </li>
+                    <li class="groupDynamicList">
+                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
+                        <div class="groupDynamicContent">
+                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
+                            <div class="groupDynamicInfo">
+                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
+                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
+                            </div>
+                            <div class="groupDynamicBrief">
+                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
+                            </div>
+                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
+                        </div>
+                    </li>
+                    <li class="groupDynamicList">
+                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
+                        <div class="groupDynamicContent">
+                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
+                            <div class="groupDynamicInfo">
+                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
+                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
+                            </div>
+                            <div class="groupDynamicBrief">
+                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
+                            </div>
+                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
+                        </div>
+                    </li>
+                    <li class="groupDynamicList">
+                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
+                        <div class="groupDynamicContent">
+                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
+                            <div class="groupDynamicInfo">
+                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
+                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
+                            </div>
+                            <div class="groupDynamicBrief">
+                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
+                            </div>
+                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
+                        </div>
+                    </li>
+                    <li class="groupDynamicList">
+                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
+                        <div class="groupDynamicContent">
+                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
+                            <div class="groupDynamicInfo">
+                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
+                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
+                            </div>
+                            <div class="groupDynamicBrief">
+                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
+                            </div>
+                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
+                        </div>
+                    </li>
+                    <li class="groupDynamicList">
+                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
+                        <div class="groupDynamicContent">
+                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
+                            <div class="groupDynamicInfo">
+                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
+                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
+                            </div>
+                            <div class="groupDynamicBrief">
+                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
+                            </div>
+                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
+                        </div>
+                    </li>
+                </div>
             </div>
         </div>
     </div>

@@ -30,7 +30,7 @@
                     <a id="create" href="/create.html" accesskey="w">
                         <li>创作</li>
                     </a>
-                    <a id="group" href="#" accesskey="g">
+                    <a id="group" href="/group-navigation.html" accesskey="g">
                         <li id="thisPage">小组</li>
                     </a>
                 </div>
@@ -871,9 +871,10 @@
         SyntaxHighlighter.all();
     </script>
     <script type="text/javascript">
-        var editor = new UE.ui.Editor();
-        textarea: '#topicData';
+        var editor = new UE.ui.Editor({pasteplain:true});
         editor.render('topicData');
+        var smallerEditor = new UE.ui.Editor({ toolbars:[['Paragraph','RowSpacing','FontFamily','FontSize']],initialFrameWidth:769,pasteplain:true});
+        smallerEditor.render('expandChatData');
     </script>
 </body>
 
