@@ -3,6 +3,7 @@ var isregisterbox=false;
 var _showwel_flag = true;
 var elapseTime = 5000;
 var topOfSight=150;
+var editingParaNum=-1;
 
 $(document).ready(function(){
     // initializing the opus and side commnet
@@ -10,7 +11,6 @@ $(document).ready(function(){
 
     $.getJSON("/u/info", function (data) {
         var username;
-        console.log(data);
         username = data.penname;
         $(".navrightoff").fadeOut(10,function(){
             $(".navrighton").fadeIn(10);
@@ -77,15 +77,15 @@ $(document).ready(function(){
     
     // expand or flod buttom comment
     $(".opusCommentIntro a").click(function(){
-        if ($(".opusCommentList").css("display")=="none") {
+        if ($(".buttomComment").css("display")=="none") {
             $(this).text("收起底部评论");
-            $(".opusCommentList").show();
+            $(".buttomComment").show();
             var heightOfReadMain=($(".floatReadMain").height()+40)+"px";
             $(".opusSideCommentWrap").css({"height":heightOfReadMain});
 
         }else{
             $(this).text("展开底部评论");
-            $(".opusCommentList").hide();
+            $(".buttomComment").hide();
             $('#return_top').css({"top":"1200px"});
             var heightOfReadMain=($(".floatReadMain").height()+40)+"px";
             $(".opusSideCommentWrap").css({"height":heightOfReadMain});
@@ -140,6 +140,7 @@ $(document).ready(function(){
     // edit the side comment of this para
     $(".sideCommentEdit").click(function(){
         var indexOfPara=$(".sideCommentEdit").index($(this));
+        editingParaNum=indexOfPara;
         var buttomOfActivePara=$(".opusMain").children().eq(indexOfPara).offset().top+$(".opusMain").children().eq(indexOfPara).height()-60;
         $(".sideCommentEditBox").css({"top":buttomOfActivePara+"px"});
         $(".sideCommentEditBox").fadeIn(100);
@@ -170,21 +171,29 @@ $(document).ready(function(){
         $(".activeOpusPara").removeClass("activeOpusPara");
         $(".sideCommentEditBox").fadeOut(100);
         $("#sideCommentEditData").val("");
+        editingParaNum=-1;
         return false;
     });
 
     // send editting side comment
     $("#sideCommentEditSend").click(function(){
-        var contentOfEdittingSideComment=$("#sideCommentEditData").val();
-        console.log(contentOfEdittingSideComment);
+        // content:sideCommentCon,paraNum:editingParaNum
+        var sideCommentCon=$("#sideCommentEditData").val();
+        return false;
+    });
+
+    // send buttom comment
+    $("#buttomCommentSend").click(function(){
+        var buttomCommentCon=$("#opusCommentData").val();
         return false;
     })
 
 });
 
 function init(){
-    for(var i=0;i<25;i++){
-        var numOfComment=Math.floor(20*Math.random());
+    var totalNumOfPara=$(".opusMain").children().size();
+    for(var i=0;i<totalNumOfPara;i++){
+        var numOfComment=Math.floor(10*Math.random());
         var appNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" >'
                     +'第'+i+'段评论('+'<span class="numOfParaComent">'+numOfComment+'</span>'+')'
                     +'</li>';
@@ -214,6 +223,7 @@ function init(){
         $(".opusMain").children().eq(i).append(viewCommentButton);
     };
     $(".opusMain").children().addClass("opusMainChildren");
+    $(".opusCommentList").last().addClass("noBorderButtom");
 }
 
 function topPartHeight(){

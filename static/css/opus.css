@@ -1,3 +1,15 @@
+.edui-default{
+	margin-left: 0;
+	padding-left: 0;
+}
+
+#edui1{
+	border: 1px solid lightblue;
+}
+#edui1_toolbarboxouter{
+	border-bottom: 1px solid lightblue;
+}
+
 .read{
 	width: 1060px;
 	margin: 0 auto;
@@ -346,6 +358,26 @@
 	display: none;
 	background: darkred;
 	font-size: 1em;
+}
+.noBorderButtom{
+	border-bottom: 0;
+}
+
+#buttomCommentData{
+	margin-left: 50px;
+}
+
+.buttomComment{
+	display: none;
+}
+
+#buttomCommentSend{
+	float: right;
+	background: lightblue;
+	color: white;
+}
+#buttomCommentSend:hover{
+	background: rgba(16,158,255,1);
 }
 
 .opusMainChildren{

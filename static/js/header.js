@@ -6,7 +6,7 @@ var elapseTime = 4500;
 var shortElapseTime=4000;
 var _showwel_flag = true;
 var _last_post_id;
-// var userInfo=[{"userName":"","userId":0}];
+var userInfo=[{"userName":"","userId":0}];
 var isLoginPasswordFocus=false;
 var isRegisterRepasswordFocus=false;
 
@@ -15,6 +15,16 @@ unsycUser();
 
 $(document).ready(function(){
     $(".preload").removeClass("preload");
+    // get user info
+    $.getJSON("/u/info", function (data) {
+        var username;
+        username = data.penname;
+        $(".navrightoff").fadeOut(10,function(){
+            $(".navrighton").fadeIn(10);
+            $("#username").children().val(username);
+            $("#usernameHover").text(username);
+        });
+    });
     // return to top icon show
     $(window).scroll(function(){
         var top=$(window).scrollTop();

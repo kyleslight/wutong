@@ -13,10 +13,10 @@ body{
 a{
 	color:#444;
 	text-decoration:none;
-	transition: 0.5s;
-	-moz-transition:0.5s;
-	-webkit-transition:0.5s;
-	-o-transition:0.5s;
+	transition: 0.2s;
+	-moz-transition:0.2s;
+	-webkit-transition:0.2s;
+	-o-transition:0.2s;
 }
 a:hover{
 	color:#680;
@@ -120,6 +120,10 @@ li img:hover{
 }
 .header a{
 	color: white;
+	transition: none;
+	-moz-transition:none;
+	-webkit-transition:none;
+	-o-transition:none;
 }
 .header a:hover{
 	color: #680;

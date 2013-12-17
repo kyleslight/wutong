@@ -10,11 +10,6 @@
              </div>
         </form>
     </div>
-    <!-- topic tag list -->
-    <div class="topicTag">
-    </div>
-    <div class="topicTagClone">
-    </div>
     <div class="groupWarpOuter">
         <div class="groupWarp">
             <!-- basic group infomation -->
@@ -42,7 +37,7 @@
                     <div class='groupOptionItem'>作品</div>
                 </a>
                 <a href="#">
-                    <div class='groupOptionItem'>计划</div>
+                    <div class='groupOptionItem'>话题</div>
                 </a>
                 <a href="#">
                     <div class='groupOptionItem'>设置</div>
@@ -51,15 +46,107 @@
             <div class="groupItem">
                 <!-- bulletin -->
                 <div class="bulletin" id="groupOptionShow0">
-                    {% for bulletin in bulletins %}
-                        {% module MyModule("bulletin.html", bulletin=bulletin) %}
-                    {% end %}
+                    <li class="bulletinList">
+                        <a href="#" class="bulletinInline">
+                            <img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="bulletinTitle">第六次团队大会</div>
+                            <div class="bulletinUserName">Kyleslight</div>
+                            <div class="bulletinTime">10-23 20:56</div>
+                        </a>
+                        <div id="bulletinConActive" class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
+                    </li>
+                    <li class="bulletinList">
+                        <a href="#" class="bulletinInline">
+                            <img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="bulletinTitle">第六次团队大会</div>
+                            <div class="bulletinUserName">Kyleslight</div>
+                            <div class="bulletinTime">10-23 20:56</div>
+                        </a>
+                        <div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
+                    </li>
+                    <li class="bulletinList">
+                        <a href="#" class="bulletinInline">
+                            <img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="bulletinTitle">第六次团队大会</div>
+                            <div class="bulletinUserName">Kyleslight</div>
+                            <div class="bulletinTime">10-23 20:56</div>
+                        </a>
+                        <div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
+                    </li>
+                    <li class="bulletinList">
+                        <a href="#" class="bulletinInline">
+                            <img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="bulletinTitle">第六次团队大会</div>
+                            <div class="bulletinUserName">Kyleslight</div>
+                            <div class="bulletinTime">10-23 20:56</div>
+                        </a>
+                        <div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
+                    </li>
+                    <li class="bulletinList">
+                        <a href="#" class="bulletinInline">
+                            <img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="bulletinTitle">第六次团队大会</div>
+                            <div class="bulletinUserName">Kyleslight</div>
+                            <div class="bulletinTime">10-23 20:56</div>
+                        </a>
+                        <div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
+                    </li>
+                    <li class="bulletinList">
+                        <a href="#" class="bulletinInline">
+                            <img class='bulletinUserImage' src="{{ static_url("css/image/test.png") }}" />
+                            <div class="bulletinTitle">第六次团队大会</div>
+                            <div class="bulletinUserName">Kyleslight</div>
+                            <div class="bulletinTime">10-23 20:56</div>
+                        </a>
+                        <div class="bulletinCon">据说明晚7:00在西十二N312要开第一次社员大会哟≡ω≡东边的话在15号晚7:00在东九B103也会开~虽然其实去其中一次就好了吧……可是爱热（jiao）闹（ji）的大家两次都去也大丈夫哟hahahahahhahaha~~另外如果有错过百团大战的小盆友，去社员大会也可以现场加入的呢ฅ^._.^ฅ</div>
+                    </li>
+
+                    <br>
                     <div id="bulletinOption"><a href="#" id="unfold">展开前6条</a>  <a href="#" id="bulletinBack" class="optionBack">返回</a>
                     </div>
                 </div>
                 <!-- information card -->
                 <div class="infoCard" id="groupOptionShow1">
-                    {% module MyModule("group_info.html", group_info=group_info) %}
+                    <div id="groupName">Kyleslight的同好会
+                        <p id="IDVaule">(000001)</p>
+                    </div>
+                    <img id="groupCardImage" src="{{ static_url("css/image/forumTest.jpg") }}" />
+                    <div id="groupDetail">
+                        <div id="groupIntro" class="groupDetailItem">
+                            <span class="introWord">简介：</span>一个Kyleslight建立的方便交流的同好会，嗯，是一个正常的社团啦
+                        </div>
+
+                        <div id="groupFounder" class="groupDetailItem">
+                            <span class="introWord">创建：</span>
+                            <p id="Founder">Kyleslight</p>创立于
+                            <p id="foundTime">2013年12月13日</p>
+                        </div>
+
+                        <div id="groupAdmin" class="groupDetailItem">
+                            <span class="introWord">组长：</span>
+                            <p id="administrator">Kyleslight</p>
+                        </div>
+
+                        <div id="groupMemberNum" class="groupDetailItem">
+                            <span class="introWord">成员数：</span>
+                            <p id="memberNum">68</p>
+                        </div>
+
+                        <div id="groupGPA" class="groupDetailItem">
+                            <span class="introWord">平均文章得分：</span>
+                            <p id="GPA">95.36</p>
+                        </div>
+
+                        <div id="groupRank" class="groupDetailItem">
+                            <span class="introWord">小组排名：</span>
+                            <p id="RANK">23</p>
+                        </div>
+
+                        <div id="groupInfoMotto" class="groupDetailItem">
+                            <span class="introWord">签名：</span>
+                            <p id="Motto">西十二自习室欢迎你</p>
+                        </div>
+                    </div>
                     <a href="#" class="optionBack">返回</a>
                 </div>
                 <!-- member -->
@@ -337,6 +424,7 @@
                                     <a href="#" class="articalAuthor">Kyleslight</a>
                                 </div>
 
+
                                 <div class="articalTag">Tags：<a href="#">长篇小说</a><a href="#">odC</a><a href="#">依诺</a>
                                 </div>
                                 <div class="articaltime">2-14 13:18</div>
@@ -421,6 +509,23 @@
                 </div>
 
             </div>
+            <span class='topicLocation'>
+            {% for topic in ancestor_topics %}
+                >><a href="/t/{{ topic["tid"] }}">{{ topic["title"] }}</a>
+            {% end %}
+            </span>
+            <li class="topicInner">
+                <a class="userImage" href='#'><img src={{ topic["avatar"] }}/></a>
+                <div class='talkMain'>
+                    <div class="userName"><a href='#'>{{ topic["penname"] }}</a></div>
+                    <div class='timeShow'>
+                        {{ topic["submit_time"] }}
+                    </div>
+                    <div class='talkContent'>
+                        {% raw topic["content"] %}
+                    </div>
+                </div>
+            </li>
             <div id="communicationWrapOuter">
                 <div id="messageTemp">
                 </div>
@@ -456,14 +561,4 @@
             </div>
         </div>
     </div>
-{% end %}
-{% block extra_js %}
-    <script type="text/javascript" src="{{ static_url("js/group.js") }}"></script>
-    <script type="text/javascript">
-        var editor = new UE.ui.Editor({toolbars: [["undo","redo","bold","italic","fontsize","forecolor","inserttable","link","insertimage","blockquote","insertcode"]],initialFrameWidth:956,initialFrameHeight:300});
-        // textarea: '#textArea';
-        editor.render('topicData');
-        var expandEditor = new UE.ui.Editor({toolbars: [["undo","redo","bold","italic","fontsize","forecolor","inserttable","link","insertimage","blockquote","insertcode"]],initialFrameWidth:780,initialFrameHeight:300});
-        expandEditor.render('expandChatData');
-    </script>
 {% end %}

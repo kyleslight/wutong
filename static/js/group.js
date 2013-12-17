@@ -241,13 +241,12 @@ function submitChatData(){
     chatCon=chatCon.replace(/</g,"&lt").replace(/>/g,"&gt");
     chatCon=chatCon.toString().replace(/(\r)*\n/g,"<br />").replace(/\s/g," ");
     chatCon=chatCon.httpHtml();
-    // alert(chatCon);
+
     if(chatCon.length==0){
     	$("#communicationData").addClass("littleTremble");
         setTimeout(function(){
     		$("#communicationData").removeClass("littleTremble");
     	},1000);
-        // alert("Please input content");
         $("#chatData").val("");
         return;
     }
@@ -256,7 +255,6 @@ function submitChatData(){
         setTimeout(function(){
             $("#communicationData").removeClass("littleTremble");
         },1000);
-        // alert("Please input content");
         return;
     }
 
@@ -307,6 +305,8 @@ function submitTopicData(){
     	},1000);
         return;
     };
+
+    console.log(topicCon);
     message = {
     	option:"send_topic",
     	title:topicTitle,

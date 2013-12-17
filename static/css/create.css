@@ -1,17 +1,6 @@
-a{
-	/*color: #555;
-	font-weight: normal;
-	text-shadow: 0px 1px 1px #AAAAAA;
-	transition: 2s;
-	-moz-transition:2s;
-	-webkit-transition:2s;
-	-o-transition:2s;*/
-}
-
 .write{
 	width: 1058px;
 	margin: 0 auto;
-	/*margin-top: 30px;	*/
 	text-align: left;
 }
 
@@ -20,13 +9,59 @@ a{
 	font-size: 14;
 }
 
+.opusTypeTip{
+	text-align: center;
+	color: #999;
+	font-size: 0.8em;
+	display: block;
+	margin-bottom: 10px;
+}
+#opusTypeOption{
+	background: rgba(255,255,255,0.6);
+	text-align: center;
+	padding: 10px;
+	margin-left: 1px;
+	border-bottom: 1px dashed #CCC;
+}
+.opusTypeArea{
+	padding-top: 10px;
+	padding-bottom: 20px;
+}
+
+.opusType{
+	font-weight: 500;
+	font-size: 2.5em;
+	padding: 0 20px;
+	transition: 0.5s;
+	-moz-transition:0.5s;
+	-webkit-transition:0.5s;
+	-o-transition:0.5s;
+}
+
+.activeOpusType{
+	color: #680;
+}
+
+.speOpusTypeItem{
+	opacity: 0;
+}
+
+#opusTypeAreaSwitch{
+	position: absolute;
+	right: 20px;
+	background:rgba(0,0,0,0.1); 
+	color:white;
+	padding: 5px;
+}
+#opusTypeAreaSwitch:hover{
+	background:rgba(0,0,0,0.3); 
+}
+
 .maindata{
 	float: left;
 	border: 1px solid #CCC;
 	border-top: 0;
-	/*border-radius: 4px;*/
 	box-shadow: 0 0 20px #CCC;
-	/*box-shadow:0px 1px 3px 3px #CCC;*/
 }
 
 .formlist{
@@ -36,6 +71,10 @@ a{
 	background: white;
 	padding-bottom: 15px;
 	border-bottom: 1px dashed #CCC;
+}
+
+.input{
+	border: 1px solid rgba(102,136,0,0.4);
 }
 
 #formlistfirst{
@@ -82,6 +121,10 @@ a{
 	border: 0;
 }
 
+#resourceForm{
+	display: none;
+}
+
 #speinputtip{
 	height: 25px;
 	margin-top: 3px;
@@ -101,10 +144,22 @@ a{
 	border-bottom-right-radius: 4px;
 }
 
-#artsubmitButton{
+#opusPublicSubmitButton,#opusPreViewButton,#opusPrivateSubmitButton{
 	float: right;
 	margin-top: 20px;
 	margin-bottom: 20px;
+}
+
+#opusPublicSubmitButton{
+	padding-left: 49px;
+	padding-right: 49px;
+	margin-right: 10px;
+	display: none;
+}
+#opusPrivateSubmitButton{
+	padding-left: 40px;
+	padding-right: 40px;
+	display: none;
 }
 
 #describe,#reference{
@@ -113,6 +168,58 @@ a{
 	width: 898px;
 }
 
+.firstClass{
+	background: white;
+	padding: 6px;
+	color: #444;
+	border-radius: 4px;
+	border: 1px solid rgba(102,136,0,0.4);
+	outline: none;
+	float: left;
+	margin-top: 15px;
+	margin-left: 10px;
+	margin-right: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+#otherTags{
+	width: 838px;
+	margin-left: 0;
+	border-left: 0;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+#opusExpandBotton{
+	color: #AAA;
+	font-size: 0.9em;
+	padding: 5px;
+	padding-left: 15px;
+	padding-bottom: 10px;
+	background: white;
+	display: block;
+}
+
+
+.expandOption{
+	display: none;
+}
+#previewBeforePublic{
+	float: right;
+	margin-top: 35px;
+	margin-right: 20px;
+	color: #999;
+}
+
+#pushOptionForm{
+	border-bottom: 0;
+}
+.pushOption{
+	margin-top: 20px;
+}
+.pushOption input{
+	margin-left: 15px;
+}
 
 #textArea{
 	display: none;
@@ -126,92 +233,6 @@ a{
 
 .writeButton{
 	width: 70px;
-}
-
-/*.loadbox{
-	display: none;
-	position: absolute;
-	width: 400px;
-	top: 200px;
-	left: 50%;
-	margin-left: -200px;
-	background:white;
-	z-index: 10000;
-	border-radius: 15px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-}
-
-.loadbox input{
-	width: 200px;
-}
-
-.loadlist{
-	float: left;
-	margin-left: 30px;
-	display: block;
-	padding-top: 10px;
-	margin-bottom: 10px;
-}
-
-#loadlistlast{
-	float: left;
-	margin-bottom: 10px;
-	padding-bottom: 20px;
-}
-
-#loadsubmitButton{
-	height: 30px;
-	float: left;
-	background: #680;
-	color: white;
-	font-weight: 600;
-	padding-bottom: 10px;
-}
-
-#loadback{
-	float: left;
-	margin-top: 3px;
-	margin-left: 40px;
-}*/
-
-
-
-
-/*.graybg{
-	display: none;
-	position:absolute;
-	filter:alpha(opacity=50);
-	background: black;
-	opacity: 0.5;	
-	top: 0;
-	left: 0;
-	width: 100%;
-	z-index: 5000;
-}
-*/
-#return_top{
-	width: 73px;
-	height: 73px;
-	position:absolute;
-	right: 20px;
-	z-index: 999;
-	background: url('image/top.png') 0px 0px no-repeat;
-	_position:absolute;
-	/*transition: 2s;
-	-moz-transition:2s;
-	-webkit-transition:2s;
-	-o-transition:2s;*/
-	/*-moz-opacity: 0.1;
-	opacity: 0.1;
-	filter: alpha(opacity=10);*/
-}
-
-#return_top:hover{
-	/*-moz-opacity: 1;
-	opacity: 1;
-	filter: alpha(opacity=100);*/
-	background: url('image/top.png') 0px -74px no-repeat;
 }
 
 .none{

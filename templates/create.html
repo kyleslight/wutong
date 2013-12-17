@@ -3,15 +3,25 @@
 	<div class="write">
 		<form id="textdata" name="textdata" action="/a/create" method="post">
 			<div class="maindata">
+                <div id="opusTypeOption" >
+                    <div class="opusTypeArea">
+                        <a href="#" title="作品类型" class="opusTypeTip">选择作品类型</a>
+                        <a href="#" class="opusType activeOpusType">文章</a>
+                        <a href="#" class="opusType">片段</a>
+                        <a href="#" class="opusType">摄影</a>
+                        <a href="#" class="opusType">绘画</a>
+                        <a href="#" class="opusType">项目</a>
+                    </div>
+                </div>
+
 				<div id="formlistfirst" class="formlist"><span class="inputTip"><a href="#" title="标题说明">标题</a></span>  <input id="arttitle" class="input" type="text" name="title" placeholder="填写标题" /></div>
 				<div class="formlisttip" id="formlisttip1"></div>
                 
-				<div id="formlistfourth" class="formlist"><span class="inputTip"><a href="#" title="描述说明">描述</a></span>  <textarea id="describe" class="input" type="text" name="describe" placeholder="填写描述"></textarea></div>
+				<div id="formlistfourth" class="formlist"><span class="inputTip"><a href="#" title="描述说明">描述</a></span>  <textarea id="describe" class="input" type="text" name="describe" placeholder="填写描述（可选）"></textarea></div>
 				<div class="formlisttip" id="formlisttip3">描述的方式比较随意。一般而言，描述用于读者在浏览文章信息时作为文章的展示文字使用。<br/>描述中可以概览全文，也可以阐述自己的写作目的，提示引导读者等。</div>
 
-				<div class="formlist"><span class="inputTip"><a href="#" title="适合说明">适合</a></span>  <input class="input" type="text" name="suit" placeholder="这里注明适合人群，人群之间用';'隔开（可选）" /></div>
-				<div class="formlisttip" id="formlisttip4">适合用于提示读者类别。<br/>例如当文章涉及专业性较强的领域时可能需要读者满足一定条件才能没有障碍地阅读。<br/>一篇Python的建站指南可能需要读者具有一定Python编程基础与网站开发基础，作者可以这样写：<br/>具有Python编程经验;具有网站开发经验;<br/>在另外一些情况下，作者可能需要对读者进行一些提示，例如文章的内容涉及剧透，或者有不适内容希望拒绝一部分读者。<br/>请注意，“适合”仅作为一种提示，并没有阻止读者继续浏览的绝对权力。</div>
-
+                <div id="resourceForm" class="formlist"><span class="inputTip"><a href="#" title="资源">资源</a></span>  <input class="input" type="file" name="suit" placeholder="这里添加资源内容" value="选择文件" /></div>
+                <div class="formlisttip" id="formlisttip4"></div>
 
 				<div id="speformlist" class="formlist"><span id="speinputtip" class="inputTip"><a href="#" title="正文说明">正文</a></span></div>
 				<div class="formlisttip" id="formlisttip5">这里只是对正文编辑的部分提示，如果需要较为系统的帮助请参考我们的 <a href="#" target="_blank">梧桐指南</a><br/>1.正文编辑对文章内容没有任何限定，但这并不意味着任何人可以随意创作可能让他人感到不适的文章。创作前请确保你的文章不属于无效文章的范畴。<br/>2.可部分引用其他文献，但请确保作品的原创性。<br/>3.富文本编辑器目前支持表格创建，图片本地上传，代码块创建，合理运用这些工具可能为你的文章增色。<br/>4.需要应用公式编辑可以在 <a href="http://www.codecogs.com/latex/eqneditor.php" target="_blank">在线Latex公式编辑器</a> 创建公式gif图片，将图拖拽至你正在编辑的地方即可。<br/>5.需要应用在线图表编辑可以在<a href='http://www.onlinecharttool.com/' target="_blank"> 在线图表编辑器 </a>创建图表，将图拖拽至你正在编辑的地方即可。<br/>6.目前富文本编辑器在全屏的时候可能会出现滚动条不能滚动问题，可调整浏览器大小解决。</div>
@@ -20,21 +30,50 @@
 				<div class="formlist"><span class="inputTip"><a href="#" title="引用来源说明">引用来源</a></span> <textarea id="reference" class="input" type="text" name="reference" placeholder="这里注明引用来源，引用格式为'···:···;',冒号前为来源说明，冒号后为引用地址（可选）" draggable="false"></textarea></div>
 				<div class="formlisttip" <div class="formlisttip" id="formlisttip6">当你的文章引用到文献的部分片段时，请在引用来源处注明，否则，此文章可能带来的版权问题将由作者本人承担。<br/>在引用时请注意被引用源的许可条件，例如用于非商业性质。<br/>任何本站公开文章可视为引用源，作者可以以非商业目的部分引用这些引用源，并在“引用来源”处注明其ART号，例如：<br/>在梧桐创建之时:ART1;<br/>或者<br/>在梧桐创建之时:http://www.wutong.com/ART1;</div>
 
-				<div class="formlist"><span class="inputTip"><a href="#" title="合作编辑说明">合作编辑</a></span>  <input class="input" type="text" name="partner" placeholder="这里注明合作编辑者（可选）" /></div>
-				<div class="formlisttip" id="formlisttip7"></div>
-
-				<div id="formlistlast" class="formlist"><span class="inputTip"><a href="#" title="Tag说明">Tags</a></span>  <input class="input" type="text" name="tags" placeholder="这里输入Tag，Tag之间用';'隔开，默认Tag为一级分类" /></div>
+				<div id="formlistlast" class="formlist"><span class="inputTip"><a href="#" title="Tag说明">Tags</a></span>
+                <select id="articleFirstClass" class="firstClass" name="articleFirstClass">
+                    <option class="firstClassItem" value="subject">学科</option>
+                    <option class="firstClassItem" value="technology">技术</option>
+                    <option class="firstClassItem" value="tutorial">教程</option>
+                    <option class="firstClassItem" value="literature">文学</option>
+                    <option class="firstClassItem" value="discovery">发现</option>
+                    <option class="firstClassItem" value="nichijou">日常</option>
+                    <option class="firstClassItem" value="essay">随笔</option>
+                    <option class="firstClassItem" value="entertainment">娱乐</option>
+                    <option class="firstClassItem" value="miscellany">杂</option>
+                </select>
+                <input id="otherTags" class="input" type="text" name="tags" placeholder="左边选项为一级Tag（即你的作品分类）,右边作者可自定Tag，Tag之间用';'隔开（可选）"/></div>
 				<div class="formlisttip" id="formlisttip8"></div>
+
+                <a href="#" id="opusExpandBotton">显示作品扩展项</a>
+                <div class="expandOption">
+                    <div class="formlist"><span class="inputTip"><a href="#" title="适合说明">适合</a></span>  <input class="input" type="text" name="suit" placeholder="这里注明适合人群，人群之间用';'隔开（可选）" /></div>
+                    <div class="formlisttip" id="formlisttip4">适合用于提示读者类别。<br/>例如当文章涉及专业性较强的领域时可能需要读者满足一定条件才能没有障碍地阅读。<br/>一篇Python的建站指南可能需要读者具有一定Python编程基础与网站开发基础，作者可以这样写：<br/>具有Python编程经验;具有网站开发经验;<br/>在另外一些情况下，作者可能需要对读者进行一些提示，例如文章的内容涉及剧透，或者有不适内容希望拒绝一部分读者。<br/>请注意，“适合”仅作为一种提示，并没有阻止读者继续浏览的绝对权力。</div>
+                    
+
+                    <div class="formlist"><span class="inputTip"><a href="#" title="合作编辑">合作编辑</a></span>  <input class="input" type="text" name="cooperation" placeholder="这里注明合作编辑人、合作小组" /></div>
+                    <div class="formlisttip" id="formlisttip4"><br/></div>
+
+                    <div id="pushOptionForm" class="formlist">
+                        <span class="inputTip"><a href="#" title="推送">推送</a></span>
+                        <div class="pushOption">
+                            <input type="radio" id="puclicPush" name="push" checked="checked" />公开并推送
+                            <input type="radio" id="puclicNotPush" name="push" />公开不推送
+                        </div>
+                    </div>
+                </div>
 			</div>
-			<a href="javascript:void(0)" id="artsubmitButton" class="formButton" name="submitButton" title="提交你的文章">提交</a>
+			<a href="javascript:void(0)" id="opusPreViewButton" class="formButton" name="submitButton" title="预览你的文章">预览</a>
+            <a href="javascript:void(0)" id="opusPrivateSubmitButton" class="formButton" name="submitButton" title="公开发布你的文章">非公开发布</a>
+            <a href="javascript:void(0)" id="opusPublicSubmitButton" class="formButton" name="submitButton" title="非公开发布你的文章">公开发布</a>
+            <span id="previewBeforePublic"><input id="IsPreviewBeforePublic" type="checkbox" checked="checked"/>发布前预览</span>
 		</form>
 	</div>
 {% end %}
 {% block extra_js %}
     <script type="text/javascript" src="{{ static_url("js/create.js") }}"></script>
     <script type="text/javascript">
-        var editor = new UE.ui.Editor({toolbars: [["undo","redo","bold","italic","fontsize","forecolor","inserttable","link","insertimage","blockquote","insertcode"]],initialFrameWidth:1058,initialFrameHeight:600});
-        textarea: '#textArea';
+        var editor = new UE.ui.Editor({toolbars: [["bold","italic","fontsize","forecolor","inserttable","link","insertimage","blockquote","insertcode"]],initialFrameWidth:1058,initialFrameHeight:600});
         editor.render('textArea');
     </script>
 {% end %}

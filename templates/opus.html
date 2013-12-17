@@ -1,4 +1,4 @@
-{% extends "base_hl.html" %}
+{% extends "base_opus.html" %}
 {% block extra_css %}
 	<link rel="stylesheet" href="{{ static_url("css/opus.css") }}" type="text/css" />
 {% end %}
@@ -20,4 +20,8 @@
 {% end %}
 {% block extra_js %}
     <script type="text/javascript" src="{{ static_url("js/opus.js") }}"></script>
+    <script type="text/javascript">
+        var BCeditor = new UE.ui.Editor({toolbars: [["undo","redo","bold","italic","fontsize","forecolor","inserttable","link","insertimage","blockquote","insertcode"]],initialFrameWidth:976,initialFrameHeight:300});
+        BCeditor.render('opusCommentData');
+    </script>
 {% end %}
