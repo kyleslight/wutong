@@ -4,7 +4,7 @@
         <p class="groupPromptPublic">这是一个公开的小组，你可以点击 <a id="publicJoin" class="joinButton" href="#"> 我喜欢 </a>加入它!</p>
         <p class="groupPromptPrivate">这是一个私人的小组，你可以  <a id="privateJoin" class="joinButton" href="#"> 联系该小组组长 </a>来加入它!</p>
         <form id="contactGroupLeader" name="contactGroupLeader" action="#" method="post">
-            <p>组长 <span id="groupLeadrerName">Kyleslight</span> :</p>
+            <p>组长 <span id="groupLeadrerName">{{ group_info["leader"] }}</span> :</p>
             <textarea class="input" id="contactGroupLeaderCon" type="text" name="contactGroupLeaderCon" placeholder="向组长提出申请"></textarea>
             <div class="joinSend"><a href="#" id="JoinSubmitButton" class="joinButton" name="submitButton" value="send">Send</a>  <a href="#" id="contactGroupLeaderBack">返回</a>
              </div>
@@ -19,12 +19,12 @@
         <div class="groupWarp">
             <!-- basic group infomation -->
             <div class="groupInfo">
-
                 <div class="groupInfoCon">
-
                     <div class="groupTitle">
-                    <img class="groupImage" src="{{ static_url("css/image/forumTest.jpg") }}" />
-                    <a id="groupTitleName" href="group.html">Kyleslight的同好会</a><span id='titleCut'> | </span><div id='groupMotto'>西十二自习室欢迎你</div>
+                        <img class="groupImage" src="{{ group_info["avatar"] }}" />
+                        <a id="groupTitleName" href="/g/{{ group_info["gid"] }}">{{ group_info["name"] }}</a>
+                        <span id='titleCut'> | </span>
+                        <div id='groupMotto'>{{ group_info["motton"] }}</div>
                     </div>
                 </div>
             </div>
@@ -64,258 +64,9 @@
                 </div>
                 <!-- member -->
                 <div class="member" id="groupOptionShow2">
-                    <div class="memberCard">
-                        <img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-                        <div class="memberBasic">
-                            <div class="memberName">Kyleslight<span class="memberHonour">站长</span>
-                            </div>
-                            <div class="memberIntro">一只普普通通的喵星人控</div>
-                            <div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span>
-                            </div>
-                        </div>
-                        <div class="memberDetail">
-                            <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-                            <div class="memberGroup">小组：
-                                <span class="memberGroup1">Kyleslight的同好会</span>
-                                <span class="memberGroup2">思存工作室</span>
-                                <span class="memberGroup3">赫萝</span>
-                            </div>
-                            <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
-                            </div>
-                            <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-                        </div>
-                    </div>
-                    <div class="memberCard">
-                        <img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-                        <div class="memberBasic">
-                            <div class="memberName">Kyleslight<span class="memberHonour">站长</span>
-                            </div>
-                            <div class="memberIntro">一只普普通通的喵星人控</div>
-                            <div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span>
-                            </div>
-                        </div>
-                        <div class="memberDetail">
-                            <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-                            <div class="memberGroup">小组：
-                                <span class="memberGroup1">Kyleslight的同好会</span>
-                                <span class="memberGroup2">思存工作室</span>
-                                <span class="memberGroup3">赫萝</span>
-                            </div>
-                            <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
-                            </div>
-                            <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-                        </div>
-                    </div>
-                    <div class="memberCard">
-                        <img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-                        <div class="memberBasic">
-                            <div class="memberName">Kyleslight<span class="memberHonour">站长</span>
-                            </div>
-                            <div class="memberIntro">一只普普通通的喵星人控</div>
-                            <div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span>
-                            </div>
-                        </div>
-                        <div class="memberDetail">
-                            <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-                            <div class="memberGroup">小组：
-                                <span class="memberGroup1">Kyleslight的同好会</span>
-                                <span class="memberGroup2">思存工作室</span>
-                                <span class="memberGroup3">赫萝</span>
-                            </div>
-                            <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
-                            </div>
-                            <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-                        </div>
-                    </div>
-                    <div class="memberCard">
-                        <img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-                        <div class="memberBasic">
-                            <div class="memberName">Kyleslight<span class="memberHonour">站长</span>
-                            </div>
-                            <div class="memberIntro">一只普普通通的喵星人控</div>
-                            <div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span>
-                            </div>
-                        </div>
-                        <div class="memberDetail">
-                            <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-                            <div class="memberGroup">小组：
-                                <span class="memberGroup1">Kyleslight的同好会</span>
-                                <span class="memberGroup2">思存工作室</span>
-                                <span class="memberGroup3">赫萝</span>
-                            </div>
-                            <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
-                            </div>
-                            <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-                        </div>
-                    </div>
-                    <div class="memberCard">
-                        <img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-                        <div class="memberBasic">
-                            <div class="memberName">Kyleslight<span class="memberHonour">站长</span>
-                            </div>
-                            <div class="memberIntro">一只普普通通的喵星人控</div>
-                            <div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span>
-                            </div>
-                        </div>
-                        <div class="memberDetail">
-                            <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-                            <div class="memberGroup">小组：
-                                <span class="memberGroup1">Kyleslight的同好会</span>
-                                <span class="memberGroup2">思存工作室</span>
-                                <span class="memberGroup3">赫萝</span>
-                            </div>
-                            <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
-                            </div>
-                            <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-                        </div>
-                    </div>
-                    <div class="memberCard">
-                        <img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-                        <div class="memberBasic">
-                            <div class="memberName">Kyleslight<span class="memberHonour">站长</span>
-                            </div>
-                            <div class="memberIntro">一只普普通通的喵星人控</div>
-                            <div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span>
-                            </div>
-                        </div>
-                        <div class="memberDetail">
-                            <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-                            <div class="memberGroup">小组：
-                                <span class="memberGroup1">Kyleslight的同好会</span>
-                                <span class="memberGroup2">思存工作室</span>
-                                <span class="memberGroup3">赫萝</span>
-                            </div>
-                            <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
-                            </div>
-                            <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-                        </div>
-                    </div>
-                    <div class="memberCard">
-                        <img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-                        <div class="memberBasic">
-                            <div class="memberName">Kyleslight<span class="memberHonour">站长</span>
-                            </div>
-                            <div class="memberIntro">一只普普通通的喵星人控</div>
-                            <div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span>
-                            </div>
-                        </div>
-                        <div class="memberDetail">
-                            <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-                            <div class="memberGroup">小组：
-                                <span class="memberGroup1">Kyleslight的同好会</span>
-                                <span class="memberGroup2">思存工作室</span>
-                                <span class="memberGroup3">赫萝</span>
-                            </div>
-                            <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
-                            </div>
-                            <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-                        </div>
-                    </div>
-                    <div class="memberCard">
-                        <img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-                        <div class="memberBasic">
-                            <div class="memberName">Kyleslight<span class="memberHonour">站长</span>
-                            </div>
-                            <div class="memberIntro">一只普普通通的喵星人控</div>
-                            <div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span>
-                            </div>
-                        </div>
-                        <div class="memberDetail">
-                            <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-                            <div class="memberGroup">小组：
-                                <span class="memberGroup1">Kyleslight的同好会</span>
-                                <span class="memberGroup2">思存工作室</span>
-                                <span class="memberGroup3">赫萝</span>
-                            </div>
-                            <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
-                            </div>
-                            <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-                        </div>
-                    </div>
-                    <div class="memberCard">
-                        <img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-                        <div class="memberBasic">
-                            <div class="memberName">Kyleslight<span class="memberHonour">站长</span>
-                            </div>
-                            <div class="memberIntro">一只普普通通的喵星人控</div>
-                            <div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span>
-                            </div>
-                        </div>
-                        <div class="memberDetail">
-                            <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-                            <div class="memberGroup">小组：
-                                <span class="memberGroup1">Kyleslight的同好会</span>
-                                <span class="memberGroup2">思存工作室</span>
-                                <span class="memberGroup3">赫萝</span>
-                            </div>
-                            <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
-                            </div>
-                            <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-                        </div>
-                    </div>
-                    <div class="memberCard">
-                        <img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-                        <div class="memberBasic">
-                            <div class="memberName">Kyleslight<span class="memberHonour">站长</span>
-                            </div>
-                            <div class="memberIntro">一只普普通通的喵星人控</div>
-                            <div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span>
-                            </div>
-                        </div>
-                        <div class="memberDetail">
-                            <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-                            <div class="memberGroup">小组：
-                                <span class="memberGroup1">Kyleslight的同好会</span>
-                                <span class="memberGroup2">思存工作室</span>
-                                <span class="memberGroup3">赫萝</span>
-                            </div>
-                            <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
-                            </div>
-                            <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-                        </div>
-                    </div>
-                    <div class="memberCard">
-                        <img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-                        <div class="memberBasic">
-                            <div class="memberName">Kyleslight<span class="memberHonour">站长</span>
-                            </div>
-                            <div class="memberIntro">一只普普通通的喵星人控</div>
-                            <div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span>
-                            </div>
-                        </div>
-                        <div class="memberDetail">
-                            <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-                            <div class="memberGroup">小组：
-                                <span class="memberGroup1">Kyleslight的同好会</span>
-                                <span class="memberGroup2">思存工作室</span>
-                                <span class="memberGroup3">赫萝</span>
-                            </div>
-                            <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
-                            </div>
-                            <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-                        </div>
-                    </div>
-                    <div class="memberCard">
-                        <img class="memberImage" src="{{ static_url("css/image/test1.png") }}" />
-                        <div class="memberBasic">
-                            <div class="memberName">Kyleslight<span class="memberHonour">站长</span>
-                            </div>
-                            <div class="memberIntro">一只普普通通的喵星人控</div>
-                            <div class="memberInfo"><span class="memberSex">♂</span><span class="memberAge">19岁</span><span class="memberCity">武汉</span>
-                            </div>
-                        </div>
-                        <div class="memberDetail">
-                            <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
-                            <div class="memberGroup">小组：
-                                <span class="memberGroup1">Kyleslight的同好会</span>
-                                <span class="memberGroup2">思存工作室</span>
-                                <span class="memberGroup3">赫萝</span>
-                            </div>
-                            <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
-                            </div>
-                            <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
-                        </div>
-                    </div>
+                    {% for member in members %}
+                        {% module MyModule("member_info.html", member=member) %}
+                    {% end %}
                     <div id="memOption">
                         <a href="#">上一页</a><a href="#">下一页</a><a href="#" class="optionBack">返回</a>
                     </div>
@@ -367,6 +118,7 @@
                     <div class="articalDirectionOption"><a href="#">上一页</a><a href="#">下一页</a><a href="#" class="optionBack">返回</a>
                     </div>
                 </div>
+                <!-- What's this? -->
                 <div class="latestTopic" id="groupOptionShow4">
                     <li class="latestTopicList">
                         <img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">

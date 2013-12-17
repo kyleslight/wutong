@@ -11,6 +11,11 @@ class UserModel:
         uid = self.db.getfirstfield(select, account)
         return uid
 
+    def get_user_permission(self, uid):
+        select = 'SELECT get_user_permission(%s)'
+        user_pms = self.db.getjson(select, uid)
+        return user_pms
+
     def get_user_info(self, uid):
         select = 'SELECT get_user_info(%s)'
         user_info = self.db.getjson(select, uid)

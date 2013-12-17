@@ -7,8 +7,8 @@ from lib.session import Session
 from lib import sendmail
 from base import BaseHandler
 
-class UserBaseHandler(BaseHandler):
 
+class UserBaseHandler(BaseHandler):
     @property
     def model(self):
         return self.usermodel
@@ -16,9 +16,24 @@ class UserBaseHandler(BaseHandler):
     def set_authenticated(self, uid):
         self.session["uid"] = uid
 
+    def is_admin(self):
+        if not hasattr(self, "_permission"):
+            self._permission = self.get_user_permission(self.user_id)
+        return self._permission.get("is_admin", False)
+
+
+class PermissionHandler(UserBaseHandler):
+    @authenticated
+    def post(self):
+        check = self.get_argument("check_permission")
+        if check == "is_admin":
+            if self.is_admin():
+                self.write("true")
+            else:
+                self.write("false")
+
 
 class LoginHandler(UserBaseHandler):
-
     def get(self):
         # @authenticated will call this function
         pass
@@ -41,14 +56,12 @@ class LoginHandler(UserBaseHandler):
 
 
 class LogoutHandler(UserBaseHandler):
-
     def post(self):
         self.session.clear()
         self.write("success")
 
 
 class RegisterHandler(UserBaseHandler):
-
     def post(self):
         penname = self.get_argument("username")
         password = self.get_argument("password")
@@ -76,7 +89,6 @@ class RegisterHandler(UserBaseHandler):
 
 
 class UserinfoHandler(UserBaseHandler):
-
     @authenticated
     def get(self):
         userinfo = self.get_current_user()
@@ -86,7 +98,6 @@ class UserinfoHandler(UserBaseHandler):
 
 
 class CheckMailHandler(UserBaseHandler):
-
     def get(self):
         hashuid = self.get_argument("r")
         uid = self.check_mail(hashuid)
@@ -102,6 +113,5 @@ class CheckMailHandler(UserBaseHandler):
 
 
 class HomeHandler(UserBaseHandler):
-
     def get(self):
         self.write("user home")

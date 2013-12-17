@@ -51,3 +51,9 @@ class BaseHandler(RequestHandler):
     def render_module_string(self, module_name, **kwargs):
         module_path = self.get_module_path()
         return self.render_string(os.path.join(module_path, module_name), **kwargs)
+
+    def get(self):
+        self.write_error(404)
+
+    def post(self):
+        self.write_error(403)

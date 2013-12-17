@@ -60,6 +60,10 @@ class GroupModel(object):
         select = 'SELECT get_group_member_info(%s, %s)'
         return self.db.getjson(select, gid, uid)
 
+    def get_group_members(self, gid, limit, offset):
+        select = 'SELECT get_group_members(%s, %s, %s)'
+        return self.db.getjson(select, gid, limit, offset)
+
     def get_bulletins(self, gid, limit, offset):
         select = 'SELECT get_group_bulletins(%s, %s, %s)'
         bulletins = self.db.getjson(select, gid, limit, offset)

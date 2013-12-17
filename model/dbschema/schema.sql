@@ -261,7 +261,10 @@ SELECT a.*, u.avatar, u.penname AS author
 
 CREATE OR REPLACE VIEW group_member_info_v
   AS
-SELECT gu.*, u.penname, u.avatar, u.motton
+SELECT gu.*,
+       u.penname, u.avatar,
+       u.motton, u.intro,
+       u.sex, u.age, u.address
   FROM group_user gu,
        user_info_v u
  WHERE gu.is_member
@@ -482,6 +485,24 @@ AS $$
              WHERE gid = $1
                AND uid = $2
         ) j;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_group_members(
+    _gid integer,
+    _limit integer,
+    _offset integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(aj))
+      FROM (
+            SELECT *
+              FROM group_member_info_v
+             WHERE gid = $1
+             ORDER BY guid DESC
+             LIMIT $2
+            OFFSET $3
+         ) aj;
 $$ LANGUAGE SQL;
 
 
