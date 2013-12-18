@@ -52,7 +52,7 @@ $(document).ready(function(){
                     var heightOfSideCommnetChild=$(".opusSideCommentList"+i).eq(0).position().top + $(".opusSideComment").scrollTop();
                     $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
                     $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
-                    $(".opusSideComment").children((".opusSideCommentList"+i)).addClass("activeOpusSideCommentList");
+                    $("#sideCommentNode"+i).children().addClass("activeOpusSideCommentList");
                     $(".opusSideCommentList"+i).eq(0).removeClass("activeOpusSideCommentList").addClass("activeOpusSideCommentNav");
                     $(".opusSideComment").animate({scrollTop:heightOfSideCommnetChild},1000);
                 }else if (
@@ -117,50 +117,32 @@ $(document).ready(function(){
 
     // view the side comment of this para
     $(".sideCommentView").click(function(){
+        // clear nullOpusSideCommentNav
         $(".nullOpusSideCommentNav").css("display","none");
-        var indexOfPara=$(".sideCommentView").index($(this)).toString();
-        $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
-        $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
-        $(".activeOpusPara").removeClass("activeOpusPara");
-        $(".opusMain").children().eq(indexOfPara).addClass("activeOpusPara");
-        if ($(".opusSideCommentList"+indexOfPara).css("display")!="none") {
-            var offsetHeightOfSideCommnetChild=$(".opusSideCommentList"+indexOfPara).eq(0).position().top + $(".opusSideComment").scrollTop();
-            $(".opusSideComment").animate({scrollTop:+offsetHeightOfSideCommnetChild});
-            $(".opusSideComment").children((".opusSideCommentList"+indexOfPara)).addClass("activeOpusSideCommentList");
-            $(".opusSideCommentList"+indexOfPara).eq(0).removeClass("activeOpusSideCommentList").addClass("activeOpusSideCommentNav");
-        }else{
-            $(".opusSideCommentList"+indexOfPara).eq(0).fadeIn(500,function(){
-                var offsetHeightOfSideCommnetChild=$(".opusSideCommentList"+indexOfPara).eq(0).position().top + $(".opusSideComment").scrollTop();
-                $(".opusSideComment").animate({scrollTop:+offsetHeightOfSideCommnetChild});       
-            });     
-        }
+
+        // when active para change
+        var indexOfPara=$(".sideCommentView").index($(this));
+        activeParaChange(indexOfPara);
+
         return false;
     })
     
     // edit the side comment of this para
     $(".sideCommentEdit").click(function(){
+        // when active para change
         var indexOfPara=$(".sideCommentEdit").index($(this));
         editingParaNum=indexOfPara;
+        activeParaChange(indexOfPara);
+
+        // set position of editing area under the para 
         var buttomOfActivePara=$(".opusMain").children().eq(indexOfPara).offset().top+$(".opusMain").children().eq(indexOfPara).height()-60;
         $(".sideCommentEditBox").css({"top":buttomOfActivePara+"px"});
         $(".sideCommentEditBox").fadeIn(100);
-        $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
-        $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
-        $(".activeOpusPara").removeClass("activeOpusPara");
-        $(".opusMain").children().eq(indexOfPara).addClass("activeOpusPara");
-        if ($(".opusSideCommentList"+indexOfPara).css("display")!="none") {
-            var offsetHeightOfSideCommnetChild=$(".opusSideCommentList"+indexOfPara).eq(0).position().top + $(".opusSideComment").scrollTop();
-            $(".opusSideComment").animate({scrollTop:+offsetHeightOfSideCommnetChild});
-            $(".opusSideComment").children((".opusSideCommentList"+indexOfPara)).addClass("activeOpusSideCommentList");
-            $(".opusSideCommentList"+indexOfPara).eq(0).removeClass("activeOpusSideCommentList").addClass("activeOpusSideCommentNav");
-        }else{
-            $(".opusSideCommentList"+indexOfPara).eq(0).fadeIn(500,function(){
-                var offsetHeightOfSideCommnetChild=$(".opusSideCommentList"+indexOfPara).eq(0).position().top + $(".opusSideComment").scrollTop();
-                $(".opusSideComment").animate({scrollTop:+offsetHeightOfSideCommnetChild});       
-            });     
-        };
+
+        // auto focus on edit area
         var sideCommentEditFocus = document.getElementById("sideCommentEditData");
-                sideCommentEditFocus.focus();
+        sideCommentEditFocus.focus();
+
         return false;
     });
 
@@ -186,25 +168,30 @@ $(document).ready(function(){
     $("#buttomCommentSend").click(function(){
         var buttomCommentCon=$("#opusCommentData").val();
         return false;
-    })
+    });
 
 });
 
 function init(){
     var totalNumOfPara=$(".opusMain").children().size();
+    // initial sideCommentNode
+    for (var i=0;i<totalNumOfPara;i++){
+        var sideCommentNode='<div class="sideCommentNode" id="sideCommentNode'+i+'">';
+        $(".opusSideComment").append(sideCommentNode);
+    };
+
+    // initial para function bution
+    for (var i =0; i<$(".opusMain").children().size(); i++) {
+        var viewCommentButton='<a href="#" class="sideCommentView">查看评论</a><a href="#" class="sideCommentEdit">编辑评论</a>';
+        $(".opusMain").children().eq(i).append(viewCommentButton);
+    };
+
+    // load sidecomment in sideCommentNode
+        // load function...
+
+    // test sidecomment
     for(var i=0;i<totalNumOfPara;i++){
         var numOfComment=Math.floor(10*Math.random());
-        var appNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" >'
-                    +'第'+i+'段评论('+'<span class="numOfParaComent">'+numOfComment+'</span>'+')'
-                    +'</li>';
-        var appNull='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav nullOpusSideCommentNav" >'
-                    +'这个段落目前还没有评论，你可以通过“编辑评论”开始创建'
-                    +'</li>';
-        if (numOfComment!=0) {
-            $(".opusSideComment").append(appNav);
-        }else{
-            $(".opusSideComment").append(appNull);
-        };
         for(var j=0;j<numOfComment;j++){
             var appText='<li class="opusSideCommentList opusSideCommentList'+i+'" >'
                     +   '<a href="#" class="opusSideCommentListUserName">kyleslight</a>'
@@ -215,13 +202,28 @@ function init(){
                     +       'lalallasdjfhjsdhf'
                     +   '</div>'
                     +'</li>';
-            $(".opusSideComment").append(appText);
+            $("#sideCommentNode"+i).append(appText);
         }
     };
-    for (var i =0; i<$(".opusMain").children().size(); i++) {
-        var viewCommentButton='<a href="#" class="sideCommentView">查看评论</a><a href="#" class="sideCommentEdit">编辑评论</a>';
-        $(".opusMain").children().eq(i).append(viewCommentButton);
+
+    // if sideCommentNode has no comment,add a appNull,if not,add a Nav
+    for(var i=0;i<totalNumOfPara;i++){
+        var preNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" >'
+                    +'第'+i+'段评论('+'<span class="numOfParaComent">'+$("#sideCommentNode"+i).children().size()+'</span>'+')'
+                    +'</li>';
+        var preNull='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav nullOpusSideCommentNav" >'
+                    +'这个段落目前还没有评论，你可以通过“编辑评论”开始创建'
+                    +'</li>';
+
+        var thisSideCommentNode=$("#sideCommentNode"+i);
+        if (thisSideCommentNode.children().size()!=0) {
+            thisSideCommentNode.prepend(preNav);
+        }else{
+            thisSideCommentNode.prepend(preNull);
+        };
     };
+
+    // other set
     $(".opusMain").children().addClass("opusMainChildren");
     $(".opusCommentList").last().addClass("noBorderButtom");
 }
@@ -249,6 +251,24 @@ function visibleHeght(){
        return $(window).height()-(topPartHeight()+buttomPartHeight()); 
     };
     return $(window).height()-(topPartHeight()+buttomPartHeight())+40;
+}
+
+function activeParaChange(indexOfPara){
+    $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
+    $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
+    $(".activeOpusPara").removeClass("activeOpusPara");
+    $(".opusMain").children().eq(indexOfPara).addClass("activeOpusPara");
+    if ($(".opusSideCommentList"+indexOfPara).css("display")!="none") {
+        var offsetHeightOfSideCommnetChild=$(".opusSideCommentList"+indexOfPara).eq(0).position().top + $(".opusSideComment").scrollTop();
+        $(".opusSideComment").animate({scrollTop:+offsetHeightOfSideCommnetChild});
+        $("#sideCommentNode"+indexOfPara).children().addClass("activeOpusSideCommentList");
+        $(".opusSideCommentList"+indexOfPara).eq(0).removeClass("activeOpusSideCommentList").addClass("activeOpusSideCommentNav");
+    }else{
+        $(".opusSideCommentList"+indexOfPara).eq(0).fadeIn(500,function(){
+            var offsetHeightOfSideCommnetChild=$(".opusSideCommentList"+indexOfPara).eq(0).position().top + $(".opusSideComment").scrollTop();
+            $(".opusSideComment").animate({scrollTop:+offsetHeightOfSideCommnetChild});       
+        });     
+    };
 }
 
 function expandSideComment(){

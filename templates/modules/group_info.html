@@ -12,7 +12,7 @@
     <div id="groupFounder" class="groupDetailItem">
         <span class="introWord">创建：</span>
         <p id="Founder">{{ group_info["founder"] }}</p>创立于
-        <p id="foundTime">{{ group_info["foundtime"] }}</p>
+        <p id="foundTime">{{ prettytime(group_info["foundtime"]) }}</p>
     </div>
 
     <div id="groupAdmin" class="groupDetailItem">

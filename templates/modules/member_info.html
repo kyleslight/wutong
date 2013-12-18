@@ -1,0 +1,36 @@
+<div class="memberCard">
+    <img class="memberImage" src="{{ member["avatar"] }}" />
+    <div class="memberBasic">
+        <div class="memberName">
+            {{ member["penname"] }}
+            <span class="memberHonour">站长<!-- 这是什么? --></span>
+        </div>
+        <div class="memberIntro">{{ member["intro"] }}</div>
+        <div class="memberInfo">
+            <span class="memberSex">
+            <!-- TODO: -->
+            {% if member["sex"] %}
+                ♂
+            {% else %}
+                ♂
+            {% end %}
+            </span>
+            <span class="memberAge">{{ member["age"] }}岁</span>
+            <span class="memberCity">{{ member["address"] }}</span>
+        </div>
+    </div>
+    <!-- 点击后当然应该直接跳转到个人主页去 -->
+<!--
+    <div class="memberDetail">
+        <div class="memberWorks">作品：<span class="memberArtNum">20</span>篇文章<span class="memberFragment">3</span>篇小品</div>
+        <div class="memberGroup">小组：
+            <span class="memberGroup1">Kyleslight的同好会</span>
+            <span class="memberGroup2">思存工作室</span>
+            <span class="memberGroup3">赫萝</span>
+        </div>
+        <div class="memberGrade">个人得分：<span class="memberGPA">2367</span>全站排名：<span class="memberRANK">96</span>
+        </div>
+        <div class="memberMotto">在此刻遇见，已经是全宇宙中最不可思议的事。</div>
+    </div>
+ -->
+ </div>

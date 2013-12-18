@@ -1,19 +1,20 @@
-var isLoginBox=false;
-var isRegisterBox=false;
-var isOtherOptionShow=false;
-var activeIndex=-1;
+var isLoginBox = false;
+var isRegisterBox = false;
+var isOtherOptionShow = false;
+var activeIndex = -1;
 var elapseTime = 4500;
-var shortElapseTime=4000;
+var shortElapseTime = 4000;
 var _showwel_flag = true;
 var _last_post_id;
-var userInfo=[{"userName":"","userId":0}];
-var isLoginPasswordFocus=false;
-var isRegisterRepasswordFocus=false;
+var userInfo;
+var groupInfo;
+var isLoginPasswordFocus = false;
+var isRegisterRepasswordFocus = false;
 
 // get unsync information
 unsycUser();
 
-$(document).ready(function(){
+$(document).ready(function() {
     $(".preload").removeClass("preload");
     // get user info
     $.getJSON("/u/info", function (data) {
@@ -26,41 +27,52 @@ $(document).ready(function(){
         });
     });
     // return to top icon show
-    $(window).scroll(function(){
-        var top=$(window).scrollTop();
-        if(top>200){
-            var realHeight=(top+(window.screen.availHeight)/2)+'px';
+    $(window).scroll(function() {
+        var top = $(window).scrollTop();
+        if (top > 200) {
+            var realHeight = (top + (window.screen.availHeight) / 2) + 'px';
             $('#return_top').removeClass('none');
             $('#return_top').stop();
-            $('#return_top').animate({top:realHeight},500);
-        }
-        else{
+            $('#return_top').animate({
+                top: realHeight
+            }, 500);
+        } else {
             $('#return_top').addClass('none');
         }
         return false;
     })
     // return to top
-    $("#return_top").click(function(){
-        $('html,body').animate({scrollTop:0},1000);
+    $("#return_top").click(function() {
+        $('html,body').animate({
+            scrollTop: 0
+        }, 1000);
         return false;
     });
     // navrighton effect
-    $("#username").mouseover(function(){
-        $(this).css("background","white");
-        $(this).children("#usernameHover").css("color","#680");
+    $("#username").mouseover(function() {
+        $(this).css("background", "white");
+        $(this).children("#usernameHover").css("color", "#680");
         $(".userExpand").show();
     });
-    $("#username").mouseleave(function(){
-        $(this).css("background","transparent");
-        $(this).children("#usernameHover").css("color","white");
+    $("#username").mouseleave(function() {
+        $(this).css("background", "transparent");
+        $(this).children("#usernameHover").css("color", "white");
         $(".userExpand").hide();
     })
-    $("#message").mouseover(function(){
-        $("#msgNum").css({"background":"pink","color":"darkred","box-shadow":"#FFF"});
+    $("#message").mouseover(function() {
+        $("#msgNum").css({
+            "background": "pink",
+            "color": "darkred",
+            "box-shadow": "#FFF"
+        });
         // $("#msgNum").addClass("tremble");
     });
-    $("#message").mouseleave(function(){
-        $("#msgNum").css({"background":"pink","color":"#680","box-shadow":"#AAA"});
+    $("#message").mouseleave(function() {
+        $("#msgNum").css({
+            "background": "pink",
+            "color": "#680",
+            "box-shadow": "#AAA"
+        });
         // $("#msgNum").removeClass("tremble");
     })
 
@@ -72,57 +84,57 @@ $(document).ready(function(){
         loginSubmit();
     });
     // quick login
-    $("#loginPassword").focus(function(){
-        isLoginPasswordFocus=true;
-        $(window).keyup(function(e){
-            var keyCode=e.keyCode;
-            if (keyCode==13&&isLoginPasswordFocus) {
+    $("#loginPassword").focus(function() {
+        isLoginPasswordFocus = true;
+        $(window).keyup(function(e) {
+            var keyCode = e.keyCode;
+            if (keyCode == 13 && isLoginPasswordFocus) {
                 loginSubmit();
             }
             return false;
         });
     })
-    $("#loginPassword").blur(function(){
-        isLoginPasswordFocus=false;
+    $("#loginPassword").blur(function() {
+        isLoginPasswordFocus = false;
     })
 
     $("#registerSubmitButton").click(function() {
         registerSubmit();
     });
     // quick register
-    $("#registerRepassword").focus(function(){
-        isRegisterRepasswordFocus=true;
-        $(window).keyup(function(e){
-            var keyCode=e.keyCode;
-            if (keyCode==13&&isRegisterRepasswordFocus) {
+    $("#registerRepassword").focus(function() {
+        isRegisterRepasswordFocus = true;
+        $(window).keyup(function(e) {
+            var keyCode = e.keyCode;
+            if (keyCode == 13 && isRegisterRepasswordFocus) {
                 registerSubmit();
             }
             return false;
         });
     })
-    $("#registerRepassword").blur(function(){
-        isRegisterRepasswordFocus=false;
+    $("#registerRepassword").blur(function() {
+        isRegisterRepasswordFocus = false;
     })
     // logout
-    $("#logout").click(function(){
+    $("#logout").click(function() {
         // logout function
         $.post("/logout");
-        $(".navrighton").fadeOut(function(){
+        $(".navrighton").fadeOut(function() {
             $(".navrightoff").fadeIn();
         });
         // $("#username").children().val(username);
     })
 
     // loginBox and registerBox
-    $("#login").click(function(){
-        if (_showwel_flag == true){
+    $("#login").click(function() {
+        if (_showwel_flag == true) {
             _showwel_flag = false;
             setTimeout(function() {
                 _showwel_flag = true;
             }, elapseTime);
-            if (isRegisterBox||isLoginBox) {
+            if (isRegisterBox || isLoginBox) {
                 return;
-            }else{
+            } else {
                 loginBoxShow();
                 var loginUsernamePosition = 0;
                 var loginUsernameFocus = document.getElementById("loginUsername");
@@ -132,20 +144,20 @@ $(document).ready(function(){
         }
         return false;
     });
-    $("#loginBack").click(function(){
+    $("#loginBack").click(function() {
         loginBoxFade();
-        isLoadBox=false;
+        isLoadBox = false;
         return false;
     });
-    $("#register").click(function(){
-        if (_showwel_flag == true){
+    $("#register").click(function() {
+        if (_showwel_flag == true) {
             _showwel_flag = false;
             setTimeout(function() {
                 _showwel_flag = true;
             }, elapseTime);
-            if (isRegisterBox||isLoginBox) {
+            if (isRegisterBox || isLoginBox) {
                 return;
-            }else{
+            } else {
                 registerBoxShow();
                 var registerUsernamePosition = 0;
                 var registerUsernameFocus = document.getElementById("registerUsername");
@@ -155,226 +167,237 @@ $(document).ready(function(){
         }
         return false;
     });
-    $("#registerBack").click(function(){
+    $("#registerBack").click(function() {
         registerBoxFade();
-        isRegisterBox=false;
+        isRegisterBox = false;
         return false;
     });
     // my collection
-    var numOfCollectionList=1;
-    var heightOfMycollection=123+numOfCollectionList*55;
-    $("#myCollection").click(function(){
-        $(".myCollectionWarp").animate({height:heightOfMycollection},function(){
+    var numOfCollectionList = 1;
+    var heightOfMycollection = 123 + numOfCollectionList * 55;
+    $("#myCollection").click(function() {
+        $(".myCollectionWarp").animate({
+            height: heightOfMycollection
+        }, function() {
             $(".myCollection").fadeIn(500);
         });
     });
-    $("#myCollectionBack").click(function(){
-        $(".myCollection").fadeOut(500,function(){
-            $(".myCollectionWarp").animate({height:0});
+    $("#myCollectionBack").click(function() {
+        $(".myCollection").fadeOut(500, function() {
+            $(".myCollectionWarp").animate({
+                height: 0
+            });
         });
     })
     // my note
-    $("#myNote").click(function(){
-        $(".myNoteWrap").animate({height:415},function(){
+    $("#myNote").click(function() {
+        $(".myNoteWrap").animate({
+            height: 415
+        }, function() {
             $(".myNote").fadeIn(500);
         });
     });
-    $("#myNoteBack").click(function(){
-        $(".myNote").fadeOut(500,function(){
-            $(".myNoteWrap").animate({height:0});
+    $("#myNoteBack").click(function() {
+        $(".myNote").fadeOut(500, function() {
+            $(".myNoteWrap").animate({
+                height: 0
+            });
         });
     });
 
-    var numOfMessageList=0;
-    var heightOfMyMessage=0;
+    var numOfMessageList = 0;
+    var heightOfMyMessage = 0;
     // my message
-    $("#message").click(function(){
-        numOfMessageList=$(".activeMessagePart").children("li").size()+1;
-        heightOfMyMessage=56+numOfMessageList*60;
-        $(".myMessageWarp").animate({height:heightOfMyMessage},function(){
+    $("#message").click(function() {
+        numOfMessageList = $(".activeMessagePart").children("li").size() + 1;
+        heightOfMyMessage = 56 + numOfMessageList * 60;
+        $(".myMessageWarp").animate({
+            height: heightOfMyMessage
+        }, function() {
             $(".myMessage").fadeIn(500);
         });
-        var activeIndexOfMessagePart=$(".myMessagePartContent").index($(".activeMessagePart"));
-        $(".myMessagePartButton").eq(activeIndexOfMessagePart).css("color","#680");
+        var activeIndexOfMessagePart = $(".myMessagePartContent").index($(".activeMessagePart"));
+        $(".myMessagePartButton").eq(activeIndexOfMessagePart).css("color", "#680");
     })
-    $("#myMessageBack").click(function(){
-        $(".myMessage").fadeOut(500,function(){
-            $(".myMessageWarp").animate({height:0});
+    $("#myMessageBack").click(function() {
+        $(".myMessage").fadeOut(500, function() {
+            $(".myMessageWarp").animate({
+                height: 0
+            });
         });
     })
-    $(".myMessagePartButton").click(function(){
-        $(".myMessagePartButton").css("color","#444");
-        $(this).css("color","#680");
-        var indexOfMessagePartButton=$(".myMessagePartButton").index($(this));
-        var activeIndexOfMessagePart=$(".myMessagePartContent").index($(".activeMessagePart"));
-        $(".myMessagePartContent").eq(activeIndexOfMessagePart).removeClass("activeMessagePart").slideUp(500,function(){
-        });
+    $(".myMessagePartButton").click(function() {
+        $(".myMessagePartButton").css("color", "#444");
+        $(this).css("color", "#680");
+        var indexOfMessagePartButton = $(".myMessagePartButton").index($(this));
+        var activeIndexOfMessagePart = $(".myMessagePartContent").index($(".activeMessagePart"));
+        $(".myMessagePartContent").eq(activeIndexOfMessagePart).removeClass("activeMessagePart").slideUp(500, function() {});
         $(".myMessagePartContent").eq(indexOfMessagePartButton).slideDown(500).addClass("activeMessagePart");
-        numOfMessageList=$(".activeMessagePart").children("li").size()+1;
-        heightOfMyMessage=56+numOfMessageList*60;
-        $(".myMessageWarp").animate({height:heightOfMyMessage});
+        numOfMessageList = $(".activeMessagePart").children("li").size() + 1;
+        heightOfMyMessage = 56 + numOfMessageList * 60;
+        $(".myMessageWarp").animate({
+            height: heightOfMyMessage
+        });
     })
 });
 
 // function for login and register
-function loginBoxShow(){
-    $("#loginBox").show().css("opacity","0");
-    var heightOfLRBox=$("#loginBox").height()+"px";
-    $("#lrBoxWrap").animate({height:heightOfLRBox},1000,function(){
-        $("#loginBox").animate({opacity:1.0},1000,function(){
-            isLoginBox=true;
-            isRegisterBox=false;
+
+function loginBoxShow() {
+    $("#loginBox").show().css("opacity", "0");
+    var heightOfLRBox = $("#loginBox").height() + "px";
+    $("#lrBoxWrap").animate({
+        height: heightOfLRBox
+    }, 1000, function() {
+        $("#loginBox").animate({
+            opacity: 1.0
+        }, 1000, function() {
+            isLoginBox = true;
+            isRegisterBox = false;
         });
     });
 }
 
 
-function loginBoxFade(){
-    $("#loginBox").animate({opacity:0.0},1000,function(){
-        $("#lrBoxWrap").animate({height:"0"},1000,function(){
+function loginBoxFade() {
+    $("#loginBox").animate({
+        opacity: 0.0
+    }, 1000, function() {
+        $("#lrBoxWrap").animate({
+            height: "0"
+        }, 1000, function() {
             $("#loginBox").hide();
-            isLoginBox=false;
-            isRegisterBox=false;
+            isLoginBox = false;
+            isRegisterBox = false;
         });
     })
 }
 
-function registerBoxShow(){
-    $("#registerBox").show().css("opacity","0");
-    var heightOfLRBox=$("#registerBox").height()+"px";
-    $("#lrBoxWrap").animate({height:heightOfLRBox},1000,function(){
-        $("#registerBox").animate({opacity:1.0},1000,function(){
-            isLoginBox=false;
-            isRegisterBox=true;
+function registerBoxShow() {
+    $("#registerBox").show().css("opacity", "0");
+    var heightOfLRBox = $("#registerBox").height() + "px";
+    $("#lrBoxWrap").animate({
+        height: heightOfLRBox
+    }, 1000, function() {
+        $("#registerBox").animate({
+            opacity: 1.0
+        }, 1000, function() {
+            isLoginBox = false;
+            isRegisterBox = true;
         });
     });
 }
 
-function registerBoxFade(){
-    $("#registerBox").animate({opacity:0.0},1000,function(){
-        $("#lrBoxWrap").animate({height:"0"},1000,function(){
+function registerBoxFade() {
+    $("#registerBox").animate({
+        opacity: 0.0
+    }, 1000, function() {
+        $("#lrBoxWrap").animate({
+            height: "0"
+        }, 1000, function() {
             $("#registerBox").hide();
-            isLoginBox=false;
-            isRegisterBox=false;
+            isLoginBox = false;
+            isRegisterBox = false;
         });
     })
 }
 
-function loginSubmit(){
-    var loginUsername=$("#loginUsername").val();
-        var loginPassword=$("#loginPassword").val();
-        $.post("/login", {
-            username:loginUsername,
-            password:loginPassword
-        }, function (response) {
-            if (response == "success") {
-                // TODO: process user_info
-                var username;
-                $.getJSON("/u/info", function (data) {
-                    console.log(data);
-                    username = data.penname;
-                });
+function loginSubmit() {
+    var loginUsername = $("#loginUsername").val();
+    var loginPassword = $("#loginPassword").val();
+    $.post("/login", {
+        username: loginUsername,
+        password: loginPassword
+    }, function(response) {
+        if (response == "success") {
+            var username;
+            $.getJSON("/u/info", function(data) {
+                console.log(data);
+                username = data.penname;
+            });
 
-                $(".navrightoff").fadeOut(function(){
-                    $(".navrighton").fadeIn();
-                    $("#username").children().val(username);
-                    // TODO: you should change this
-                    $("#usernameHover").text(username);
-                    loginBoxFade();
-                });
-                unsycUser();
-                unsyncGroup();
-            } else if (response == "failed") {
-            	$("#loginBox").addClass("littleTremble");
-            	setTimeout(function(){
-            		$("#loginBox").removeClass("littleTremble");
-            	},1000);
-            }
-        });
-}
-
-
-function registerSubmit(){
-    var registerUsername=$("#registerUsername").val();
-        var registerEmail=$("#registerEmail").val();
-        var registerPassword=$("#registerPassword").val();
-        var registerRepassword=$("#registerRepassword").val();
-        if (registerPassword!=registerRepassword) {
-            alert("password and repassword must be the same vaule");
+            $(".navrightoff").fadeOut(function() {
+                $(".navrighton").fadeIn();
+                $("#username").children().val(username);
+                $("#usernameHover").text(username);
+                loginBoxFade();
+            });
+            unsycUser();
+            unsyncGroup();
+        } else if (response == "failed") {
             $("#loginBox").addClass("littleTremble");
-            	setTimeout(function(){
-            	$("#loginBox").removeClass("littleTremble");
-            },1000);
-            return;
-        };
-        $.post("/register",{
-            username:registerUsername,
-            password:registerPassword,
-            email:registerEmail
-        },function(){
-            registerBoxFade();
-        });
+            setTimeout(function() {
+                $("#loginBox").removeClass("littleTremble");
+            }, 1000);
+        }
+    });
 }
 
-function testTremble(){
-	document.getElementById("msgNum").innerHTML=parseInt($("#msgNum").text())+1;
-	$("#msgNum").addClass("tremble");
-	setTimeout(function(){$("#msgNum").removeClass("tremble");},2000)
-	setTimeout(function(){testTremble()},10000);
+function registerSubmit() {
+    var registerUsername = $("#registerUsername").val();
+    var registerEmail = $("#registerEmail").val();
+    var registerPassword = $("#registerPassword").val();
+    var registerRepassword = $("#registerRepassword").val();
+    if (registerPassword != registerRepassword) {
+        alert("password and repassword must be the same vaule");
+        $("#loginBox").addClass("littleTremble");
+        setTimeout(function() {
+            $("#loginBox").removeClass("littleTremble");
+        }, 1000);
+        return;
+    };
+    $.post("/register", {
+        username: registerUsername,
+        password: registerPassword,
+        email: registerEmail
+    }, function() {
+        registerBoxFade();
+    });
 }
 
-function unsycUser(){
-    // get user infomation
+function testTremble() {
+    document.getElementById("msgNum").innerHTML = parseInt($("#msgNum").text()) + 1;
+    $("#msgNum").addClass("tremble");
+    setTimeout(function() {
+        $("#msgNum").removeClass("tremble");
+    }, 2000)
+    setTimeout(function() {
+        testTremble()
+    }, 10000);
+}
+
+function unsycUser() {
     $.ajax({
-        url:"/u/info",
-        type:"GET",
-        dataType:"json",
-        async:false,
-        success:function(data){
-            userInfo[0].userName = data.penname;
-            userInfo[0].userId = data.uid;
-            $(".navrightoff").fadeOut(10,function(){
+        url: "/u/info",
+        type: "GET",
+        dataType: "json",
+        async: false,
+        success: function(data) {
+            userInfo = data
+            $(".navrightoff").fadeOut(10, function() {
                 $(".navrighton").fadeIn(10);
-                $("#usernameHover").text(userInfo[0].userName);
+                $("#usernameHover").text(userInfo.penname);
             });
         }
     })
 }
 
-function unsyncGroup(){
-    // get group infomation
-    $.ajax({
-        url:location.pathname+"/groupInfo",
-        type: "GET",
-        dataType:"json",
-        async: false,
-        success:function(data){
-            groupInfo[0].groupName = data.name;
-            groupInfo[0].groupId = data.gid;
-            if(data.publicity){
-                $(".groupPromptPrivate").css({"display":"none"});
-                $("#contactGroupLeader").css({"display":"none"});
-            }else{
-                $(".groupPromptPublic").css({"display":"none"});
-            }
-            $('#groupTitleName').text(groupInfo[0].groupName);
+function unsyncGroup() {
+    var url = location.pathname + "/info";
+    $.getJSON(url, function(data) {
+        groupInfo = data;
+        if (data.publicity) {
+            $(".groupPromptPrivate").css({
+                "display": "none"
+            });
+            $("#contactGroupLeader").css({
+                "display": "none"
+            });
+        } else {
+            $(".groupPromptPublic").css({
+                "display": "none"
+            });
         }
-    });
-    // get group-user infomation
-    $.ajax({
-        url:location.pathname+"/groupUserInfo",
-        type: "POST",
-        dataType:"json",
-        async: false,
-        data:{
-            uid:userInfo[0].userId,
-            gid:groupInfo[0].groupId
-        },
-        success:function(data){
-            if(data.is_member){
-                $(".groupPrompt").css({"display":"none"});
-            }
-        }
+        $('#groupTitleName').text(groupInfo.name);
     });
 }
-
