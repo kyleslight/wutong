@@ -128,6 +128,11 @@
 	box-sizing: border-box;
 }
 
+.opusMain p{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
 .opusSuffixes{
 	padding: 20px;
 	color: #777;

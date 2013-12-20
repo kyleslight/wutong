@@ -783,7 +783,7 @@ li.topicOutter{
 	padding-bottom: 5px;
 	border-bottom: 2px solid #CCC;
 	border-radius: 7px;
-	background: rgba(100,138,0,0.2);
+	background: rgba(102,136,0,0.4);
 }
 .userName{
 	display: inline;
@@ -833,7 +833,8 @@ li.topicOutter{
 	font-size: 15px;
 }
 .talkAction a{
-	color:rgba(102,136,0,0.9);
+	/*color:rgba(102,136,0,0.9);*/
+	color: white;
 }
 .talkAction a:hover{
 	color: #680;

@@ -17,7 +17,7 @@ $(document).ready(function() {
     // get group unsync information
     unsyncGroup();
     // change groupPrompt state by groupType
-    changeGroupPromptState();
+    // changeGroupPromptState();
     // check premission
     checkGroupPremission();
 

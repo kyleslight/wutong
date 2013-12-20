@@ -174,13 +174,13 @@
                         </div>
                     </li>
                 </div>
-                <div class="createGroupBefore">
+                <!-- <div class="createGroupBefore">
                     <h class="groupDynamicHeader">创建梧桐小组»</h>
                     <p class="createGroupBeforeWords">
                     如果想就某一类话题跟别人交流，可以创建一个小组。<br/>
                     小组是对同一个话题感兴趣的人的聚集地</p>
                     <a href="#" id="startCreateGroup" class="formButton">开始创建小组</a>
-                </div>
+                </div> -->
                 <div class="createGroup">
                     <div id="createGroupHeader"><p>申请创建小组»</p></div>
                     <div class="createGroupItem">
@@ -217,8 +217,13 @@
                         </div>
                     </div>
                     <a href="#" id="createGroupSend" class="formButton">提交申请</a>
+                    <a href="#" id="createGroupBack">返回</a>
                 </div>
             </div>
         </div>
     </div>
 {% end %}
+{% block extra_js %}
+    <script type="text/javascript" src="{{ static_url("js/group-navigation.js") }}"></script>
+{% end %}
+

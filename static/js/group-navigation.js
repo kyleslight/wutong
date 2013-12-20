@@ -1,0 +1,10 @@
+$(document).ready(function(){
+	$("#createGroup").click(function(){
+		$(".groupDynamic").fadeOut();
+		$(".createGroup").fadeIn();
+	});
+	$("#createGroupBack").click(function(){
+		$(".createGroup").fadeOut();
+		$(".groupDynamic").fadeIn();		
+	})
+})

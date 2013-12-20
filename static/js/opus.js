@@ -14,7 +14,7 @@ $(document).ready(function(){
         username = data.penname;
         $(".navrightoff").fadeOut(10,function(){
             $(".navrighton").fadeIn(10);
-            $("#username").children().val(username);
+            $("#username").children("p").val(username);
             $("#usernameHover").text(username);
         });
     });
@@ -36,9 +36,9 @@ $(document).ready(function(){
 
         // side comment scroll with the sight of user 
         if ($(".opusSideCommentWrap").css("display")!="none") {
-            for (var i =0; i<$(".opusMain").children().size(); i++) {
-                var offsetHeightOfOpusMainChild=$(".opusMain").children().eq(i).offset().top;
-                var heightOfOpusMainChild=$(".opusMain").children().eq(i).height();
+            for (var i =0; i<$(".opusMain").children("p").size(); i++) {
+                var offsetHeightOfOpusMainChild=$(".opusMain").children("p").eq(i).offset().top;
+                var heightOfOpusMainChild=$(".opusMain").children("p").eq(i).height();
                 if(
                 (
                    ( (offsetHeightOfOpusMainChild>=(top+topOfSight)&&offsetHeightOfOpusMainChild<(top+topOfSight+60)) )||
@@ -48,7 +48,7 @@ $(document).ready(function(){
                    ){
                     $(".opusSideComment").stop();
                     $(".activeOpusPara").removeClass("activeOpusPara");
-                    $(".opusMain").children().eq(i).addClass("activeOpusPara");
+                    $(".opusMain").children("p").eq(i).addClass("activeOpusPara");
                     var heightOfSideCommnetChild=$(".opusSideCommentList"+i).eq(0).position().top + $(".opusSideComment").scrollTop();
                     $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
                     $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
@@ -63,7 +63,7 @@ $(document).ready(function(){
                         &&($(".opusSideCommentList"+i).css("display")=="none")
                     ) {
                     $(".activeOpusPara").removeClass("activeOpusPara");
-                    $(".opusMain").children().eq(i).addClass("activeOpusPara");
+                    $(".opusMain").children("p").eq(i).addClass("activeOpusPara");
                     $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
                     $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
                 };
@@ -104,12 +104,12 @@ $(document).ready(function(){
     })
 
     // show and fade option of opus para
-    $(".opusMain").children().mouseover(function(){
+    $(".opusMain").children("p").mouseover(function(){
         if ($(".opusSideCommentWrap").css("display")!="none"){
             $(this).children(".sideCommentView,.sideCommentEdit").fadeIn(100);
         }
     });
-    $(".opusMain").children().mouseleave(function(){
+    $(".opusMain").children("p").mouseleave(function(){
         if ($(".opusSideCommentWrap").css("display")!="none"){
             $(this).children(".sideCommentView,.sideCommentEdit").fadeOut(10);
         }
@@ -135,7 +135,7 @@ $(document).ready(function(){
         activeParaChange(indexOfPara);
 
         // set position of editing area under the para 
-        var buttomOfActivePara=$(".opusMain").children().eq(indexOfPara).offset().top+$(".opusMain").children().eq(indexOfPara).height()-60;
+        var buttomOfActivePara=$(".opusMain").children("p").eq(indexOfPara).offset().top+$(".opusMain").children("p").eq(indexOfPara).height()-60;
         $(".sideCommentEditBox").css({"top":buttomOfActivePara+"px"});
         $(".sideCommentEditBox").fadeIn(100);
 
@@ -167,13 +167,14 @@ $(document).ready(function(){
     // send buttom comment
     $("#buttomCommentSend").click(function(){
         var buttomCommentCon=$("#opusCommentData").val();
+        console.log(deleteBrPara(buttomCommentCon));
         return false;
     });
 
 });
 
 function init(){
-    var totalNumOfPara=$(".opusMain").children().size();
+    var totalNumOfPara=$(".opusMain").children("p").size();
     // initial sideCommentNode
     for (var i=0;i<totalNumOfPara;i++){
         var sideCommentNode='<div class="sideCommentNode" id="sideCommentNode'+i+'">';
@@ -181,9 +182,9 @@ function init(){
     };
 
     // initial para function bution
-    for (var i =0; i<$(".opusMain").children().size(); i++) {
+    for (var i =0; i<$(".opusMain").children("p").size(); i++) {
         var viewCommentButton='<a href="#" class="sideCommentView">查看评论</a><a href="#" class="sideCommentEdit">编辑评论</a>';
-        $(".opusMain").children().eq(i).append(viewCommentButton);
+        $(".opusMain").children("p").eq(i).append(viewCommentButton);
     };
 
     // load sidecomment in sideCommentNode
@@ -224,7 +225,7 @@ function init(){
     };
 
     // other set
-    $(".opusMain").children().addClass("opusMainChildren");
+    $(".opusMain").children("p").addClass("opusMainChildren");
     $(".opusCommentList").last().addClass("noBorderButtom");
 }
 
@@ -257,7 +258,7 @@ function activeParaChange(indexOfPara){
     $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
     $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
     $(".activeOpusPara").removeClass("activeOpusPara");
-    $(".opusMain").children().eq(indexOfPara).addClass("activeOpusPara");
+    $(".opusMain").children("p").eq(indexOfPara).addClass("activeOpusPara");
     if ($(".opusSideCommentList"+indexOfPara).css("display")!="none") {
         var offsetHeightOfSideCommnetChild=$(".opusSideCommentList"+indexOfPara).eq(0).position().top + $(".opusSideComment").scrollTop();
         $(".opusSideComment").animate({scrollTop:+offsetHeightOfSideCommnetChild});
@@ -289,8 +290,8 @@ function foldSideComment(){
     $("#expandSideComment").text("展开侧评");
     $(".opusSideCommentWrap").fadeOut(50);
     $(".activeOpusPara").removeClass("activeOpusPara");
-    $(".opusMain").children().removeClass("activeOpusPara");
-    $(".opusMain").children().css({"color":"rgb(68,68,68)","opacity":"1.0"});
+    $(".opusMain").children("p").removeClass("activeOpusPara");
+    $(".opusMain").children("p").css({"color":"rgb(68,68,68)","opacity":"1.0"});
     var top=$(window).scrollTop();    
     $(".readMain").removeClass("floatReadMain");
     $(".read").css({"width":"1060px"});

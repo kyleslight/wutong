@@ -24,6 +24,10 @@ $(document).ready(function(){
             // opusPublicity : isPublic($(this).attr("id")),                作品公开性，返回true，false
             // opusIsPushed : $("#puclicPush").prop('checked')              作品是否推送，返回true，false
         // };
+        // make null para not a child of opus
+        var mainText=$("#textArea").val();
+        mainText=deleteBrPara(mainText);
+        $("#textArea").val(mainText);
         var theForm=document.getElementById("textdata");
         theForm.submit();
     });
@@ -88,6 +92,14 @@ function isPublic(bottonId){
         return true;
     }else{return false;};
     return false;
+}
+
+function deleteBrPara(string){
+    var deletaBrReg=/<p>(<br\/>)+<\/p>/g;
+    var deleteSpaceReg=/<p>(&nbsp;| &nbsp;)+<\/p>/g;
+    string=string.replace(deletaBrReg,"<br/>");
+    string=string.replace(deleteSpaceReg,"<br/>");
+    return string;
 }
 
 
