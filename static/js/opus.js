@@ -282,7 +282,7 @@ function expandSideComment(){
     $(".opusSideCommentWrap").fadeIn();
     $("#expandSideComment").text("收起侧评");
     $('html,body').animate({scrollTop:top},10);
-    // $('html,body').scrollTop(top);
+    $('#buttomCommentSend').css({"margin-right":"-17px"});
 }
 
 function foldSideComment(){
@@ -299,4 +299,5 @@ function foldSideComment(){
     });
     $(".sideCommentView,.sideCommentEdit").hide();
     $(".opusSideCommentWrap").addClass("noTransition");
+    $("#buttomCommentSend").css({"margin-right":"0"});
 }

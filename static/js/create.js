@@ -24,8 +24,8 @@ $(document).ready(function(){
             // opusPublicity : isPublic($(this).attr("id")),                作品公开性，返回true，false
             // opusIsPushed : $("#puclicPush").prop('checked')              作品是否推送，返回true，false
         // };
-        // var theForm=document.getElementById("textdata");
-        // theForm.submit();
+        var theForm=document.getElementById("textdata");
+        theForm.submit();
     });
 
     $(".inputTip a").click(function(){

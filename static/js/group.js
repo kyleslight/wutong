@@ -7,7 +7,7 @@ var shortElapseTime = 4000;
 var _showwel_flag = true;
 var userInfo;
 var groupInfo;
-
+var gid = parseInt(location.pathname.slice(3));
 var url = "ws://" + location.host + location.pathname + "/message";
 var msg_socket = new WebSocket(url);
 msg_socket.onclose = function() {};
@@ -16,8 +16,13 @@ msg_socket.onclose = function() {};
 $(document).ready(function() {
     // get group unsync information
     unsyncGroup();
+    // change groupPrompt state by groupType
+    changeGroupPromptState();
+    // check premission
+    checkGroupPremission();
 
-    //check sex of the member
+    // console.log(groupInfo.is_public);
+
     renderMaleAndFemale();
     var groupMottoPrimaryWidth = $("#groupMotto").width();
     if (groupMottoPrimaryWidth > 425) {
@@ -31,10 +36,6 @@ $(document).ready(function() {
         $.ajax({
             url: location.pathname + "/join",
             type: "POST",
-            data: {
-                uid: userInfo[0].userId,
-                gid: groupInfo[0].groupId
-            },
             success: function(data) {
                 alert("You have joined this group");
                 $(".groupPrompt").slideUp();
@@ -317,6 +318,43 @@ function submitTopicData() {
     $(window.frames["ueditor_0"].document).find("body.view").html("");
     $("#topicTitle").val("");
     return false;
+}
+
+function unsyncGroup() {
+    var gurl = location.pathname + "/info";
+    $.ajax({
+        url: gurl,
+        type: "GET",
+        dataType: "json",
+        async: false,
+        success: function(data) {
+            groupInfo=data;
+        }
+    });
+}
+
+function checkGroupPremission(){
+    var cgpurl = location.pathname + "/permission";
+    $.ajax({
+        url: cgpurl,
+        type: "POST",
+        data: {
+            check_permission: 'is_member'
+        },
+        success: function(data) {
+            if (data) {
+                $(".activePrompt").hide();
+            };
+        }
+    });
+}
+
+function changeGroupPromptState(){
+    if (groupInfo.is_public) {
+        $(".groupPromptPublic").addClass("activePrompt").show();
+    }else{
+        $(".groupPromptPrivate,#contactGroupLeader").addClass("activePrompt").show();
+    }
 }
 
 function checkIsOtherOptionShow() {

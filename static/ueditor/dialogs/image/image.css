@@ -2,7 +2,13 @@
 .wrapper{ width: 623px;margin: 10px auto;zoom:1;position: relative;}
 .tabbody{ height:325px;_height:330px;}/*tab样式框大小*/
 .panel { position: absolute;width:100%; height:100%;background: #fff;}
-
+#imgSearch{
+    display: none;
+}
+[tabsrc=imgSearch]
+{
+    display: none;
+}
 #remote{ z-index: 200;}
 #remote table{border-collapse: collapse;width: 620px; height: 300px; margin-top: 5px;}
 #remote td.label{text-align: center;width: 80px; }

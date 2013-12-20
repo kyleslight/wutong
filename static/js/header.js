@@ -16,6 +16,7 @@ unsycUser();
 
 $(document).ready(function() {
     $(".preload").removeClass("preload");
+    $("#tabHeads").children("span").eq(3).css({"display":"none"});
     // get user info
     $.getJSON("/u/info", function (data) {
         var username;
@@ -379,7 +380,7 @@ function unsycUser() {
                 $("#usernameHover").text(userInfo.penname);
             });
         }
-    })
+    });
 }
 
 function unsyncGroup() {

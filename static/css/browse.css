@@ -5,8 +5,6 @@
 .mainView{
 	float: left;
 	background: rgba(255,255,255,0.5);
-	/*border-bottom-left-radius: 7px;
-	border-bottom-right-radius: 7px;*/
 	border-radius: 7px;
 	padding: 20px;
 	margin-top: 20px;
@@ -15,11 +13,10 @@
 	float: left;
 	width: 1060px;
 	text-align: center;
-	padding-bottom: 10px;
+	padding-bottom: 15px;
 	height: 35px;
 }
 .opusType a{
-	/*font-size:20px; */
 	padding: 0 10px;
 	font-weight: 500;
 	transition: 0.5s;
@@ -42,6 +39,7 @@
 .opusClass{
 	float: left;
 }
+
 .opusClassDivision{
 	float: left;
 	background: rgba(0,0,0,0.3);
@@ -50,7 +48,10 @@
 	border-bottom-left-radius: 4px;
 	border-bottom-right-radius: 4px;
 	overflow: hidden;
-	/*padding-top: 2px;*/
+	display: none;
+}
+.activeClassDivision{
+	display: block;
 }
 .opusClassItem{
 	float: left;
@@ -59,7 +60,7 @@
 	display: block;
 	text-align: center;
 	color: white;
-	border-top: 2px solid rgba(0,0,0,0.3);
+	border-top: 2px solid rgba(102,136,0,0.1);
 	transition: 0.5s;
 	-moz-transition:0.5s;
 	-webkit-transition:0.5s;

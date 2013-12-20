@@ -139,13 +139,11 @@ class PermissionHandler(GroupBaseHandler):
 
 
 class JoinHandler(GroupBaseHandler):
-    def join_group(gid, uid):
+    def join_group(self, gid, uid):
         return self.model.do_join_group(gid, uid)
 
     def post(self, gid):
-        uid = self.get_argument("uid")
-        gid = self.get_argument("gid", gid)
-        if self.join_group(gid, uid):
+        if self.join_group(gid, self.user_id):
             self.write("success")
         else:
             self.write("failed")
@@ -173,7 +171,7 @@ class GroupIndexHandler(MessageBaseHandler):
 
         bulletins = self.get_bulletins(gid)
         messages = self.get_group_messages(gid)
-        members = q>self.get_group_members(gid)
+        members = self.get_group_members(gid)
         self.render(
                 "group.html",
                 bulletins=bulletins,

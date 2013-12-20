@@ -82,6 +82,15 @@ body {
     border: 1px solid #ccc;
 }
 
+#imgSearch{
+    display: none;
+}
+
+[tabsrc=imgSearch]
+{
+    display: none;
+}
+
 /*button*/
 a.button {
     display: block;

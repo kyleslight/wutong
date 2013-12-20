@@ -62,6 +62,14 @@ textarea,input{
 	border-bottom: 1px solid #CCC;
 }
 
+.groupPrompt p,.groupPrompt form{
+	display: none;
+}
+
+.activePrompt{
+	display: block;
+}
+
 .groupPrompt a.joinButton{
 	background: #680;
 	color: white;

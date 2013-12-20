@@ -2,6 +2,7 @@ var isloadbox=false;
 var isregisterbox=false;
 var _showwel_flag = true;
 var elapseTime = 5000;
+var indexOfOpusType=-1;
 $(document).ready(function(){
     // basic
     $.getJSON("/u/info", function (data) {
@@ -56,12 +57,18 @@ $(document).ready(function(){
     })
 
     $(".opusTypeItem").click(function(){
+        if ($(".opusTypeItem").index($(this))==indexOfOpusType) {
+            return;
+        };
+        indexOfOpusType=$(".opusTypeItem").index($(this));
         $(".opusTypeItem").css({"color":"#555","font-size":"20px"});
         $(this).css({"color":"#680","font-size":"35px"});
+        $(".opusClassDivision").slideUp();
+        $(".opusClassDivision").eq(indexOfOpusType).slideDown();
     })
 
     $(".opusClassItem").click(function(){
-        $(".activeOpusClassItem").removeClass("activeOpusClassItem");
+        $(this).siblings().removeClass("activeOpusClassItem");
         $(this).addClass("activeOpusClassItem");
     })
 
