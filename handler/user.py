@@ -78,6 +78,10 @@ class RegisterHandler(UserBaseHandler):
         return hashuid
 
     def send_mail(self, email, hashuid):
+        if self.settings["debug"]:
+            self.model.do_activate(hashuid)
+            self.write("success")
+            return
         title = u"欢迎加入梧桐"
         content = u"{url}".format(
             url = "http://localhost:8888/account/check?r=" + hashuid

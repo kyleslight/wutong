@@ -468,9 +468,23 @@ CREATE OR REPLACE FUNCTION join_group(
     _uid integer)
   RETURNS integer
 AS $$
+DECLARE
+    _guid integer;
+BEGIN
+    PERFORM guid
+       FROM group_user
+      WHERE gid = $1
+         OR uid = $2;
+    IF FOUND THEN
+        RETURN NULL;
+    END IF;
+
     INSERT INTO group_user (gid, uid) VALUES ($1, $2)
-    RETURNING guid;
-$$ LANGUAGE SQL;
+    RETURNING guid
+    INTO _guid;
+    RETURN _guid;
+END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION get_group_member_info(
