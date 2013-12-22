@@ -2,7 +2,7 @@
 {% for comment in [{"avatar": "", "username": "foo", "submittime": "14:00", "content": "content"}] %}
 <li class="opusCommentList" style="display: list-item;">
     <a class="userImage" href="#">
-        <img src={{ comment[ "avatar"] }}>
+        <img src="{{ comment[ "avatar"] }}">
     </a>
     <div class="opusCommentMain">
         <div class="opusCommentListFirstLine">

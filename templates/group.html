@@ -1,4 +1,7 @@
-{% extends "base_group.html" %}
+{% extends "base_edit.html" %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ static_url("css/group.css") }}" type="text/css" />
+{% end %}
 {% block extra_div %}
     <div class="groupPrompt">
         <p class="groupPromptPublic">这是一个公开的小组，你可以点击 <a id="publicJoin" class="joinButton" href="#"> 我喜欢 </a>加入它!</p>
@@ -9,11 +12,6 @@
             <div class="joinSend"><a href="#" id="JoinSubmitButton" class="joinButton" name="submitButton" value="send">Send</a>  <a href="#" id="contactGroupLeaderBack">返回</a>
              </div>
         </form>
-    </div>
-    <!-- topic tag list -->
-    <div class="topicTag">
-    </div>
-    <div class="topicTagClone">
     </div>
     <div class="groupWarpOuter">
         <div class="groupWarp">
@@ -173,6 +171,25 @@
                 </div>
 
             </div>
+            {% if is_topic %}
+            <span class='topicLocation'>
+            {% for topic in ancestor_topics %}
+                >><a href="/t/{{ topic["tid"] }}">{{ topic["title"] }}</a>
+            {% end %}
+            </span>
+            <li class="topicInner">
+                <a class="userImage" href='#'><img src="{{ topic["avatar"] }}" /></a>
+                <div class='talkMain'>
+                    <div class="userName"><a href='#'>{{ topic["penname"] }}</a></div>
+                    <div class='timeShow'>
+                        {{ topic["submit_time"] }}
+                    </div>
+                    <div class='talkContent'>
+                        {% raw topic["content"] %}
+                    </div>
+                </div>
+            </li>
+            {% end %}
             <div id="communicationWrapOuter">
                 <div id="messageTemp">
                 </div>

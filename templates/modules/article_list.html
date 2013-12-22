@@ -1,14 +1,16 @@
 <li class="opusShow article">
-    <img src={{ article_list["avatar"] }} class="opusAluthorImage">
+    <img src="{{ article_list["avatar"] }}" class="opusAluthorImage">
     <div class="opusBasicInfo">
         <a href="/a/{{ article_list["aid"] }}" class="opusTitle" accesskey={{ article_list["aid"] }}>
             {{ article_list["title"] }}
         </a>
         <br/>
         <a href="#" class="opusAuthor">{{ article_list["author"] }}</a>
+        {% if article_list["description"] %}
         <div class="opusBrief">
             {{ article_list["description"] }}
         </div>
+        {% end %}
         <div class="opusTag">Tags：
         {% for tag in article_list["tags"] %}
             <a href="/tag/{{ tag["id"] }}">{{ tag["name"] }}</a>

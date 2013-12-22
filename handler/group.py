@@ -163,7 +163,7 @@ class GroupinfoHandler(GroupBaseHandler):
 
 
 class GroupIndexHandler(MessageBaseHandler):
-    def get(self, gid):
+    def render_group(self, gid, is_topic=False, **kwargs):
         group_info = self.get_group_info(gid)
         if not group_info:
             self.write_error(403)
@@ -177,40 +177,32 @@ class GroupIndexHandler(MessageBaseHandler):
                 bulletins=bulletins,
                 messages=messages,
                 members=members,
-                group_info=group_info
+                group_info=group_info,
+                is_topic=is_topic,
+                **kwargs
             )
 
+    def get(self, gid):
+        self.render_group(gid)
 
-class TopicIndexHandler(MessageBaseHandler):
-    def get_ancestor_topics(self):
-        tpc = self.topic
-        topics = [tpc]
-        while tpc["reply_id"]:
-            father_tid = tpc["reply_id"]
-            tpc = self.get_topic(father_tid)
-            topics.append(tpc)
+
+class TopicIndexHandler(GroupIndexHandler):
+    def get_ancestor_topics(self, topic):
+        topics = [topic]
+        while topic["reply_id"]:
+            father_tid = topic["reply_id"]
+            topic = self.get_topic(father_tid)
+            topics.append(topic)
         return topics
 
     def get(self, tid):
-        self.topic = self.get_topic(tid)
-        if not self.topic:
-            self.write_error(403)
-            return
+        topic = self.get_topic(tid)
+        if topic:
+            gid = topic["gid"]
+            ancestor_topics = self.get_ancestor_topics(topic).__reversed__()
+            self.render_group(gid, is_topic=True, ancestor_topics=ancestor_topics)
         else:
-            self.gid = self.topic["gid"]
-
-        ancestor_topics = self.get_ancestor_topics()
-        group_info = self.get_group_info(self.gid)
-        bulletins = self.get_bulletins(self.gid)
-        messages = self.get_topic_messages(tid)
-        self.render(
-                "topic.html",
-                ancestor_topics=ancestor_topics.__reversed__(),
-                topic=self.topic,
-                bulletins=bulletins,
-                messages=messages,
-                group_info=group_info
-            )
+            self.write_error(403)
 
 
 class MessageSocketHandler(MessageBaseHandler, WebSocketHandler):

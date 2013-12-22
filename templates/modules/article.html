@@ -11,17 +11,21 @@
     </div>
     <div class="authorBasicInfo">
         <p class="">作者信息</p>
-        <img src={{ article["avatar"] }} class="opusAluthorImage">
+        <img src="{{ article["avatar"] }}" class="opusAluthorImage">
         <a href="#" class="opusAuthor">{{ article["author"] }}</a>
         <p class="authorMotto"></p>
     </div>
     <div class="opusTitle">
         <div class="opusMainTitle">{{ article["title"] }}</div>
     </div>
+    {% if article["description"] %}
     <div class="opusDescription">
         {{ article["description"] }}
     </div>
+    {% end %}
+    {% if article["suit_for"] %}
     <div class="opusAppositeness">适合：{{ article["suit_for"] }}</div>
+    {% end %}
 </div>
 
 <div class="opusMain">
@@ -29,37 +33,23 @@
 </div>
 
 <div class="opusSuffixes">
+    {% if article["reference"] %}
     <div class="opusReference">参考来源：<a href="#">{{ article["reference"] }}</a>
     </div>
+    {% end %}
     <div class="opusTag">Tags： <a href="#">技术</a><a href="#">2013极客人物</a><a href="#">404</a>
     </div>
+    {% if None %}
     <div class="opusSeries">所属文辑其他文章：
         <a href="#">other1</a>
         <a href="#">other2</a>
     </div>
-    <!-- 这是一个底部评论示例，加了底部评论编辑 li 标签建议作为模板从article模板中分离 -->
+    {% end %}
     <div class="opusComment">
         <div class="opusCommentIntro"><a href="#">展开底部评论</a></div>
         <div class="buttomComment">
-            <li class="opusCommentList" style="display: list-item;">
-                <a class="userImage" href="#">
-                    <img src="">
-                </a>
-                <div class="opusCommentMain">
-                    <div class="opusCommentListFirstLine">
-                        <div class="userName"><a href="#">kyleslight</a>
-                        </div>
-                        <span class="opusCommentPosition">1楼</span>
-                        <div class="timeShow">
-                            9-17 20:00
-                        </div>
-                    </div>
-                    <div class="opusCommentContent">
-                        aaaaaaaaaaaaaaaaaa<br/>
-                        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
-                    </div>
-                </div>
-            </li>
+            <!-- bottom_comment begin -->
+            <!-- bottom_comment end -->
             <form method="post">
                 <textarea id="opusCommentData" class="input" type="text" name="opusCommentData"></textarea>
                 <a id="buttomCommentSend" class="formButton" href="#">发送</a>

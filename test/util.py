@@ -51,7 +51,7 @@ def gen_random_user(num=1):
 
     return users
 
-def gen_test_data():
+def gen_test_data(number=30):
     admin = {
         'email': 'test@wutong.com',
         'penname': 'wutong',
@@ -69,16 +69,20 @@ def gen_test_data():
                                     admin['penname'],
                                     admin['password'])
     admin["uid"] = usermodel.do_activate(hashuid)
-    users = gen_random_user(30)
+
+    users = gen_random_user(number)
+    # user
     for user in users:
         hashuid = usermodel.do_register(user["email"],
                                         user["penname"],
                                         user["password"])
         user["uid"] = usermodel.do_activate(hashuid)
+        usermodel.update_user_info(**user)
 
     gid = groupmodel.do_create(user['uid'], 'test_group1')
     gid2 = groupmodel.do_create(admin['uid'], 'test_group2', is_public=False)
     tids = []
+    # group
     for user in users:
         uid = user['uid']
         groupmodel.do_join_group(gid, uid)
@@ -88,10 +92,10 @@ def gen_test_data():
         groupmodel.do_create_chat(gid, uid, '%s chat' % gid)
         groupmodel.do_create_bulletin(gid, uid, 'title', '%s bulletin' % gid)
 
-    for i in xrange(1000):
+    # topic and chat
+    for i in xrange(number * 10):
         uid = random.choice(users)['uid']
         tid = random.choice(tids)
-        random.random()
         if bool(random.getrandbits(1)):
             groupmodel.do_create_chat(gid, uid, 'topic chat', tid)
         else:
@@ -102,6 +106,28 @@ def gen_test_data():
                                              tid)
             tids.append(tid)
 
+    # article
+    aids = []
+    for i in xrange(number * 3):
+        uid = random.choice(users)['uid']
+        aid = articlemodel.do_create(uid,
+                                     'title%s' % random.random(),
+                                     'mainbody')
+        aids.append(aid)
+        for i in xrange(random.randint(0, number * 30)):
+            uid = random.choice(users)['uid']
+            articlemodel.create_bottom_comment(aid,
+                                               uid,
+                                               'content%s' % random.random())
+            articlemodel.create_side_comment(aid,
+                                             uid,
+                                             'content%s' % random.random(),
+                                             str(random.randint(0,1)))
+
 
 if __name__ == "__main__":
-    gen_test_data()
+    try:
+        number = int(sys.argv[1])
+    except IndexError:
+        number = 30
+    gen_test_data(number)

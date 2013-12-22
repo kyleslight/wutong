@@ -28,6 +28,8 @@ urls = [
     (r"/t/(\d+)", group.TopicIndexHandler),
     (r"/t/(\d+)/message", group.TopicMessageHandler),
     (r"/a/(\d+)", article.OpusHandler),
+    (r"/a/(\d+)/comment/bottom", article.BottomCommentHandler),
+    (r"/a/(\d+)/comment/side", article.SideCommentHandler),
     (r"/a/browse", article.BrowseArticleHandler),
     (r"/a/create", article.CreateArticleHandler),
 ]

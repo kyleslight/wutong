@@ -1,0 +1,18 @@
+<li class="opusCommentList" style="display: list-item;">
+    <a class="userImage" href="#">
+        <img src="{{ comment['avatar'] }}">
+    </a>
+    <div class="opusCommentMain">
+        <div class="opusCommentListFirstLine">
+            <div class="userName"><a href="#">{{ comment['penname'] }}</a>
+            </div>
+            <span class="opusCommentPosition">{{ comment['floor'] }}楼</span>
+            <div class="timeShow">
+                {{ prettytime(comment['create_time']) }}
+            </div>
+        </div>
+        <div class="opusCommentContent">
+            {% raw comment['content'] %}
+        </div>
+    </div>
+</li>
