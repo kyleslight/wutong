@@ -17,6 +17,11 @@ class ArticleModel(object):
         article_list = self.db.getjson(select, sort, limit, offset)
         return article_list
 
+    def get_comment(self, comment_id):
+        select = 'SELECT get_comment(%s)'
+        comment = self.db.getjson(select, comment_id)
+        return comment
+
     def get_side_comments(self, aid):
         select = 'SELECT get_side_comments(%s)'
         comments = self.db.getjson(select, aid)

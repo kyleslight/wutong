@@ -61,118 +61,27 @@
                 </div> -->
                 <div class="groupDynamic">
                     <h class="groupDynamicHeader">小组动态»</h>
+                    {% for topic in topics %}
                     <li class="groupDynamicList">
-                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
+                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ topic['avatar'] }}"></a>
                         <div class="groupDynamicContent">
-                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
+                            <a href="#" class="groupDynamicTitle">{{ topic['title'] }}</a>
                             <div class="groupDynamicInfo">
-                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
-                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
+                                <a href="#" class="groupDynamicAuthor">{{ topic['penname'] }}</a>
+                                <div class="groupDynamicFrom">
+                                    来自 <a href="#">{{ topic['group_name'] }}</a> 小组
+                                    <span class="groupDynamicMemberNum">{{ topic['reply_times'] }}</span>人次参与
+                                </div>
                             </div>
                             <div class="groupDynamicBrief">
-                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
+                                {% raw topic['content'] %}
                             </div>
-                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
+                            <div class="groupDynamicDetal">
+                                <span class="groupDynamicTime">{{ prettytime(topic['submit_time']) }}</span>
+                            </div>
                         </div>
                     </li>
-                    <li class="groupDynamicList">
-                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test13.png") }}"></a>
-                        <div class="groupDynamicContent">
-                            <a href="#" class="groupDynamicTitle">自学心得（zz我一个非数学的学长写的）</a>
-                            <div class="groupDynamicInfo">
-                                <a href="#" class="groupDynamicAuthor">loggerhead</a>
-                                <div class="groupDynamicFrom">来自 <a href="#">纯数学</a> 小组<span class="groupDynamicMemberNum">326</span>人参与</div>
-                            </div>
-                            <div class="groupDynamicBrief">
-                                这篇文章的作者是一个非数学专业的自学心的 作者分享了自学中的一些个人的见解 或许对很多科班数学的朋友并不适用 由于并未得本人允许就转载了 所以评价时请注意各位的言语 对于对作者的人身攻击我不加通知的删除了 请原谅...
-                            </div>
-                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
-                        </div>
-                    </li>
-                    <li class="groupDynamicList">
-                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
-                        <div class="groupDynamicContent">
-                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
-                            <div class="groupDynamicInfo">
-                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
-                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
-                            </div>
-                            <div class="groupDynamicBrief">
-                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
-                            </div>
-                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
-                        </div>
-                    </li>
-                    <li class="groupDynamicList">
-                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
-                        <div class="groupDynamicContent">
-                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
-                            <div class="groupDynamicInfo">
-                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
-                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
-                            </div>
-                            <div class="groupDynamicBrief">
-                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
-                            </div>
-                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
-                        </div>
-                    </li>
-                    <li class="groupDynamicList">
-                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
-                        <div class="groupDynamicContent">
-                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
-                            <div class="groupDynamicInfo">
-                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
-                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
-                            </div>
-                            <div class="groupDynamicBrief">
-                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
-                            </div>
-                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
-                        </div>
-                    </li>
-                    <li class="groupDynamicList">
-                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
-                        <div class="groupDynamicContent">
-                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
-                            <div class="groupDynamicInfo">
-                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
-                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
-                            </div>
-                            <div class="groupDynamicBrief">
-                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
-                            </div>
-                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
-                        </div>
-                    </li>
-                    <li class="groupDynamicList">
-                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
-                        <div class="groupDynamicContent">
-                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
-                            <div class="groupDynamicInfo">
-                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
-                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
-                            </div>
-                            <div class="groupDynamicBrief">
-                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
-                            </div>
-                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
-                        </div>
-                    </li>
-                    <li class="groupDynamicList">
-                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ static_url("css/image/test.png") }}"></a>
-                        <div class="groupDynamicContent">
-                            <a href="#" class="groupDynamicTitle">豆瓣使用技巧豆瓣使用技巧</a>
-                            <div class="groupDynamicInfo">
-                                <a href="#" class="groupDynamicAuthor">Kyleslight</a>
-                                <div class="groupDynamicFrom">来自 <a href="#">豆瓣排行榜</a> 小组<span class="groupDynamicMemberNum">416</span>人参与</div>
-                            </div>
-                            <div class="groupDynamicBrief">
-                                小组浏览 http://www.douban.com/group/all 所有小站 http://www.douban.com/explore/site/all 全部东西 http://www.douban.com/subject/all 世界 / World http://www.douban.com/subject/8000001/ 发现周边生...
-                            </div>
-                            <div class="groupDynamicDetal"><span class="groupDynamicTime">11-30</span></div>
-                        </div>
-                    </li>
+                    {% end %}
                 </div>
                 <!-- <div class="createGroupBefore">
                     <h class="groupDynamicHeader">创建梧桐小组»</h>

@@ -35,6 +35,4 @@ class PoolTest(unittest.TestCase):
 
     def test_execute(self):
         res = self.db.execute(self.sql, 1)
-        self.assertTrue(res)
-
-
+        self.assertTrue(res) 

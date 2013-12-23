@@ -22,6 +22,13 @@ class UserBaseHandler(BaseHandler):
         return self._permission.get("is_admin", False)
 
 
+class HomeHandler(UserBaseHandler):
+    def get(self, penname):
+        uid = self.model.get_uid(penname)
+        user_info = self.model.get_user_info(uid)
+        self.render('user.html', user=user_info)
+
+
 class PermissionHandler(UserBaseHandler):
     @authenticated
     def post(self):
@@ -100,6 +107,7 @@ class UserinfoHandler(UserBaseHandler):
         userinfo = escape.json_encode(userinfo)
         self.write(userinfo)
 
+    # update user info
     @authenticated
     def post(self):
         userinfo = self.get_current_user()
@@ -142,8 +150,3 @@ class CheckMailHandler(UserBaseHandler):
 
     def check_mail(self, hashuid):
         return self.model.do_activate(hashuid)
-
-
-class HomeHandler(UserBaseHandler):
-    def get(self):
-        self.write("user home")

@@ -536,6 +536,19 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION get_group_news(_uid integer)
+  RETURNS json
+AS $$
+    -- TODO
+    SELECT array_to_json(array_agg(aj.*))
+      FROM (
+            SELECT *
+              FROM group_member_info_v
+             WHERE uid = $1
+        ) aj;
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION get_group_member_info(
     _gid integer,
     _uid integer)
@@ -732,6 +745,7 @@ AS $$
             SELECT *
               FROM group_message_v
              WHERE gid = $1
+               AND reply_id IS NULL
              ORDER BY last_reply_time DESC
              LIMIT $2
             OFFSET $3) j;
@@ -848,6 +862,19 @@ $$
                    user_info_v u
              WHERE a.uid = u.uid
          ) aj;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_comment(
+    _comment_id integer)
+  RETURNS json
+AS $$
+    SELECT row_to_json(j.*)
+      FROM (
+            SELECT *
+              FROM article_comment_v
+             WHERE id = $1
+         ) j;
 $$ LANGUAGE SQL;
 
 

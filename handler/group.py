@@ -48,25 +48,12 @@ class GroupBaseHandler(BaseHandler):
 
 
 class MessageBaseHandler(GroupBaseHandler):
-    @property
-    def gid(self):
-        if not hasattr(self, "_gid"):
-            self._gid = None
-        return self._gid
+    def init_content(self, *arg):
+        self.reply_id = None
+        self.gid = None
 
-    @gid.setter
-    def gid(self, value):
-        self._gid = value
-
-    @property
-    def reply_id(self):
-        if not hasattr(self, "_tid"):
-            return None
-        return self._tid
-
-    @reply_id.setter
-    def reply_id(self, value):
-        self._tid = value
+    def get(self, *arg):
+        self.init_content(*arg)
 
     def get_topic(self, tid):
         topic = self.model.get_topic(tid)
@@ -138,6 +125,25 @@ class PermissionHandler(GroupBaseHandler):
                 self.write("false")
 
 
+class BrowseHandler(GroupBaseHandler):
+    def get(self):
+        pass
+
+
+class CreateHandler(GroupBaseHandler):
+    def post(self):
+        name = self.get_argument('name')
+        intro = self.get_argument('intro')
+        tags = self.get_argument('tags')
+        is_public = self.get_argument('is_public', True)
+        if tags:
+            tags = json_decode(tags)
+        else:
+            tags = []
+
+        self.model.do_create(self.user_id, name, intro=intro, is_public=is_public)
+
+
 class JoinHandler(GroupBaseHandler):
     def join_group(self, gid, uid):
         return self.model.do_join_group(gid, uid)
@@ -163,14 +169,13 @@ class GroupinfoHandler(GroupBaseHandler):
 
 
 class GroupIndexHandler(MessageBaseHandler):
-    def render_group(self, gid, is_topic=False, **kwargs):
+    def render_group(self, gid, messages, is_topic=False, **kwargs):
         group_info = self.get_group_info(gid)
         if not group_info:
             self.write_error(403)
             return
 
         bulletins = self.get_bulletins(gid)
-        messages = self.get_group_messages(gid)
         members = self.get_group_members(gid)
         self.render(
                 "group.html",
@@ -183,10 +188,14 @@ class GroupIndexHandler(MessageBaseHandler):
             )
 
     def get(self, gid):
-        self.render_group(gid)
+        messages = self.get_group_messages(gid)
+        self.render_group(gid, messages)
 
 
 class TopicIndexHandler(GroupIndexHandler):
+    def get_messages(self, id):
+        messages = self.get_topic_messages(id)
+
     def get_ancestor_topics(self, topic):
         topics = [topic]
         while topic["reply_id"]:
@@ -199,8 +208,9 @@ class TopicIndexHandler(GroupIndexHandler):
         topic = self.get_topic(tid)
         if topic:
             gid = topic["gid"]
+            messages = self.get_topic_messages(tid)
             ancestor_topics = self.get_ancestor_topics(topic).__reversed__()
-            self.render_group(gid, is_topic=True, ancestor_topics=ancestor_topics)
+            self.render_group(gid, messages, is_topic=True, ancestor_topics=ancestor_topics)
         else:
             self.write_error(403)
 
@@ -214,12 +224,12 @@ class MessageSocketHandler(MessageBaseHandler, WebSocketHandler):
         return cls._manager
 
     @property
-    def id(self):
-        return self._id
+    def user_id(self):
+        return self.session.load().get("uid")
 
-    @id.setter
-    def id(self, value):
-        self._id = value
+    def init_content(self, id):
+        super(MessageSocketHandler, self).init_content(id)
+        self.id = id
 
     def add(self):
         if not self.manager.has_key(self.id):
@@ -227,17 +237,11 @@ class MessageSocketHandler(MessageBaseHandler, WebSocketHandler):
         self.manager[self.id].add(self)
 
     def remove(self):
-        handlers = self.manager.get(self.id)
-        if handlers:
-            handlers.discard(self)
+        self.manager.get(self.id).discard(self)
 
     def send_message(self, message):
         for handler in self.manager[self.id]:
             handler.write_message(message)
-
-    @property
-    def user_id(self):
-        return self.session.load().get("uid")
 
     def can_send_message(self):
         member_info = self.model.get_member_info(self.gid, self.user_id)
@@ -245,6 +249,10 @@ class MessageSocketHandler(MessageBaseHandler, WebSocketHandler):
             return True
         else:
             return False
+
+    def open(self, id):
+        self.init_content(id)
+        self.add()
 
     def on_message(self, message):
         if self.can_send_message():
@@ -261,17 +269,13 @@ class MessageSocketHandler(MessageBaseHandler, WebSocketHandler):
 
 
 class GroupMessageHandler(MessageSocketHandler):
-    def open(self, gid):
-        self.gid = self.id = gid
-        self.add()
+    def init_content(self, gid):
+        super(GroupMessageHandler, self).init_content(gid)
+        self.gid = gid
 
 
 class TopicMessageHandler(MessageSocketHandler):
-    def get_topic(self, tid):
-        return self.model.get_topic(tid)
-
-    def open(self, tid):
-        self.id = tid
-        self.reply_id = tid
+    def init_content(self, tid):
+        super(TopicMessageHandler, self).init_content(tid)
         self.gid = self.get_topic(tid)["gid"]
-        self.add()
+        self.reply_id = tid

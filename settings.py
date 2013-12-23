@@ -12,14 +12,16 @@ from lib.util import encodestr, str2datetime, prettytime
 
 
 urls = [
-    (r"/", user.HomeHandler),
-    (r"/u/home/(\w+)", user.HomeHandler),
+    (r"/", group.GroupIndexHandler),
+    (r"/u/(\w+)/home", user.HomeHandler),
     (r"/u/info", user.UserinfoHandler),
     (r"/u/permission", user.PermissionHandler),
     (r"/login", user.LoginHandler),
     (r"/logout", user.LogoutHandler),
     (r"/register", user.RegisterHandler),
     (r"/account/check", user.CheckMailHandler),
+    (r"/g/browse", group.BrowseHandler),
+    (r"/g/create", group.CreateHandler),
     (r"/g/(\d+)", group.GroupIndexHandler),
     (r"/g/(\d+)/info", group.GroupinfoHandler),
     (r"/g/(\d+)/message", group.GroupMessageHandler),
@@ -27,11 +29,11 @@ urls = [
     (r"/g/(\d+)/permission", group.PermissionHandler),
     (r"/t/(\d+)", group.TopicIndexHandler),
     (r"/t/(\d+)/message", group.TopicMessageHandler),
+    (r"/a/browse", article.BrowseArticleHandler),
+    (r"/a/create", article.CreateArticleHandler),
     (r"/a/(\d+)", article.OpusHandler),
     (r"/a/(\d+)/comment/bottom", article.BottomCommentHandler),
     (r"/a/(\d+)/comment/side", article.SideCommentHandler),
-    (r"/a/browse", article.BrowseArticleHandler),
-    (r"/a/create", article.CreateArticleHandler),
 ]
 
 

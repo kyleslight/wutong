@@ -93,9 +93,9 @@ class CommentBaseHandler(ArticleBaseHandler):
     def post(self, article_id):
         article_id = int(article_id)
         content = self.get_argument('content')
-        comment_id = self.create_comment(article_id, content)
-        if comment_id:
-            self.write('success')
+        comment = self.create_comment(article_id, content)
+        if comment:
+            self.write(json_encode(comment))
         else:
             self.write('failed')
 
@@ -107,11 +107,14 @@ class SideCommentHandler(CommentBaseHandler):
 
     def create_comment(self, article_id, content):
         paragraph_id = self.get_argument('paragraph_id')
-        comment_id = self.model.create_side_comment(article_id,
-                                                    self.user_id,
-                                                    content,
-                                                    paragraph_id)
-        return comment_id
+        comment_id = self.model.create_side_comment(
+            article_id,
+            self.user_id,
+            content,
+            paragraph_id
+        )
+        comment = self.model.get_comment(comment_id)
+        return comment
 
     def render_comments(self, comments):
         return json_encode(comments)
@@ -125,10 +128,13 @@ class BottomCommentHandler(CommentBaseHandler):
         return comments
 
     def create_comment(self, article_id, content):
-        comment_id = self.model.create_bottom_comment(article_id,
-                                                      self.user_id,
-                                                      content)
-        return comment_id
+        comment_id = self.model.create_bottom_comment(
+            article_id,
+            self.user_id,
+            content
+        )
+        comment = self.model.get_comment(comment_id)
+        return comment
 
     def render_comments(self, comments):
         renders = []
