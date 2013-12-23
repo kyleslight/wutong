@@ -28,9 +28,6 @@ p{
 img{
 	border: 0;
 }
-#imgSearch{
-	display: none;
-}
 input{
 	border: 1px solid #680;
 	background: white !important;
@@ -59,6 +56,14 @@ li img{
 li img:hover{
 	/*opacity: 0.5;*/
 	box-shadow: 0px 0px 1px 1px #777;
+}
+
+blockquote {
+background: url('image/quote.png') no-repeat scroll left 11px transparent;
+color: #999999;
+margin-left: 28px;
+min-height: 30px;
+padding: 17px 40px 0;
 }
 
 .input{

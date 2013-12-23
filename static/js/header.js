@@ -15,6 +15,7 @@ var isRegisterRepasswordFocus = false;
 unsycUser();
 
 $(document).ready(function() {
+
     $(".preload").removeClass("preload");
     $("#tabHeads").children("span").eq(3).css({"display":"none"});
     // get user info
@@ -383,22 +384,3 @@ function unsycUser() {
     });
 }
 
-function unsyncGroup() {
-    var url = location.pathname + "/info";
-    $.getJSON(url, function(data) {
-        groupInfo = data;
-        if (data.publicity) {
-            $(".groupPromptPrivate").css({
-                "display": "none"
-            });
-            $("#contactGroupLeader").css({
-                "display": "none"
-            });
-        } else {
-            $(".groupPromptPublic").css({
-                "display": "none"
-            });
-        }
-        $('#groupTitleName').text(groupInfo.name);
-    });
-}

@@ -4,7 +4,7 @@ var _showwel_flag = true;
 var elapseTime = 5000;
 var topOfSight=150;
 var editingParaNum=-1;
-var editableOpusChild=$(".opusMain").children("p,table");
+var editableOpusChild=$(".opusMain").children("div,p,table,blockquote");
 
 $(document).ready(function(){
     // initializing the opus and side commnet
@@ -171,9 +171,28 @@ $(document).ready(function(){
             'content': content,
             'paragraph_id': editingParaNum, // TODO: replace this
         },
-        function(data, status) {
+        function(data) {
             // TODO: if 'failed'
-
+            var sideComment=eval("("+data+")");
+            paraId=sideComment.paragraph_id;
+            // console.log(sideComment.paragraph_id,sideComment.uid,sideComment.penname,sideComment.content);
+            var sideCommentShowBox='<li class="opusSideCommentList opusSideCommentList'+sideComment.paragraph_id+'" style="background:pink;width:253px">'
+                           +   '<a href="/u/'+sideComment.uid+'" class="opusSideCommentListUserName">'+sideComment.penname+'</a>'
+                           +   '<div class="opusSideCommentContent">'
+                           +        sideComment.content
+                           +   '</div>'
+                           +'</li>';
+            var addListNav=$("#sideCommentNode"+sideComment.paragraph_id).children(".opusSideCommentNav");
+            addListNav.after(sideCommentShowBox);
+            if (addListNav.hasClass("nullOpusSideCommentNav")) {
+                var preNav='<li class="opusSideCommentList opusSideCommentList'+paraId+' opusSideCommentNav" style="width:253px">'
+                        +'第'+paraId+'段评论('+'<span class="numOfParaComent">'+($("#sideCommentNode"+paraId).children().size()-1)+'</span>'+')'
+                        +'</li>';
+                addListNav.after(preNav);
+                addListNav.remove();
+            };
+            $("#sideCommentEditData").val("");
+            $(".sideCommentEditBox").fadeOut();
         });
         return false;
     });
@@ -191,6 +210,34 @@ $(document).ready(function(){
         },
         function(data, status) {
             // TODO: if 'failed'
+            var buttomComment=eval("("+data+")");
+            var buttomCommentShowBox='<li class="opusCommentList" style="display: list-item;">'
+                                    +  '<a class="userImage" href=/u/"'+buttomComment.uid+'">'
+                                    +        '<img src="'+buttomComment.avatar+'">'
+                                    +   '</a>'
+                                    +   '<div class="opusCommentMain">'
+                                    +       '<div class="opusCommentListFirstLine">'
+                                    +            '<div class="userName"><a href="#">'+buttomComment.penname+'</a>'
+                                    +            '</div>'
+                                    +            '<span class="opusCommentPosition">'+buttomComment.floor+'楼</span>'
+                                    +            '<div class="timeShow">'
+                                    +                buttomComment.create_time
+                                    +            '</div>'
+                                    +        '</div>'
+                                    +        '<div class="opusCommentContent">'
+                                    +            buttomComment.content
+                                    +        '</div>'
+                                    +    '</div>'
+                                    +'</li>';
+            if ($(".opusCommentList").size()==0) {
+                $(".buttomComment").append(buttomCommentShowBox);
+
+            }else{
+                $(".opusCommentList").last().removeClass("noBorderButtom");
+                $(".opusCommentList").last().after(buttomCommentShowBox);
+            };
+            $(".opusCommentList").last().addClass("noBorderButtom");
+            $(window.frames["ueditor_0"].document).find("body.view").html("");
         });
         return false;
     });
@@ -220,13 +267,13 @@ function init(){
                 if (comment.paragraph_id != i)
                     continue;
             
-                var appText='<li class="opusSideCommentList opusSideCommentList'+i+'" >'
+                var appText='<li class="opusSideCommentList opusSideCommentList'+i+'">'
                            +   '<a href="#" class="opusSideCommentListUserName">'+comment.penname+'</a>'
                            +   '<div class="opusSideCommentContent">'
                            +        comment.content
                            +   '</div>'
                            +'</li>';
-                $("#sideCommentNode"+i).append(appText);
+                $("#sideCommentNode"+i).prepend(appText);
             }
         };
     
@@ -325,3 +372,4 @@ function foldSideComment(){
     $(".opusSideCommentWrap").addClass("noTransition");
     $("#buttomCommentSend").css({"margin-right":"0"});
 }
+
