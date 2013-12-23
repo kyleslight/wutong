@@ -16,6 +16,55 @@ $(document).ready(function(){
         };
     });
 
+    $("#opusPreViewButton").click(function(){
+        $("#textdata,#opusPreViewButton,#previewBeforePublic").fadeOut();
+        var mainText=$("#textArea").val();
+        // console.log($("#title").val(),$("#foreword").val(),$("#reference").val(),($("#articleFirstClass").val()+$("#otherTags").val()),$("#suit").val(),$("#cooperation").val(),$("#puclicPush").prop('checked'));
+        var temTextData={
+            title:$("#title").val(),
+            foreword:$("#foreword").val(),
+            mainText:$("#textArea").val(),
+            reference:$("#reference").val(),
+            tags:[  $("#articleFirstClass").val(),
+                    $("#otherTags").val()],
+            suit:$("#suit").val(),
+            cooperation:$("#cooperation").val(),
+            is_pushed:$("#puclicPush").prop('checked'),
+            type:$(".activeOpusType").text()
+        }
+        // console.log(temTextData);
+        var temTime=new Date();
+        var temtText='<div class="opusBasicInfo">'
+                    +    '<div class="firstLine">'
+                    +        '<div class="opusTime">'+temTime.getFullYear()+' '+(temTime.getMonth()+1)+' '+temTime.getDate()+'</div>'
+                    +        '<span class="opusAuthor">by <a href="#">'+userInfo.penname+'</a></span>'
+                    +    '</div>'
+                    +    '<div class="opusTitle">'
+                    +        '<div class="opusMainTitle">'+temTextData.title+'</div>'
+                    +    '</div>'
+                    +    '<div class="opusDescription">'
+                    +        temTextData.foreword
+                    +    '</div>'
+                    +    '<div class="opusAppositeness">适合：<span calss="opusAppositenessContent">'+temTextData.suit+'</span></div>'
+                    +'</div>'
+
+                    +'<div class="opusMain">'
+                    +    temTextData.mainText
+                    +'</div>'
+                    +'<div class="opusSuffixes">'
+                    +    '<div class="opusReference">参考来源：<a href="#">'+temTextData.reference+'</a>'
+                    +    '</div>'
+                    +    '<div class="opusTag">Tags： '+temTextData.tags
+                    +    '</div>'
+                    +'</div>'
+        $("#temTextData").prepend(temtText);
+        $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").fadeIn();
+    });
+    $("#opusPreViewBack").click(function(){
+        $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").fadeOut();
+        $("#textdata,#opusPreViewButton,#previewBeforePublic").fadeIn();
+    })
+
     $("#opusPublicSubmitButton,#opusPrivateSubmitButton").click(function(){
         
         // 发送需要的数据
