@@ -4,6 +4,7 @@ var _showwel_flag = true;
 var elapseTime = 5000;
 var topOfSight=150;
 var editingParaNum=-1;
+var editableOpusChild=$(".opusMain").children("p,table");
 
 $(document).ready(function(){
     // initializing the opus and side commnet
@@ -36,9 +37,9 @@ $(document).ready(function(){
 
         // side comment scroll with the sight of user 
         if ($(".opusSideCommentWrap").css("display")!="none") {
-            for (var i =0; i<$(".opusMain").children("p").size(); i++) {
-                var offsetHeightOfOpusMainChild=$(".opusMain").children("p").eq(i).offset().top;
-                var heightOfOpusMainChild=$(".opusMain").children("p").eq(i).height();
+            for (var i =0; i<editableOpusChild.size(); i++) {
+                var offsetHeightOfOpusMainChild=editableOpusChild.eq(i).offset().top;
+                var heightOfOpusMainChild=editableOpusChild.eq(i).height();
                 if(
                 (
                    ( (offsetHeightOfOpusMainChild>=(top+topOfSight)&&offsetHeightOfOpusMainChild<(top+topOfSight+60)) )||
@@ -48,7 +49,7 @@ $(document).ready(function(){
                    ){
                     $(".opusSideComment").stop();
                     $(".activeOpusPara").removeClass("activeOpusPara");
-                    $(".opusMain").children("p").eq(i).addClass("activeOpusPara");
+                    editableOpusChild.eq(i).addClass("activeOpusPara");
                     var heightOfSideCommnetChild=$(".opusSideCommentList"+i).eq(0).position().top + $(".opusSideComment").scrollTop();
                     $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
                     $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
@@ -63,7 +64,7 @@ $(document).ready(function(){
                         &&($(".opusSideCommentList"+i).css("display")=="none")
                     ) {
                     $(".activeOpusPara").removeClass("activeOpusPara");
-                    $(".opusMain").children("p").eq(i).addClass("activeOpusPara");
+                    editableOpusChild.eq(i).addClass("activeOpusPara");
                     $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
                     $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
                 };
@@ -104,12 +105,12 @@ $(document).ready(function(){
     })
 
     // show and fade option of opus para
-    $(".opusMain").children("p").mouseover(function(){
+    editableOpusChild.mouseover(function(){
         if ($(".opusSideCommentWrap").css("display")!="none"){
             $(this).children(".sideCommentView,.sideCommentEdit").fadeIn(100);
         }
     });
-    $(".opusMain").children("p").mouseleave(function(){
+    editableOpusChild.mouseleave(function(){
         if ($(".opusSideCommentWrap").css("display")!="none"){
             $(this).children(".sideCommentView,.sideCommentEdit").fadeOut(10);
         }
@@ -135,7 +136,7 @@ $(document).ready(function(){
         activeParaChange(indexOfPara);
 
         // set position of editing area under the para 
-        var buttomOfActivePara=$(".opusMain").children("p").eq(indexOfPara).offset().top+$(".opusMain").children("p").eq(indexOfPara).height()-60;
+        var buttomOfActivePara=editableOpusChild.eq(indexOfPara).offset().top+editableOpusChild.eq(indexOfPara).height()-60;
         $(".sideCommentEditBox").css({"top":buttomOfActivePara+"px"});
         $(".sideCommentEditBox").fadeIn(100);
 
@@ -174,7 +175,7 @@ $(document).ready(function(){
 });
 
 function init(){
-    var totalNumOfPara=$(".opusMain").children("p").size();
+    var totalNumOfPara=editableOpusChild.size();
     // initial sideCommentNode
     for (var i=0;i<totalNumOfPara;i++){
         var sideCommentNode='<div class="sideCommentNode" id="sideCommentNode'+i+'">';
@@ -182,9 +183,9 @@ function init(){
     };
 
     // initial para function bution
-    for (var i =0; i<$(".opusMain").children("p").size(); i++) {
+    for (var i =0; i<editableOpusChild.size(); i++) {
         var viewCommentButton='<a href="#" class="sideCommentView">查看评论</a><a href="#" class="sideCommentEdit">编辑评论</a>';
-        $(".opusMain").children("p").eq(i).append(viewCommentButton);
+        editableOpusChild.eq(i).append(viewCommentButton);
     };
 
     // load sidecomment in sideCommentNode
@@ -225,7 +226,7 @@ function init(){
     };
 
     // other set
-    $(".opusMain").children("p").addClass("opusMainChildren");
+    editableOpusChild.addClass("opusMainChildren");
     $(".opusCommentList").last().addClass("noBorderButtom");
 }
 
@@ -249,16 +250,16 @@ function buttomPartHeight(){
 
 function visibleHeght(){
     if (buttomPartHeight()==0) {
-       return $(window).height()-(topPartHeight()+buttomPartHeight()); 
+       return $(window).height()-(topPartHeight()+buttomPartHeight())-10; 
     };
-    return $(window).height()-(topPartHeight()+buttomPartHeight())+40;
+    return $(window).height()-(topPartHeight()+buttomPartHeight())+30;
 }
 
 function activeParaChange(indexOfPara){
     $(".activeOpusSideCommentList").removeClass("activeOpusSideCommentList");
     $(".activeOpusSideCommentNav").removeClass("activeOpusSideCommentNav");
     $(".activeOpusPara").removeClass("activeOpusPara");
-    $(".opusMain").children("p").eq(indexOfPara).addClass("activeOpusPara");
+    editableOpusChild.eq(indexOfPara).addClass("activeOpusPara");
     if ($(".opusSideCommentList"+indexOfPara).css("display")!="none") {
         var offsetHeightOfSideCommnetChild=$(".opusSideCommentList"+indexOfPara).eq(0).position().top + $(".opusSideComment").scrollTop();
         $(".opusSideComment").animate({scrollTop:+offsetHeightOfSideCommnetChild});
@@ -290,8 +291,8 @@ function foldSideComment(){
     $("#expandSideComment").text("展开侧评");
     $(".opusSideCommentWrap").fadeOut(50);
     $(".activeOpusPara").removeClass("activeOpusPara");
-    $(".opusMain").children("p").removeClass("activeOpusPara");
-    $(".opusMain").children("p").css({"color":"rgb(68,68,68)","opacity":"1.0"});
+    editableOpusChild.removeClass("activeOpusPara");
+    editableOpusChild.css({"color":"rgb(68,68,68)","opacity":"1.0"});
     var top=$(window).scrollTop();    
     $(".readMain").removeClass("floatReadMain");
     $(".read").css({"width":"1060px"});

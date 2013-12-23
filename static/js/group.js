@@ -14,12 +14,12 @@ msg_socket.onclose = function() {};
 
 
 $(document).ready(function() {
-    // get group unsync information
-    unsyncGroup();
     // change groupPrompt state by groupType
     // changeGroupPromptState();
     // check premission
     checkGroupPremission();
+    // get group unsync information
+    unsyncGroup();
 
     // console.log(groupInfo.is_public);
 
