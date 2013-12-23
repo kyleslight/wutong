@@ -7,7 +7,7 @@ from psycopg2.extensions import TRANSACTION_STATUS_IDLE
 from tornado.escape import json_decode
 
 
-class Pool:
+class Pool(object):
     @classmethod
     def instance(cls, dsn=None, min_size=1, max_size=10000):
         if not hasattr(cls, "_instance"):
@@ -69,7 +69,7 @@ class Pool:
             return self._new_connection()
 
 
-class Connection:
+class Connection(object):
     def __init__(self, dsn):
         self.cnn = psycopg2.connect(dsn=dsn)
         self.cur = self.cnn.cursor()
@@ -122,6 +122,7 @@ class Connection:
         except Exception as e:
             dbsql = self.cur.mogrify(sql, args)
             logging.error("SQL: `%s`", dbsql)
+            logging.error('-' * 80)
             logging.error(str(e))
             result = False
         self.cnn.commit()

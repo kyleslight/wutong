@@ -35,7 +35,7 @@ $(document).ready(function(){
         // set height of side comment
         $(".opusSideComment").css({"height":(visibleHeght()+"px")});
 
-        // side comment scroll with the sight of user 
+        // side comment scroll with the sight of user
         if ($(".opusSideCommentWrap").css("display")!="none") {
             for (var i =0; i<editableOpusChild.size(); i++) {
                 var offsetHeightOfOpusMainChild=editableOpusChild.eq(i).offset().top;
@@ -43,7 +43,7 @@ $(document).ready(function(){
                 if(
                 (
                    ( (offsetHeightOfOpusMainChild>=(top+topOfSight)&&offsetHeightOfOpusMainChild<(top+topOfSight+60)) )||
-                   ( (offsetHeightOfOpusMainChild<=(top+topOfSight)&&((offsetHeightOfOpusMainChild+heightOfOpusMainChild))>(top+topOfSight+5) )) 
+                   ( (offsetHeightOfOpusMainChild<=(top+topOfSight)&&((offsetHeightOfOpusMainChild+heightOfOpusMainChild))>(top+topOfSight+5) ))
                 )
                 &&($(".opusSideCommentList"+i).css("display")!="none")
                    ){
@@ -59,7 +59,7 @@ $(document).ready(function(){
                 }else if (
                     (
                         ( (offsetHeightOfOpusMainChild>=(top+topOfSight)&&offsetHeightOfOpusMainChild<(top+topOfSight+60)) )||
-                        ( (offsetHeightOfOpusMainChild<=(top+topOfSight)&&((offsetHeightOfOpusMainChild+heightOfOpusMainChild))>(top+topOfSight+5) )) 
+                        ( (offsetHeightOfOpusMainChild<=(top+topOfSight)&&((offsetHeightOfOpusMainChild+heightOfOpusMainChild))>(top+topOfSight+5) ))
                     )
                         &&($(".opusSideCommentList"+i).css("display")=="none")
                     ) {
@@ -75,7 +75,7 @@ $(document).ready(function(){
 
         return false;
     })
-    
+
     // expand or flod buttom comment
     $(".opusCommentIntro a").click(function(){
         if ($(".buttomComment").css("display")=="none") {
@@ -83,7 +83,10 @@ $(document).ready(function(){
             $(".buttomComment").show();
             var heightOfReadMain=($(".floatReadMain").height()+40)+"px";
             $(".opusSideCommentWrap").css({"height":heightOfReadMain});
-
+            var url = location.pathname + '/comment/bottom';
+            $.get(url, function(data) {
+                $(".buttomComment").prepend(data);
+            });
         }else{
             $(this).text("展开底部评论");
             $(".buttomComment").hide();
@@ -91,7 +94,7 @@ $(document).ready(function(){
             var heightOfReadMain=($(".floatReadMain").height()+40)+"px";
             $(".opusSideCommentWrap").css({"height":heightOfReadMain});
         }
-        
+
         return false;
     })
 
@@ -127,7 +130,7 @@ $(document).ready(function(){
 
         return false;
     })
-    
+
     // edit the side comment of this para
     $(".sideCommentEdit").click(function(){
         // when active para change
@@ -161,14 +164,34 @@ $(document).ready(function(){
     // send editting side comment
     $("#sideCommentEditSend").click(function(){
         // content:sideCommentCon,paraNum:editingParaNum
-        var sideCommentCon=$("#sideCommentEditData").val();
+        var content=$("#sideCommentEditData").val();
+        var url = location.pathname + '/comment/side';
+        $.post(url,
+        {
+            'content': content,
+            'paragraph_id': editingParaNum, // TODO: replace this
+        },
+        function(data, status) {
+            // TODO: if 'failed'
+
+        });
         return false;
     });
 
     // send buttom comment
+    // TODO: It's 'bottom' not 'buttom'
     $("#buttomCommentSend").click(function(){
-        var buttomCommentCon=$("#opusCommentData").val();
-        console.log(deleteBrPara(buttomCommentCon));
+        var content=$("#opusCommentData").val();
+        var url = location.pathname + '/comment/bottom';
+        // console.log(deleteBrPara(content));
+        $.post(url,
+        {
+            'content': content,
+            'page_id': 0, // TODO: replace this
+        },
+        function(data, status) {
+            // TODO: if 'failed'
+        });
         return false;
     });
 
@@ -189,42 +212,41 @@ function init(){
     };
 
     // load sidecomment in sideCommentNode
-        // load function...
-
-    // test sidecomment
-    for(var i=0;i<totalNumOfPara;i++){
-        var numOfComment=Math.floor(10*Math.random());
-        for(var j=0;j<numOfComment;j++){
-            var appText='<li class="opusSideCommentList opusSideCommentList'+i+'" >'
-                    +   '<a href="#" class="opusSideCommentListUserName">kyleslight</a>'
-                    +   '<div class="opusSideCommentContent">'
-                    +       'lalallalal<br/>'
-                    +       'lalallallalla<br/>'
-                    +       'lalallal<br/>'
-                    +       'lalallasdjfhjsdhf'
-                    +   '</div>'
-                    +'</li>';
-            $("#sideCommentNode"+i).append(appText);
-        }
-    };
-
-    // if sideCommentNode has no comment,add a appNull,if not,add a Nav
-    for(var i=0;i<totalNumOfPara;i++){
-        var preNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" >'
-                    +'第'+i+'段评论('+'<span class="numOfParaComent">'+$("#sideCommentNode"+i).children().size()+'</span>'+')'
-                    +'</li>';
-        var preNull='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav nullOpusSideCommentNav" >'
-                    +'这个段落目前还没有评论，你可以通过“编辑评论”开始创建'
-                    +'</li>';
-
-        var thisSideCommentNode=$("#sideCommentNode"+i);
-        if (thisSideCommentNode.children().size()!=0) {
-            thisSideCommentNode.prepend(preNav);
-        }else{
-            thisSideCommentNode.prepend(preNull);
+    var url = location.pathname + '/comment/side';
+    $.getJSON(url, function(data) {
+        for(var i=0;i<totalNumOfPara;i++){
+            for (var j=0; j<data.length; j++) {
+                var comment = data[j];
+                if (comment.paragraph_id != i)
+                    continue;
+            
+                var appText='<li class="opusSideCommentList opusSideCommentList'+i+'" >'
+                           +   '<a href="#" class="opusSideCommentListUserName">'+comment.penname+'</a>'
+                           +   '<div class="opusSideCommentContent">'
+                           +        comment.content
+                           +   '</div>'
+                           +'</li>';
+                $("#sideCommentNode"+i).append(appText);
+            }
         };
-    };
+    
+        // if sideCommentNode has no comment,add a appNull,if not,add a Nav
+        for(var i=0;i<totalNumOfPara;i++){
+            var preNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" >'
+                        +'第'+i+'段评论('+'<span class="numOfParaComent">'+$("#sideCommentNode"+i).children().size()+'</span>'+')'
+                        +'</li>';
+            var preNull='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav nullOpusSideCommentNav" >'
+                        +'这个段落目前还没有评论，你可以通过“编辑评论”开始创建'
+                        +'</li>';
 
+            var thisSideCommentNode=$("#sideCommentNode"+i);
+            if (thisSideCommentNode.children().size()!=0) {
+                thisSideCommentNode.prepend(preNav);
+            }else{
+                thisSideCommentNode.prepend(preNull);
+            };
+        };
+    });
     // other set
     editableOpusChild.addClass("opusMainChildren");
     $(".opusCommentList").last().addClass("noBorderButtom");
@@ -268,8 +290,8 @@ function activeParaChange(indexOfPara){
     }else{
         $(".opusSideCommentList"+indexOfPara).eq(0).fadeIn(500,function(){
             var offsetHeightOfSideCommnetChild=$(".opusSideCommentList"+indexOfPara).eq(0).position().top + $(".opusSideComment").scrollTop();
-            $(".opusSideComment").animate({scrollTop:+offsetHeightOfSideCommnetChild});       
-        });     
+            $(".opusSideComment").animate({scrollTop:+offsetHeightOfSideCommnetChild});
+        });
     };
 }
 

@@ -174,6 +174,7 @@ CREATE TABLE article_comment (
     paragraph_id varchar(50),
     -- 侧评
     is_side bool NOT NULL DEFAULT false,
+    floor integer DEFAULT 1,
     create_time timestamp NOT NULL DEFAULT now()
 );
 
@@ -258,6 +259,12 @@ SELECT a.*, u.avatar, u.penname AS author
        "user" u
  WHERE a.uid = u.uid;
 
+CREATE OR REPLACE VIEW article_comment_v
+  AS
+SELECT c.*, u.avatar, u.penname
+  FROM article_comment c,
+       user_info_v u
+ WHERE c.uid = u.uid;
 
 CREATE OR REPLACE VIEW group_member_info_v
   AS
@@ -360,20 +367,32 @@ AS $$
 $$ LANGUAGE SQL;
 
 
+CREATE OR REPLACE FUNCTION is_user_exists(
+    _email varchar,
+    _penname varchar,
+    _phone varchar)
+  RETURNS integer
+AS $$
+  SELECT uid
+    FROM "user"
+   WHERE email = $1
+      OR penname = $2
+      OR phone = $3;
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION do_register_user(
     _email varchar,
     _penname varchar,
     _password varchar)
-  RETURNS varchar AS
-$$
+  RETURNS varchar
+AS $$
 DECLARE
+    _uid integer;
     _hashuid varchar;
 BEGIN
-    PERFORM uid
-       FROM "user"
-      WHERE email = $1
-         OR penname = $2;
-    IF FOUND THEN
+    SELECT is_user_exists($1, $2, NULL) INTO _uid;
+    IF _uid THEN
         RETURN NULL;
     END IF;
 
@@ -388,14 +407,44 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION update_user_info(
+  _uid integer,
+  _email varchar,
+  _penname varchar,
+  _phone varchar,
+  _realname varchar,
+  _sex varchar,
+  _age integer,
+  _address varchar,
+  _intro varchar,
+  _motton varchar,
+  _avatar varchar)
+  RETURNS integer
+AS $$
+  UPDATE "user"
+     SET email = _email,
+         penname = _penname,
+         phone = _penname,
+         realname = _realname,
+         sex = _sex,
+         age = _age,
+         address = _address,
+         intro = _intro,
+         motton = _motton,
+         avatar = _avatar
+   WHERE uid = _uid
+   RETURNING uid;
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION do_activate_user(_hashuid varchar)
-  RETURNS integer AS
-$$
-    UPDATE "user"
-       SET is_activated = true
-     WHERE is_activated = false
-       AND $1 = md5(CAST(uid AS varchar))
-     RETURNING uid;
+  RETURNS integer
+AS $$
+  UPDATE "user"
+     SET is_activated = true
+   WHERE is_activated = false
+     AND $1 = md5(CAST(uid AS varchar))
+   RETURNING uid;
 $$ LANGUAGE SQL;
 
 
@@ -468,9 +517,23 @@ CREATE OR REPLACE FUNCTION join_group(
     _uid integer)
   RETURNS integer
 AS $$
+DECLARE
+    _guid integer;
+BEGIN
+    PERFORM guid
+       FROM group_user
+      WHERE gid = $1
+         OR uid = $2;
+    IF FOUND THEN
+        RETURN NULL;
+    END IF;
+
     INSERT INTO group_user (gid, uid) VALUES ($1, $2)
-    RETURNING guid;
-$$ LANGUAGE SQL;
+    RETURNING guid
+    INTO _guid;
+    RETURN _guid;
+END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION get_group_member_info(
@@ -786,6 +849,99 @@ $$
              WHERE a.uid = u.uid
          ) aj;
 $$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_side_comments(
+    _aid integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(aj.*))
+      FROM (
+            SELECT *
+              FROM article_comment_v
+             WHERE aid = $1
+               AND is_side
+         ) aj;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_bottom_comments(
+    _aid integer,
+    _limit integer,
+    _offset integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(aj.*))
+      FROM (
+            SELECT *
+              FROM article_comment_v
+             WHERE aid = $1
+               AND is_side = false
+             LIMIT $2
+            OFFSET $3
+         ) aj;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION create_side_comment(
+    _aid integer,
+    _uid integer,
+    _content varchar,
+    _paragraph_id varchar)
+  RETURNS integer
+AS $$
+DECLARE
+    _tmp integer;
+BEGIN
+    SELECT max(floor) + 1
+      FROM article_comment
+     WHERE aid = $1
+       AND is_side
+      INTO _tmp;
+    IF _tmp IS NULL THEN
+        _tmp := 1;
+    END IF;
+
+    INSERT INTO article_comment (
+        aid, uid, content,
+        paragraph_id, is_side,
+        floor)
+    VALUES (
+        $1, $2, $3,
+        $4, true,
+        _tmp)
+    RETURNING id
+    INTO _tmp;
+    RETURN _tmp;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION create_bottom_comment(
+    _aid integer,
+    _uid integer,
+    _content varchar)
+  RETURNS integer
+AS $$
+DECLARE
+    _tmp integer;
+BEGIN
+    SELECT max(floor) + 1
+      FROM article_comment
+     WHERE aid = $1
+       AND is_side = false
+      INTO _tmp;
+    IF _tmp IS NULL THEN
+        _tmp := 1;
+    END IF;
+
+    INSERT INTO article_comment (aid, uid, content, floor)
+    VALUES ($1, $2, $3, _tmp)
+    RETURNING id
+    INTO _tmp;
+    RETURN _tmp;
+END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION article_before_t()

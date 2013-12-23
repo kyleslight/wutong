@@ -78,6 +78,10 @@ class RegisterHandler(UserBaseHandler):
         return hashuid
 
     def send_mail(self, email, hashuid):
+        if self.settings["debug"]:
+            self.model.do_activate(hashuid)
+            self.write("success")
+            return
         title = u"欢迎加入梧桐"
         content = u"{url}".format(
             url = "http://localhost:8888/account/check?r=" + hashuid
@@ -95,6 +99,34 @@ class UserinfoHandler(UserBaseHandler):
         userinfo["register_date"] = str(userinfo["register_date"])
         userinfo = escape.json_encode(userinfo)
         self.write(userinfo)
+
+    @authenticated
+    def post(self):
+        userinfo = self.get_current_user()
+        email = self.get_argument('email')
+        penname = self.get_argument('penname')
+        phone = self.get_argument('phone')
+
+        res = self.model.is_user_exists(email=email,
+                                        penname=penname,
+                                        phone=phone)
+        if res:
+            self.write('exists')
+            return
+        else:
+            userinfo['email'] = email or userinfo['email']
+            userinfo['penname'] = penname or userinfo['penname']
+            userinfo['phone'] = phone or userinfo['phone']
+
+        userinfo['realname'] = self.get_argument('realname', userinfo['realname'])
+        userinfo['sex'] = self.get_argument('sex', userinfo['sex'])
+        userinfo['age'] = self.get_argument('age', userinfo['age'])
+        userinfo['address'] = self.get_argument('address', userinfo['address'])
+        userinfo['intro'] = self.get_argument('intro', userinfo['intro'])
+        userinfo['motton'] = self.get_argument('motton', userinfo['motton'])
+        userinfo['avatar'] = self.get_argument('avatar', userinfo['avatar'])
+
+        self.model.update_user_info(userinfo['uid'], **userinfo)
 
 
 class CheckMailHandler(UserBaseHandler):

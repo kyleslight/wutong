@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 class ArticleModel(object):
 
     def __init__(self, db):
@@ -16,6 +17,16 @@ class ArticleModel(object):
         article_list = self.db.getjson(select, sort, limit, offset)
         return article_list
 
+    def get_side_comments(self, aid):
+        select = 'SELECT get_side_comments(%s)'
+        comments = self.db.getjson(select, aid)
+        return comments
+
+    def get_bottom_comments(self, aid, limit=30, offset=0):
+        select = 'SELECT get_bottom_comments(%s, %s, %s)'
+        comments = self.db.getjson(select, aid, limit, offset)
+        return comments
+
     def do_create(self, uid, title, mainbody, subtitle=None,
                   description=None, suit_for=None, reference=None,
                   series=None, resource=None, is_public=u'推送'):
@@ -24,3 +35,20 @@ class ArticleModel(object):
                                     description, suit_for, reference,
                                     series, resource, is_public)
         return aid
+
+    def create_side_comment(self, aid, uid, content, paragraph_id):
+        select = 'SELECT create_side_comment(%s, %s, %s, %s)'
+        comment_id = self.db.getfirstfield(select,
+                                           aid,
+                                           uid,
+                                           content,
+                                           paragraph_id)
+        return comment_id
+
+    def create_bottom_comment(self, aid, uid, content):
+        select = 'SELECT create_bottom_comment(%s, %s, %s)'
+        comment_id = self.db.getfirstfield(select,
+                                           aid,
+                                           uid,
+                                           content)
+        return comment_id

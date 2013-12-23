@@ -66,51 +66,6 @@ class TestModelBase(unittest.TestCase):
         }
 
 
-class TestDBModel(TestModelBase):
-
-    def test(self):
-        self.assertEqual(self.db.getfirstfield('SELECT 1'), 1)
-        self.assertEqual(self.db.getjson("SELECT '1'"), 1)
-        self.assertEqual(self.db.getrow('SELECT 1'), (1,))
-        self.assertEqual(self.db.getrows('SELECT 1'), [(1,)])
-        dirpath = path("model/dbschema/")
-        sql = open(dirpath + "schema.sql", "r").read()
-        self.assertTrue(self.db.execute(sql))
-
-
-class TestUserModel(TestModelBase):
-
-    def setUp(self):
-        super(TestUserModel, self).setUp()
-        self.model = UserModel(self.db)
-        self.db.execute('DELETE FROM "user" *')
-
-    def tearDown(self):
-        if is_debug():
-            return
-        self.db.execute('DELETE FROM "user" *')
-
-    def test(self):
-        user = self.users[1]
-        hashuid = self.model.do_register(
-                email=user["email"],
-                penname=user["penname"],
-                password=user["password"]
-            )
-        self.assertIsInstance(hashuid, basestring)
-        uid = self.model.do_activate(hashuid)
-        self.assertIsInstance(uid, int)
-        uid = self.model.get_uid(user["penname"])
-        self.assertIsInstance(uid, int)
-        uid = self.model.do_login(
-                account=user["email"],
-                password=user["password"]
-            )
-        self.assertIsInstance(uid, int)
-        user_info = self.model.get_user_info(uid)
-        self.assertIsNotNone(user_info)
-
-
 class TestGroupModel(TestModelBase):
 
     def setUp(self):
