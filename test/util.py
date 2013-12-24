@@ -180,7 +180,6 @@ class TestDataGenerator(object):
                     paragraph_id
                 )
 
-
     def gen_test_data(self):
         self.gen_database_table()
         admin = self.gen_admin_user()

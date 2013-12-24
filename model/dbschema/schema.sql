@@ -536,14 +536,14 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION get_group_news(_uid integer)
+CREATE OR REPLACE FUNCTION get_group_dynamic(_uid integer)
   RETURNS json
 AS $$
     -- TODO
     SELECT array_to_json(array_agg(aj.*))
       FROM (
             SELECT *
-              FROM group_member_info_v
+              FROM group_topic_v
              WHERE uid = $1
         ) aj;
 $$ LANGUAGE SQL;
@@ -904,6 +904,7 @@ AS $$
               FROM article_comment_v
              WHERE aid = $1
                AND is_side = false
+             ORDER BY id
              LIMIT $2
             OFFSET $3
          ) aj;

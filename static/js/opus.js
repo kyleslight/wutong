@@ -84,7 +84,7 @@ $(document).ready(function(){
             var heightOfReadMain=($(".floatReadMain").height()+40)+"px";
             $(".opusSideCommentWrap").css({"height":heightOfReadMain});
             var url = location.pathname + '/comment/bottom';
-            $.get(url, function(data) {
+            $.getJSON(url, function(data) {
                 $(".buttomComment").prepend(data);
             });
         }else{
@@ -138,7 +138,7 @@ $(document).ready(function(){
         editingParaNum=indexOfPara;
         activeParaChange(indexOfPara);
 
-        // set position of editing area under the para 
+        // set position of editing area under the para
         var buttomOfActivePara=editableOpusChild.eq(indexOfPara).offset().top+editableOpusChild.eq(indexOfPara).height()-60;
         $(".sideCommentEditBox").css({"top":buttomOfActivePara+"px"});
         $(".sideCommentEditBox").fadeIn(100);
@@ -210,25 +210,7 @@ $(document).ready(function(){
         },
         function(data, status) {
             // TODO: if 'failed'
-            var buttomComment=eval("("+data+")");
-            var buttomCommentShowBox='<li class="opusCommentList" style="display: list-item;">'
-                                    +  '<a class="userImage" href=/u/"'+buttomComment.uid+'">'
-                                    +        '<img src="'+buttomComment.avatar+'">'
-                                    +   '</a>'
-                                    +   '<div class="opusCommentMain">'
-                                    +       '<div class="opusCommentListFirstLine">'
-                                    +            '<div class="userName"><a href="#">'+buttomComment.penname+'</a>'
-                                    +            '</div>'
-                                    +            '<span class="opusCommentPosition">'+buttomComment.floor+'楼</span>'
-                                    +            '<div class="timeShow">'
-                                    +                buttomComment.create_time
-                                    +            '</div>'
-                                    +        '</div>'
-                                    +        '<div class="opusCommentContent">'
-                                    +            buttomComment.content
-                                    +        '</div>'
-                                    +    '</div>'
-                                    +'</li>';
+            var buttomCommentShowBox = data;
             if ($(".opusCommentList").size()==0) {
                 $(".buttomComment").append(buttomCommentShowBox);
 
@@ -264,19 +246,13 @@ function init(){
         for(var i=0;i<totalNumOfPara;i++){
             for (var j=0; j<data.length; j++) {
                 var comment = data[j];
-                if (comment.paragraph_id != i)
+                var paragraph_id = comment.split('\n')[0].match(/\d+/g)[0];
+                if (paragraph_id != i)
                     continue;
-            
-                var appText='<li class="opusSideCommentList opusSideCommentList'+i+'">'
-                           +   '<a href="#" class="opusSideCommentListUserName">'+comment.penname+'</a>'
-                           +   '<div class="opusSideCommentContent">'
-                           +        comment.content
-                           +   '</div>'
-                           +'</li>';
-                $("#sideCommentNode"+i).prepend(appText);
+                $("#sideCommentNode"+i).prepend(comment);
             }
         };
-    
+
         // if sideCommentNode has no comment,add a appNull,if not,add a Nav
         for(var i=0;i<totalNumOfPara;i++){
             var preNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" >'
@@ -319,7 +295,7 @@ function buttomPartHeight(){
 
 function visibleHeght(){
     if (buttomPartHeight()==0) {
-       return $(window).height()-(topPartHeight()+buttomPartHeight())-10; 
+       return $(window).height()-(topPartHeight()+buttomPartHeight())-10;
     };
     return $(window).height()-(topPartHeight()+buttomPartHeight())+30;
 }
@@ -362,7 +338,7 @@ function foldSideComment(){
     $(".activeOpusPara").removeClass("activeOpusPara");
     editableOpusChild.removeClass("activeOpusPara");
     editableOpusChild.css({"color":"rgb(68,68,68)","opacity":"1.0"});
-    var top=$(window).scrollTop();    
+    var top=$(window).scrollTop();
     $(".readMain").removeClass("floatReadMain");
     $(".read").css({"width":"1060px"});
     $('html,body').animate({scrollTop:top},500,function(){

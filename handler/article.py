@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from tornado.web import authenticated
-from base import BaseHandler
 from tornado.escape import json_decode, json_encode
+from base import BaseHandler
+from lib.util import prettytime
 
 
 class ArticleBaseHandler(BaseHandler):
@@ -80,14 +81,17 @@ class CommentBaseHandler(ArticleBaseHandler):
     def create_comment(self, article_id, content):
         pass
 
-    def render_comments(self, comments, **kwargs):
+    def render_comment(self, comment, **kwargs):
         pass
 
     def get(self, article_id):
         article_id = int(article_id)
         comments = self.get_comments(article_id)
-        comments = self.render_comments(comments)
-        self.write(comments)
+        after_render = []
+        for comment in comments:
+            comment = self.render_comment(comment)
+            after_render.append(comment)
+        self.write(json_encode(after_render))
 
     @authenticated
     def post(self, article_id):
@@ -95,7 +99,7 @@ class CommentBaseHandler(ArticleBaseHandler):
         content = self.get_argument('content')
         comment = self.create_comment(article_id, content)
         if comment:
-            self.write(json_encode(comment))
+            self.write(self.render_comment(comment))
         else:
             self.write('failed')
 
@@ -116,8 +120,9 @@ class SideCommentHandler(CommentBaseHandler):
         comment = self.model.get_comment(comment_id)
         return comment
 
-    def render_comments(self, comments):
-        return json_encode(comments)
+    def render_comment(self, comment):
+        res = self.render_module_string('side_comment.html', comment=comment)
+        return res
 
 
 class BottomCommentHandler(CommentBaseHandler):
@@ -136,10 +141,6 @@ class BottomCommentHandler(CommentBaseHandler):
         comment = self.model.get_comment(comment_id)
         return comment
 
-    def render_comments(self, comments):
-        renders = []
-        for comment in comments:
-            res = self.render_module_string('bottom_comment.html',
-                                            comment=comment)
-            renders.append(res)
-        return ''.join(renders)
+    def render_comment(self, comment):
+        res = self.render_module_string('bottom_comment.html', comment=comment)
+        return res
