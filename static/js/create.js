@@ -17,7 +17,8 @@ $(document).ready(function(){
     });
 
     $("#opusPreViewButton").click(function(){
-        $("#textdata,#opusPreViewButton,#previewBeforePublic").fadeOut();
+        $("#temTextData").html("");
+        $("#textdata,#opusPreViewButton,#previewBeforePublic").hide();
         var mainText=$("#textArea").val();
         // console.log($("#title").val(),$("#foreword").val(),$("#reference").val(),($("#articleFirstClass").val()+$("#otherTags").val()),$("#suit").val(),$("#cooperation").val(),$("#puclicPush").prop('checked'));
         var temTextData={
@@ -58,11 +59,11 @@ $(document).ready(function(){
                     +    '</div>'
                     +'</div>'
         $("#temTextData").prepend(temtText);
-        $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").fadeIn();
+        $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").show();
     });
     $("#opusPreViewBack").click(function(){
-        $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").fadeOut();
-        $("#textdata,#opusPreViewButton,#previewBeforePublic").fadeIn();
+        $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").hide();
+        $("#textdata,#opusPreViewButton,#previewBeforePublic").show();
     })
 
     $("#opusPublicSubmitButton,#opusPrivateSubmitButton").click(function(){

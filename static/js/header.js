@@ -16,8 +16,11 @@ unsycUser();
 
 $(document).ready(function() {
 
+    // editor.ready(function(){
+    //     WT();
+    // });
+
     $(".preload").removeClass("preload");
-    $("#tabHeads").children("span").eq(3).css({"display":"none"});
     // get user info
     $.getJSON("/u/info", function (data) {
         var username;
@@ -240,7 +243,11 @@ $(document).ready(function() {
         $(".myMessageWarp").animate({
             height: heightOfMyMessage
         });
-    })
+    });
+
+    $("#dropbox").click(function(){
+
+    });
 });
 
 // function for login and register
@@ -384,3 +391,22 @@ function unsycUser() {
     });
 }
 
+function atHandler(){
+    
+}
+
+function insertImage(){
+
+    // success
+    // editor.execCommand( 'insertimage', {
+    //      src:'http://su.bdimg.com/static/superpage/img/logo_white.png',
+    //      width:'100',
+    //      height:'100'
+    // } );
+}
+
+function WT(){
+    console.log("aaa");
+    var insertImageButtom='<a href="javascript:void(0)" id="insertA" onclick="insertImage()">inserta</a>'
+    $("#edui28").after(insertImageButtom);
+};

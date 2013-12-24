@@ -15,6 +15,8 @@
         <link rel="shortcut icon" href={{ static_url("css/image/favicon.ico") }} />
         <link rel="stylesheet" href={{ static_url("css/base.css") }} type="text/css" />
         <link rel="stylesheet" href={{ static_url("css/animation.css") }} type="text/css" />
+        <link rel="stylesheet" type="text/css" href="{{ static_url('css/imageUpload.css') }}">
+        <link type="text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">
         {% block editor_css %}
         {% end %}
         {% block extra_css %}
@@ -22,6 +24,7 @@
     {% end %}
     </head>
     <body class="preload">
+    <div class="mask"></div>
     {% block body %}
         <div class="header" id="header">
             <div class="navcontainer">
@@ -272,6 +275,59 @@
                 </div>
             </div>
         </div>
+        <!-- image upload -->
+        <!-- Main section -->
+        <section id="main">
+            <ul id="result_zone">
+                <div class="clear"></div>
+            </ul>
+
+
+            <ul id="message_zone">
+            </ul>
+            <!-- Button and message in center -->
+            <div id="first_load">
+                <a id="add" title="上传文件"></a>
+                <p>上传文件</p>
+                <p>拖放文件到此处</p>
+            </div>
+
+            <!-- Upload pop-up -->
+            <div id="upload_popup">
+                <div id="pop_window">
+                    <header>上传</header>
+                    <section>
+                        <!-- Tabs -->
+                        <div id="method_change"><a id="normal">普通上传</a><a id="url" class="noact">URL上传</a>
+                        </div>
+                        <!-- Normal upload zone -->
+                        <div id="normal_zone" class="zone">
+                            <form id="normal_form" method="post" enctype="multipart/form-data">
+                                <button id="file_select" type="button">选择文件</button>
+                                <input type="file" id="file_list" name="files[]" accept="image/*" capture="filesystem camera" multiple="">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="67108864">
+                                <input type="hidden" name="normal" value="upload">
+                            </form>
+                            <div id="file_review">
+                            </div>
+                        </div>
+                        <!-- URL upload zone -->
+                        <div id="url_zone" class="zone">
+                            <textarea id="url_list" placeholder="请在此输入URL（包含“http://”），每行一个"></textarea>
+                        </div>
+                        <!-- Submit and Close buttons -->
+                        <div id="submit_zone">
+                            <button id="closepop" type="button">关闭</button>
+                            <button id="submit" type="button">开始上传</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+    <!-- File info section -->
+    <aside id="info_zone" class="hide">
+    </aside>
         {% block return_top %}
         <a id="return_top" href="#" title="回到顶部" class="none"></a>
         {% end %}
@@ -284,6 +340,9 @@
         </div>
         <script type="text/javascript" src={{ static_url("js/jquery.js") }}></script>
         <script type="text/javascript" src={{ static_url("js/header.js") }}></script>
+        <script type="text/javascript" src={{ static_url("js/ui.js") }}></script>
+        <script type="text/javascript" src={{ static_url("js/imageUpload.js") }}></script>
+        <script type="text/javascript" charset="utf-8" src="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/js/page_context.js"></script>
         {% block editor_js %}
         {% end %}
         {% block extra_js %}

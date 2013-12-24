@@ -744,6 +744,82 @@ padding: 17px 40px 0;
 	margin-right: 25px;
 	margin-bottom: 15px;
 }
+.mask{
+	position: fixed;
+	background: rgba(0,0,0,0.7);
+	z-index: 1001;
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+#uploadImage{
+	width: 340px;
+	margin: 0 auto;	
+	z-index: 10011;
+	/*text-align: center;*/
+}
+#dropbox{
+	position: fixed;
+	width: 300px;
+	height: 200px;
+	background-image: url('image/add.svg');
+	border: none;
+	display: inline-block;
+	text-decoration: none;
+	top: 200px;
+	margin-left: 20px;
+	text-align: center;
+	z-index: 10011;
+	ransition: none;
+	-moz-transition:none;
+	-webkit-transition:none;
+	-o-transition:none;
+	display: none;
+}
+#dropbox:hover {
+	background-position: 0 -200px;
+}
+#imageUploadIntro{
+	margin-top: 200px;
+	color: #CCC;
+}
+
+.normalImageUpload{
+	position: fixed;
+	z-index: 10011;
+	background: white;
+	top: 200px;
+	width: 360px;
+	height: 100px;
+	padding: 20px;
+	border-radius: 2px;
+	box-shadow: 0 0 10px #CCC;
+	display: none;
+}
+.normalImageUploadOption{
+	float: left;
+	width: 300px;
+}
+#loaclImageUpload,#webImageUpload{
+	margin-left: 20px;
+	float: left;
+}
+.activeImageUpload{
+	color: #680;
+}
+#loaclImageUploadInput,#webImageUploadInput{
+	width: 300px;
+	margin-left: 20px;
+}
+#loaclImageUploadInput{
+	background: #680;
+	color: #680;
+}
+#webImageUploadInput{
+	width: 300px;
+	display: none;
+}
+
 .none{
 	display: none;
 }
