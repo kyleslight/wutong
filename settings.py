@@ -5,7 +5,7 @@ import os
 import uuid
 from tornado.options import define, options
 from tornado.web import TemplateModule, RequestHandler
-from handler import base, group, user, article
+from handler import base, group, user, article, upload
 import lib.util
 from lib.session import Session
 from lib.util import encodestr, str2datetime, prettytime
@@ -13,6 +13,7 @@ from lib.util import encodestr, str2datetime, prettytime
 
 urls = [
     (r"/", group.GroupIndexHandler),
+    (r"/upload", upload.FileHandler),
     (r"/u/(\w+)/home", user.HomeHandler),
     (r"/u/info", user.UserinfoHandler),
     (r"/u/permission", user.PermissionHandler),
