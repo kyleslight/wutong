@@ -17,8 +17,9 @@ CREATE TABLE "user" (
     phone varchar(18) UNIQUE,
     password varchar(128) NOT NULL,
     realname varchar(32),
-    sex varchar(6) CHECK (sex IN ('男', '女', 'male', 'female', NULL)),
-    age smallint CHECK (age BETWEEN 0 AND 130 OR age IS NULL),
+    -- true is man
+    sex bool,
+    age smallint CHECK (age BETWEEN 1 AND 130 OR age IS NULL),
     -- 位置
     address varchar(1000),
     -- 简介
@@ -392,7 +393,7 @@ DECLARE
     _hashuid varchar;
 BEGIN
     SELECT is_user_exists($1, $2, NULL) INTO _uid;
-    IF _uid THEN
+    IF _uid IS NOT NULL THEN
         RETURN NULL;
     END IF;
 
@@ -413,7 +414,7 @@ CREATE OR REPLACE FUNCTION update_user_info(
   _penname varchar,
   _phone varchar,
   _realname varchar,
-  _sex varchar,
+  _sex bool,
   _age integer,
   _address varchar,
   _intro varchar,

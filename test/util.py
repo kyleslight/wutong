@@ -7,6 +7,7 @@ import requests
 import random
 _path = os.path.join(os.path.dirname(__file__), "..")
 sys.path.append(_path)
+from lib.util import genavatar
 from model.db import Pool
 from model.user import UserModel
 from model.group import GroupModel
@@ -52,6 +53,21 @@ class TestDataGenerator(object):
                                         self.admin['penname'],
                                         self.admin['password'])
         self.admin["uid"] = self.user.do_activate(hashuid)
+
+        # gen avatar
+        avatar_dir = os.path.join(os.path.dirname(__file__),
+                                  '../static/avatar/')
+        random_path = os.path.join(avatar_dir, 'random')
+        avatar_path = os.path.join(random_path,
+                                   random.choice(os.listdir(random_path)))
+
+        with open(avatar_path, 'r') as avatar_fp:
+            avatar = genavatar(avatar_fp, avatar_dir, self.admin['penname'])
+            self.user.update_user_avatar_by_penname(
+                self.admin['penname'],
+                avatar
+            )
+
         return self.admin
 
     def gen_users(self):
