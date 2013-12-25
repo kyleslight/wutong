@@ -127,7 +127,7 @@ class PermissionHandler(GroupBaseHandler):
 
 class BrowseHandler(GroupBaseHandler):
     def get(self):
-        pass
+        self.render('group-navigation.html', topics=[])
 
 
 class CreateHandler(GroupBaseHandler):

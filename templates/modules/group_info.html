@@ -1,13 +1,17 @@
 <div id="groupName">{{ group_info["name"] }}
     <p id="IDVaule"></p>
 </div>
+{% if group_info['banner'] %}
 <div class="groupBannerBox">
     <img id="groupBanner" src="{{ group_info["banner"] }}" />
 </div>
+{% end %}
 <div id="groupDetail">
+    {% if group_info['intro'] %}
     <div id="groupIntro" class="groupDetailItem">
         <span class="introWord">简介：</span>{{ group_info["intro"] }}
     </div>
+    {% end %}
 
     <div id="groupFounder" class="groupDetailItem">
         <span class="introWord">创建：</span>
@@ -35,11 +39,15 @@
         <p id="RANK">23</p>
     </div>
 
+    {% if group_info['motton'] %}
     <div id="groupInfoMotto" class="groupDetailItem">
         <span class="introWord">签名：</span>
         <p id="Motto">{{ group_info["motton"] }}</p>
     </div>
+    {% end %}
 </div>
+{% if group_info["description"] %}
 <div id="groupMoreDetail">
     {{ group_info["description"] }}
 </div>
+{% end %}

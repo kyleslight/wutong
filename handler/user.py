@@ -3,9 +3,8 @@
 
 import os
 import random
-from tornado import escape
+from tornado.escape import json_encode
 from tornado.web import authenticated
-from lib.session import Session
 from lib import sendmail
 from lib import util
 from base import BaseHandler
@@ -58,7 +57,8 @@ class LoginHandler(UserBaseHandler):
 
         uid = self.do_login(account, password)
         if uid:
-            self.write("success")
+            user_info = self.model.get_user_info(uid)
+            self.write(json_encode(user_info))
         else:
             self.write("failed")
 
@@ -122,7 +122,7 @@ class UserinfoHandler(UserBaseHandler):
     def get(self):
         userinfo = self.get_current_user()
         userinfo["register_date"] = str(userinfo["register_date"])
-        userinfo = escape.json_encode(userinfo)
+        userinfo = json_encode(userinfo)
         self.write(userinfo)
 
     # update user info
@@ -201,3 +201,41 @@ class AvatarHandler(UserBaseHandler):
         except:
             pass
         self.write('failed')
+
+
+class MemoHandler(UserBaseHandler):
+    @authenticated
+    def get(self):
+        memos = self.model.get_memos(self.user_id)
+        memos = json_encode(memos)
+        self.write(memos)
+
+    @authenticated
+    def post(self):
+        title = self.get_argument('title')
+        content = self.get_argument('content')
+
+        memo_id = self.model.create_memo(self.user_id, title, content)
+        memo = self.model.get_memo(memo_id)
+        self.write(json_encode(memo))
+
+
+class UpdateMemoHandler(UserBaseHandler):
+    @authenticated
+    def get(self):
+        memo_id = self.get_argument('memo_id')
+
+        memo = self.model.get_memo(memo_id)
+        self.write(json_encode(memo))
+
+    @authenticated
+    def post(self):
+        memo_id = self.get_argument('memo_id')
+        title = self.get_argument('title')
+        content = self.get_argument('content')
+
+        if self.model.update_memo(self.user_id, memo_id, title, content):
+            memo = self.model.get_memo(memo_id)
+            self.write(json_encode(memo))
+        else:
+            self.write('failed')

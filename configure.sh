@@ -9,6 +9,7 @@ if [ ! $? -eq 0 ];then
     echo "$res"
     exit 1
 fi
+
 echo "run unittest"
 res=$(pytest test 2>&1)
 if [ ! $? -eq 0 ];then
@@ -18,6 +19,10 @@ fi
 
 if [ "$1" = "test" ];then
     echo 'gen random test data ...'
-    python test/util.py 3 1>/dev/null 2>&1
+    res=$(python test/util.py 3 2>&1)
+    if [ ! $? -eq 0 ];then
+        echo "$res"
+        exit 1
+    fi
     echo 'finished!'
 fi

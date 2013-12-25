@@ -16,6 +16,8 @@ urls = [
     (r"/upload", upload.FileHandler),
     (r"/u/(\w+)/home", user.HomeHandler),
     (r"/u/info", user.UserinfoHandler),
+    (r"/u/memo", user.MemoHandler),
+    (r"/u/memo/update", user.UpdateMemoHandler),
     (r"/u/permission", user.PermissionHandler),
     (r"/login", user.LoginHandler),
     (r"/logout", user.LogoutHandler),
