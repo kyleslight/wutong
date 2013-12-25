@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+import random
 from tornado import escape
 from tornado.web import authenticated
 from lib.session import Session
 from lib import sendmail
+from lib import util
 from base import BaseHandler
 
 
@@ -12,6 +15,10 @@ class UserBaseHandler(BaseHandler):
     @property
     def model(self):
         return self.usermodel
+
+    @property
+    def penname(self):
+        return self.get_current_user()['penname']
 
     def set_authenticated(self, uid):
         self.session["uid"] = uid
@@ -69,6 +76,16 @@ class LogoutHandler(UserBaseHandler):
 
 
 class RegisterHandler(UserBaseHandler):
+    def set_random_avatar(self, penname):
+        avatar_dir = self.settings['avatar_path']
+        random_path = os.path.join(avatar_dir, 'random')
+        avatar_path = os.path.join(random_path,
+                                   random.choice(os.listdir(random_path)))
+
+        with open(avatar_path, 'r') as avatar_fp:
+            avatar = util.genavatar(avatar_fp, avatar_dir, penname)
+            return self.model.update_user_avatar_by_penname(penname, avatar)
+
     def post(self):
         penname = self.get_argument("username")
         password = self.get_argument("password")
@@ -76,6 +93,7 @@ class RegisterHandler(UserBaseHandler):
 
         hashuid = self.do_register(email, penname, password)
         if hashuid:
+            self.set_random_avatar(penname)
             self.send_mail(email, hashuid)
         else:
             self.write("failed")
@@ -127,12 +145,12 @@ class UserinfoHandler(UserBaseHandler):
             userinfo['phone'] = phone or userinfo['phone']
 
         userinfo['realname'] = self.get_argument('realname', userinfo['realname'])
-        userinfo['sex'] = self.get_argument('sex', userinfo['sex'])
+        userinfo['sex'] = bool(self.get_argument('sex', userinfo['sex']))
         userinfo['age'] = self.get_argument('age', userinfo['age'])
         userinfo['address'] = self.get_argument('address', userinfo['address'])
         userinfo['intro'] = self.get_argument('intro', userinfo['intro'])
         userinfo['motton'] = self.get_argument('motton', userinfo['motton'])
-        userinfo['avatar'] = self.get_argument('avatar', userinfo['avatar'])
+        # userinfo['avatar'] = self.get_argument('avatar', userinfo['avatar'])
 
         self.model.update_user_info(userinfo['uid'], **userinfo)
 
@@ -150,3 +168,36 @@ class CheckMailHandler(UserBaseHandler):
 
     def check_mail(self, hashuid):
         return self.model.do_activate(hashuid)
+
+
+class AvatarHandler(UserBaseHandler):
+    @authenticated
+    def post(self):
+        # max avatar file is 10Mb
+        self.max_file_size = 1000000
+
+        if not "avatar" in self.request.files:
+            self.write('failed')
+            return
+        try:
+            filesize = int(self.request.headers['Content-Length'])
+            if filesize > self.max_file_size:
+                self.write('exceed')
+                return
+            avatar = {
+                "name": self.penname,
+                "request": self.request.files['avatar'][0],
+            }
+            avatar["data"] = avatar['request']['body'],
+            avatar["suffix"] = util.filesuffix(avatar['request']['filename'])
+            avatar["name"] = util.addsuffix(avatar["name"], avatar["suffix"])
+            with StringIO.StringIO(avatar["data"]) as avatar_fp:
+                avatar_dir = self.settings['avatar_path']
+                avatar_name = util.genavatar(avatar_fp,
+                                             avatar_dir,
+                                             avatar["name"])
+                self.write(avatar_name)
+                return
+        except:
+            pass
+        self.write('failed')

@@ -5,14 +5,15 @@ import os
 import uuid
 from tornado.options import define, options
 from tornado.web import TemplateModule, RequestHandler
-from handler import base, group, user, article
+from handler import base, group, user, article, upload
 import lib.util
 from lib.session import Session
-from lib.util import encodestr, str2datetime, prettytime
+from lib import util
 
 
 urls = [
     (r"/", group.GroupIndexHandler),
+    (r"/upload", upload.FileHandler),
     (r"/u/(\w+)/home", user.HomeHandler),
     (r"/u/info", user.UserinfoHandler),
     (r"/u/permission", user.PermissionHandler),
@@ -79,9 +80,10 @@ settings = dict(
         "MyModule": MyModule,
     },
     ui_methods = {
-        "encodestr": lambda h, x: encodestr(x),
-        "str2datetime": lambda h, x: str2datetime(x),
-        "prettytime": lambda h, x: prettytime(x),
+        "encodestr": lambda h, x: util.encodestr(x),
+        "str2datetime": lambda h, x: util.str2datetime(x),
+        "prettytime": lambda h, x: util.prettytime(x),
+        "avatarurl": lambda h, x, *arg: util.avatarurl(x, *arg),
     },
     dsn="dbname=" + options.dbname      \
        +" user=" + options.dbuser       \
@@ -89,6 +91,7 @@ settings = dict(
        +" host=" + options.dbhost       \
        +" port=" + str(options.dbport)
 )
+settings['avatar_path'] = os.path.join(settings['static_path'], "avatar")
 
 
 Session.register(settings["session_secret"])

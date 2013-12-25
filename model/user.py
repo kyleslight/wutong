@@ -41,6 +41,11 @@ class UserModel(object):
         uid = self.db.getfirstfield(select, account, password)
         return uid
 
+    def update_user_avatar_by_penname(self, penname, avatar_url):
+        update = 'UPDATE "user" SET avatar = %s WHERE penname = %s'
+        res = self.db.execute(update, avatar_url, penname)
+        return res
+
     def update_user_info(self, uid, **kwargs):
         args = [
             kwargs['email'],
