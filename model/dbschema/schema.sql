@@ -66,6 +66,32 @@ CREATE TABLE article (
 );
 
 
+DROP TABLE IF EXISTS notification CASCADE;
+CREATE TABLE notification (
+    id serial PRIMARY KEY,
+    -- 发送者
+    uid integer REFERENCES "user"(uid) NOT NULL,
+    -- 接收者
+    receiver varchar(32) REFERENCES "user"(penname),
+    title varchar(500),
+    content varchar(27262),
+    type varchar(6) CHECK (type IN ('公告', '回复', '推送', '私信')),
+    url varchar(255),
+    is_viewed bool DEFAULT false,
+    create_time timestamp NOT NULL DEFAULT now()
+);
+
+
+DROP TABLE IF EXISTS memo CASCADE;
+CREATE TABLE memo (
+    id serial PRIMARY KEY,
+    uid integer REFERENCES "user"(uid) NOT NULL,
+    title varchar(500),
+    content varchar(27262),
+    create_time timestamp NOT NULL DEFAULT now()
+);
+
+
 DROP TABLE IF EXISTS article_history CASCADE;
 CREATE TABLE article_history (
     id serial PRIMARY KEY,
@@ -195,7 +221,7 @@ DROP TABLE IF EXISTS article_tag CASCADE;
 CREATE TABLE article_tag (
     id serial PRIMARY KEY,
     aid integer REFERENCES article(aid) NOT NULL,
-    name varchar(20) NOT NULL,
+    tag_name varchar(20) NOT NULL,
     create_time timestamp NOT NULL DEFAULT now()
 );
 
@@ -425,7 +451,7 @@ AS $$
   UPDATE "user"
      SET email = _email,
          penname = _penname,
-         phone = _penname,
+         phone = _phone,
          realname = _realname,
          sex = _sex,
          age = _age,
@@ -465,6 +491,44 @@ AS $$
          OR phone = $1)
        AND password = crypt($2, password);
 $$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_notifications(
+    _uid integer,
+    _limit integer,
+    _offset integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(aj))
+      FROM (
+            SELECT *
+              FROM notification
+             WHERE uid = $1
+             LIMIT $2
+            OFFSET $3
+        ) aj;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION create_notification(
+    _uid integer,
+    _penname varchar,
+    _title varchar,
+    _content varchar,
+    _type varchar,
+    _url varchar)
+  RETURNS integer
+AS $$
+DECLARE
+    _tmp integer;
+BEGIN
+    INSERT INTO notification (uid, receiver, title, content, type, url)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING id
+    INTO _tmp;
+    RETURN _tmp;
+END;
+$$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION get_group_permission(
@@ -854,7 +918,7 @@ $$
                      array(
                            SELECT row_to_json(j.*)
                              FROM (
-                                   SELECT id, name
+                                   SELECT id, tag_name
                                      FROM article_tag at
                                     WHERE a.aid = at.aid
                                 ) j
@@ -862,6 +926,7 @@ $$
               FROM article a,
                    user_info_v u
              WHERE a.uid = u.uid
+             ORDER BY a.aid DESC
          ) aj;
 $$ LANGUAGE SQL;
 

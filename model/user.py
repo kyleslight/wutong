@@ -64,3 +64,41 @@ class UserModel(object):
             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
         res = self.db.execute(select, uid, *args)
         return res
+
+    def create_memo(self, uid, title, content):
+        insert = '''insert into memo
+                           (uid, title, content)
+                    values (%s, %s, %s)
+                    returning id'''
+        memo_id = self.db.getfirstfield(insert, uid, title, content)
+        return memo_id
+
+    def get_memo(self, memo_id):
+        select = '''SELECT row_to_json(j.*)
+                      FROM (
+                            SELECT *
+                              FROM memo
+                             WHERE id = %s
+                        ) j'''
+        memo = self.db.getjson(select, memo_id)
+        return memo
+
+    def get_memos(self, uid, limit=5, offset=0):
+        select = '''SELECT array_to_json(array_agg(aj))
+                      FROM (
+                            SELECT *
+                              FROM memo
+                             WHERE uid = %s
+                             LIMIT %s
+                            OFFSET %s
+                        ) aj'''
+        memos = self.db.getjson(select, uid, limit, offset)
+        return memos
+
+    def update_memo(self, uid, memo_id, title, content):
+        update = '''update memo
+                       set title = %s,
+                           content = %s
+                     where id = %s
+                       and uid = %s'''
+        return self.db.execute(update, title, content, memo_id, uid)

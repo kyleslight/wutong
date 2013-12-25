@@ -57,3 +57,17 @@ class ArticleModel(object):
                                            uid,
                                            content)
         return comment_id
+
+    def create_article_tags(self, aid, tags):
+        insert = '''insert into article
+                                (aid, tag_name)
+                    values (%s, %s)
+                     where not (aid = %s and tag_name = %s)'''
+        for tag in tags:
+            self.db.execute(insert, aid, tag)
+
+    def remove_article_tags(self, aid):
+        pass
+
+    def get_article_tags(self, aid):
+        pass

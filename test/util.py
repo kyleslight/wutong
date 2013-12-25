@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import __builtin__
 import sys
 import os
 import requests
@@ -13,6 +14,7 @@ from model.user import UserModel
 from model.group import GroupModel
 from model.article import ArticleModel
 import q
+__builtin__.__dict__['q'] = q
 
 
 dsn_test = "host=%s dbname=%s user=%s password=%s" % (
@@ -21,7 +23,7 @@ dsn_test = "host=%s dbname=%s user=%s password=%s" % (
 db_test = Pool.instance(dsn_test)
 
 
-def path(p):
+def wutong_path(p):
     # return abspath(wutong)/p
     return os.path.join(_path, p)
 
@@ -44,7 +46,7 @@ class TestDataGenerator(object):
         self.gen_test_data()
 
     def gen_database_table(self):
-        sqlpath = path("model/dbschema/") + "schema.sql"
+        sqlpath = wutong_path("model/dbschema/") + "schema.sql"
         sql = open(sqlpath, "r").read()
         assert(self.db.execute(sql))
 
@@ -102,7 +104,10 @@ class TestDataGenerator(object):
                                             user["penname"],
                                             user["password"])
             user["uid"] = self.user.do_activate(hashuid)
-            self.user.update_user_info(**user)
+            self.user.update_user_avatar_by_penname(
+                user['penname'],
+                user['avatar']
+            )
 
         return users
 
@@ -211,4 +216,4 @@ if __name__ == "__main__":
         number = int(sys.argv[1])
     except IndexError:
         number = 3
-    TestDataGenerator(number)
+    TestDataGenerator(q>number)

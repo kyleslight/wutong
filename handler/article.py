@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from tornado.web import authenticated
-from tornado.escape import json_decode, json_encode
+from tornado.escape import json_encode
 from base import BaseHandler
-from lib.util import prettytime
 
 
 class ArticleBaseHandler(BaseHandler):
@@ -12,9 +11,15 @@ class ArticleBaseHandler(BaseHandler):
     def model(self):
         return self.articlemodel
 
-    def create_article(self, title, mainbody, subtitle=None,
-                       description=None, suit_for=None, reference=None,
-                       partner=None, tags=None):
+    def create_article(self,
+                       title,
+                       mainbody,
+                       subtitle=None,
+                       description=None,
+                       suit_for=None,
+                       reference=None,
+                       partner=None,
+                       tags=None):
         article_id =  self.model.do_create(self.user_id,
                                            title,
                                            mainbody,
