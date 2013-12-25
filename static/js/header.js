@@ -10,15 +10,12 @@ var userInfo;
 var groupInfo;
 var isLoginPasswordFocus = false;
 var isRegisterRepasswordFocus = false;
+var ueditor=null;
 
 // get unsync information
 unsycUser();
 
 $(document).ready(function() {
-
-    // editor.ready(function(){
-    //     WT();
-    // });
 
     $(".preload").removeClass("preload");
     // get user info
@@ -245,9 +242,10 @@ $(document).ready(function() {
         });
     });
 
-    $("#dropbox").click(function(){
-
-    });
+    // image upload back
+    $("#uploadImageBack").click(function(){
+        $("section#main,#uploadImageBack,#info_zone,.mask").hide();
+    })
 });
 
 // function for login and register
@@ -343,10 +341,10 @@ function loginSubmit() {
 }
 
 function registerSubmit() {
-    var registerUsername = $("#registerUsername").val();
-    var registerEmail = $("#registerEmail").val();
-    var registerPassword = $("#registerPassword").val();
-    var registerRepassword = $("#registerRepassword").val();
+    var registerUsername = $("#registerUsername").val(),
+        registerEmail = $("#registerEmail").val(),
+        registerPassword = $("#registerPassword").val(),
+        registerRepassword = $("#registerRepassword").val();
     if (registerPassword != registerRepassword) {
         alert("password and repassword must be the same vaule");
         $("#loginBox").addClass("littleTremble");
@@ -391,22 +389,14 @@ function unsycUser() {
     });
 }
 
-function atHandler(){
-    
-}
-
 function insertImage(){
-
-    // success
-    // editor.execCommand( 'insertimage', {
-    //      src:'http://su.bdimg.com/static/superpage/img/logo_white.png',
-    //      width:'100',
-    //      height:'100'
-    // } );
+    $("section#main,#info_zone,#uploadImageBack,#first_load,.mask").show();
+    hide(upload_popup);
+    url_list.value = '';
+    file_list.value = '';
 }
 
-function WT(){
-    console.log("aaa");
-    var insertImageButtom='<a href="javascript:void(0)" id="insertA" onclick="insertImage()">inserta</a>'
+function initUeditor(){
+    var insertImageButtom='<a href="javascript:void(0)" id="insertIamge" title="插入图片" onclick="insertImage()"></a>'
     $("#edui28").after(insertImageButtom);
 };

@@ -71,7 +71,7 @@
 {% block extra_js %}
     <script type="text/javascript" src="{{ static_url("js/create.js") }}"></script>
     <script type="text/javascript">
-        var editor = new UE.ui.Editor({toolbars: [["msg","bold","italic","fontsize","forecolor","inserttable","link","insertimage","blockquote","insertcode","showmsg"]],initialFrameWidth:1058,initialFrameHeight:600});
+        var editor = new UE.ui.Editor({toolbars: [["msg","bold","italic","fontsize","forecolor","inserttable","link","blockquote","insertcode","showmsg"]],initialFrameWidth:1058,initialFrameHeight:600});
         editor.render('textArea');
     </script>
 {% end %}

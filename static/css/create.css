@@ -389,4 +389,10 @@
 	margin-right: 10px;
 }
 
+.edui-default .edui-editor-toolbarboxouter {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom: 1px solid #B5C550 !important;
+}
+
 

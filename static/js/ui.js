@@ -11,7 +11,8 @@ if(!main) {
 	closepop = document.getElementById('closepop'),
 	url_list = document.getElementById('url_list'),
 	submit = document.getElementById('submit'),
-	main =  document.getElementById('main'),
+	// main =  document.getElementById('main'),
+	main=0,
 	result_zone = document.getElementById('result_zone'),
 	message_zone = document.getElementById('message_zone'),
 	info_zone = document.getElementById('info_zone'),
@@ -72,7 +73,8 @@ file_list.onchange=function(e){
 // Triger upload
 submit.onclick = function(e) {
 	hide(upload_popup);
-	remove(first_load);
+	// remove(first_load);
+	$("#first_load").hide();
 	if(method == 'url') {
 		url_upload_handler();
 		url_list.value = '';
@@ -101,10 +103,13 @@ document.ondrop = function(e) {
 	e.stopPropagation();
 	e.preventDefault();
 	hide(upload_popup);
-	remove(first_load);
+	// remove(first_load);
+	// url_list.value = '';
+	// file_list.value = '';
 	if(new FileReader || new FormData) {
 		var files = e.dataTransfer.files;
 		file_upload_handler(files);
+		$("#uploadImageLast").show();
 	}else {
 		alert(ui_msg.undrop);
 	}
@@ -144,14 +149,14 @@ function hasClass(elm,classname) {
 /* show info zone */
 function show_info_zone() {
 	removeClass(info_zone,'hide');
-	addClass(main,'showinfo');
+	// addClass(main,'showinfo');
 	addClass(message_zone,'showinfo');
 }
 
 /* hide info zone */
 function hide_info_zone() {
 	addClass(info_zone,'hide');
-	removeClass(main,'showinfo');
+	// removeClass(main,'showinfo');
 	removeClass(message_zone,'showinfo');
 	info_zone.innerHTML = '';
 }

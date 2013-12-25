@@ -3,59 +3,6 @@ var queueid=0,
 queue = new Array(),
 working = 0,
 msgqueue = new Array();
-// for image upload
-ui_msg = {
-    err: {
-        illegal_url: '不是合法的URL。',
-        fail_load: '无法加载预览，等待服务器响应。',
-        wrong_type: '文件格式不支持',
-        size_limit: '超出文件大小限制',
-        no_file: '无法被服务器获取，请检查URL是否正确。',
-        write_prohibited: '无法存储到服务器。',
-        fail_duplicate: '无法进行重复文件检查。',
-        php_upload_size_limit: '超出php.ini中设置的大小限制。',
-        part_upload: '只有部分被上传。',
-        no_tmp: '服务器没有临时目录',
-        fail_retry: '多次重试均失败。'
-    },
-    err_detail: {
-        no_file: '文件无法被服务器获取，可能远程服务器无法访问，或者文件不再存在，或者你输入的URL有错误。',
-        size_limit: '超过文件大小限制。',
-        fail_load: '文件预览无法加载，可能文件不存在，或者远程服务器无法访问，或者你输入的URL有错误。',
-        write_prohibited: '文件无法写入服务器的上传目录，请联系网站管理员检查权限设置。',
-        wrong_type: '文件格式当前无法支持，请联系程序作者获取帮助。',
-        fail_duplicate: '无法进行重复文件检查。',
-        php_upload_size_limit: '超过php.ini中设定的文件大小限制',
-        part_upload: '文件只有部分被上传，请重新上传。',
-        no_tmp: '服务器上不存在临时目录，请联系网站管理员检查。',
-        fail_retry: '多次尝试上传但均告失败。'
-    },
-    status: {
-        prepare: '准备上传',
-        waiting: '等待上传',
-        uploading: '上传中',
-        success: '上传成功',
-        error: '发生错误',
-        failed: '上传失败',
-        all_success: '所选文件均成功上传',
-        part_success: '所选部分文件没有成功上传，仅成功上传的会在下方显示',
-        all_failed: '所选文件均上传失败',
-    },
-    info: {
-        selected: '已选择',
-        files_selected: '个文件被选择。',
-        orig: '原始文件地址',
-        html: 'HTML代码',
-        html_with_thumb: '带有缩略图的HTML代码',
-        bbcode: 'BBCode代码',
-        bbcode_with_thumb: '带有缩略图的BBCode代码',
-        thumb_tips: '点击显示原始图片'
-    }
-};
-prop = {
-    size_limit: 67108864,
-    upload_count: 300
-}
 
 /* Handler for URL upload */
 function url_upload_handler() {
@@ -211,19 +158,14 @@ function file_upload(work) {
 	var fd = new FormData();
 
 	xhr.open('POST', '/upload', true);
-	// xhr.setRequestHeader("Content-type", "multipart/form-data");
+	//xhr.setRequestHeader("Content-type", "multipart/form-data");
 
 	xhr.addEventListener('readystatechange', function(e){
 		if(xhr.readyState == 4) {
 			if(xhr.status == 200) {
-				// eval('var res = '+xhr.responseText);
-				imageUploadUrl='/static/uploads/'+xhr.responseText;
-			    editor.execCommand( 'insertimage', {
-			         src:imageUploadUrl
-			    } );
-			    $("#first_load,#result_zone,#message_zone,.mask,#uploadImageBack,#main").hide();
-				// after_upload(res);
-				// upload_next();
+				eval('var res = '+xhr.responseText);
+				after_upload(res);
+				upload_next();
 			}
 		}
 	},false);
@@ -242,6 +184,7 @@ function file_upload(work) {
 	fd.append('file',work.fileobj);
 
 	xhr.send(fd);
+	alert(xhr.responseText);
 }
 
 /* Check if valid URL */

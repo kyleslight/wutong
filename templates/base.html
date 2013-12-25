@@ -25,6 +25,7 @@
     </head>
     <body class="preload">
     <div class="mask"></div>
+    <a href="#" id="uploadImageBack"></a>
     {% block body %}
         <div class="header" id="header">
             <div class="navcontainer">
@@ -276,7 +277,6 @@
             </div>
         </div>
         <!-- image upload -->
-        <!-- Main section -->
         <section id="main">
             <ul id="result_zone">
                 <div class="clear"></div>
@@ -326,8 +326,9 @@
         </section>
 
     <!-- File info section -->
-    <aside id="info_zone" class="hide">
-    </aside>
+    <!-- <aside id="info_zone" class="hide">
+    <a href="#" id="uploadImageLast">上一步</a>
+    </aside>  -->
         {% block return_top %}
         <a id="return_top" href="#" title="回到顶部" class="none"></a>
         {% end %}

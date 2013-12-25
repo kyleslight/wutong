@@ -744,80 +744,45 @@ padding: 17px 40px 0;
 	margin-right: 25px;
 	margin-bottom: 15px;
 }
+
+#insertIamge{
+	width: 20px;
+	height: 20px;
+	background: url('image/ueditor_botton.png');
+	background-position:894px 0;
+	margin-top: 2px;
+	margin-left: 5px;
+	margin-right: 5px;
+	display: inline-block;
+}
 .mask{
 	position: fixed;
-	background: rgba(0,0,0,0.7);
-	z-index: 1001;
 	width: 100%;
 	height: 100%;
+	background: rgba(0,0,0,0.7);
+	z-index: 1001;
 	display: none;
 }
-#uploadImage{
-	width: 340px;
-	margin: 0 auto;	
-	z-index: 10011;
-	/*text-align: center;*/
-}
-#dropbox{
+#uploadImageBack{
+	display: block;
+	width: 56px;
+	height: 56px;
+	background: url('image/delete.png');
 	position: fixed;
-	width: 300px;
-	height: 200px;
-	background-image: url('image/add.svg');
-	border: none;
-	display: inline-block;
-	text-decoration: none;
-	top: 200px;
-	margin-left: 20px;
-	text-align: center;
-	z-index: 10011;
-	ransition: none;
-	-moz-transition:none;
-	-webkit-transition:none;
-	-o-transition:none;
+	right: 40px;
+	top: 40px;
+	z-index: 1003;
 	display: none;
 }
-#dropbox:hover {
-	background-position: 0 -200px;
+section#main{
+	display: none;
 }
-#imageUploadIntro{
-	margin-top: 200px;
-	color: #CCC;
-}
-
-.normalImageUpload{
+div#first_load{
 	position: fixed;
-	z-index: 10011;
-	background: white;
-	top: 200px;
-	width: 360px;
-	height: 100px;
-	padding: 20px;
-	border-radius: 2px;
-	box-shadow: 0 0 10px #CCC;
-	display: none;
+	z-index: 1002;
 }
-.normalImageUploadOption{
-	float: left;
-	width: 300px;
-}
-#loaclImageUpload,#webImageUpload{
-	margin-left: 20px;
-	float: left;
-}
-.activeImageUpload{
-	color: #680;
-}
-#loaclImageUploadInput,#webImageUploadInput{
-	width: 300px;
-	margin-left: 20px;
-}
-#loaclImageUploadInput{
-	background: #680;
-	color: #680;
-}
-#webImageUploadInput{
-	width: 300px;
-	display: none;
+div#first_load p{
+	color: white;
 }
 
 .none{

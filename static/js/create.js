@@ -133,7 +133,10 @@ $(document).ready(function(){
         return false;
     });
 
-
+    // init ueditor
+    editor.ready(function(){
+        initUeditor();
+    });
 
 });
 

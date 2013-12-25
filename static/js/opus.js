@@ -87,6 +87,10 @@ $(document).ready(function(){
             $.getJSON(url, function(data) {
                 $(".buttomComment").prepend(data);
             });
+            // init ueditor
+            BCeditor.ready(function(){
+                initUeditor();
+            });
         }else{
             $(this).text("展开底部评论");
             $(".buttomComment").hide();
