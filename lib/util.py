@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Last Modified time: 2013-12-25 03:07:59
+# @Last Modified time: 2013-12-26 22:05:32
 
 import os
 import uuid
@@ -9,6 +9,12 @@ from hashlib import sha1
 from datetime import datetime
 from tornado.web import create_signed_value, decode_signed_value
 
+
+def split(txt, seps):
+    default_sep = seps[0]
+    for sep in seps[1:]:
+        txt = txt.replace(sep, default_sep)
+    return [i.strip() for i in txt.split(default_sep)]
 
 def hexstring(salt, string):
     hexstr = sha1((salt + string).encode("utf-8"))

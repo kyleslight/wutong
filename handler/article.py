@@ -4,7 +4,7 @@
 from tornado.web import authenticated
 from tornado.escape import json_encode, json_decode
 from base import BaseHandler
-import re
+from lib import util
 
 
 class ArticleBaseHandler(BaseHandler):
@@ -44,18 +44,32 @@ class BrowseArticleHandler(ArticleBaseHandler):
 
 class OpusHandler(ArticleBaseHandler):
     def get_article(self, article_id):
+        ip = self.request.remote_ip
         article = self.model.get_article_info(article_id)
-        self.model.add_article_view(article_id, self.user_id)
+        self.model.create_article_view(article_id, self.user_id, ip)
         return article
 
     def get(self, article_id):
         article = self.get_article(article_id)
-        self.render('opus.html', article=article)
+        if article:
+            self.render('opus.html', article=article)
+        else:
+            self.write_error(404)
 
 
 class CreateArticleHandler(ArticleBaseHandler):
-    def has_top_tag(self, tags):
-        pass
+    def get_tags_from_str(self, tags):
+        top_tags = set([
+            u'学科', u'技术', u'教程', u'文学',
+            u'发现', u'日常', u'随笔', u'娱乐',
+            u'杂',
+        ])
+        seps = [u' ', u';', u'；']
+
+        tags = util.split(tags, u' ,;；')
+        if set(tags).isdisjoint(top_tags):
+            tags = []
+        return tags
 
     def get(self):
         self.render('create.html')
@@ -71,9 +85,11 @@ class CreateArticleHandler(ArticleBaseHandler):
         suit_for = self.get_argument('suit')
         reference = self.get_argument('reference')
         partner = self.get_argument('partner')
-        tags = self.get_argument('tags').split(';')
-        if not self.has_top_tag(tags):
-            self.write('no tag')
+        tags = q>self.get_argument('tags')
+
+        tags = q>self.get_tags_from_str(tags)
+        if not tags:
+            self.write('invalid tags')
             return
 
         article_id = self.create_article(title,

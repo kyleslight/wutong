@@ -6,16 +6,17 @@
     <div class="groupNavWarp">
         <div class="groupNav">
             <div class="userGroupInfo">
-                <a class="userImg" href="#"><img src="{{ static_url("css/image/test.png") }}" /></a>
-                <a class="userName" href="#">Kyleslight</a>
+                <a class="userImg" href="#"><img src="{{ avatarurl(user['avatar']) }}" /></a>
+                <a class="userName" href="#">{{ user['penname'] }}</a>
                 <div class="myGroup">
                     <div class="myGroupTitle">我的小组</div>
+                    {% if mygroups %}
+                    {% for group in mygroups %}
                     <a class="myGroupListWrap" href="/g/1"><li class="myGroupList">Kyleslight的同好会</li></a>
-                    <a class="myGroupListWrap" href="#"><li class="myGroupList">循环性情绪低落症侯群</li></a>
-                    <a class="myGroupListWrap" href="#"><li class="myGroupList">华中科技大学</li></a>
-                    <a class="myGroupListWrap" href="#"><li class="myGroupList">谁来阻止我吃东西的手谁来阻止我吃东西的手</li></a>
-                    <a class="myGroupListWrap" href="#"><li class="myGroupList">手绘旅行</li></a>
-                    <a class="myGroupListWrap" href="#"><li class="myGroupList">烧耳机</li></a>
+                    {% end %}
+                    {% else %}
+                    <a class="myGroupListWrap" href="#"><li class="myGroupList">你还没有加入任何小组</li></a>
+                    {% end %}
                     <!-- <a href="#" id="myGroupMore">更多小组</a> -->
                     <a href="#" id="createGroup"> + 创建小组</a>
                 </div>

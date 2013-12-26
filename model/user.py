@@ -102,3 +102,11 @@ class UserModel(object):
                      where id = %s
                        and uid = %s'''
         return self.db.execute(update, title, content, memo_id, uid)
+
+    def get_collections(self, uid, limit=5, offset=0):
+        select = 'SELECT get_article_collections(%s, %s, %s)'
+        return self.db.getjson(select, uid, limit, offset)
+
+    def create_collection(self, uid, aid):
+        select = 'SELECT create_article_collection(%s, %s)'
+        return self.db.getfirstfield(select, uid, aid)

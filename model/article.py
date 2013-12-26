@@ -88,6 +88,6 @@ class ArticleModel(object):
         select = 'SELECT get_article_tags(%s)'
         return self.db.getjson(select, aid)
 
-    def add_article_view(self, aid, uid=None):
-        insert = 'insert into article_view (aid, uid) values (%s, %s)'
-        return self.db.execute(insert, aid, uid)
+    def create_article_view(self, aid, uid=None, ip=None):
+        select = 'SELECT create_article_view(%s, %s, %s)'
+        return self.db.execute(select, aid, uid, ip)
