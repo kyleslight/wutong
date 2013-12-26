@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from tornado.web import authenticated
-from tornado.escape import json_encode
+from tornado.escape import json_encode, json_decode
 from base import BaseHandler
+import re
 
 
 class ArticleBaseHandler(BaseHandler):
@@ -19,7 +20,7 @@ class ArticleBaseHandler(BaseHandler):
                        suit_for=None,
                        reference=None,
                        partner=None,
-                       tags=None):
+                       tags=[]):
         article_id =  self.model.do_create(self.user_id,
                                            title,
                                            mainbody,
@@ -27,6 +28,7 @@ class ArticleBaseHandler(BaseHandler):
                                            description,
                                            suit_for,
                                            reference)
+        self.model.create_article_tags(article_id, tags)
         return article_id
 
 
@@ -43,6 +45,7 @@ class BrowseArticleHandler(ArticleBaseHandler):
 class OpusHandler(ArticleBaseHandler):
     def get_article(self, article_id):
         article = self.model.get_article_info(article_id)
+        self.model.add_article_view(article_id, self.user_id)
         return article
 
     def get(self, article_id):
@@ -51,6 +54,9 @@ class OpusHandler(ArticleBaseHandler):
 
 
 class CreateArticleHandler(ArticleBaseHandler):
+    def has_top_tag(self, tags):
+        pass
+
     def get(self):
         self.render('create.html')
 
@@ -64,10 +70,12 @@ class CreateArticleHandler(ArticleBaseHandler):
         description = self.get_argument('describe')
         suit_for = self.get_argument('suit')
         reference = self.get_argument('reference')
-
-        # article_user
         partner = self.get_argument('partner')
-        tags = self.get_argument('tags')
+        tags = self.get_argument('tags').split(';')
+        if not self.has_top_tag(tags):
+            self.write('no tag')
+            return
+
         article_id = self.create_article(title,
                                          mainbody,
                                          subtitle,

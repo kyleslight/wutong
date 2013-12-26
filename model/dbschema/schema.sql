@@ -221,7 +221,7 @@ DROP TABLE IF EXISTS article_tag CASCADE;
 CREATE TABLE article_tag (
     id serial PRIMARY KEY,
     aid integer REFERENCES article(aid) NOT NULL,
-    tag_name varchar(20) NOT NULL,
+    name varchar(20) NOT NULL,
     create_time timestamp NOT NULL DEFAULT now()
 );
 
@@ -241,7 +241,7 @@ DROP TABLE IF EXISTS article_view CASCADE;
 CREATE TABLE article_view (
     id serial PRIMARY KEY,
     aid integer REFERENCES article(aid) NOT NULL,
-    uid integer REFERENCES "user"(uid) NOT NULL,
+    uid integer REFERENCES "user"(uid),
     view_time timestamp NOT NULL DEFAULT now()
 );
 
@@ -891,12 +891,54 @@ AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION get_article_info(aid integer)
+CREATE OR REPLACE FUNCTION count_article_views(_aid integer)
+  RETURNS bigint
+AS $$
+    SELECT count(aid)
+      FROM article_view
+     WHERE aid = $1
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION create_article_tags(
+  _aid integer,
+  _tags varchar[])
+  RETURNS void
+AS $$
+DECLARE
+    _tag varchar;
+BEGIN
+    FOREACH _tag IN ARRAY _tags
+    LOOP
+        INSERT INTO article_tag (aid, name)
+        VALUES ($1, _tag);
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_article_tags(_aid integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(aj))
+      FROM (
+            SELECT name
+              FROM article_tag
+             WHERE aid = $1
+             GROUP BY name
+             ORDER BY count(name) DESC
+        ) aj;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_article_info(_aid integer)
   RETURNS json
 AS $$
     SELECT row_to_json(j.*)
       FROM (
-            SELECT *
+            SELECT *,
+                   (SELECT get_article_tags($1)) AS "tags",
+                   (SELECT count_article_views($1)) AS "views"
               FROM article_info_v
              WHERE aid = $1
         ) j;
@@ -907,25 +949,18 @@ CREATE OR REPLACE FUNCTION get_article_list(
     _sort varchar,
     _limit integer,
     _offset integer)
-  RETURNS json AS
-$$
+  RETURNS json
+AS $$
     SELECT array_to_json(array_agg(aj.*))
       FROM (
-            SELECT a.aid, a.title,
-                   a.description, a.submit_time,
-                   u.avatar, u.penname AS "author",
-                   array_to_json(
-                     array(
-                           SELECT row_to_json(j.*)
-                             FROM (
-                                   SELECT id, tag_name
-                                     FROM article_tag at
-                                    WHERE a.aid = at.aid
-                                ) j
-                        )) AS "tags"
-              FROM article a,
-                   user_info_v u
-             WHERE a.uid = u.uid
+            SELECT a.aid,
+                   a.title,
+                   a.author,
+                   a.avatar,
+                   a.submit_time,
+                   a.description,
+                   (SELECT get_article_tags(a.aid)) AS "tags"
+              FROM article_info_v a
              ORDER BY a.aid DESC
          ) aj;
 $$ LANGUAGE SQL;

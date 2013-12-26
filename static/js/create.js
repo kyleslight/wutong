@@ -66,14 +66,6 @@ $(document).ready(function(){
     })
 
     $("#opusPublicSubmitButton,#opusPrivateSubmitButton").click(function(){
-        
-        // 发送需要的数据
-        // var opusAttachedData={
-            // opusType : $(".activeOpusType").text(),                      作品类型，包括“文章”，“片段”，“摄影”，“绘画”，“音乐”，“视频”，“项目”
-            // opusPublicity : isPublic($(this).attr("id")),                作品公开性，返回true，false
-            // opusIsPushed : $("#puclicPush").prop('checked')              作品是否推送，返回true，false
-        // };
-        // make null para not a child of opus
         var mainText=$("#textArea").val();
         mainText=deleteBrPara(mainText);
         $("#textArea").val(mainText);
