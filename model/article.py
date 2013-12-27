@@ -32,13 +32,31 @@ class ArticleModel(object):
         comments = self.db.getjson(select, aid, limit, offset)
         return comments
 
-    def do_create(self, uid, title, mainbody, subtitle=None,
-                  description=None, suit_for=None, reference=None,
-                  series=None, resource=None, is_public=u'推送'):
+    def do_create(self,
+                  uid,
+                  title,
+                  mainbody,
+                  subtitle=None,
+                  description=None,
+                  suit_for=None,
+                  reference=None,
+                  series=None,
+                  resource=None,
+                  is_public=u'推送',
+                  tags=[]):
         select = 'SELECT create_article(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-        aid = self.db.getfirstfield(select, uid, title, mainbody, subtitle,
-                                    description, suit_for, reference,
-                                    series, resource, is_public)
+        aid = self.db.getfirstfield(select,
+                                    uid,
+                                    title,
+                                    mainbody,
+                                    subtitle,
+                                    description,
+                                    suit_for,
+                                    reference,
+                                    series,
+                                    resource,
+                                    is_public)
+        self.create_article_tags(aid, tags)
         return aid
 
     def create_side_comment(self, aid, uid, content, paragraph_id):
@@ -59,15 +77,17 @@ class ArticleModel(object):
         return comment_id
 
     def create_article_tags(self, aid, tags):
-        insert = '''insert into article
-                                (aid, tag_name)
-                    values (%s, %s)
-                     where not (aid = %s and tag_name = %s)'''
-        for tag in tags:
-            self.db.execute(insert, aid, tag)
+        insert = 'SELECT create_article_tags(%s, %s)'
+        return self.db.execute(insert, aid, (tags, ))
 
     def remove_article_tags(self, aid):
-        pass
+        delete = 'delete from article_tag where aid = %s'
+        return self.db.execute(delete, aid)
 
     def get_article_tags(self, aid):
-        pass
+        select = 'SELECT get_article_tags(%s)'
+        return self.db.getjson(select, aid)
+
+    def create_article_view(self, aid, uid=None, ip=None):
+        select = 'SELECT create_article_view(%s, %s, %s)'
+        return self.db.execute(select, aid, uid, ip)

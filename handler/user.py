@@ -239,3 +239,21 @@ class UpdateMemoHandler(UserBaseHandler):
             self.write(json_encode(memo))
         else:
             self.write('failed')
+
+
+class CollectionHandler(UserBaseHandler):
+    def add_collection(self, article_id):
+        return self.create_article_collection(self.user_id, article_id)
+
+    def get_collections(self, page_id=0):
+        return self.model.get_collections(self.user_id, offset=page_id)
+
+    @authenticated
+    def get(self):
+        collections = self.get_collections()
+        self.write(json_encode(collections))
+
+    @authenticated
+    def post(self):
+        article_id = self.get_argument('article_id')
+        self.write(self.add_collection(article_id))

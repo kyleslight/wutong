@@ -103,13 +103,9 @@ document.ondrop = function(e) {
 	e.stopPropagation();
 	e.preventDefault();
 	hide(upload_popup);
-	// remove(first_load);
-	// url_list.value = '';
-	// file_list.value = '';
 	if(new FileReader || new FormData) {
 		var files = e.dataTransfer.files;
 		file_upload_handler(files);
-		$("#uploadImageLast").show();
 	}else {
 		alert(ui_msg.undrop);
 	}

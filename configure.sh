@@ -17,9 +17,10 @@ if [ ! $? -eq 0 ];then
     exit 1
 fi
 
-if [ "$1" = "test" ];then
+#if [ "$1" = "test" ];then
+if true;then
     echo 'gen random test data ...'
-    res=$(python test/util.py 3 2>&1)
+    res=$(python test/util.py 1 2>&1)
     if [ ! $? -eq 0 ];then
         echo "$res"
         exit 1

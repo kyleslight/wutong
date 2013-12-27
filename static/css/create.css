@@ -134,16 +134,12 @@
 	display: none;
 }
 
-#speinputtip{
-	height: 25px;
-	margin-top: 3px;
-	margin-bottom: 3px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	border: 0;
+.inputTip{
+	color: #444;
 }
 
-#formlisttip5{
+
+#mainTextForm{
 	border: 0;
 }
 
@@ -196,6 +192,11 @@
 	margin-right: 0;
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
+	display: none;
+}
+
+.activeFirstClass{
+	display: block;
 }
 
 #otherTags{

@@ -11,6 +11,7 @@ var groupInfo;
 var isLoginPasswordFocus = false;
 var isRegisterRepasswordFocus = false;
 var ueditor=null;
+var insertImageState=-1;
 
 // get unsync information
 unsycUser();
@@ -315,27 +316,26 @@ function loginSubmit() {
     $.post("/login", {
         username: loginUsername,
         password: loginPassword
-    }, function(response) {
-        if (response == "success") {
-            var username;
-            $.getJSON("/u/info", function(data) {
-                console.log(data);
-                username = data.penname;
-            });
-
-            $(".navrightoff").fadeOut(function() {
-                $(".navrighton").fadeIn();
-                $("#username").children().val(username);
-                $("#usernameHover").text(username);
-                loginBoxFade();
-            });
-            unsycUser();
-            unsyncGroup();
-        } else if (response == "failed") {
+    }, function(data) {
+        if (data == "failed") {
             $("#loginBox").addClass("littleTremble");
             setTimeout(function() {
                 $("#loginBox").removeClass("littleTremble");
             }, 1000);
+        }else{
+            var username;
+            $.getJSON("/u/info", function(data) {
+                console.log(data);
+                username = data.penname;
+                $(".navrightoff").fadeOut(function() {
+                    $(".navrighton").fadeIn();
+                    $("#username").children().val(username);
+                    $("#usernameHover").text(username);
+                    loginBoxFade();
+                });
+            });
+            unsycUser();
+            unsyncGroup();
         }
     });
 }
@@ -389,14 +389,28 @@ function unsycUser() {
     });
 }
 
-function insertImage(){
+// insertImageState
+// 0:in textarea
+// 1:in create
+// 2:in buttom comment
+// 3:in group chat
+// 4:in group topic
+// 5:for more...
+
+function insertImage(state){
     $("section#main,#info_zone,#uploadImageBack,#first_load,.mask").show();
     hide(upload_popup);
     url_list.value = '';
     file_list.value = '';
+    insertImageState=state;
 }
 
-function initUeditor(){
-    var insertImageButtom='<a href="javascript:void(0)" id="insertIamge" title="插入图片" onclick="insertImage()"></a>'
-    $("#edui28").after(insertImageButtom);
+function initUeditor(UEstate){
+    var insertImageButtom='<a href="javascript:void(0)" id="insertIamge" title="插入图片" onclick="insertImage('+UEstate+')"></a>'
+    $(".edui-for-link").after(insertImageButtom);
 };
+
+function activeItemChange(activeItem,activeClassName){
+    $("."+activeClassName).removeClass(activeClassName);
+    activeItem.addClass(activeClassName);
+}

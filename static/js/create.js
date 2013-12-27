@@ -26,7 +26,7 @@ $(document).ready(function(){
             foreword:$("#foreword").val(),
             mainText:$("#textArea").val(),
             reference:$("#reference").val(),
-            tags:[  $("#articleFirstClass").val(),
+            tags:[  $(".activeFirstClass").val(),
                     $("#otherTags").val()],
             suit:$("#suit").val(),
             cooperation:$("#cooperation").val(),
@@ -67,17 +67,10 @@ $(document).ready(function(){
     })
 
     $("#opusPublicSubmitButton,#opusPrivateSubmitButton").click(function(){
-        
-        // 发送需要的数据
-        // var opusAttachedData={
-            // opusType : $(".activeOpusType").text(),                      作品类型，包括“文章”，“片段”，“摄影”，“绘画”，“音乐”，“视频”，“项目”
-            // opusPublicity : isPublic($(this).attr("id")),                作品公开性，返回true，false
-            // opusIsPushed : $("#puclicPush").prop('checked')              作品是否推送，返回true，false
-        // };
-        // make null para not a child of opus
         var mainText=$("#textArea").val();
         mainText=deleteBrPara(mainText);
         $("#textArea").val(mainText);
+        $("#otherTags").val(($("#articleFirstClass").val()+$("#otherTags").val()));
         var theForm=document.getElementById("textdata");
         theForm.submit();
     });
@@ -94,23 +87,28 @@ $(document).ready(function(){
         }
         return false;
     });
-
-    $(window).scroll(function(){
-        var top=$(window).scrollTop();
-        if(top>200){
-            var realHeight=(top+(window.screen.availHeight)/2)+'px';
-            $('#return_top').removeClass('none');
-            $('#return_top').stop();
-            $('#return_top').animate({top:realHeight},500);
-        }
-        else{
-            $('#return_top').addClass('none');
-        }
-        return false;
-    });
     $(".opusType").click(function(){
-        $(".activeOpusType").removeClass("activeOpusType");
-        $(this).addClass("activeOpusType");
+        if ($(this).hasClass("activeOpusType")) {
+            return;
+        };
+        activeItemChange($(this),"activeOpusType");
+        // title:0 1 0:optional 1:required
+        // foreword:0 1 0:null 1:optional
+        // mainText:0 1 0:optional 1:required
+        // resource:0 1 2 0:null 1:image 2:file
+        // tags:0 1 2 3 4 0:article 1:fragment 2:photograph 3:drawing 4:project
+        switch($(this).text()){
+            case "文章":
+                changeOpusItem(1,1,1,0,0);break;
+            case "片段":
+                changeOpusItem(0,0,1,0,1);break;
+            case "摄影":
+                changeOpusItem(1,1,0,1,2);break;
+            case "绘画":
+                changeOpusItem(1,0,0,1,3);break;
+            case "项目":
+                changeOpusItem(1,1,1,2,4);break;
+        };
     });
     $("#opusTypeAreaSwitch").click(function(){
         if ($("#opusTypeOption").css("display")=="none") {
@@ -153,6 +151,30 @@ function deleteBrPara(string){
     string=string.replace(deletaBrReg,"<br/>");
     string=string.replace(deleteSpaceReg,"<br/>");
     return string;
+}
+
+// title:0 1 0:optional 1:required
+// foreword:0 1 0:null 1:optional
+// mainText:0 1 0:optional 1:required
+// resource:0 1 2 0:null 1:image 2:file
+
+function changeOpusItem(title,foreword,mainText,resource,tags){
+    // title
+    if (title) $("#title").attr("placeholder","填写标题"); else  $("#title").attr("placeholder","填写标题（可选）");
+    // foreword
+    if (foreword) $("#forewordForm").show(); else $("#forewordForm").hide();
+    // mainText
+    // if (mainText) editor.setHeight(600); else editor.setHeight(100);
+    // resource
+    switch(resource){
+        case 0:$("#resourceForm").hide();break;
+        case 1:insertImage(1);$("#resourceForm").hide();break;
+        case 2:$("#resourceForm").show();break;
+        default:break;
+    };
+    // tags
+    $(".activeFirstClass").removeClass("activeFirstClass");
+    $(".firstClass").eq(tags).addClass("activeFirstClass");
 }
 
 

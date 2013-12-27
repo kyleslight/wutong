@@ -376,6 +376,17 @@ td,tbody,table{
 	border-bottom: 0;
 }
 
+.opusCommentContent img{
+	width: auto;
+	height: auto;
+	max-width: 900px;
+	border-radius: 4px;
+	border-top-right-radius: 0px;
+	padding: 5px;
+	border: 1px solid #CCC;
+	margin: 0;
+}
+
 #buttomCommentData{
 	margin-left: 50px;
 }

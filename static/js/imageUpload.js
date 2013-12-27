@@ -216,14 +216,25 @@ function file_upload(work) {
 	xhr.addEventListener('readystatechange', function(e){
 		if(xhr.readyState == 4) {
 			if(xhr.status == 200) {
-				// eval('var res = '+xhr.responseText);
-				imageUploadUrl='/static/uploads/'+xhr.responseText;
-			    editor.execCommand( 'insertimage', {
-			         src:imageUploadUrl
-			    } );
+				var imageUploadUrl='/static/uploads/'+xhr.responseText;
+				switch(insertImageState){
+					case 0:
+					editor.execCommand( 'insertimage', {
+			         	src:imageUploadUrl
+			    	} );break;
+			    	case 1:
+			    	console.log(imageUploadUrl);
+			    	case 2:
+			    	BCeditor.execCommand( 'insertimage', {
+			         	src:imageUploadUrl
+			    	} );break;
+			    	case 4:
+			    	editor.execCommand( 'insertimage', {
+			         	src:imageUploadUrl
+			    	} );break;
+				}
+
 			    $("#first_load,#result_zone,#message_zone,.mask,#uploadImageBack,#main").hide();
-				// after_upload(res);
-				// upload_next();
 			}
 		}
 	},false);

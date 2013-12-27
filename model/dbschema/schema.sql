@@ -221,7 +221,7 @@ DROP TABLE IF EXISTS article_tag CASCADE;
 CREATE TABLE article_tag (
     id serial PRIMARY KEY,
     aid integer REFERENCES article(aid) NOT NULL,
-    tag_name varchar(20) NOT NULL,
+    name varchar(20) NOT NULL,
     create_time timestamp NOT NULL DEFAULT now()
 );
 
@@ -241,8 +241,19 @@ DROP TABLE IF EXISTS article_view CASCADE;
 CREATE TABLE article_view (
     id serial PRIMARY KEY,
     aid integer REFERENCES article(aid) NOT NULL,
-    uid integer REFERENCES "user"(uid) NOT NULL,
+    uid integer REFERENCES "user"(uid),
+    ip varchar(40),
     view_time timestamp NOT NULL DEFAULT now()
+);
+
+
+-- 收藏文章的用户
+DROP TABLE IF EXISTS article_collection CASCADE;
+CREATE TABLE article_collection (
+    id serial PRIMARY KEY,
+    aid integer REFERENCES article(aid) NOT NULL,
+    uid integer REFERENCES "user"(uid) NOT NULL,
+    create_time timestamp NOT NULL DEFAULT now()
 );
 
 
@@ -286,12 +297,23 @@ SELECT a.*, u.avatar, u.penname AS author
        "user" u
  WHERE a.uid = u.uid;
 
+
 CREATE OR REPLACE VIEW article_comment_v
   AS
 SELECT c.*, u.avatar, u.penname
   FROM article_comment c,
        user_info_v u
  WHERE c.uid = u.uid;
+
+
+CREATE OR REPLACE VIEW article_collection_v
+  AS
+SELECT ac.*,
+       a.title, a.author, a.avatar
+  FROM article_collection ac,
+       article_info_v a
+ WHERE ac.aid = a.aid;
+
 
 CREATE OR REPLACE VIEW group_member_info_v
   AS
@@ -582,23 +604,16 @@ CREATE OR REPLACE FUNCTION join_group(
     _uid integer)
   RETURNS integer
 AS $$
-DECLARE
-    _guid integer;
-BEGIN
-    PERFORM guid
-       FROM group_user
-      WHERE gid = $1
-         OR uid = $2;
-    IF FOUND THEN
-        RETURN NULL;
-    END IF;
-
-    INSERT INTO group_user (gid, uid) VALUES ($1, $2)
-    RETURNING guid
-    INTO _guid;
-    RETURN _guid;
-END;
-$$ LANGUAGE plpgsql;
+    INSERT INTO group_user (gid, uid)
+    SELECT $1, $2
+     WHERE NOT EXISTS(
+               SELECT guid
+                 FROM group_user
+                WHERE gid = $1
+                   OR uid = $2
+          )
+    RETURNING guid;
+$$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_group_dynamic(_uid integer)
@@ -891,12 +906,73 @@ AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION get_article_info(aid integer)
+CREATE OR REPLACE FUNCTION create_article_view(
+  _aid integer,
+  _uid integer,
+  _ip varchar)
+  RETURNS integer
+AS $$
+    INSERT INTO article_view
+                (aid, uid, ip)
+    SELECT $1, $2, $3
+     WHERE NOT EXISTS (
+               SELECT uid, ip
+                 FROM article_view
+                WHERE aid = $1
+                  AND (uid = $2 OR ip = $3)
+          )
+    RETURNING id;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION count_article_views(_aid integer)
+  RETURNS bigint
+AS $$
+    SELECT count(aid)
+      FROM article_view
+     WHERE aid = $1
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION create_article_tags(
+  _aid integer,
+  _tags varchar[])
+  RETURNS void
+AS $$
+DECLARE
+    _tag varchar;
+BEGIN
+    FOREACH _tag IN ARRAY _tags
+    LOOP
+        INSERT INTO article_tag (aid, name)
+        VALUES ($1, _tag);
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_article_tags(_aid integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(aj))
+      FROM (
+            SELECT name
+              FROM article_tag
+             WHERE aid = $1
+             GROUP BY name
+             ORDER BY count(name) DESC
+        ) aj;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_article_info(_aid integer)
   RETURNS json
 AS $$
     SELECT row_to_json(j.*)
       FROM (
-            SELECT *
+            SELECT *,
+                   (SELECT get_article_tags($1)) AS "tags",
+                   (SELECT count_article_views($1)) AS "views"
               FROM article_info_v
              WHERE aid = $1
         ) j;
@@ -907,25 +983,18 @@ CREATE OR REPLACE FUNCTION get_article_list(
     _sort varchar,
     _limit integer,
     _offset integer)
-  RETURNS json AS
-$$
+  RETURNS json
+AS $$
     SELECT array_to_json(array_agg(aj.*))
       FROM (
-            SELECT a.aid, a.title,
-                   a.description, a.submit_time,
-                   u.avatar, u.penname AS "author",
-                   array_to_json(
-                     array(
-                           SELECT row_to_json(j.*)
-                             FROM (
-                                   SELECT id, tag_name
-                                     FROM article_tag at
-                                    WHERE a.aid = at.aid
-                                ) j
-                        )) AS "tags"
-              FROM article a,
-                   user_info_v u
-             WHERE a.uid = u.uid
+            SELECT a.aid,
+                   a.title,
+                   a.author,
+                   a.avatar,
+                   a.submit_time,
+                   a.description,
+                   (SELECT get_article_tags(a.aid)) AS "tags"
+              FROM article_info_v a
              ORDER BY a.aid DESC
          ) aj;
 $$ LANGUAGE SQL;
@@ -1034,6 +1103,43 @@ BEGIN
     RETURNING id
     INTO _tmp;
     RETURN _tmp;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_article_collections(
+    _uid integer,
+    _limit integer,
+    _offset integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(aj.*))
+      FROM (
+            SELECT *
+              FROM article_collection_v
+             WHERE uid = $1
+             ORDER BY id
+             LIMIT $2
+            OFFSET $3
+         ) aj;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION create_article_collection(
+    _uid integer,
+    _aid integer)
+  RETURNS integer
+AS $$
+BEGIN
+    INSERT INTO article_collection (uid, aid)
+    SELECT $1, $2
+     WHERE NOT EXISTS (
+               SELECT uid, aid
+                 FROM article_collection
+                WHERE uid = $1
+                  AND aid = $2
+          )
+    RETURNING id;
 END;
 $$ LANGUAGE plpgsql;
 

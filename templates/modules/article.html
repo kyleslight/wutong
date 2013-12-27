@@ -3,7 +3,7 @@
         <div class="opusTime">{{ prettytime(article["submit_time"]) }}</div>
         <span class="opusAuthor">by <a href="#">{{ article["author"] }}</a></span>
         <div class="opusData">
-            <div class="opusViewed">浏览：19102</div>
+            <div class="opusViewed">浏览：{{ article["views"] }}</div>
             <div class="opusGrade">得分：8.5</div>
             <div class="opusCollected">收藏：102</div>
             <div class="opusForwarded">转发：378</div>
@@ -37,7 +37,10 @@
     <div class="opusReference">参考来源：<a href="#">{{ article["reference"] }}</a>
     </div>
     {% end %}
-    <div class="opusTag">Tags： <a href="#">技术</a><a href="#">2013极客人物</a><a href="#">404</a>
+    <div class="opusTag">Tags：
+        {% for tag in article['tags'] %}
+        <a href="#">{{ tag['name'] }}</a>
+        {% end %}
     </div>
     {% if None %}
     <div class="opusSeries">所属文辑其他文章：

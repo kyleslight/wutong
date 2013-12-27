@@ -14,48 +14,89 @@
                         <a href="#" class="opusType">项目</a>
                     </div>
                 </div>
+                <div id="resourceForm" class="formlist"><span class="inputTip">资源</span>
+                    <input id="fileResource" class="input" type="file" name="resource" placeholder="这里添加资源内容" value="选择文件" />
+                </div>
 
-				<div id="formlistfirst" class="formlist"><span class="inputTip"><a href="#" title="标题说明">标题</a></span>  <input id="title" class="input" type="text" name="title" placeholder="填写标题" /></div>
-				<div class="formlisttip" id="formlisttip1"></div>
-                
-				<div id="formlistfourth" class="formlist"><span class="inputTip"><a href="#" title="描述说明">引言</a></span>  <textarea id="foreword" class="input" type="text" name="describe" placeholder="填写引言（可选）"></textarea></div>
+				<div id="titleForm" class="formlist"><span class="inputTip">标题</span>  <input id="title" class="input" type="text" name="title" placeholder="填写标题" /></div>
 
-                <div id="resourceForm" class="formlist"><span class="inputTip"><a href="#" title="资源">资源</a></span>  <input id="resource" class="input" type="file" name="resource" placeholder="这里添加资源内容" value="选择文件" /></div>
-                <div class="formlisttip" id="formlisttip4"></div>
+				<div id="forewordForm" class="formlist"><span class="inputTip">引言</span>  <textarea id="foreword" class="input" type="text" name="describe" placeholder="填写引言（可选）"></textarea></div>
 
-				<div id="speformlist" class="formlist"><span id="speinputtip" class="inputTip"><a href="#" title="正文说明">正文</a></span></div>
+				<div id="mainTextForm" class="formlist"><span id="speinputtip" class="inputTip">正文</span>
+				    <div class="formlist"><textarea id="textArea" name="textArea" cols="100" rows="14"></textarea></div>
+                </div>
 
-				<div class="formlist"><textarea id="textArea" name="textArea" cols="100" rows="14"></textarea></div>
+				<div id="referenceForm" class="formlist"><span class="inputTip">引用来源</span> <textarea id="reference" class="input" type="text" name="reference" placeholder="这里注明引用来源，引用格式为'···:···;',冒号前为来源说明，冒号后为引用地址（可选）" draggable="false"></textarea></div>
 
-				<div class="formlist"><span class="inputTip"><a href="#" title="引用来源说明">引用来源</a></span> <textarea id="reference" class="input" type="text" name="reference" placeholder="这里注明引用来源，引用格式为'···:···;',冒号前为来源说明，冒号后为引用地址（可选）" draggable="false"></textarea></div>
-
-				<div id="formlistlast" class="formlist"><span class="inputTip"><a href="#" title="Tag说明">Tags</a></span>
-                <select id="articleFirstClass" class="firstClass" name="articleFirstClass">
-                    <option class="firstClassItem" value="subject">学科</option>
-                    <option class="firstClassItem" value="technology">技术</option>
-                    <option class="firstClassItem" value="tutorial">教程</option>
-                    <option class="firstClassItem" value="literature">文学</option>
-                    <option class="firstClassItem" value="discovery">发现</option>
-                    <option class="firstClassItem" value="nichijou">日常</option>
-                    <option class="firstClassItem" value="essay">随笔</option>
-                    <option class="firstClassItem" value="entertainment">娱乐</option>
-                    <option class="firstClassItem" value="miscellany">杂</option>
+				<div id="tagsForm" class="formlist"><span class="inputTip">Tags</span>
+                <select id="articleFirstClass" class="firstClass activeFirstClass" name="articleFirstClass">
+                    <option class="firstClassItem" value="学科">学科</option>
+                    <option class="firstClassItem" value="技术">技术</option>
+                    <option class="firstClassItem" value="教程">教程</option>
+                    <option class="firstClassItem" value="文学">文学</option>
+                    <option class="firstClassItem" value="发现">发现</option>
+                    <option class="firstClassItem" value="日常">日常</option>
+                    <option class="firstClassItem" value="随笔">随笔</option>
+                    <option class="firstClassItem" value="娱乐">娱乐</option>
+                    <option class="firstClassItem" value="杂">杂</option>
+                </select>
+                <select id="articleFirstClass" class="firstClass" name="fragmentFirstClass">
+                    <option class="firstClassItem" value="问答">问答</option>
+                    <option class="firstClassItem" value="idea">idea</option>
+                    <option class="firstClassItem" value="状态">状态</option>
+                    <option class="firstClassItem" value="心情">心情</option>
+                    <option class="firstClassItem" value="推荐">推荐</option>
+                    <option class="firstClassItem" value="语录">语录</option>
+                    <option class="firstClassItem" value="段子">段子</option>
+                    <option class="firstClassItem" value="周边">周边</option>
+                    <option class="firstClassItem" value="杂">杂</option>
+                </select>
+                <select id="articleFirstClass" class="firstClass" name="photographFirstClass">
+                    <option class="firstClassItem" value="人像">人像</option>
+                    <option class="firstClassItem" value="风光">风光</option>
+                    <option class="firstClassItem" value="纪实">纪实</option>
+                    <option class="firstClassItem" value="静物">静物</option>
+                    <option class="firstClassItem" value="动物">动物</option>
+                    <option class="firstClassItem" value="建筑">建筑</option>
+                    <option class="firstClassItem" value="生态">生态</option>
+                    <option class="firstClassItem" value="游记">游记</option>
+                    <option class="firstClassItem" value="杂">杂</option>
+                </select>
+                <select id="articleFirstClass" class="firstClass" name="photographFirstClass">
+                    <option class="firstClassItem" value="手绘">手绘</option>
+                    <option class="firstClassItem" value="故事">故事</option>
+                    <option class="firstClassItem" value="CG">CG</option>
+                    <option class="firstClassItem" value="水彩">水彩</option>
+                    <option class="firstClassItem" value="纹案">纹案</option>
+                    <option class="firstClassItem" value="建筑">建筑</option>
+                    <option class="firstClassItem" value="平面">平面</option>
+                    <option class="firstClassItem" value="概念">概念</option>
+                    <option class="firstClassItem" value="杂">杂</option>
+                </select>
+                <select id="articleFirstClass" class="firstClass" name="projectFirstClass">
+                    <option class="firstClassItem" value="Web">Web</option>
+                    <option class="firstClassItem" value="Android">Android</option>
+                    <option class="firstClassItem" value="IOS">IOS</option>
+                    <option class="firstClassItem" value="Linux">Linux</option>
+                    <option class="firstClassItem" value="Mac OS">Mac OS</option>
+                    <option class="firstClassItem" value="Windows">Windows</option>
+                    <option class="firstClassItem" value="平面">平面</option>
+                    <option class="firstClassItem" value="原型">原型</option>
+                    <option class="firstClassItem" value="杂">杂</option>
                 </select>
                 <input id="otherTags" class="input" type="text" name="tags" placeholder="左边选项为一级Tag（即你的作品分类）,右边作者可自定Tag，Tag之间用';'隔开（可选）"/></div>
-				<div class="formlisttip" id="formlisttip8"></div>
 
                 <a href="#" id="opusExpandBotton">显示作品扩展项</a>
                 <div class="expandOption">
-                    <div class="formlist"><span class="inputTip"><a href="#" title="适合说明">适合</a></span>  <input id="suit" class="input" type="text" name="suit" placeholder="这里注明适合人群，人群之间用';'隔开（可选）" /></div>
+                    <div class="formlist"><span class="inputTip">适合</span>  <input id="suit" class="input" type="text" name="suit" placeholder="这里注明适合人群，人群之间用';'隔开（可选）" /></div>
 
-                    <div class="formlist"><span class="inputTip"><a href="#" title="合作编辑">合作编辑</a></span>  <input id="cooperation" class="input" type="text" name="cooperation" placeholder="这里注明合作编辑人、合作小组" /></div>
-                    <div class="formlisttip" id="formlisttip4"><br/></div>
+                    <div class="formlist"><span class="inputTip">合作编辑</span>  <input id="cooperation" class="input" type="text" name="cooperation" placeholder="这里注明合作编辑人、合作小组" /></div>
 
                     <div id="pushOptionForm" class="formlist">
-                        <span class="inputTip"><a href="#" title="推送">推送</a></span>
+                        <span class="inputTip">推送方式</span>
                         <div class="pushOption">
-                            <input type="radio" id="puclicPush" name="push" checked="checked" />公开并推送
-                            <input type="radio" id="puclicNotPush" name="push" />公开不推送
+                            <input type="radio" id="puclicPush" name="push" checked="checked" />推送
+                            <input type="radio" id="puclicNotPush" name="push" />不推送
                         </div>
                     </div>
                 </div>

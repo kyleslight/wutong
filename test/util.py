@@ -178,7 +178,8 @@ class TestDataGenerator(object):
             aid = self.article.do_create(
                 uid,
                 '%s article title by %s' % (random.random(), uid),
-                '<p>random mainbody %s</p>' % random.random()
+                '<p>random mainbody %s</p>' % random.random(),
+                tags=['技术', 'linux', 'python']
             )
             aids.append(aid)
 
@@ -216,4 +217,4 @@ if __name__ == "__main__":
         number = int(sys.argv[1])
     except IndexError:
         number = 3
-    TestDataGenerator(q>number)
+    TestDataGenerator(number)

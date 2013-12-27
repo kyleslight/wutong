@@ -208,7 +208,7 @@
         //常用配置项目
         //,isShow : true    //默认显示编辑器
 
-        //,initialContent:'欢迎使用ueditor!'    //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
+        ,initialContent:''    //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
 
         ,initialFrameWidth:957  //初始化编辑器宽度,默认1000
         ,initialFrameHeight:250 //初始化编辑器高度,默认320
@@ -409,7 +409,7 @@
 
         //autoHeightEnabled
         // 是否自动长高,默认true
-        //,autoHeightEnabled:true
+        ,autoHeightEnabled:false
 
         //scaleEnabled
         //是否可以拉伸长高,默认true(当开启时，自动长高失效)
