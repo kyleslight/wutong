@@ -58,7 +58,7 @@ textarea,input{
 	clear: both;
 	width: 100%;
 	background: white;
-	padding-top: 1px;
+	padding:15px 0;
 	border-bottom: 1px solid #CCC;
 }
 
@@ -791,9 +791,9 @@ li.topicOutter p img{
 	height: auto;
 }
 .userName{
-	display: inline;
 	font-size: 0.9em;
 	margin-bottom: 2px;
+	width: 760px;
 }
 .talkMain{
 	float: left;
@@ -830,6 +830,10 @@ li.topicOutter p img{
 	font-size: 0.8em;
 	margin-right: 20px;
 	display: inline;
+}
+.chatFirstLine{
+	width: 950px;
+	clear: both;
 }
 
 /*topic show in out layer*/

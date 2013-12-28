@@ -51,6 +51,11 @@
 	padding: 20px;
 	border-top: 1px solid #CCC;
 }
+.noGroup{
+	list-style: none;
+	color: #CCC;
+	font-size: 0.8em;
+}
 .myGroupTitle{
 	font-size: 1.5em;
 	margin-bottom: 10px;
@@ -127,13 +132,11 @@
 	margin-left: 20px;
 	/*display: none;*/
 }
-.groupDynamicHeader,#createGroupHeader{
+.groupDynamicHeader,#createGroupHeader p{
 	font-size: 1.5em;
 	margin-bottom: 10px;
 	display: block;
 	color: #999;
-	text-align: center;
-	
 }
 .groupDynamicList{
 	float: left;

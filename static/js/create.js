@@ -70,7 +70,8 @@ $(document).ready(function(){
         var mainText=$("#textArea").val();
         mainText=deleteBrPara(mainText);
         $("#textArea").val(mainText);
-        $("#otherTags").val(($("#articleFirstClass").val()+$("#otherTags").val()));
+        var tagshdkdjfh=$("#otherTags").val(($("#articleFirstClass").val()+$("#otherTags").val()));
+        console.log(tagshdkdjfh);
         var theForm=document.getElementById("textdata");
         theForm.submit();
     });
@@ -133,7 +134,7 @@ $(document).ready(function(){
 
     // init ueditor
     editor.ready(function(){
-        initUeditor();
+        initUeditor(0);
     });
 
 });

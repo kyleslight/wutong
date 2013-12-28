@@ -11,18 +11,14 @@ var gid = parseInt(location.pathname.slice(3));
 var url = "ws://" + location.host + location.pathname + "/message";
 var msg_socket = new WebSocket(url);
 msg_socket.onclose = function() {};
-
+var gurl;
+if(location.pathname.slice(0,2)=="/t"){
+    gurl=$("#groupTitleName").attr("href");
+}else{
+    gurl = location.pathname;
+};
 
 $(document).ready(function() {
-    // change groupPrompt state by groupType
-    // changeGroupPromptState();
-    // check premission
-    checkGroupPremission();
-    // get group unsync information
-    unsyncGroup();
-
-    // console.log(groupInfo.is_public);
-
     renderMaleAndFemale();
     var groupMottoPrimaryWidth = $("#groupMotto").width();
     if (groupMottoPrimaryWidth > 425) {
@@ -33,8 +29,9 @@ $(document).ready(function() {
 
     // join group
     $("#publicJoin").click(function() {
+        console.log(gurl + "/join");
         $.ajax({
-            url: location.pathname + "/join",
+            url: gurl + "/join",
             type: "POST",
             success: function(data) {
                 alert("You have joined this group");
@@ -223,6 +220,8 @@ $(document).ready(function() {
     editor.ready(function(){
         initUeditor(4);
     });
+    // check premission
+    checkGroupPremission();
 
 });
 
@@ -325,41 +324,27 @@ function submitTopicData() {
     return false;
 }
 
-function unsyncGroup() {
-    var gurl = location.pathname + "/info";
-    $.ajax({
-        url: gurl,
-        type: "GET",
-        dataType: "json",
-        async: false,
-        success: function(data) {
-            groupInfo=data;
-        }
-    });
-}
-
 function checkGroupPremission(){
-    var cgpurl = location.pathname + "/permission";
-    $.ajax({
-        url: cgpurl,
-        type: "POST",
-        data: {
-            check_permission: 'is_member'
-        },
-        success: function(data) {
-            if (data) {
-                $(".activePrompt").hide();
-            };
+    var cgpurl;
+    if(location.pathname.slice(0,2)=="/t"){
+        cgpurl=$("#groupTitleName").attr("href")+"/permission";
+    }else{
+        cgpurl = location.pathname + "/permission";
+    };
+    $.post(cgpurl, {'check_permission': 'is_member'}, function(is_member) {
+        if (is_member=="true") {
+            $(".groupPrompt").hide();
+        }else{
+            $(".groupPrompt").show();
         }
     });
-}
-
-function changeGroupPromptState(){
-    if (groupInfo.is_public) {
-        $(".groupPromptPublic").addClass("activePrompt").show();
-    }else{
-        $(".groupPromptPrivate,#contactGroupLeader").addClass("activePrompt").show();
-    }
+    $.post(cgpurl, {'check_permission': 'is_public'}, function(is_public) {
+        if (is_public=="true"){
+            $(".groupPromptPublic").addClass("activePrompt").show();
+        }else{
+            $(".groupPromptPrivate,#contactGroupLeader").addClass("activePrompt").show();
+        }
+    });
 }
 
 function checkIsOtherOptionShow() {

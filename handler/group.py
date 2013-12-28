@@ -153,7 +153,10 @@ class CreateHandler(GroupBaseHandler):
 
 class JoinHandler(GroupBaseHandler):
     def join_group(self, gid, uid):
-        return self.model.do_join_group(gid, uid)
+
+        res = self.model.do_join_group(gid, uid)
+        print('-' * 80, res)
+        return res
 
     def post(self, gid):
         if self.join_group(gid, self.user_id):

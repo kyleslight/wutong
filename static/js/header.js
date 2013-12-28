@@ -125,7 +125,7 @@ $(document).ready(function() {
         $(".navrighton").fadeOut(function() {
             $(".navrightoff").fadeIn();
         });
-        // $("#username").children().val(username);
+        checkGroupPremission();
     })
 
     // loginBox and registerBox
@@ -335,7 +335,7 @@ function loginSubmit() {
                 });
             });
             unsycUser();
-            unsyncGroup();
+            checkGroupPremission();
         }
     });
 }
