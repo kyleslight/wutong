@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Last Modified time: 2013-12-26 22:05:32
+# @Last Modified time: 2013-12-28 14:11:08
 
 import os
 import uuid
@@ -76,7 +76,6 @@ def genavatar(avatar_fp, avatar_dir, avatar_name):
     avatar_50x50.save("%s_thumb.png" % avatar_name, "PNG")
     avatar_32x32.save("%s_mini.png" % avatar_name, "PNG")
     return os.path.basename(avatar_normal)
-
 
 def avatarurl(url, size='normal'):
     if url.startswith('http://') or url.startswith('https://'):

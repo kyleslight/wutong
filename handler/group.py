@@ -151,11 +151,16 @@ class CreateHandler(GroupBaseHandler):
         tags = self.get_argument('tags')
         is_public = self.get_argument('is_public', True)
         if tags:
-            tags = json_decode(tags)
+            # tags = json_decode(tags)
+            pass
         else:
             tags = []
 
-        self.model.do_create(self.user_id, name, intro=intro, is_public=is_public)
+        group_id = self.model.do_create(self.user_id,
+                                        name,
+                                        intro=intro,
+                                        is_public=is_public)
+        self.write(str(group_id))
 
 
 class JoinHandler(GroupBaseHandler):
