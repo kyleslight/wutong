@@ -180,11 +180,11 @@
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
         
-        , toolbars: [["fullscreen","undo","redo","link","insertimage","blockquote","insertcode","bold","italic","forecolor","inserttable","fontsize"]]
+        , toolbars: [["fullscreen","undo","redo","link","blockquote","insertcode","bold","italic","forecolor","inserttable","fontsize"]]
         //当鼠标放在工具栏上时显示的tooltip提示,留空支持自动多语言配置，否则以配置值为准
-//        ,labelMap:{
-//            'anchor':'', 'undo':''
-//        }
+       // ,labelMap:{
+       //     'anchor':'', 'undo':'','showmsg':'显示提示消息'
+       // }
         //webAppKey
         //百度应用的APIkey，每个站长必须首先去百度官网注册一个key后方能正常使用app功能
         //,webAppKey:""
@@ -208,7 +208,7 @@
         //常用配置项目
         //,isShow : true    //默认显示编辑器
 
-        //,initialContent:'欢迎使用ueditor!'    //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
+        ,initialContent:''    //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
 
         ,initialFrameWidth:957  //初始化编辑器宽度,默认1000
         ,initialFrameHeight:250 //初始化编辑器高度,默认320
@@ -409,7 +409,7 @@
 
         //autoHeightEnabled
         // 是否自动长高,默认true
-        //,autoHeightEnabled:true
+        ,autoHeightEnabled:false
 
         //scaleEnabled
         //是否可以拉伸长高,默认true(当开启时，自动长高失效)

@@ -163,7 +163,6 @@ $(document).ready(function(){
 
     // send editting side comment
     $("#sideCommentEditSend").click(function(){
-        // content:sideCommentCon,paraNum:editingParaNum
         var content=$("#sideCommentEditData").val();
         var url = location.pathname + '/comment/side';
         $.post(url,
@@ -172,21 +171,12 @@ $(document).ready(function(){
             'paragraph_id': editingParaNum, // TODO: replace this
         },
         function(data) {
-            // TODO: if 'failed'
-            var sideComment=eval("("+data+")");
-            paraId=sideComment.paragraph_id;
-            // console.log(sideComment.paragraph_id,sideComment.uid,sideComment.penname,sideComment.content);
-            var sideCommentShowBox='<li class="opusSideCommentList opusSideCommentList'+sideComment.paragraph_id+'" style="background:pink;width:253px">'
-                           +   '<a href="/u/'+sideComment.uid+'" class="opusSideCommentListUserName">'+sideComment.penname+'</a>'
-                           +   '<div class="opusSideCommentContent">'
-                           +        sideComment.content
-                           +   '</div>'
-                           +'</li>';
-            var addListNav=$("#sideCommentNode"+sideComment.paragraph_id).children(".opusSideCommentNav");
-            addListNav.after(sideCommentShowBox);
+            var addListNav=$("#sideCommentNode"+editingParaNum).children(".opusSideCommentNav");
+            addListNav.after(data);
+            $(".opusSideCommentList"+editingParaNum).eq(1).css({"background":"pink","width":"268px"});
             if (addListNav.hasClass("nullOpusSideCommentNav")) {
-                var preNav='<li class="opusSideCommentList opusSideCommentList'+paraId+' opusSideCommentNav" style="width:253px">'
-                        +'第'+paraId+'段评论('+'<span class="numOfParaComent">'+($("#sideCommentNode"+paraId).children().size()-1)+'</span>'+')'
+                var preNav='<li class="opusSideCommentList opusSideCommentList'+editingParaNum+' opusSideCommentNav" style="width:253px">'
+                        +'第'+editingParaNum+'段评论('+'<span class="numOfParaComent">'+($("#sideCommentNode"+editingParaNum).children().size()-1)+'</span>'+')'
                         +'</li>';
                 addListNav.after(preNav);
                 addListNav.remove();
@@ -222,6 +212,11 @@ $(document).ready(function(){
             $(window.frames["ueditor_0"].document).find("body.view").html("");
         });
         return false;
+    });
+
+    // init ueditor
+    BCeditor.ready(function(){
+        initUeditor(2);
     });
 
 });

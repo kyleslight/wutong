@@ -219,6 +219,11 @@ $(document).ready(function() {
         removeMessage();
     }
 
+    // init ueditor
+    editor.ready(function(){
+        initUeditor(4);
+    });
+
 });
 
 function unsyncGroupBulletin() {

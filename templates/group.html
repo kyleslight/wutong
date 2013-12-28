@@ -178,7 +178,7 @@
 {% block extra_js %}
     <script type="text/javascript" src="{{ static_url("js/group.js") }}"></script>
     <script type="text/javascript">
-        var editor = new UE.ui.Editor({toolbars: [["undo","redo","bold","italic","fontsize","forecolor","inserttable","link","insertimage","blockquote","insertcode"]],initialFrameWidth:956,initialFrameHeight:300});
+        var editor = new UE.ui.Editor({toolbars: [["undo","redo","bold","italic","fontsize","forecolor","inserttable","link","blockquote","insertcode"]],initialFrameWidth:956,initialFrameHeight:300});
         // textarea: '#textArea';
         editor.render('topicData');
         var expandEditor = new UE.ui.Editor({toolbars: [["undo","redo","bold","italic","fontsize","forecolor","inserttable","link","insertimage","blockquote","insertcode"]],initialFrameWidth:780,initialFrameHeight:300});

@@ -10,6 +10,8 @@ var userInfo;
 var groupInfo;
 var isLoginPasswordFocus = false;
 var isRegisterRepasswordFocus = false;
+var ueditor=null;
+var insertImageState=-1;
 
 // get unsync information
 unsycUser();
@@ -17,7 +19,6 @@ unsycUser();
 $(document).ready(function() {
 
     $(".preload").removeClass("preload");
-    $("#tabHeads").children("span").eq(3).css({"display":"none"});
     // get user info
     $.getJSON("/u/info", function (data) {
         var username;
@@ -240,6 +241,11 @@ $(document).ready(function() {
         $(".myMessageWarp").animate({
             height: heightOfMyMessage
         });
+    });
+
+    // image upload back
+    $("#uploadImageBack").click(function(){
+        $("section#main,#uploadImageBack,#info_zone,.mask").hide();
     })
 });
 
@@ -310,36 +316,35 @@ function loginSubmit() {
     $.post("/login", {
         username: loginUsername,
         password: loginPassword
-    }, function(response) {
-        if (response == "success") {
-            var username;
-            $.getJSON("/u/info", function(data) {
-                console.log(data);
-                username = data.penname;
-            });
-
-            $(".navrightoff").fadeOut(function() {
-                $(".navrighton").fadeIn();
-                $("#username").children().val(username);
-                $("#usernameHover").text(username);
-                loginBoxFade();
-            });
-            unsycUser();
-            unsyncGroup();
-        } else if (response == "failed") {
+    }, function(data) {
+        if (data == "failed") {
             $("#loginBox").addClass("littleTremble");
             setTimeout(function() {
                 $("#loginBox").removeClass("littleTremble");
             }, 1000);
+        }else{
+            var username;
+            $.getJSON("/u/info", function(data) {
+                console.log(data);
+                username = data.penname;
+                $(".navrightoff").fadeOut(function() {
+                    $(".navrighton").fadeIn();
+                    $("#username").children().val(username);
+                    $("#usernameHover").text(username);
+                    loginBoxFade();
+                });
+            });
+            unsycUser();
+            unsyncGroup();
         }
     });
 }
 
 function registerSubmit() {
-    var registerUsername = $("#registerUsername").val();
-    var registerEmail = $("#registerEmail").val();
-    var registerPassword = $("#registerPassword").val();
-    var registerRepassword = $("#registerRepassword").val();
+    var registerUsername = $("#registerUsername").val(),
+        registerEmail = $("#registerEmail").val(),
+        registerPassword = $("#registerPassword").val(),
+        registerRepassword = $("#registerRepassword").val();
     if (registerPassword != registerRepassword) {
         alert("password and repassword must be the same vaule");
         $("#loginBox").addClass("littleTremble");
@@ -384,3 +389,28 @@ function unsycUser() {
     });
 }
 
+// insertImageState
+// 0:in textarea
+// 1:in create
+// 2:in buttom comment
+// 3:in group chat
+// 4:in group topic
+// 5:for more...
+
+function insertImage(state){
+    $("section#main,#info_zone,#uploadImageBack,#first_load,.mask").show();
+    hide(upload_popup);
+    url_list.value = '';
+    file_list.value = '';
+    insertImageState=state;
+}
+
+function initUeditor(UEstate){
+    var insertImageButtom='<a href="javascript:void(0)" id="insertIamge" title="插入图片" onclick="insertImage('+UEstate+')"></a>'
+    $(".edui-for-link").after(insertImageButtom);
+};
+
+function activeItemChange(activeItem,activeClassName){
+    $("."+activeClassName).removeClass(activeClassName);
+    activeItem.addClass(activeClassName);
+}

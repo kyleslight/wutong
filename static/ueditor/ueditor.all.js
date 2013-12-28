@@ -7100,9 +7100,9 @@ UE.plugins['link'] = function(){
     UE.commands['link'] = {
         execCommand : function( cmdName, opt ) {
             var range;
-            opt._href && (opt._href = utils.unhtml(opt._href,/[<">]/g));
-            opt.href && (opt.href = utils.unhtml(opt.href,/[<">]/g));
-            opt.textValue && (opt.textValue = utils.unhtml(opt.textValue,/[<">]/g));
+            opt._href && (opt._href = utils.unhtml(opt._href,/[<>]/g));
+            opt.href && (opt.href = utils.unhtml(opt.href,/[<>]/g));
+            opt.textValue && (opt.textValue = utils.unhtml(opt.textValue,/[<>]/g));
             doLink(range=this.selection.getRange(),opt,this);
             //闭合都不加占位符，如果加了会在a后边多个占位符节点，导致a是图片背景组成的列表，出现空白问题
             range.collapse().select(true);
@@ -16122,13 +16122,13 @@ baidu.editor.ui = {};(function (){
         'background':'~/dialogs/background/background.html'
     };
     //为工具栏添加按钮，以下都是统一的按钮触发命令，所以写在一起
-    var btnCmds = ['undo', 'redo', 'formatmatch',
+    var btnCmds = ['showmsg','undo', 'redo', 'formatmatch',
         'bold', 'italic', 'underline', 'fontborder', 'touppercase', 'tolowercase',
         'strikethrough', 'subscript', 'superscript', 'source', 'indent', 'outdent',
         'blockquote', 'pasteplain', 'pagebreak',
         'selectall', 'print', 'preview', 'horizontal', 'removeformat', 'time', 'date', 'unlink',
         'insertparagraphbeforetable', 'insertrow', 'insertcol', 'mergeright', 'mergedown', 'deleterow',
-        'deletecol', 'splittorows', 'splittocols', 'splittocells', 'mergecells', 'deletetable'];
+        'deletecol', 'splittorows', 'splittocols', 'splittocells', 'mergecells', 'deletetable','showmsg'];
 
     for (var i = 0, ci; ci = btnCmds[i++];) {
         ci = ci.toLowerCase();
@@ -16509,7 +16509,7 @@ baidu.editor.ui = {};(function (){
                     ui.setDisabled(false);
                     var value = editor.queryCommandValue('FontFamily');
                     //trace:1871 ie下从源码模式切换回来时，字体会带单引号，而且会有逗号
-                    value && (value = value.replace(/['"]/g, '').split(',')[0]);
+                    value && (value = value.replace(/[']/g, '').split(',')[0]);
                     ui.setValue(value);
 
                 }

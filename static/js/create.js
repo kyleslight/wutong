@@ -17,7 +17,8 @@ $(document).ready(function(){
     });
 
     $("#opusPreViewButton").click(function(){
-        $("#textdata,#opusPreViewButton,#previewBeforePublic").fadeOut();
+        $("#temTextData").html("");
+        $("#textdata,#opusPreViewButton,#previewBeforePublic").hide();
         var mainText=$("#textArea").val();
         // console.log($("#title").val(),$("#foreword").val(),$("#reference").val(),($("#articleFirstClass").val()+$("#otherTags").val()),$("#suit").val(),$("#cooperation").val(),$("#puclicPush").prop('checked'));
         var temTextData={
@@ -25,7 +26,7 @@ $(document).ready(function(){
             foreword:$("#foreword").val(),
             mainText:$("#textArea").val(),
             reference:$("#reference").val(),
-            tags:[  $("#articleFirstClass").val(),
+            tags:[  $(".activeFirstClass").val(),
                     $("#otherTags").val()],
             suit:$("#suit").val(),
             cooperation:$("#cooperation").val(),
@@ -58,17 +59,18 @@ $(document).ready(function(){
                     +    '</div>'
                     +'</div>'
         $("#temTextData").prepend(temtText);
-        $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").fadeIn();
+        $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").show();
     });
     $("#opusPreViewBack").click(function(){
-        $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").fadeOut();
-        $("#textdata,#opusPreViewButton,#previewBeforePublic").fadeIn();
+        $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").hide();
+        $("#textdata,#opusPreViewButton,#previewBeforePublic").show();
     })
 
     $("#opusPublicSubmitButton,#opusPrivateSubmitButton").click(function(){
         var mainText=$("#textArea").val();
         mainText=deleteBrPara(mainText);
         $("#textArea").val(mainText);
+        $("#otherTags").val(($("#articleFirstClass").val()+$("#otherTags").val()));
         var theForm=document.getElementById("textdata");
         theForm.submit();
     });
@@ -85,23 +87,28 @@ $(document).ready(function(){
         }
         return false;
     });
-
-    $(window).scroll(function(){
-        var top=$(window).scrollTop();
-        if(top>200){
-            var realHeight=(top+(window.screen.availHeight)/2)+'px';
-            $('#return_top').removeClass('none');
-            $('#return_top').stop();
-            $('#return_top').animate({top:realHeight},500);
-        }
-        else{
-            $('#return_top').addClass('none');
-        }
-        return false;
-    });
     $(".opusType").click(function(){
-        $(".activeOpusType").removeClass("activeOpusType");
-        $(this).addClass("activeOpusType");
+        if ($(this).hasClass("activeOpusType")) {
+            return;
+        };
+        activeItemChange($(this),"activeOpusType");
+        // title:0 1 0:optional 1:required
+        // foreword:0 1 0:null 1:optional
+        // mainText:0 1 0:optional 1:required
+        // resource:0 1 2 0:null 1:image 2:file
+        // tags:0 1 2 3 4 0:article 1:fragment 2:photograph 3:drawing 4:project
+        switch($(this).text()){
+            case "文章":
+                changeOpusItem(1,1,1,0,0);break;
+            case "片段":
+                changeOpusItem(0,0,1,0,1);break;
+            case "摄影":
+                changeOpusItem(1,1,0,1,2);break;
+            case "绘画":
+                changeOpusItem(1,0,0,1,3);break;
+            case "项目":
+                changeOpusItem(1,1,1,2,4);break;
+        };
     });
     $("#opusTypeAreaSwitch").click(function(){
         if ($("#opusTypeOption").css("display")=="none") {
@@ -124,7 +131,10 @@ $(document).ready(function(){
         return false;
     });
 
-
+    // init ueditor
+    editor.ready(function(){
+        initUeditor();
+    });
 
 });
 
@@ -141,6 +151,30 @@ function deleteBrPara(string){
     string=string.replace(deletaBrReg,"<br/>");
     string=string.replace(deleteSpaceReg,"<br/>");
     return string;
+}
+
+// title:0 1 0:optional 1:required
+// foreword:0 1 0:null 1:optional
+// mainText:0 1 0:optional 1:required
+// resource:0 1 2 0:null 1:image 2:file
+
+function changeOpusItem(title,foreword,mainText,resource,tags){
+    // title
+    if (title) $("#title").attr("placeholder","填写标题"); else  $("#title").attr("placeholder","填写标题（可选）");
+    // foreword
+    if (foreword) $("#forewordForm").show(); else $("#forewordForm").hide();
+    // mainText
+    // if (mainText) editor.setHeight(600); else editor.setHeight(100);
+    // resource
+    switch(resource){
+        case 0:$("#resourceForm").hide();break;
+        case 1:insertImage(1);$("#resourceForm").hide();break;
+        case 2:$("#resourceForm").show();break;
+        default:break;
+    };
+    // tags
+    $(".activeFirstClass").removeClass("activeFirstClass");
+    $(".firstClass").eq(tags).addClass("activeFirstClass");
 }
 
 

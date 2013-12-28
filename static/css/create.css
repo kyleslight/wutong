@@ -5,7 +5,7 @@
 }
 
 .write p{
-	line-height: 100px;
+	line-height: 10px;
 	font-size: 14;
 }
 
@@ -134,16 +134,12 @@
 	display: none;
 }
 
-#speinputtip{
-	height: 25px;
-	margin-top: 3px;
-	margin-bottom: 3px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	border: 0;
+.inputTip{
+	color: #444;
 }
 
-#formlisttip5{
+
+#mainTextForm{
 	border: 0;
 }
 
@@ -196,6 +192,11 @@
 	margin-right: 0;
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
+	display: none;
+}
+
+.activeFirstClass{
+	display: block;
 }
 
 #otherTags{
@@ -387,6 +388,12 @@
 }
 .opusSeries a{
 	margin-right: 10px;
+}
+
+.edui-default .edui-editor-toolbarboxouter {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom: 1px solid #B5C550 !important;
 }
 
 
