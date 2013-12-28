@@ -4,6 +4,7 @@
 from tornado.websocket import WebSocketHandler
 from tornado.escape import json_decode, json_encode
 from base import BaseHandler
+from lib import util
 
 
 class GroupBaseHandler(BaseHandler):
@@ -145,16 +146,21 @@ class BrowseHandler(GroupBaseHandler):
 
 
 class CreateHandler(GroupBaseHandler):
+    def get_tags_from_str(self, tags):
+        seps = [u' ', u';', u'；']
+        tags = util.split(tags, u' ,;；')
+        return tags
+
     def post(self):
         name = self.get_argument('name')
         intro = self.get_argument('intro')
-        tags = self.get_argument('tags')
         is_public = self.get_argument('is_public', True)
-        if tags:
-            # tags = json_decode(tags)
-            pass
-        else:
-            tags = []
+        tags = self.get_argument('tags')
+
+        tags = self.get_tags_from_str(tags)
+        if not tags:
+            self.write('invalid tags')
+            return
 
         group_id = self.model.do_create(self.user_id,
                                         name,

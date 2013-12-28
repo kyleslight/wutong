@@ -629,7 +629,7 @@ AS $$
                SELECT guid
                  FROM group_user
                 WHERE gid = $1
-                   OR uid = $2
+                  AND uid = $2
           )
     RETURNING guid;
 $$ LANGUAGE SQL;
