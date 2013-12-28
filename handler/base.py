@@ -5,12 +5,15 @@ from lib.session import Session
 from model import user, group, article
 import lib.util
 
-class BaseHandler(RequestHandler):
 
+class BaseHandler(RequestHandler):
     def __init__(self, *args, **kwargs):
         super(BaseHandler, self).__init__(*args, **kwargs)
         self.session = Session(self)
         self.db = self.application.db
+        if not isinstance(self, WebSocketHandler):
+            # record last view url
+            self.set_cookie('last_view', self.request.uri)
 
     def on_finish(self):
         self.session.save()

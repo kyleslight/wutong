@@ -110,3 +110,7 @@ class UserModel(object):
     def create_collection(self, uid, aid):
         select = 'SELECT create_article_collection(%s, %s)'
         return self.db.getfirstfield(select, uid, aid)
+
+    def get_user_groups(self, uid, limit=5, offset=0):
+        select = 'SELECT get_user_groups(%s, %s, %s)'
+        return self.db.getjson(select, uid, limit, offset)

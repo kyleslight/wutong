@@ -553,6 +553,25 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION get_user_groups(
+    _uid integer,
+    _limit integer,
+    _offset integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(aj))
+      FROM (
+            SELECT g.gid, g.name
+              FROM group_user gu,
+                   "group" g
+             WHERE gu.uid = $1
+               AND gu.gid = g.gid
+             LIMIT $2
+            OFFSET $3
+        ) aj;
+$$ LANGUAGE SQL;
+
+
 CREATE OR REPLACE FUNCTION get_group_permission(
     _gid integer,
     _uid integer)
@@ -616,7 +635,7 @@ AS $$
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION get_group_dynamic(_uid integer)
+CREATE OR REPLACE FUNCTION get_group_dynamics(_uid integer)
   RETURNS json
 AS $$
     -- TODO

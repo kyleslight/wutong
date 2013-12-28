@@ -126,12 +126,19 @@ class PermissionHandler(GroupBaseHandler):
 
 
 class BrowseHandler(GroupBaseHandler):
+    def get_mygroups(self, user_id):
+        return self.usermodel.get_user_groups(user_id)
+
+    def get_group_dynamic(self, user_id):
+        return []
+
     def get(self):
         user = self.get_current_user()
         if user:
+            mygroups = self.get_mygroups(user['uid'])
             self.render('group-navigation.html',
                         user=user,
-                        mygroups=[],
+                        mygroups=mygroups,
                         topics=[])
         else:
             self.write('not login')

@@ -28,6 +28,12 @@ class UserBaseHandler(BaseHandler):
         return self._permission.get("is_admin", False)
 
 
+class IndexHandler(UserBaseHandler):
+    def get(self):
+        url = self.get_cookie('last_view')
+        self.redirect(url)
+
+
 class HomeHandler(UserBaseHandler):
     def get(self, penname):
         uid = self.model.get_uid(penname)
@@ -257,3 +263,8 @@ class CollectionHandler(UserBaseHandler):
     def post(self):
         article_id = self.get_argument('article_id')
         self.write(self.add_collection(article_id))
+
+
+class AutoCompletionHandler(UserBaseHandler):
+    def get(self):
+        query = self.get_argument('q')
