@@ -14,6 +14,8 @@ class FileHandler(BaseHandler):
         # byte
         self.max_file_size = 20000000
         self.save_dir = os.path.join(self.settings['static_path'], 'uploads')
+        if not os.path.isdir(self.save_dir):
+            os.makedirs('uploads', 0755)
 
     def get_save_path(self, filename):
         return os.path.join(self.save_dir, filename)

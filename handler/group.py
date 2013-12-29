@@ -4,6 +4,7 @@
 from tornado.websocket import WebSocketHandler
 from tornado.escape import json_decode, json_encode
 from base import BaseHandler
+from lib import util
 
 
 class GroupBaseHandler(BaseHandler):
@@ -126,29 +127,46 @@ class PermissionHandler(GroupBaseHandler):
 
 
 class BrowseHandler(GroupBaseHandler):
+    def get_mygroups(self, user_id):
+        return self.usermodel.get_user_groups(user_id)
+
+    def get_group_dynamic(self, user_id):
+        return []
+
     def get(self):
         user = self.get_current_user()
         if user:
+            mygroups = self.get_mygroups(user['uid'])
             self.render('group-navigation.html',
                         user=user,
-                        mygroups=[],
+                        mygroups=mygroups,
                         topics=[])
         else:
             self.write('not login')
 
 
 class CreateHandler(GroupBaseHandler):
+    def get_tags_from_str(self, tags):
+        seps = [u' ', u';', u'；']
+        tags = util.split(tags, u' ,;；')
+        return tags
+
     def post(self):
         name = self.get_argument('name')
         intro = self.get_argument('intro')
-        tags = self.get_argument('tags')
         is_public = self.get_argument('is_public', True)
-        if tags:
-            tags = json_decode(tags)
-        else:
-            tags = []
+        tags = self.get_argument('tags')
 
-        self.model.do_create(self.user_id, name, intro=intro, is_public=is_public)
+        tags = self.get_tags_from_str(tags)
+        if not tags:
+            self.write('invalid tags')
+            return
+
+        group_id = self.model.do_create(self.user_id,
+                                        name,
+                                        intro=intro,
+                                        is_public=is_public)
+        self.write(str(group_id))
 
 
 class JoinHandler(GroupBaseHandler):

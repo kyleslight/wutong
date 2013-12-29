@@ -892,6 +892,7 @@ li.topicInner p img{
 	padding: 5px;
 	background: white;
 	border: 1px solid #CCC;
+	margin-right: 10px;
 }
 .topicLocation{
 	display: block;

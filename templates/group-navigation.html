@@ -12,7 +12,7 @@
                     <div class="myGroupTitle">我的小组</div>
                     {% if mygroups %}
                     {% for group in mygroups %}
-                    <a class="myGroupListWrap" href="/g/1"><li class="myGroupList">Kyleslight的同好会</li></a>
+                    <a class="myGroupListWrap" href="/g/{{ group['gid'] }}"><li class="myGroupList">{{ group['name'] }}</li></a>
                     {% end %}
                     {% else %}
                     <a href="#"><li class="noGroup">我还没有加入任何小组</li></a>
@@ -57,9 +57,6 @@
                 </div>
             </div>
             <div class="groupMainWrap">
-                <!-- <div class="groupExplanation">
-                    这里是梧桐小组，一个让你与他人共同分享与交流兴趣的地方。
-                </div> -->
                 <div class="groupDynamic">
                     <h class="groupDynamicHeader">小组动态»</h>
                     {% for topic in topics %}

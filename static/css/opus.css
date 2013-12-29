@@ -138,6 +138,11 @@ td,tbody,table{
 	margin-bottom: 20px;
 }
 
+.opusMain p img{
+	margin-top: 15px;
+	margin-right: 10px;
+}
+
 .opusSuffixes{
 	padding: 20px;
 	color: #777;

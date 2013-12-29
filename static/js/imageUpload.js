@@ -72,7 +72,7 @@ function url_upload_handler() {
 			if (isurl(url)) {
 				work.qid = queueid++;
 				show_thumbnail(work);
-				upload(work);
+				insertImageAll(work.path);
 			}else {
 				work.status = 'failed'
 				work.err = 'illegal_url';
@@ -217,24 +217,7 @@ function file_upload(work) {
 		if(xhr.readyState == 4) {
 			if(xhr.status == 200) {
 				var imageUploadUrl='/static/uploads/'+xhr.responseText;
-				switch(insertImageState){
-					case 0:
-					editor.execCommand( 'insertimage', {
-			         	src:imageUploadUrl
-			    	} );break;
-			    	case 1:
-			    	console.log(imageUploadUrl);
-			    	case 2:
-			    	BCeditor.execCommand( 'insertimage', {
-			         	src:imageUploadUrl
-			    	} );break;
-			    	case 4:
-			    	editor.execCommand( 'insertimage', {
-			         	src:imageUploadUrl
-			    	} );break;
-				}
-
-			    $("#first_load,#result_zone,#message_zone,.mask,#uploadImageBack,#main").hide();
+				insertImageAll(imageUploadUrl);
 			}
 		}
 	},false);
@@ -312,4 +295,24 @@ function after_upload(res) {
 			break;
 	}
 	changeinfo(true);
+}
+
+function insertImageAll(imgUrl){
+	switch(insertImageState){
+					case 0:
+					editor.execCommand( 'insertimage', {
+			         	src:imgUrl
+			    	} );break;
+			    	case 1:
+			    	console.log(imgUrl);
+			    	case 2:
+			    	BCeditor.execCommand( 'insertimage', {
+			         	src:imgUrl
+			    	} );break;
+			    	case 4:
+			    	editor.execCommand( 'insertimage', {
+			         	src:imgUrl
+			    	} );break;
+				}
+	$("#first_load,#result_zone,#message_zone,.mask,#uploadImageBack,#main").hide();
 }

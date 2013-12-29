@@ -19,7 +19,7 @@
             <div class="groupInfo">
                 <div class="groupInfoCon">
                     <div class="groupTitle">
-                        <img class="groupImage" src="{{ group_info["avatar"] }}" />
+                        <!-- <img class="groupImage" src="{{ group_info["avatar"] }}" /> -->
                         <a id="groupTitleName" href="/g/{{ group_info["gid"] }}">{{ group_info["name"] }}</a>
                         {% if group_info['motton'] %}
                         <span id='titleCut'> | </span>
@@ -129,10 +129,10 @@
             <li class="topicInner">
                 <a class="userImage" href='#'><img src="{{ avatarurl(topic["avatar"]) }}" /></a>
                 <div class='talkMain'>
-                    <div class="userName"><a href='#'>{{ topic["penname"] }}</a></div>
-                    <div class='timeShow'>
+                    <span class="userName"><a href='#'>{{ topic["penname"] }}</a></span>
+                    <span class='timeShow'>
                         {{ topic["submit_time"] }}
-                    </div>
+                    </span>
                     <div class='talkContent'>
                         {% raw topic["content"] %}
                     </div>

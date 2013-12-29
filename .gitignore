@@ -1,5 +1,7 @@
-*.py[co]
+*.py[cod]
 *.php
 *.idea
 *.swp
-*.(png|gif|jpg)
+*.png
+*.gif
+*.jpg

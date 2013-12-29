@@ -195,8 +195,22 @@
 	display: none;
 }
 
+.mainImageUpload{
+	float: left;
+}
+.mainImageUpload #add{
+	position: relative;
+}
+.mainImageUpload #first_load{
+	float: left;
+	position: relative;
+}
 .activeFirstClass{
 	display: block;
+}
+
+.imageresourceForm{
+
 }
 
 #otherTags{

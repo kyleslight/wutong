@@ -12,7 +12,7 @@ from lib import util
 
 
 urls = [
-    (r"/", group.GroupIndexHandler),
+    (r"/", user.IndexHandler),
     (r"/upload", upload.FileHandler),
     (r"/u/(\w+)/home", user.HomeHandler),
     (r"/u/info", user.UserinfoHandler),

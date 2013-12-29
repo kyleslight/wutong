@@ -181,6 +181,8 @@ $(document).ready(function(){
                 addListNav.after(preNav);
                 addListNav.remove();
             };
+            $(".opusSideCommentList"+editingParaNum).eq(1).css({"background":"pink","width":"253px"});
+            $(".opusSideCommentList"+editingParaNum).eq(0).css("width","253px");
             $("#sideCommentEditData").val("");
             $(".sideCommentEditBox").fadeOut();
         });
@@ -202,14 +204,14 @@ $(document).ready(function(){
             // TODO: if 'failed'
             var buttomCommentShowBox = data;
             if ($(".opusCommentList").size()==0) {
-                $(".buttomComment").append(buttomCommentShowBox);
+                $(".buttomComment").prepend(buttomCommentShowBox);
 
             }else{
                 $(".opusCommentList").last().removeClass("noBorderButtom");
                 $(".opusCommentList").last().after(buttomCommentShowBox);
             };
             $(".opusCommentList").last().addClass("noBorderButtom");
-            $(window.frames["ueditor_0"].document).find("body.view").html("");
+            BCeditor.setContent("");
         });
         return false;
     });

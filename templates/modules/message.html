@@ -1,7 +1,7 @@
 {% if message["title"] %}
 <li id="topic_{{ message["id"] }}" class="topicOutter">
     <a class="userImage" href='#'>
-        <img src='{{ message["avatar"] }}' />
+        <img src='{{ avatarurl(message["avatar"]) }}' />
     </a>
     <div class='talkMain'>
         <div class="talkAction">
@@ -22,7 +22,7 @@
 {% else %}
 <li id="chat_{{ message["id"] }}" class="chat">
     <a class="userImage" href='#'>
-        <img src="{{ message["avatar"] }}" />
+        <img src="{{ avatarurl(message["avatar"]) }}" />
     </a>
     <div class='talkMain'>
         <div class="chatFirstLine">

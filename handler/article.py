@@ -85,9 +85,9 @@ class CreateArticleHandler(ArticleBaseHandler):
         suit_for = self.get_argument('suit')
         reference = self.get_argument('reference')
         partner = self.get_argument('partner')
-        tags = q>self.get_argument('tags')
+        tags = self.get_argument('tags')
 
-        tags = q>self.get_tags_from_str(tags)
+        tags = self.get_tags_from_str(tags)
         if not tags:
             self.write('invalid tags')
             return

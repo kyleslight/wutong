@@ -26,7 +26,7 @@ $(document).ready(function(){
             foreword:$("#foreword").val(),
             mainText:$("#textArea").val(),
             reference:$("#reference").val(),
-            tags:[  $(".activeFirstClass").val(),
+            tags:[  $(".activeFirstClass").val()+" "+
                     $("#otherTags").val()],
             suit:$("#suit").val(),
             cooperation:$("#cooperation").val(),
@@ -70,8 +70,8 @@ $(document).ready(function(){
         var mainText=$("#textArea").val();
         mainText=deleteBrPara(mainText);
         $("#textArea").val(mainText);
-        var tagshdkdjfh=$("#otherTags").val(($("#articleFirstClass").val()+$("#otherTags").val()));
-        console.log(tagshdkdjfh);
+        var transTags=$(".activeFirstClass").val()+";"+$("#otherTags").val();
+        $("#otherTags").val(transTags);
         var theForm=document.getElementById("textdata");
         theForm.submit();
     });
