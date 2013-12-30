@@ -4,7 +4,10 @@
 
 import os
 import uuid
-import Image
+try:
+    import Image
+except ImportError:
+    from PIL import Image
 from hashlib import sha1
 from datetime import datetime
 from tornado.web import create_signed_value, decode_signed_value

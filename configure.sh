@@ -1,6 +1,8 @@
 #!/bin/bash
 
-if ! python -c "import tornado, requests";then exit 1;fi
+if ! python -c "import tornado, requests, Image";
+    then exit 1;
+fi
 psql -l | grep -wo wutong 1>/dev/null 2>&1 || createdb wutong
 psql -l | grep -wo wutong_test 1>/dev/null 2>&1 && dropdb wutong_test
 createdb wutong_test && echo "create database 'wutong_test'"
