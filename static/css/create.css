@@ -39,7 +39,7 @@
 	z-index: 1000;
 }
 #articleType{
-	background:url('image/article.gif') no-repeat;
+	background:url('{{ static_url("css/image/article.gif") }}') no-repeat;
 }
 #articleType:hover{
 	background:url('image/article_active.gif') 0px 4px no-repeat;
