@@ -3,27 +3,19 @@
 	<div class="write">
         <div id="temTextData"></div>
 		<form id="textdata" name="textdata" action="/a/create" method="post">
-			<div class="maindata">
-                <div id="opusTypeOption" >
-                    <div class="opusTypeArea">
-                        <a href="#" title="作品类型" class="opusTypeTip">选择作品类型</a>
-                        <a href="#" class="opusType activeOpusType">文章</a>
-                        <a href="#" class="opusType">片段</a>
-                        <a href="#" class="opusType">摄影</a>
-                        <a href="#" class="opusType">绘画</a>
-                        <a href="#" class="opusType">项目</a>
-                    </div>
+            <div id="opusTypeOption" >
+                <div class="opusTypeArea">
+                    <a href="#" title="作品类型" class="opusTypeTip">————选择作品类型————</a>
+                    <a href="#" id="articleType" class="opusType activeOpusType"><p>文章</p></a>
+                    <a href="#" id="fragmentType" class="opusType"><p>片段</p></a>
+                    <a href="#" id="photographType" class="opusType"><p>摄影</p></a>
+                    <a href="#" id="drawingType" class="opusType"><p>绘画</p></a>
+                    <a href="#" id="projectType" class="opusType"><p>项目</p></a>
                 </div>
+            </div>
+			<div class="maindata">
                 <div id="resourceForm" class="formlist"><span class="inputTip">资源</span>
                     <input id="fileResource" class="input" type="file" name="resource" placeholder="这里添加资源内容" value="选择文件" />
-                </div>
-
-                <div id="imageresourceForm" class="formlist mainImageUpload"><span class="inputTip">照片</span>
-                    <div id="first_load">
-                        <a id="add" title="上传文件"></a>
-                        <p>上传文件</p>
-                        <p>拖放文件到此处</p>
-                    </div>
                 </div>
 
 				<div id="titleForm" class="formlist"><span class="inputTip">标题</span>  <input id="title" class="input" type="text" name="title" placeholder="填写标题" /></div>
@@ -32,6 +24,11 @@
 
 				<div id="mainTextForm" class="formlist"><span id="speinputtip" class="inputTip">正文</span>
 				    <div class="formlist"><textarea id="textArea" name="textArea" cols="100" rows="14"></textarea></div>
+                </div>
+
+                <div id="imageresourceForm" class="formlist mainImageUpload"><span class="inputTip">照片</span>
+                    <div id="preImageContainer"></div>
+                    <div class="addImage">+</div>
                 </div>
 
 				<div id="referenceForm" class="formlist"><span class="inputTip">引用来源</span> <textarea id="reference" class="input" type="text" name="reference" placeholder="这里注明引用来源，引用格式为'···:···;',冒号前为来源说明，冒号后为引用地址（可选）" draggable="false"></textarea></div>

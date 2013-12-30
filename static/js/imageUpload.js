@@ -304,7 +304,16 @@ function insertImageAll(imgUrl){
 			         	src:imgUrl
 			    	} );break;
 			    	case 1:
-			    	console.log(imgUrl);
+			    	// console.log(imgUrl);
+				    var appImage='<div class="preImageUpload">'
+			                     +  '<img src="'+imgUrl+'" />'
+			                     +  '<textarea class="preImageIntro input"></textarea>'
+			                     +   '<div class="preImageUploadFunction">'
+			                     +       '<a href="#" class="deletePreImage" >删除</a><a href="#" class="addPreImageIntro">图片说明</a>'
+			                     +       '<a href="#" class="moveup">上移</a><a href="#" class="movedown">下移</a>'
+			                     +   '</div>'
+			                     +'</div>';
+			        $("#preImageContainer").append(appImage);break;
 			    	case 2:
 			    	BCeditor.execCommand( 'insertimage', {
 			         	src:imgUrl

@@ -131,6 +131,15 @@ $(document).ready(function(){
         };
         return false;
     });
+    $(".addImage").click(function(){
+        insertImage(1);
+    });
+    $(".deletePreImage").click(function(){
+        console.log("a");
+        var preImageIndex = $(".deletePreImage").index($(this));
+        $(".preImageUpload").eq(preImageIndex).remove();
+        return false;
+    });
 
     // init ueditor
     editor.ready(function(){
@@ -156,21 +165,21 @@ function deleteBrPara(string){
 
 // title:0 1 0:optional 1:required
 // foreword:0 1 0:null 1:optional
-// mainText:0 1 0:optional 1:required
+// mainText:0 1 0:show 1:none
 // resource:0 1 2 0:null 1:image 2:file
 
 function changeOpusItem(title,foreword,mainText,resource,tags){
     // title
-    if (title) $("#title").attr("placeholder","填写标题"); else  $("#title").attr("placeholder","填写标题（可选）");
+    // if (title) $("#title").attr("placeholder","填写标题"); else  $("#title").attr("placeholder","填写标题（可选）");
     // foreword
     if (foreword) $("#forewordForm").show(); else $("#forewordForm").hide();
     // mainText
-    // if (mainText) editor.setHeight(600); else editor.setHeight(100);
+    if (mainText) $("#mainTextForm").show(); else $("#mainTextForm").hide();
     // resource
     switch(resource){
-        case 0:$("#resourceForm").hide();break;
-        case 1:insertImage(1);$("#resourceForm").hide();break;
-        case 2:$("#resourceForm").show();break;
+        case 0:$("#resourceForm").hide();$("#imageresourceForm").hide();break;
+        case 1:$("#resourceForm").hide();$("#imageresourceForm").show();break;
+        case 2:$("#resourceForm").show();$("#imageresourceForm").hide();break;
         default:break;
     };
     // tags
