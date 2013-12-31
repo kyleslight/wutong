@@ -67,13 +67,20 @@ $(document).ready(function(){
     })
 
     $("#opusPublicSubmitButton,#opusPrivateSubmitButton").click(function(){
-        var mainText=$("#textArea").val();
-        mainText=deleteBrPara(mainText);
-        $("#textArea").val(mainText);
-        var transTags=$(".activeFirstClass").val()+";"+$("#otherTags").val();
-        $("#otherTags").val(transTags);
-        var theForm=document.getElementById("textdata");
-        theForm.submit();
+        if ($(".activeOpusType").text()=="摄影"||$(".activeOpusType").text()=="绘画") {
+            var mainText=$("#preImageContainer").html();
+            console.log(mainText);
+        };
+        // var mainText=$("#textArea").val();
+        // mainText=deleteBrPara(mainText);
+        // $("#textArea").val(mainText);
+        // var transTags=$(".activeFirstClass").val()+";"+$("#otherTags").val();
+        // $("#opusType").val($(".activeOpusType").text());
+        // $("#opusTag").val(transTags);
+        // $("#opusSuit").val($("#outterSuit").val());
+        // $("#opusCooperation").val($("#outterCooperation").val());
+        // var theForm=document.getElementById("textdata");
+        // theForm.submit();
     });
 
     $(".inputTip a").click(function(){
@@ -133,12 +140,6 @@ $(document).ready(function(){
     });
     $(".addImage").click(function(){
         insertImage(1);
-    });
-    $(".deletePreImage").click(function(){
-        console.log("a");
-        var preImageIndex = $(".deletePreImage").index($(this));
-        $(".preImageUpload").eq(preImageIndex).remove();
-        return false;
     });
 
     // init ueditor

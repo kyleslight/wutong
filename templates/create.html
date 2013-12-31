@@ -14,6 +14,12 @@
                 </div>
             </div>
 			<div class="maindata">
+                <!-- fade input -->
+                <input id="opusType" class="hideInput" type="text" name="type" />
+                <input id="opusTag" class="hideInput" type="text" name="tags" />
+                <input id="opusSuit" class="hideInput" type="text" name="suit" />
+                <input id="opusCooperation" class="hideInput" type="text" name="cooperation" />
+
                 <div id="resourceForm" class="formlist"><span class="inputTip">资源</span>
                     <input id="fileResource" class="input" type="file" name="resource" placeholder="这里添加资源内容" value="选择文件" />
                 </div>
@@ -28,7 +34,7 @@
 
                 <div id="imageresourceForm" class="formlist mainImageUpload"><span class="inputTip">照片</span>
                     <div id="preImageContainer"></div>
-                    <div class="addImage">+</div>
+                    <a href="#" class="addImage"><span>+</span> 此处添加照片</a>
                 </div>
 
 				<div id="referenceForm" class="formlist"><span class="inputTip">引用来源</span> <textarea id="reference" class="input" type="text" name="reference" placeholder="这里注明引用来源，引用格式为'···:···;',冒号前为来源说明，冒号后为引用地址（可选）" draggable="false"></textarea></div>
@@ -89,13 +95,13 @@
                     <option class="firstClassItem" value="原型">原型</option>
                     <option class="firstClassItem" value="杂">杂</option>
                 </select>
-                <input id="otherTags" class="input" type="text" name="tags" placeholder="左边选项为一级Tag（即你的作品分类）,右边作者可自定Tag，Tag之间用';'隔开（可选）"/></div>
+                <input id="otherTags" class="input" type="text" name="outterTags" placeholder="左边选项为一级Tag（即你的作品分类）,右边作者可自定Tag，Tag之间用';'隔开（可选）"/></div>
 
                 <a href="#" id="opusExpandBotton">显示作品扩展项</a>
                 <div class="expandOption">
-                    <div class="formlist"><span class="inputTip">适合</span>  <input id="suit" class="input" type="text" name="suit" placeholder="这里注明适合人群，人群之间用';'隔开（可选）" /></div>
+                    <div class="formlist"><span class="inputTip">适合</span>  <input id="outterSuit" class="input" type="text" name="outterSuit" placeholder="这里注明适合人群，人群之间用';'隔开（可选）" /></div>
 
-                    <div class="formlist"><span class="inputTip">合作编辑</span>  <input id="cooperation" class="input" type="text" name="cooperation" placeholder="这里注明合作编辑人、合作小组" /></div>
+                    <div class="formlist"><span class="inputTip">合作编辑</span>  <input id="outterCooperation" class="input" type="text" name="outterCooperation" placeholder="这里注明合作编辑人、合作小组" /></div>
 
                     <div id="pushOptionForm" class="formlist">
                         <span class="inputTip">推送方式</span>

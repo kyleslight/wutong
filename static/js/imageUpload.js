@@ -305,12 +305,13 @@ function insertImageAll(imgUrl){
 			    	} );break;
 			    	case 1:
 			    	// console.log(imgUrl);
-				    var appImage='<div class="preImageUpload">'
+			    	var imgUrlStr="'"+imgUrl+"'";
+				    var appImage='<div class="preImageUpload" id="'+imgUrl+'">'
 			                     +  '<img src="'+imgUrl+'" />'
 			                     +  '<textarea class="preImageIntro input"></textarea>'
 			                     +   '<div class="preImageUploadFunction">'
-			                     +       '<a href="#" class="deletePreImage" >删除</a><a href="#" class="addPreImageIntro">图片说明</a>'
-			                     +       '<a href="#" class="moveup">上移</a><a href="#" class="movedown">下移</a>'
+			                     +       '<a href="javascript:void(0);" class="deletePreImage" onclick="deletePreImage(this)">删除</a><a href="javascript:void(0);" class="addPreImageIntro" onclick="imageIntro(this)">图片说明</a>'
+			                     +       '<a href="javascript:void(0);" class="moveup" onclick="imageMoveUp('+imgUrlStr+')">上移</a><a href="javascript:void(0);" class="movedown" onclick="imageMoveDown('+imgUrlStr+')">下移</a>'
 			                     +   '</div>'
 			                     +'</div>';
 			        $("#preImageContainer").append(appImage);break;
@@ -325,3 +326,39 @@ function insertImageAll(imgUrl){
 				}
 	$("#first_load,#result_zone,#message_zone,.mask,#uploadImageBack,#main").hide();
 }
+
+function deletePreImage(deleteObj){
+	deleteObj.parentNode.parentNode.remove();
+}
+
+function imageIntro(imageIntro){
+	if (imageIntro.parentNode.previousSibling.style.display!="block") {
+		imageIntro.parentNode.previousSibling.style.display="block";
+	}else{
+		imageIntro.parentNode.previousSibling.style.display="none";
+	}
+}
+
+function imageMoveUp(imgUrl){
+	var upImage=$("[id='"+imgUrl+"']");
+	var upImageIndex=$(".preImageUpload").index(upImage);
+	
+	if (upImageIndex==0) {
+		alert("已经是第一张图片");
+		return;
+	};
+	upImage.prev().before(upImage.clone());
+	upImage.remove();
+}
+
+function imageMoveDown(imgUrl){
+	var upImage=$("[id='"+imgUrl+"']");
+	var upImageIndex=$(".preImageUpload").index(upImage);
+	if (upImageIndex==($(".preImageUpload").size()-1)) {
+		alert("已经是最后一张图片");
+		return;
+	};
+	upImage.next().after(upImage.clone());
+	upImage.remove();
+}
+	
