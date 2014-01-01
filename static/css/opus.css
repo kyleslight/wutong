@@ -136,6 +136,14 @@ td,tbody,table{
 .opusMain p{
 	margin-top: 20px;
 	margin-bottom: 20px;
+	padding: 0px;
+	border: 0px;
+	font-family: 'Microsoft Yahei', 'Helvetica Neue', 'Luxi Sans', 'DejaVu Sans', Tahoma, 'Hiragino Sans GB', STHeiti;
+	font-size: 15px;
+	line-height: 25px;
+	vertical-align: baseline;
+	color: rgb(68, 68, 68);
+	white-space: normal;
 }
 
 .opusMain p img{

@@ -21,7 +21,6 @@
 	box-shadow: 0 0 20px #CCC;
 	display: none;
 	font-size: 0.9em;
-	line-height: 25px;
 }
 
 .opusTypeTip{
@@ -141,6 +140,10 @@
 	border-bottom: 1px dashed #CCC;
 }
 
+.forewordFormNoBottomLine{
+	border-bottom: 0;
+}
+
 .input{
 	border: 1px solid rgba(102,136,0,0.4);
 }
@@ -182,7 +185,8 @@
 }
 .preImageIntro{
 	float: none;
-	margin-left: 3px;
+	/*margin-left: 3px;*/
+	margin: 0 auto;
 	outline: none;
 	border:1px solid #999;
 	margin-top: 5px;
@@ -195,6 +199,7 @@
 .preImageUploadFunction a{
 	padding: 5px 20px;
 	color: #777;
+	font-size: 0.9em;
 	transition: 0.5s;
 	-moz-transition:0.5s;
 	-webkit-transition:0.5s;
@@ -455,12 +460,6 @@
 	margin:20px auto;
 	padding-bottom: 10px;
 }
-.opusSubtitle{
-	color: #222;
-	font-size: 0.5em;
-	margin: 0;
-	margin-top: 5px;
-}
 .opusDescription{
 	clear: both;
 	border-left: 5px solid #680;
@@ -484,13 +483,12 @@
 .opusMain img{
 	margin: 0px;
 	padding: 0px;
-	border: 0.5em solid rgb(255, 255, 255);
 	font-family: inherit;
 	font-style: inherit;
 	font-variant: inherit;
 	line-height: inherit;
 	vertical-align: baseline;
-	max-width: 100%;
+	max-width: 95%;
 	height: auto;
 	border-top-left-radius: 0.3em;opusSuffixes
 	border-top-right-radius: 0.3em;
@@ -504,6 +502,28 @@
 .opusMain p{
 	margin-top: 20px;
 	margin-bottom: 20px;
+	padding: 0px;
+	border: 0px;
+	font-family: 'Microsoft Yahei', 'Helvetica Neue', 'Luxi Sans', 'DejaVu Sans', Tahoma, 'Hiragino Sans GB', STHeiti;
+	font-size: 15px;
+	line-height: 25px;
+	vertical-align: baseline;
+	color: rgb(68, 68, 68);
+	white-space: normal;
+}
+
+.imageIntro{
+	text-align: center;
+}
+.imageIntro p{
+	font-size: 0.9em;
+	color: #777;
+	margin: 0 auto;
+	max-width: 61%;
+}
+
+.imageUpload{
+	text-align: center;
 }
 
 .opusSuffixes{

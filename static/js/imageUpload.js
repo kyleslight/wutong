@@ -334,6 +334,13 @@ function deletePreImage(deleteObj){
 function imageIntro(imageIntro){
 	if (imageIntro.parentNode.previousSibling.style.display!="block") {
 		imageIntro.parentNode.previousSibling.style.display="block";
+		var imageWidth=imageIntro.parentNode.previousSibling.previousSibling.width;
+		if (imageWidth<300) {
+			imageIntro.parentNode.previousSibling.style.width="300px";
+			return;
+		};
+		console.log(imageWidth);
+		imageIntro.parentNode.previousSibling.style.width=((imageWidth-4)+"px");
 	}else{
 		imageIntro.parentNode.previousSibling.style.display="none";
 	}
@@ -342,7 +349,6 @@ function imageIntro(imageIntro){
 function imageMoveUp(imgUrl){
 	var upImage=$("[id='"+imgUrl+"']");
 	var upImageIndex=$(".preImageUpload").index(upImage);
-	
 	if (upImageIndex==0) {
 		alert("已经是第一张图片");
 		return;
