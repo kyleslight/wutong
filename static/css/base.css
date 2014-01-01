@@ -587,6 +587,9 @@ blockquote p{
 #addNote{
 	margin-bottom: 5px;
 }
+#createNewNote{
+	display: none;
+}
 .myNoteListWrap{
 	padding-top: 5px;
 	float: left;
@@ -596,12 +599,17 @@ blockquote p{
 	border-top: 1px dashed #680;
 }
 .myNoteList{
+	white-space:nowrap; 
+	overflow: hidden;
 	display: block;
 	list-style-type: decimal;
 	height: 18px;
 	border-top-left-radius: 2px;
 	border-bottom-left-radius: 2px;
+	text-overflow:ellipsis;
 	padding: 4px;
+	width: 120px;
+	line-height: 22px;
 }
 .myNoteList:hover{
 	background: #680;

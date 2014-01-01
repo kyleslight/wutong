@@ -129,6 +129,7 @@
 	border-top: 0;
 	box-shadow: 0 0 20px #CCC;
 	box-shadow-top:none;
+	background: white;
 }
 
 .formlist{
@@ -353,8 +354,9 @@
 	padding: 5px;
 	padding-left: 15px;
 	padding-bottom: 10px;
+	margin-top: 6px;
 	background: white;
-	display: block;
+	display: inline-block;
 }
 
 #foreword{
