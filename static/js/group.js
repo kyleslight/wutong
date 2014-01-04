@@ -218,8 +218,15 @@ $(document).ready(function() {
 
     // init ueditor
     editor.ready(function(){
-        initUeditor(4);
+        var insertImageButtom='<a href="javascript:void(0)" id="insertIamge" title="插入图片" onclick="insertImage('+4+')"></a>';
+        $("#edui57").find(".edui-for-link").after(insertImageButtom);
     });
+    expandEditor.ready(function(){
+        // initUeditor(3);
+        var insertImageButtom='<a href="javascript:void(0)" id="insertIamge" title="插入图片" onclick="insertImage('+3+')"></a>';
+        $("#edui1").find(".edui-for-link").after(insertImageButtom);
+    });
+
     // check premission
     checkGroupPremission();
 

@@ -235,8 +235,16 @@ $(document).ready(function() {
         $.post("/u/memo",{
             "title":$(".myCurrentNoteTitle").val(),
             "content":$(".myCurrentNoteContent").val()
-        },function(){
-            alert("create note success");
+        },function(data){
+            console.log(data);
+            var newNote=eval ("(" + data + ")");
+            var newNoteTitle='<a href="#" id="'+newNote.id+'" class="myNoteList" onclick="selectNote('+newNote.id+')">'+newNote.title+'</a>';
+            $(".myNoteListWrap").prepend(newNoteTitle);
+            $(".myCurrentNoteTitle").val(newNote.title);
+            $(".myCurrentNoteContent").val(newNote.content);
+            $(".myCurrentNoteTime").text(newNote.create_time.slice(0,10));
+            $("#deleteCurrentNote,#saveCurrentNote").show();
+            $("#createNewNote").hide();
         });
     });
     // update note
@@ -437,18 +445,13 @@ function unsycUser() {
 }
 
 function selectNote(noteID){
-    // console.log(noteID);
-    $.getJSON("/u/memo",function(data){
-        for(var i=0;i<data.length;i++){
-            if ((noteID.toString())==data[i].id) {
-                var thisNote=data[i];
-                $(".myCurrentNoteTitle").val(thisNote.title);
-                $(".myCurrentNoteContent").val(thisNote.content);
-                $(".myCurrentNoteTime").text(thisNote.create_time.slice(0,10));
-                activeNoteID=noteID;
-                break;
-            };
-        };
+    $.getJSON("/u/memo/update",{
+        "memo_id":noteID
+    },function(data){
+        $(".myCurrentNoteTitle").val(data.title);
+        $(".myCurrentNoteContent").val(data.content);
+        $(".myCurrentNoteTime").text(data.create_time.slice(0,10));
+        activeNoteID=noteID;
     });
     $("#deleteCurrentNote,#saveCurrentNote").show();
     $("#createNewNote").hide();

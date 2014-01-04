@@ -180,11 +180,11 @@
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
         
-        , toolbars: [["fullscreen","undo","redo","link","blockquote","insertcode","bold","italic","forecolor","inserttable","fontsize"]]
+        , toolbars: [["fullscreen","undo","redo","link","blockquote","insertcode","bold","italic","forecolor","inserttable","fontsize","WTinsertimage"]]
         //当鼠标放在工具栏上时显示的tooltip提示,留空支持自动多语言配置，否则以配置值为准
-       // ,labelMap:{
-       //     'anchor':'', 'undo':'','showmsg':'显示提示消息'
-       // }
+       ,labelMap:{
+           'anchor':'', 'undo':'','showmsg':'显示提示消息','WTinsertimage':'应该是可以插入图片的'
+       }
         //webAppKey
         //百度应用的APIkey，每个站长必须首先去百度官网注册一个key后方能正常使用app功能
         //,webAppKey:""

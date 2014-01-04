@@ -1056,6 +1056,7 @@ div.edui-box {
 }
 
 .edui-default .edui-popup-content {
+    height: 188px !important;
     border:1px solid #ccc;
     border: 1px solid rgba(0, 0, 0, 0.2);
     *border-right-width: 2px;

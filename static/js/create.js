@@ -100,11 +100,21 @@ $(document).ready(function(){
     })
 
     $("#opusPublicSubmitButton,#opusPrivateSubmitButton").click(function(){
-        // if ($(".activeOpusType").text()=="摄影"||$(".activeOpusType").text()=="绘画") {
-        //     var mainText=$("#preImageContainer").html();
-        //     console.log(mainText);
-        // };
-        var mainText=$("#textArea").val();
+        if ($(".activeOpusType").text()=="摄影"||$(".activeOpusType").text()=="绘画") {
+            $("#imageUploadContainer").html("");
+            for(var i=0;i<$(".preImageUpload").size();i++){
+                var imgUrl=$(".preImageUpload").children("img").eq(i).attr("src");
+                var imgIntro=$(".preImageUpload").children(".preImageIntro").eq(i).val();
+                var appImage='<div class="imageUpload" style="background:rgba(0,0,0,0.8);padding-top:20px;padding-bottom:20px;">'
+                                 +  '<img src="'+imgUrl+'" />'
+                                 +  '<div class="imageIntro"><p>'+imgIntro+'</p></div>'
+                                 +'</div>';
+                $("#imageUploadContainer").append(appImage);
+            }
+            var mainText=$("#imageUploadContainer").html();
+        }else{
+            var mainText=$("#textArea").val();
+        };
         mainText=deleteBrPara(mainText);
         $("#textArea").val(mainText);
         var transTags=$(".activeFirstClass").val()+";"+$("#otherTags").val();
@@ -174,6 +184,7 @@ $(document).ready(function(){
     });
     $(".addImage").click(function(){
         insertImage(1);
+        return false;
     });
 
     // init ueditor

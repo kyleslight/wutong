@@ -21,6 +21,7 @@ td,tbody,table{
 	/*border-top: 1px solid #AAA;*/
 }
 .readMain{
+	width: 1018px;
 	float: left;
 	background: white;
 	padding: 20px;
@@ -30,6 +31,7 @@ td,tbody,table{
 	border-top: 0;
 }
 
+/*opus model*/
 .opusBasicInfo{
 	float: left;
 	padding: 20px;
@@ -87,12 +89,6 @@ td,tbody,table{
 	margin:20px auto;
 	padding-bottom: 10px;
 }
-.opusSubtitle{
-	color: #222;
-	font-size: 0.5em;
-	margin: 0;
-	margin-top: 5px;
-}
 .opusDescription{
 	clear: both;
 	border-left: 5px solid #680;
@@ -116,7 +112,6 @@ td,tbody,table{
 .opusMain img{
 	margin: 0px;
 	padding: 0px;
-	border: 0.5em solid rgb(255, 255, 255);
 	font-family: inherit;
 	font-style: inherit;
 	font-variant: inherit;
@@ -146,9 +141,18 @@ td,tbody,table{
 	white-space: normal;
 }
 
-.opusMain p img{
-	margin-top: 15px;
-	margin-right: 10px;
+.imageIntro{
+	text-align: center;
+}
+.imageIntro p{
+	font-size: 0.9em;
+	color: #777;
+	margin: 0 auto;
+	max-width: 61%;
+}
+
+.imageUpload{
+	text-align: center;
 }
 
 .opusSuffixes{
@@ -170,6 +174,13 @@ td,tbody,table{
 .opusSeries a{
 	margin-right: 10px;
 }
+
+.edui-default .edui-editor-toolbarboxouter {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom: 1px solid #B5C550 !important;
+}
+
 .opusComment{
 	/*float: left;*/
 	text-align: center;

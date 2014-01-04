@@ -319,10 +319,15 @@ function insertImageAll(imgUrl){
 			    	BCeditor.execCommand( 'insertimage', {
 			         	src:imgUrl
 			    	} );break;
+			    	case 3:
+			    	expandEditor.execCommand( 'insertimage', {
+			         	src:imgUrl
+			    	} );break;
 			    	case 4:
 			    	editor.execCommand( 'insertimage', {
 			         	src:imgUrl
 			    	} );break;
+			    	default:break;
 				}
 	$("#first_load,#result_zone,#message_zone,.mask,#uploadImageBack,#main").hide();
 }
@@ -339,10 +344,11 @@ function imageIntro(imageIntro){
 			imageIntro.parentNode.previousSibling.style.width="300px";
 			return;
 		};
-		console.log(imageWidth);
 		imageIntro.parentNode.previousSibling.style.width=((imageWidth-4)+"px");
+		imageIntro.parentNode.previousSibling.focus();
 	}else{
 		imageIntro.parentNode.previousSibling.style.display="none";
+		imageIntro.parentNode.previousSibling.value="";
 	}
 }
 
