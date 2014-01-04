@@ -686,16 +686,18 @@ textarea,input{
 
 #chatData{
 	float: left;
-	height: 30px;
-	resize:vertical;
+	min-height: 30px;
+	overflow-y:hidden; 
+	resize:none;
 	border: 1px solid #680;
 	border-radius: 4px;
 	width: 762px;
 	margin-left: 0;
-	transition: 1s;
-	-moz-transition:1s;
-	-webkit-transition:1s;
-	-o-transition:1s;
+	line-height: 15px;
+/*	transition: 0.1s;
+	-moz-transition:0.1s;
+	-webkit-transition:0.1s;
+	-o-transition:0.1s;*/
 }
 
 #chatData:focus{
