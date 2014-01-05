@@ -102,7 +102,7 @@
                 <div class="expandOption">
                     <div class="formlist"><span class="inputTip">适合</span>  <input id="outterSuit" class="input" type="text" name="outterSuit" placeholder="这里注明适合人群，人群之间用';'隔开（可选）" /></div>
 
-                    <div class="formlist"><span class="inputTip">合作编辑</span>  <input id="outterCooperation" class="input" type="text" name="outterCooperation" placeholder="这里注明合作编辑人、合作小组" /></div>
+                    <div class="formlist"><span class="inputTip">合作编辑</span>  <input id="outterCooperation" class="input" type="text" name="outterCooperation" placeholder="这里注明合作编辑人、合作小组（可选）" /></div>
 
                     <div id="pushOptionForm" class="formlist">
                         <span class="inputTip">推送方式</span>
@@ -124,7 +124,7 @@
 {% block extra_js %}
     <script type="text/javascript" src="{{ static_url("js/create.js") }}"></script>
     <script type="text/javascript">
-        var editor = new UE.ui.Editor({toolbars: [["msg","bold","italic","fontsize","forecolor","inserttable","link","blockquote","insertcode","showmsg"]],initialFrameWidth:1058,initialFrameHeight:600});
+        var editor = new UE.ui.Editor({toolbars: [["paragraph","bold","italic","fontsize","forecolor","inserttable","link","blockquote","insertcode","showmsg"]],initialFrameWidth:1058,initialFrameHeight:600,autoHeightEnabled:true});
         editor.render('textArea');
     </script>
 {% end %}

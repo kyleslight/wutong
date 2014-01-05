@@ -29,6 +29,9 @@ $(document).ready(function() {
             $("#username").children().val(username);
             $("#usernameHover").text(username);
         });
+        if (location.pathname.slice(0,2)=="/a") {
+            $(".write").show();
+        };
     });
     // return to top icon show
     $(window).scroll(function() {
@@ -125,6 +128,11 @@ $(document).ready(function() {
         $.post("/logout");
         $(".navrighton").fadeOut(function() {
             $(".navrightoff").fadeIn();
+            $("#create").hide();
+            if (location.pathname.slice(0,2)=="/a") {
+                $(".write").hide();
+                alert("要进入创作页请先登入");
+            };
         });
         checkGroupPremission();
     })
@@ -299,6 +307,7 @@ $(document).ready(function() {
     // image upload back
     $("#uploadImageBack").click(function(){
         $("section#main,#uploadImageBack,#info_zone,.mask").hide();
+        return false;
     })
 });
 
@@ -390,7 +399,10 @@ function loginSubmit() {
             unsycUser();
             if(location.pathname.slice(0,2)=="/t"||location.pathname.slice(0,2)=="/g"){
                 checkGroupPremission();
-            }
+            };
+            if (location.pathname.slice(0,2)=="/a") {
+                $(".write").show();
+            };
         }
     });
 }

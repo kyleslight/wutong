@@ -15,7 +15,9 @@ $(document).ready(function(){
 			'tags':$("#creareGroupTag").val(),
 			'is_public':isCreateGroupPublic(),
 		},function(data){
-			// after create group
+			alert('小组"'+$("#createGroupName").val()+'"已成功申请');
+			$(".createGroup").fadeOut();
+			$(".groupDynamic").fadeIn();
 		});
 	})
 });

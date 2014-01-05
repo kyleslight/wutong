@@ -548,6 +548,15 @@
 	margin-right: 10px;
 }
 
+
+#edui1_toolbarbox{
+	z-index: 10000;
+}
+.floatEditorBtn{
+	position: fixed;
+	top: 0px;
+	width: 1058px;
+}
 .edui-default .edui-editor-toolbarboxouter {
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;

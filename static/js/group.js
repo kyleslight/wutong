@@ -213,6 +213,7 @@ $(document).ready(function() {
         if (!data)
             return;
         $("#communication").prepend(data);
+        showParaFirst();
         removeMessage();
     }
 
@@ -230,6 +231,7 @@ $(document).ready(function() {
     // check premission
     checkGroupPremission();
 
+    showParaFirst();
 });
 
 function unsyncGroupBulletin() {
@@ -328,6 +330,7 @@ function submitTopicData() {
 
     $(window.frames["ueditor_0"].document).find("body.view").html("");
     $("#topicTitle").val("");
+    showParaFirst();
     return false;
 }
 
@@ -373,6 +376,14 @@ function renderMaleAndFemale() {
             $(this).css("color", "pink");
         }
     })
+}
+
+function showParaFirst(){
+    $(".topicTalkContent").each(function(){
+        $(this).children().hide();
+        $(this).children().eq(0).show();
+    });
+    console.log(1);
 }
 
 String.prototype.httpHtml = function() {

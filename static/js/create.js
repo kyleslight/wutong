@@ -5,6 +5,7 @@ var elapseTime = 5000;
 var opusShowTime=1000;
 
 $(document).ready(function(){
+    $(".write").hide();
 
     $("#IsPreviewBeforePublic").change(function(){
         if (!$(this).prop('checked')) {
@@ -13,6 +14,17 @@ $(document).ready(function(){
         }else{
             $("#opusPreViewButton").show();
             $("#opusPublicSubmitButton,#opusPrivateSubmitButton").hide();
+        };
+    });
+
+    $(window).scroll(function(){
+        var top=$(window).scrollTop();
+        var editorTop=editor.container.offsetTop;
+        var editorHeight=editor.container.offsetHeight;
+        if (top>editorTop&&top<(editorTop+editorHeight)) {
+            $("#edui1_toolbarbox").addClass("floatEditorBtn");
+        }else{
+            $("#edui1_toolbarbox").removeClass("floatEditorBtn");
         };
     });
 
