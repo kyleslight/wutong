@@ -10,7 +10,9 @@ var groupInfo;
 var gid = parseInt(location.pathname.slice(3));
 var url = "ws://" + location.host + location.pathname + "/message";
 var msg_socket = new WebSocket(url);
-msg_socket.onclose = function() {};
+msg_socket.onclose = function() {
+    // long pull
+};
 var gurl;
 if(location.pathname.slice(0,2)=="/t"){
     gurl=$("#groupTitleName").attr("href");
@@ -19,6 +21,8 @@ if(location.pathname.slice(0,2)=="/t"){
 };
 
 $(document).ready(function() {
+
+
     renderMaleAndFemale();
     var groupMottoPrimaryWidth = $("#groupMotto").width();
     if (groupMottoPrimaryWidth > 425) {
@@ -191,13 +195,10 @@ $(document).ready(function() {
         }
         return false;
     });
-    // $(window.frames["ueditor_0"]).find("body.view").keyup(function(e){
-    //     alert(1);
-    //     var keyCode=e.keyCode;
-    //     if (keyCode==13&&event.ctrlKey==1){
-    //         submitTopicData();
-    //     }
-    // })
+    $(".topicTalkContent img").click(function(){
+        var imgUrl=$(this).attr("src");
+        
+    });
 
     function removeMessage() {
         var thedata = $("#communication").children().size();
@@ -252,27 +253,36 @@ function submitChatData() {
     if ($("#chatData").val().length > 1000) {
         alert("请保持字数在1000字以内");
         return;
-    }
+    };
     if (chatCon == "<ex>") {
         $(".normalChatSend").slideUp(500, function() {
             $(".expandChatSend").slideDown(1000);
         });
         $("#chatData").val("");
         return;
-    }
-    chatCon=chatCon.replace(/</g,"&lt").replace(/>/g,"&gt");
-    chatCon=chatCon.toString().replace(/(\r)*\n/g,"<br />").replace(/\s/g," ");
-    chatCon=chatCon.httpHtml();
-
+    };
     if (chatCon.length == 0 || chatCon.toString().replace(/(\r)*\n/g, "").replace(/\s/g, "").length == 0) {
+        alert("请输入内容");
         $("#communicationData").addClass("littleTremble");
         setTimeout(function() {
             $("#communicationData").removeClass("littleTremble");
         }, 1000);
         return;
     };
+    var chatConBr=chatCon.match(/(\r)*\n/g);
+    if (chatConBr) {
+        if (chatConBr.length>30) {
+            alert("刷屏禁止");
+            return;
+        };
+    };
+    chatCon=chatCon.replace(/</g,"&lt").replace(/>/g,"&gt");
+    chatCon=chatCon.httpHtml();
+    chatCon=chatCon.toString().replace(/(\r)*\n/g,"<br />").replace(/\s/g," ");
 
     $("#chatData").val("");
+    var chatBox=document.getElementById("chatData");
+    chatBox.style.height = "30px";
     // send message to server, TODO: please refactor
     message = {
         "content": chatCon,
@@ -305,19 +315,20 @@ function submitExpandChatData() {
     message = JSON.stringify(message);
     msg_socket.send(message);
 
-    $(window.frames["ueditor_1"].document).find("body.view").html("");
+    // $(window.frames["ueditor_1"].document).find("body.view").html("");
+    expandEditor.setContent("");
     return false;
 }
 
 function submitTopicData() {
     var topicTitle = $('#topicTitle').val();
     var topicCon = $("#topicData").val();
-    if (topicCon.length == 0 || topicTitle.length == 0) {
-        $("#communicationData").addClass("littleTremble");
-        setTimeout(function() {
-            $("#communicationData").removeClass("littleTremble");
-        }, 1000);
+    if (topicTitle.length == 0) {
+        alert("请输入话题标题");
         return;
+    };
+    if (topicCon.length == 0 ) {
+        alert("请输入话题内容");
     };
 
     message = {
@@ -328,7 +339,7 @@ function submitTopicData() {
     message = JSON.stringify(message);
     msg_socket.send(message);
 
-    $(window.frames["ueditor_0"].document).find("body.view").html("");
+    editor.setContent("");
     $("#topicTitle").val("");
     showParaFirst();
     return false;
@@ -383,7 +394,6 @@ function showParaFirst(){
         $(this).children().hide();
         $(this).children().eq(0).show();
     });
-    console.log(1);
 }
 
 String.prototype.httpHtml = function() {

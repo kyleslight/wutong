@@ -279,9 +279,9 @@ function init(){
     // console.log($(".opusMain").children().eq(0).attr("class"));
     if ($(".opusMain").children().eq(0).hasClass("imageUpload")) {
         is_image_view=true;
-        $(".readMain").css({"background":"rgba(0,0,0,0.8)"});
+        $(".readMain").css({"background":"transparent","border":"0"});
         $(".opusMain").children().css({"background":"none"});
-        $(".opusMainTitle").css({"color":"white"});
+        $(".opusMainTitle").css({"color":"black"});
         $(".readMain").css({"box-shadow":"none"});
         $(".opusSuffixes a").css({"color":"white"});
         $(".opusComment").css({"border-top":"1px solid white"});

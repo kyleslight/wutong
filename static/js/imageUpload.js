@@ -333,7 +333,8 @@ function insertImageAll(imgUrl){
 }
 
 function deletePreImage(deleteObj){
-	deleteObj.parentNode.parentNode.remove();
+	var deleteGrandFa=deleteObj.parentNode.parentNode;
+	deleteGrandFa.parentNode.removeChild(deleteGrandFa);
 }
 
 function imageIntro(imageIntro){

@@ -52,13 +52,11 @@ textarea,input{
 }
 
 .groupPrompt{
-	width: 1060px;
-	margin: 0 auto;
+	float: left;
 	text-align: center;
 	clear: both;
 	width: 100%;
 	background: white;
-	padding:15px 0;
 	border-bottom: 1px solid #CCC;
 }
 
@@ -772,7 +770,7 @@ li.chat{
 	padding-top: 5px;
 	padding-bottom: 8px;
 	border-bottom: 2px solid #CCC;
-	border-radius: 7px;
+	border-radius: 5px;
 	background: white;
 }
 li.topicOutter{
@@ -783,14 +781,51 @@ li.topicOutter{
 	margin-bottom: 3px;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	border-bottom: 2px solid #CCC;
-	border-radius: 7px;
-	background: rgba(102,136,0,0.4);
+	border-bottom: 2px solid #999;
+	border-radius: 5px;
+	background: rgba(102,0,0,0.64);
+}
+li.topicOutter .topicTalkContent{
+	color: #DDD;
+}
+li.topicOutter a{
+	transition: 0.2s;
+	-moz-transition:0.2s;
+	-webkit-transition:0.2s;
+	-o-transition:0.2s;
+}
+li.topicOutter p{
+	white-space: nowrap;
+	overflow: hidden;
+	list-style-type: decimal;
+	text-overflow: ellipsis;
+	width: 850px;
+	color: #CCC;
 }
 li.topicOutter p img{
 	border-radius: 2px;
 	width: 100px;
 	height: auto;
+}
+li.topicOutter .talkAction{
+	font-size: 0.8em;
+	color: white;
+}
+li.topicOutter a.userName{
+	font-size: 1.1em;
+}
+li.topicOutter .userName:hover{
+	color: #DDD;
+}
+li.topicOutter .talkTitle a{
+	font-size: 1.1em;
+	color: #BD5;
+}
+li.topicOutter .talkTitle a:hover{
+	color: #DF7;
+}
+li.topicOutter .timeShow{
+	color: white;
 }
 .userName{
 	font-size: 0.9em;
@@ -814,11 +849,18 @@ li.topicOutter p img{
 }
 
 /*chat&topic content*/
+li.chat .talkContent img{
+	width: auto;
+	max-width: 900px;
+	height: auto;
+	margin-left: 0;
+	border-radius: 2px;
+}
 .talkContent{
 	word-break:break-all;
 	font-size: 0.9em;
 	clear: both;
-	margin-top: 5px;
+	margin-top: 10px;
 	margin-right: 10px;
 }
 .talkContent a{
@@ -858,9 +900,16 @@ li.topicOutter p img{
 }
 
 .topicTalkContent p{
-	/*padding-top: 11px;*/
 	margin: 0;
-	color: #777;
+	color: #EEE;
+}
+
+.topicTalkContent img{
+	max-width: 200px;
+	width: auto;
+	height: auto;
+	border-radius: 2px;
+	margin-left: 0;
 }
 
 /*topic show in inner layer*/
@@ -884,7 +933,7 @@ li.topicInner p{
 li.topicInner td,tbody,table{
 	margin-top: 10px;
 }
-li.topicInner p img{
+li.topicInner p img,li.topicInner .talkContent img{
 	width: auto;
 	height: auto;
 	max-width: 900px;
