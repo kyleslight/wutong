@@ -180,11 +180,11 @@
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
         
-        , toolbars: [["fullscreen","undo","redo","link","blockquote","insertcode","bold","italic","forecolor","inserttable","fontsize"]]
+        , toolbars: [["fullscreen","undo","redo","link","blockquote","insertcode","bold","italic","forecolor","inserttable","fontsize","WTinsertimage"]]
         //当鼠标放在工具栏上时显示的tooltip提示,留空支持自动多语言配置，否则以配置值为准
-       // ,labelMap:{
-       //     'anchor':'', 'undo':'','showmsg':'显示提示消息'
-       // }
+       ,labelMap:{
+           'anchor':'', 'undo':'','showmsg':'显示提示消息','WTinsertimage':'应该是可以插入图片的'
+       }
         //webAppKey
         //百度应用的APIkey，每个站长必须首先去百度官网注册一个key后方能正常使用app功能
         //,webAppKey:""
@@ -447,21 +447,21 @@
 
         //autotypeset
         //  //自动排版参数
-        //  ,autotypeset:{
-        //      mergeEmptyline : true,         //合并空行
-        //      removeClass : true,           //去掉冗余的class
-        //      removeEmptyline : false,      //去掉空行
-        //      textAlign : "left" ,           //段落的排版方式，可以是 left,right,center,justify 去掉这个属性表示不执行排版
-        //      imageBlockLine : 'center',      //图片的浮动方式，独占一行剧中,左右浮动，默认: center,left,right,none 去掉这个属性表示不执行排版
-        //      pasteFilter : false,            //根据规则过滤没事粘贴进来的内容
-        //      clearFontSize : false,          //去掉所有的内嵌字号，使用编辑器默认的字号
-        //      clearFontFamily : false,        //去掉所有的内嵌字体，使用编辑器默认的字体
-        //      removeEmptyNode : false ,       // 去掉空节点
-        //      //可以去掉的标签
-        //      removeTagNames : {标签名字:1},
-        //      indent : false,                 // 行首缩进
-        //      indentValue : '2em'             //行首缩进的大小
-        //  },
+         // ,autotypeset:{
+         //     mergeEmptyline : false,         //合并空行
+         //     removeClass : true,           //去掉冗余的class
+         //     removeEmptyline : false,      //去掉空行
+         //     textAlign : "left" ,           //段落的排版方式，可以是 left,right,center,justify 去掉这个属性表示不执行排版
+         //     imageBlockLine : 'center',      //图片的浮动方式，独占一行剧中,左右浮动，默认: center,left,right,none 去掉这个属性表示不执行排版
+         //     pasteFilter : false,            //根据规则过滤没事粘贴进来的内容
+         //     clearFontSize : false,          //去掉所有的内嵌字号，使用编辑器默认的字号
+         //     clearFontFamily : false,        //去掉所有的内嵌字体，使用编辑器默认的字体
+         //     removeEmptyNode : false ,       // 去掉空节点
+         //     //可以去掉的标签
+         //     removeTagNames : {标签名字:1},
+         //     indent : false,                 // 行首缩进
+         //     indentValue : '2em'             //行首缩进的大小
+         // },
         //填写过滤规则
         //filterRules : {}
     };

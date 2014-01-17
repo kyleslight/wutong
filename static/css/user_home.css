@@ -1,0 +1,110 @@
+.userHome{
+	width: 1060px;
+	margin: 0 auto;
+}
+.userHomeInner{
+	float: left;
+	background: rgba(255,255,255,0.5);
+	border-radius: 7px;
+	padding: 20px;
+	margin-top: 20px;
+}
+.userInfo{
+	float: left;
+	width: 200px;
+	padding: 20px;
+	background: white;
+	color: #444;
+	font-size: 0.8em;
+	line-height: 1.5em;
+}
+.userInfo div{
+	float: left;
+	width: 200px;
+}
+.userBasicInfo span{
+	color: #222;
+}
+.imageAndOtherAction{
+	width: 200px;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.userImage{
+	/*float: left;*/
+	display: block;
+	width: 100px;
+	height: 100px;
+	border-radius: 4px;
+	border: 1px solid #CCC;
+	clear: both;
+	margin: 0 auto;
+}
+.userImage:hover{
+	box-shadow: 0 0 10px #CCC;
+}
+.userName{
+	color: #444;
+	font-size: 1.5em;
+}
+
+.otherAction{
+	margin-top: 10px;
+}
+.otherAction a{
+	display: inline-block;
+	width: 45px;
+	padding: 5px 10px;
+	background: white;
+	border: 1px solid #CCC;
+	/*color: white;*/
+	border-radius: 4px;
+}
+
+.userMotto{
+	padding: 5px;
+	margin-left: -5px;
+	color: black;
+	font-weight: bolder;
+	text-align: left;
+}
+
+.userExtendInfo{
+	margin-top: 20px;
+}
+.followInfo{
+	margin-top: 25px;
+}
+.followList{
+	margin-top: 10px;
+	margin-bottom: 5px;
+	padding-top: 10px;
+	border-top: 1px solid #CCC;
+}
+.followList li{
+	width: 40px;
+	float: left;
+	margin-right: 10px;
+}
+
+.followList img{
+	width: 40px;
+	height: 40px;
+	margin: 0;
+	/*margin-right: 5px;*/
+}
+.followList span{
+	wiwhite-space: nowrap;
+	overflow: hidden;
+	display: block;
+	list-style-type: decimal;
+	height: 18px;
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+	text-overflow: ellipsis;
+	padding: 4px;
+	width: 40px;
+	line-height: 22px;
+	text-overflow:eclipse;
+}

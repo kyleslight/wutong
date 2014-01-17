@@ -1,15 +1,79 @@
-{% extends "base_hl.html" %}
+{% extends "base_opus.html" %}
 {% block extra_css %}
-    <link rel="stylesheet" href={{ static_url("css/create.css") }} type="text/css" />
+	<link rel="stylesheet" href="{{ static_url("css/user_home.css") }}" type="text/css" />
 {% end %}
-{% block editor_js %}
-    <script type="text/javascript" src={{ static_url("js/shCore.js") }}></script>
-    <script type="text/javascript" src={{ static_url("js/allhl.js") }}></script>
-    <script type="text/javascript" src={{ static_url("ueditor/ueditor.config.js") }}></script>
-    <script type="text/javascript" src={{ static_url("ueditor/ueditor.all.min.js") }}></script>
-    <script type="text/javascript">
-        SyntaxHighlighter.all();
-    </script>
+{% block extra_div%}
+ <div class="userHome">
+ 	<div class="userHomeInner">
+	 	<div class="userInfo">
+	 		<div class="userBasicInfo">
+	 			<div class="imageAndOtherAction">
+	 				<img class="userImage" src="{{ static_url("avatar/random/2.jpg") }}"/>
+	 				<div class="userName">Kyleslight</div>
+	 				<div class="userMotto">如果我的付出,可以为人类的未来增加一块基石的话,大概我就是为此而生的吧</div>
+		 			<div class="otherAction">
+		 				<a href="#" id="follow">关注</a>
+		 				<a href="#" id="chat">会话</a>
+		 			</div>
+	 			</div>
+	 			<div class="userIntro">简介：<span>中二病嚴重患者</span></div>
+	 			<div class="userPrivateInfo">
+	 				私人信息：
+	 				<span class="userSex">♂</span>
+		 			<span class="userAge">20</span>
+		 			<span class="userCity">武汉</span>
+	 			</div>
+	 			<div class="userTitle">头衔：<span>站长</span></div>
+	 		</div>
+	 		<div class="userExtendInfo">
+	 			<div class="userRegister">
+	 				申请时间：<span class="userRegisterTime">2014.1.1</span>
+	 			</div>
+	 			<div class="userEmail">
+	 				邮箱：<span class="userEmailAddress">likelakes07@gmail.com</span>
+	 			</div>
+	 			<div class="userHonourAndWarn">
+	 				<div class="userHonourAndWarnFirstLine">得分与警告信息</div>
+	 				<li class="userGrade">总得分：<span>3604</span></li>
+	 				<li class="userReadGrade">阅历得分：<span>122</span></li>
+	 				<li class="userOpusGrade">作品得分：<span>3056</span></li>
+	 				<li class="userGroupGrade">小组得分：<span>304</span></li>
+	 				<li class="userWarnTime">警告数：<span>0</span></li>
+	 			</div>
+	 		</div>
+	 		<div class="followInfo">
+				<div class="followOther">
+					<div class="followOtherFirstLine">Ta关注了<span id="follerOtherNum">111</span>人</div>
+					<div class="followOtherList followList">
+						<li><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></li>
+						<li><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><span>monsterdog</span></li>
+						<li><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></li>
+						<li><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><span>monsterdog</span></li>
+						<li><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></li>
+						<li><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><span>monsterdog</span></li>
+						<li><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></li>
+						<li><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><span>monsterdog</span></li>
+						<!-- 只列出最近8人 -->
+					</div>
+				</div>
+				<div class="otherFollow">
+					<div class="otherFollowFirstLine"><span>1111</span>人关注了Ta</div>
+					<div class="otherFollowList followList">
+						<li><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></li>
+						<li><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><span>monsterdog</span></li>
+						<li><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></li>
+						<li><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><span>monsterdog</span></li>
+						<li><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></li>
+						<li><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><span>monsterdog</span></li>
+						<li><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></li>
+						<li><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><span>monsterdog</span></li>
+						<!-- 只列出最近8人 -->
+					</div>
+				</div>
+			</div>
+	 	</div>
+	 </div>
+ </div>
 {% end %}
 {% block extra_js %}
 {% end %}

@@ -12,6 +12,7 @@ var isLoginPasswordFocus = false;
 var isRegisterRepasswordFocus = false;
 var ueditor=null;
 var insertImageState=-1;
+var activeNoteID=-1;
 
 // get unsync information
 unsycUser();
@@ -28,6 +29,9 @@ $(document).ready(function() {
             $("#username").children().val(username);
             $("#usernameHover").text(username);
         });
+        if (location.pathname.slice(0,9)=="/a/create") {
+            $(".write").show();
+        };
     });
     // return to top icon show
     $(window).scroll(function() {
@@ -124,6 +128,10 @@ $(document).ready(function() {
         $.post("/logout");
         $(".navrighton").fadeOut(function() {
             $(".navrightoff").fadeIn();
+            if (location.pathname.slice(0,9)=="/a/create") {
+                $(".write").hide();
+                alert("要进入创作页请先登入");
+            };
         });
         checkGroupPremission();
     })
@@ -198,6 +206,18 @@ $(document).ready(function() {
             height: 415
         }, function() {
             $(".myNote").fadeIn(500);
+            // update note
+            $.getJSON("/u/memo",function(data){
+                var noteNum=data.length-1;
+                activeNoteID=data[noteNum].id;
+                $(".myCurrentNoteTitle").val(data[noteNum].title);
+                $(".myCurrentNoteContent").val(data[noteNum].content);
+                $(".myCurrentNoteTime").text(data[noteNum].create_time.slice(0,10));
+                for (var i = 0; i < data.length; i++) {
+                    var preNoteList='<a href="#" id="'+data[i].id+'" class="myNoteList" onclick="selectNote('+data[i].id+')">'+data[i].title+'</a>';
+                    $(".myNoteListWrap").prepend(preNoteList);
+                };
+            });
         });
     });
     $("#myNoteBack").click(function() {
@@ -205,6 +225,48 @@ $(document).ready(function() {
             $(".myNoteWrap").animate({
                 height: 0
             });
+        });
+    });
+    $("#addNote").click(function(){
+        $(".myCurrentNoteTitle").val("");
+        $(".myCurrentNoteContent").val("");
+        $(".myCurrentNoteTime").text("");
+        $("#deleteCurrentNote,#saveCurrentNote").hide();
+        $("#createNewNote").show();
+    });
+    // create note
+    $("#createNewNote").click(function(){
+        if ($(".myCurrentNoteTitle").val()=="") {
+            alert("请填写标题");
+            return false;
+        };
+        $.post("/u/memo",{
+            "title":$(".myCurrentNoteTitle").val(),
+            "content":$(".myCurrentNoteContent").val()
+        },function(data){
+            var newNote=eval ("(" + data + ")");
+            var newNoteTitle='<a href="#" id="'+newNote.id+'" class="myNoteList" onclick="selectNote('+newNote.id+')">'+newNote.title+'</a>';
+            activeNoteID=newNote.id;
+            $(".myNoteListWrap").prepend(newNoteTitle);
+            $(".myCurrentNoteTitle").val(newNote.title);
+            $(".myCurrentNoteContent").val(newNote.content);
+            $(".myCurrentNoteTime").text(newNote.create_time.slice(0,10));
+            $("#deleteCurrentNote,#saveCurrentNote").show();
+            $("#createNewNote").hide();
+        });
+    });
+    // update note
+    $("#saveCurrentNote").click(function(){
+        if (activeNoteID==-1) {
+            return false;
+        };
+        $.post("/u/memo/update",{
+            "memo_id":activeNoteID,
+            "title":$(".myCurrentNoteTitle").val(),
+            "content":$(".myCurrentNoteContent").val()
+        },function(){
+            alert("save note success");
+            $("#"+activeNoteID).text($(".myCurrentNoteTitle").val());
         });
     });
 
@@ -246,6 +308,7 @@ $(document).ready(function() {
     // image upload back
     $("#uploadImageBack").click(function(){
         $("section#main,#uploadImageBack,#info_zone,.mask").hide();
+        return false;
     })
 });
 
@@ -256,10 +319,10 @@ function loginBoxShow() {
     var heightOfLRBox = $("#loginBox").height() + "px";
     $("#lrBoxWrap").animate({
         height: heightOfLRBox
-    }, 1000, function() {
+    }, 300, function() {
         $("#loginBox").animate({
             opacity: 1.0
-        }, 1000, function() {
+        }, 300, function() {
             isLoginBox = true;
             isRegisterBox = false;
         });
@@ -270,10 +333,10 @@ function loginBoxShow() {
 function loginBoxFade() {
     $("#loginBox").animate({
         opacity: 0.0
-    }, 1000, function() {
+    }, 300, function() {
         $("#lrBoxWrap").animate({
             height: "0"
-        }, 1000, function() {
+        }, 300, function() {
             $("#loginBox").hide();
             isLoginBox = false;
             isRegisterBox = false;
@@ -286,10 +349,10 @@ function registerBoxShow() {
     var heightOfLRBox = $("#registerBox").height() + "px";
     $("#lrBoxWrap").animate({
         height: heightOfLRBox
-    }, 1000, function() {
+    }, 300, function() {
         $("#registerBox").animate({
             opacity: 1.0
-        }, 1000, function() {
+        }, 300, function() {
             isLoginBox = false;
             isRegisterBox = true;
         });
@@ -299,10 +362,10 @@ function registerBoxShow() {
 function registerBoxFade() {
     $("#registerBox").animate({
         opacity: 0.0
-    }, 1000, function() {
+    }, 300, function() {
         $("#lrBoxWrap").animate({
             height: "0"
-        }, 1000, function() {
+        }, 300, function() {
             $("#registerBox").hide();
             isLoginBox = false;
             isRegisterBox = false;
@@ -335,7 +398,12 @@ function loginSubmit() {
                 });
             });
             unsycUser();
-            checkGroupPremission();
+            if(location.pathname.slice(0,2)=="/t"||location.pathname.slice(0,2)=="/g"){
+                checkGroupPremission();
+            };
+            if (location.pathname.slice(0,9)=="/a/create") {
+                $(".write").show();
+            };
         }
     });
 }
@@ -387,6 +455,19 @@ function unsycUser() {
             });
         }
     });
+}
+
+function selectNote(noteID){
+    $.getJSON("/u/memo/update",{
+        "memo_id":noteID
+    },function(data){
+        $(".myCurrentNoteTitle").val(data.title);
+        $(".myCurrentNoteContent").val(data.content);
+        $(".myCurrentNoteTime").text(data.create_time.slice(0,10));
+        activeNoteID=noteID;
+    });
+    $("#deleteCurrentNote,#saveCurrentNote").show();
+    $("#createNewNote").hide();
 }
 
 // insertImageState

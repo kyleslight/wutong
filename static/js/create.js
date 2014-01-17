@@ -5,6 +5,7 @@ var elapseTime = 5000;
 var opusShowTime=1000;
 
 $(document).ready(function(){
+    $(".write").hide();
 
     $("#IsPreviewBeforePublic").change(function(){
         if (!$(this).prop('checked')) {
@@ -16,23 +17,61 @@ $(document).ready(function(){
         };
     });
 
+    $(window).scroll(function(){
+        var top=$(window).scrollTop();
+        var editorTop=editor.container.offsetTop;
+        var editorHeight=editor.container.offsetHeight;
+        if (top>editorTop&&top<(editorTop+editorHeight)) {
+            $("#edui1_toolbarbox").addClass("floatEditorBtn");
+        }else{
+            $("#edui1_toolbarbox").removeClass("floatEditorBtn");
+        };
+    });
+
     $("#opusPreViewButton").click(function(){
+        // check form
+        if($("#title").val().length==0){
+            alert("请填写标题");
+            return false;
+        };
+
+        $("#imageUploadContainer").html("");
+        if ($(".activeOpusType").text()=="摄影"||$(".activeOpusType").text()=="绘画") {
+            for(var i=0;i<$(".preImageUpload").size();i++){
+                var imgUrl=$(".preImageUpload").children("img").eq(i).attr("src");
+                var imgIntro=$(".preImageUpload").children(".preImageIntro").eq(i).val();
+                var appImage='<div class="imageUpload" style="background:rgba(0,0,0,0.8);padding-top:20px;padding-bottom:20px;">'
+                                 +  '<img src="'+imgUrl+'" />'
+                                 +  '<div class="imageIntro"><p>'+imgIntro+'</p></div>'
+                                 +'</div>';
+                $("#imageUploadContainer").append(appImage);
+            }
+            var mainText=$("#imageUploadContainer").html();
+        }else{
+            var mainText=$("#textArea").val();
+        };
+
+        if (mainText=="") {
+            alert("请添加正文/照片");
+            return false;
+        };
+
         $("#temTextData").html("");
         $("#textdata,#opusPreViewButton,#previewBeforePublic").hide();
-        var mainText=$("#textArea").val();
-        // console.log($("#title").val(),$("#foreword").val(),$("#reference").val(),($("#articleFirstClass").val()+$("#otherTags").val()),$("#suit").val(),$("#cooperation").val(),$("#puclicPush").prop('checked'));
+
         var temTextData={
             title:$("#title").val(),
             foreword:$("#foreword").val(),
-            mainText:$("#textArea").val(),
+            mainText:mainText,
             reference:$("#reference").val(),
             tags:[  $(".activeFirstClass").val()+" "+
                     $("#otherTags").val()],
-            suit:$("#suit").val(),
+            suit:$("#outterSuit").val(),
             cooperation:$("#cooperation").val(),
             is_pushed:$("#puclicPush").prop('checked'),
             type:$(".activeOpusType").text()
         }
+        // console.log($("#title").val(),$("#foreword").val(),$("#reference").val(),($("#articleFirstClass").val()+$("#otherTags").val()),$("#suit").val(),$("#cooperation").val(),$("#puclicPush").prop('checked'));
         // console.log(temTextData);
         var temTime=new Date();
         var temtText='<div class="opusBasicInfo">'
@@ -59,6 +98,12 @@ $(document).ready(function(){
                     +    '</div>'
                     +'</div>'
         $("#temTextData").prepend(temtText);
+        if (temTextData.suit=="") {
+            $(".opusAppositeness").hide();
+        };
+        if (temTextData.reference=="") {
+            $(".opusReference").hide();
+        };
         $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").show();
     });
     $("#opusPreViewBack").click(function(){
@@ -67,11 +112,28 @@ $(document).ready(function(){
     })
 
     $("#opusPublicSubmitButton,#opusPrivateSubmitButton").click(function(){
-        var mainText=$("#textArea").val();
+        if ($(".activeOpusType").text()=="摄影"||$(".activeOpusType").text()=="绘画") {
+            $("#imageUploadContainer").html("");
+            for(var i=0;i<$(".preImageUpload").size();i++){
+                var imgUrl=$(".preImageUpload").children("img").eq(i).attr("src");
+                var imgIntro=$(".preImageUpload").children(".preImageIntro").eq(i).val();
+                var appImage='<div class="imageUpload" style="background:rgba(0,0,0,0.8);padding-top:20px;padding-bottom:20px;">'
+                                 +  '<img src="'+imgUrl+'" />'
+                                 +  '<div class="imageIntro"><p>'+imgIntro+'</p></div>'
+                                 +'</div>';
+                $("#imageUploadContainer").append(appImage);
+            }
+            var mainText=$("#imageUploadContainer").html();
+        }else{
+            var mainText=$("#textArea").val();
+        };
         mainText=deleteBrPara(mainText);
         $("#textArea").val(mainText);
         var transTags=$(".activeFirstClass").val()+";"+$("#otherTags").val();
-        $("#otherTags").val(transTags);
+        $("#opusType").val($(".activeOpusType").text());
+        $("#opusTag").val(transTags);
+        $("#opusSuit").val($("#outterSuit").val());
+        $("#opusCooperation").val($("#outterCooperation").val());
         var theForm=document.getElementById("textdata");
         theForm.submit();
     });
@@ -98,17 +160,18 @@ $(document).ready(function(){
         // mainText:0 1 0:optional 1:required
         // resource:0 1 2 0:null 1:image 2:file
         // tags:0 1 2 3 4 0:article 1:fragment 2:photograph 3:drawing 4:project
+        // subtleChange:0 1 0:foreword bottom border hide 1:foreword bottom border show
         switch($(this).text()){
             case "文章":
-                changeOpusItem(1,1,1,0,0);break;
+                changeOpusItem(1,1,1,0,0,1);break;
             case "片段":
-                changeOpusItem(0,0,1,0,1);break;
+                changeOpusItem(0,0,1,0,1,1);break;
             case "摄影":
-                changeOpusItem(1,1,0,1,2);break;
+                changeOpusItem(1,1,0,1,2,0);break;
             case "绘画":
-                changeOpusItem(1,0,0,1,3);break;
+                changeOpusItem(1,1,0,1,3,0);break;
             case "项目":
-                changeOpusItem(1,1,1,2,4);break;
+                changeOpusItem(1,1,1,2,4,1);break;
         };
     });
     $("#opusTypeAreaSwitch").click(function(){
@@ -133,11 +196,6 @@ $(document).ready(function(){
     });
     $(".addImage").click(function(){
         insertImage(1);
-    });
-    $(".deletePreImage").click(function(){
-        console.log("a");
-        var preImageIndex = $(".deletePreImage").index($(this));
-        $(".preImageUpload").eq(preImageIndex).remove();
         return false;
     });
 
@@ -168,7 +226,7 @@ function deleteBrPara(string){
 // mainText:0 1 0:show 1:none
 // resource:0 1 2 0:null 1:image 2:file
 
-function changeOpusItem(title,foreword,mainText,resource,tags){
+function changeOpusItem(title,foreword,mainText,resource,tags,subtleChange){
     // title
     // if (title) $("#title").attr("placeholder","填写标题"); else  $("#title").attr("placeholder","填写标题（可选）");
     // foreword
@@ -185,6 +243,12 @@ function changeOpusItem(title,foreword,mainText,resource,tags){
     // tags
     $(".activeFirstClass").removeClass("activeFirstClass");
     $(".firstClass").eq(tags).addClass("activeFirstClass");
+    // subtleChange
+    if (subtleChange==0){
+        $("#forewordForm").addClass("forewordFormNoBottomLine");
+    }else{
+        $("#forewordForm").removeClass("forewordFormNoBottomLine");
+    }
 }
 
 

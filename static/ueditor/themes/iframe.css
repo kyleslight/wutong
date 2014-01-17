@@ -1,8 +1,9 @@
 /*可以在这里添加你自己的css*/
 .view{
-	
+	padding: 5px;
+	padding-top: 2px;
+	margin-top: 0;
 }
-
 pre{
 	font-family:"Monaco",/* ← ← “Monaco”这个字体是为了纪念丁基友的*/
 	"Inconsolata","Consolas","Bitstream Vera Sans Mono","Courier New"Courier,monospace !important;
@@ -11,16 +12,21 @@ pre{
 }
 
 p{
-	color: rgb(34, 34, 34);
-	font-family: 'Proxima Nova', 'Helvetica Neue', Arial, 'Microsoft YaHei', sans-serif;
-	font-size: 13px;
-	line-height: 27.59375px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	padding: 0px;
+	border: 0px;
+	font-family: 'Microsoft Yahei', 'Helvetica Neue', 'Luxi Sans', 'DejaVu Sans', Tahoma, 'Hiragino Sans GB', STHeiti;
+	font-size: 15px;
+	line-height: 23px;
+	vertical-align: baseline;
+	color: rgb(68, 68, 68);
+	white-space: normal;
 }
 
 img{
 	margin: 0px;
 	padding: 0px;
-	border: 0.5em solid rgb(255, 255, 255);
 	font-family: inherit;
 	font-style: inherit;
 	font-variant: inherit;
@@ -40,6 +46,15 @@ img{
 a{
 	text-decoration: none;
 	color: #680;
+}
+
+blockquote{
+	background: url('image/quote.png') no-repeat scroll left 11px transparent;
+	min-height: 30px;
+	padding: 17px 40px 0;
+}
+blockquote p{
+	color: #999;
 }
 
 

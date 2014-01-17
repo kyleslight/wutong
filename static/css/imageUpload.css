@@ -1,24 +1,12 @@
-/* Do some clean */
-* {
-	padding: 0;
-	margin: 0;
-	font-family:verdana, arial, helvetica, sans-serif;
-}
-
 /* Global style */
-.clear {
+/*.clear {
 	clear: both;
-}
-
-/* Page background-color */
-body {
-	background-color: #f8f8f8;
-}
+}*/
 
 /**********************
  *       Header       *
  **********************/
-header#main_header {
+/*header#main_header {
 	background-color: mediumseagreen;
 	color:white;
 	position: fixed;
@@ -27,9 +15,9 @@ header#main_header {
 	right: 0;
 	height: 80px;
 	z-index: 10000;
-}
+}*/
 /* Header container */
-ul#header_wrap {
+/*ul#header_wrap {
 	list-style: none;
 }
 ul#header_wrap > li {
@@ -46,9 +34,9 @@ ul#header_wrap > li#upload:hover {
 }
 ul#header_wrap > li#upload:active {
 	background-color: mediumseagreen;
-}
+}*/
 /* Logo size 200x80 */
-ul#header_wrap > li#logo {
+/*ul#header_wrap > li#logo {
 	width: 200px;
 	padding: 0;
 	height: 80px;
@@ -56,17 +44,17 @@ ul#header_wrap > li#logo {
 ul#header_wrap > li#logo img {
 	height:80px;
 	border: none;
-}
+}*/
 
 /* Language select */
-ul#header_wrap > li#lang_set {
+/*ul#header_wrap > li#lang_set {
 	float: right;
 }
 li#lang_set:hover {
 	background-color: dodgerblue;
-}
+}*/
 /* Language select dropdown menu */
-li#lang_set ul {
+/*li#lang_set ul {
 	list-style: none;
 	display: none;
 	width: 300px;
@@ -74,8 +62,8 @@ li#lang_set ul {
 	background-color: dodgerblue;
 	font-size: 16px;
 	padding: 10px;
-}
-li#lang_set:hover ul {
+}*/
+/*li#lang_set:hover ul {
 	display: block;
 }
 li#lang_set ul li {
@@ -88,7 +76,7 @@ li#lang_set ul li a {
 }
 li#lang_set ul li a:hover {
 	text-decoration: underline;
-}
+}*/
 
 /**********************
  *    Main section    *
@@ -136,7 +124,7 @@ a#add:hover {
 	background-position: 0 -200px;
 }
 
-/* Result Zone */
+
 ul#result_zone {
 	list-style: none;
 	background-repeat: no-repeat;
@@ -162,7 +150,7 @@ ul#result_zone div.select p{
 	text-align: right;
 }
 
-/* Message Zone */
+
 ul#message_zone {
 	position: fixed;
 	right: 0;
@@ -198,8 +186,7 @@ ul#message_zone li.tiny {
 	border-width: 0;
 }
 
-/* Pop-up for upload */
-/* Pop-up container */
+
 div#upload_popup {
 	position: fixed;
 	top: 80px;
@@ -214,7 +201,7 @@ div#pop_window {
 	width: 600px;
 	background-color: #f8f8f8;
 }
-/* Title bar */
+
 div#pop_window header {
 	height: 30px;
 	background-color: mediumseagreen;
@@ -222,12 +209,12 @@ div#pop_window header {
 	color: white;
 	font-size: 25px;
 }
-/* Work zone */
+
 div#pop_window div.zone {
 	height: 250px;
 	padding: 25px;
 }
-/* Tab */
+
 div#method_change {
 	background-color: mediumseagreen;
 }
@@ -275,16 +262,16 @@ div#file_review p:nth-child(2n)::before {
 div#file_review p:nth-child(2n+1)::before{
 	background-color: #333;
 }
-/* Hide on start */
+
 div#url_zone {
 	display: none;
 }
-/* Hide file input */
+
 input#file_list {
 	visibility: hidden;
 	width: 0px;
 }
-/* URL textarea */
+
 textarea#url_list {
 	width: 536px;
 	height: 236px;
@@ -306,14 +293,14 @@ textarea#url_list:focus {
 	border: 2px solid cornflowerblue;
 }
 
-/* Submit and Close button zone */
+
 div#submit_zone {
 	background-color: #f8f8f8;
 	padding: 10px;
 	text-align: right;
 }
 
-/* Buttons */
+
 div#pop_window button {
 	border: none;
 	padding: 10px;
@@ -340,7 +327,7 @@ button#submit:active, button#file_select:active {
 	background-color: cornflowerblue;
 }
 
-aside#info_zone {
+/*aside#info_zone {
 	padding: 10px;
 	height: 200px;
 	position: fixed;
@@ -422,4 +409,4 @@ aside#info_zone p.result_info input:hover,aside#info_zone p.result_info textarea
 aside#info_zone p.result_info input:focus,aside#info_zone p.result_info textarea:focus {
 	background-color: #f8f8f8;
 	border: 2px solid tomato;
-}
+}*/

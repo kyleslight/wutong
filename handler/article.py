@@ -67,8 +67,8 @@ class CreateArticleHandler(ArticleBaseHandler):
         seps = [u' ', u';', u'；']
 
         tags = util.split(tags, u' ,;；')
-        if set(tags).isdisjoint(top_tags):
-            tags = []
+        # if set(tags).isdisjoint(top_tags):
+            # tags = []
         return tags
 
     def get(self):

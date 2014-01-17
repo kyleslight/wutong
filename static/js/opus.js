@@ -5,6 +5,7 @@ var elapseTime = 5000;
 var topOfSight=150;
 var editingParaNum=-1;
 var editableOpusChild=$(".opusMain").children("div,p,table,blockquote");
+var is_image_view=false;
 
 $(document).ready(function(){
     // initializing the opus and side commnet
@@ -84,6 +85,7 @@ $(document).ready(function(){
             var heightOfReadMain=($(".floatReadMain").height()+40)+"px";
             $(".opusSideCommentWrap").css({"height":heightOfReadMain});
             var url = location.pathname + '/comment/bottom';
+            $(".opusCommentList").remove();
             $.getJSON(url, function(data) {
                 $(".buttomComment").prepend(data);
             });
@@ -140,7 +142,11 @@ $(document).ready(function(){
 
         // set position of editing area under the para
         var buttomOfActivePara=editableOpusChild.eq(indexOfPara).offset().top+editableOpusChild.eq(indexOfPara).height()-60;
-        $(".sideCommentEditBox").css({"top":buttomOfActivePara+"px"});
+        if (is_image_view) {
+            $(".sideCommentEditBox").css({"top":(buttomOfActivePara+30)+"px"});
+        }else{
+            $(".sideCommentEditBox").css({"top":buttomOfActivePara+"px"});
+        };
         $(".sideCommentEditBox").fadeIn(100);
 
         // auto focus on edit area
@@ -252,7 +258,7 @@ function init(){
 
         // if sideCommentNode has no comment,add a appNull,if not,add a Nav
         for(var i=0;i<totalNumOfPara;i++){
-            var preNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" >'
+            var preNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" onclick="toLeftPara('+i+')">'
                         +'第'+i+'段评论('+'<span class="numOfParaComent">'+$("#sideCommentNode"+i).children().size()+'</span>'+')'
                         +'</li>';
             var preNull='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav nullOpusSideCommentNav" >'
@@ -270,6 +276,17 @@ function init(){
     // other set
     editableOpusChild.addClass("opusMainChildren");
     $(".opusCommentList").last().addClass("noBorderButtom");
+    // console.log($(".opusMain").children().eq(0).attr("class"));
+    if ($(".opusMain").children().eq(0).hasClass("imageUpload")) {
+        is_image_view=true;
+        $(".readMain").css({"background":"transparent","border":"0"});
+        $(".opusMain").children().css({"background":"none"});
+        $(".opusMainTitle").css({"color":"black"});
+        $(".readMain").css({"box-shadow":"none"});
+        $(".opusSuffixes a").css({"color":"white"});
+        $(".opusComment").css({"border-top":"1px solid white"});
+        $("#edui1").css({"border":"1px solid lightblue"});
+    };
 }
 
 function topPartHeight(){
@@ -344,5 +361,10 @@ function foldSideComment(){
     $(".sideCommentView,.sideCommentEdit").hide();
     $(".opusSideCommentWrap").addClass("noTransition");
     $("#buttomCommentSend").css({"margin-right":"0"});
+}
+
+function toLeftPara(paraID){
+    var paraOffTop=editableOpusChild.eq((paraID+1)).offset().top;
+    $(window).scrollTop(paraOffTop);
 }
 

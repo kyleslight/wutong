@@ -39,6 +39,9 @@ textarea{
 	outline: none;
 	background: white;
 }
+li{
+	list-style: none;
+}
 li img{
 	width: 50px;
 	height: 50px;
@@ -64,6 +67,12 @@ color: #999999;
 margin-left: 28px;
 min-height: 30px;
 padding: 17px 40px 0;
+}
+blockquote p{
+	color: #999999;
+	margin-left: 28px;
+	min-height: 30px;
+	padding: 17px 40px 0;
 }
 
 .input{
@@ -215,6 +224,10 @@ padding: 17px 40px 0;
 	border-top-left-radius: 0;
 	border: 1px solid white;
 	opacity: 0.5;
+	transition: 1s;
+	-moz-transition: 1s;
+	-webkit-transition: 1s;
+	-o-transition: 1s;
 	/*border-left: 0;*/
 }
 #searchSubmitButton:hover{
@@ -581,6 +594,9 @@ padding: 17px 40px 0;
 #addNote{
 	margin-bottom: 5px;
 }
+#createNewNote{
+	display: none;
+}
 .myNoteListWrap{
 	padding-top: 5px;
 	float: left;
@@ -590,12 +606,17 @@ padding: 17px 40px 0;
 	border-top: 1px dashed #680;
 }
 .myNoteList{
+	white-space:nowrap; 
+	overflow: hidden;
 	display: block;
 	list-style-type: decimal;
 	height: 18px;
 	border-top-left-radius: 2px;
 	border-bottom-left-radius: 2px;
+	text-overflow:ellipsis;
 	padding: 4px;
+	width: 120px;
+	line-height: 22px;
 }
 .myNoteList:hover{
 	background: #680;
@@ -787,6 +808,10 @@ div#first_load p{
 
 .none{
 	display: none;
+}
+
+#insertIamge{
+	cursor: default;
 }
 
 /*return to top button*/
