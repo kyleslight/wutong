@@ -131,7 +131,7 @@
                 <div class='talkMain'>
                     <span class="userName"><a href='#'>{{ topic["penname"] }}</a></span>
                     <span class='timeShow'>
-                        {{ topic["submit_time"] }}
+                        {{ prettytime(topic["submit_time"]) }}
                     </span>
                     <div class='talkContent'>
                         {% raw topic["content"] %}

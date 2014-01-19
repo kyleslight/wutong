@@ -273,6 +273,19 @@ $(document).ready(function() {
             $("#"+activeNoteID).text($(".myCurrentNoteTitle").val());
         });
     });
+    // delete note
+    $("#deleteCurrentNote").click(function(){
+        if (activeNoteID==-1) {
+            return false;
+        };
+        $.post("/u/memo/delete",{
+            "memo_id":activeNoteID,
+        },function(){
+            alert("delete note success");
+            // TODO: refresh notes
+            $("#"+activeNoteID).text($(".myCurrentNoteTitle").val());
+        });
+    });
 
     var numOfMessageList = 0;
     var heightOfMyMessage = 0;

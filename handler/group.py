@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from tornado.web import asynchronous
 from tornado.websocket import WebSocketHandler
 from tornado.escape import json_decode, json_encode
 from base import BaseHandler
@@ -46,59 +47,6 @@ class GroupBaseHandler(BaseHandler):
         if not hasattr(self, "_member_info"):
             self._member_info = self.get_member_info(gid, self.user_id)
         return self._member_info.get("is_leader", False)
-
-
-class MessageBaseHandler(GroupBaseHandler):
-    def init_content(self, *arg):
-        self.reply_id = None
-        self.gid = None
-
-    def get(self, *arg):
-        self.init_content(*arg)
-
-    def get_topic(self, tid):
-        topic = self.model.get_topic(tid)
-        return topic
-
-    def get_topic_group(self, tid):
-        topic = self.get_topic(tid)
-        group_info = self.model.get_group_info(topic["gid"])
-        return group_info
-
-    def get_topic_messages(self, tid):
-        messages = self.model.get_topic_messages(tid, 30, 0)
-        return messages or []
-
-    def get_group_messages(self, gid):
-        messages = self.model.get_group_messages(gid, 30, 0)
-        return messages or []
-
-    def get_message(self, message_id):
-        message = self.model.get_message(message_id)
-        return message
-
-    def save_message(self, message):
-        if message.has_key("title"):
-            id = self.model.do_create_topic(
-                self.gid,
-                self.user_id,
-                message["title"],
-                message["content"],
-                self.reply_id
-            )
-        else:
-            id = self.model.do_create_chat(
-                self.gid,
-                self.user_id,
-                message["content"],
-                self.reply_id
-            )
-        return id
-
-    def save_and_render_message(self, message):
-        id = self.save_message(message)
-        msg = self.get_message(id)
-        return self.render_module_string("message.html", message=msg)
 
 
 class PermissionHandler(GroupBaseHandler):
@@ -196,24 +144,118 @@ class GroupinfoHandler(GroupBaseHandler):
         self.write(group_info)
 
 
+class MessageBaseHandler(GroupBaseHandler):
+    _group_manager = dict()
+    _topic_manager = dict()
+
+    @property
+    def user_id(self):
+        return self.session.load().get("uid")
+
+    def init_content(self, id, **kwargs):
+        """Call this function immediately after connected with client"""
+        self.id = id
+        name = self.__class__.__name__.lower()
+        if 'group' in name:
+            self.manager = self._group_manager
+            self.gid = self.id
+            self.reply_id = None
+        elif 'topic' in name:
+            self.manager = self._topic_manager
+            self.tid = self.id
+            self.reply_id = self.tid
+            self.gid = self.get_topic(self.tid)["gid"]
+
+    def add(self, handler):
+        if not self.manager.has_key(self.id):
+            self.manager[self.id] = set()
+        self.manager[self.id].add(handler)
+
+    def remove(self, handler):
+        self.manager.get(self.id).discard(handler)
+
+    def send_message(self, message):
+        trash = set()
+        for handler in self.manager[self.id]:
+            handler = handler.write_message(message)
+            trash.add(handler)
+        self.manager[self.id] -= trash
+
+    def can_send_message(self):
+        member_info = self.model.get_member_info(self.gid, self.user_id)
+        if member_info:
+            return True
+        else:
+            return False
+
+    def on_message(self, message):
+        if not self.can_send_message():
+            self.error('not login')
+            return
+        msg = json_decode(message)
+        mid = self.save_message(msg)
+        msg = self.get_message(mid)
+        msg = self.render_module_string("message.html", message=msg)
+        self.send_message(msg)
+
+    def save_message(self, message):
+        if message.has_key("title"):
+            id = self.model.do_create_topic(
+                self.gid,
+                self.user_id,
+                message["title"],
+                message["content"],
+                self.reply_id
+            )
+        else:
+            id = self.model.do_create_chat(
+                self.gid,
+                self.user_id,
+                message["content"],
+                self.reply_id
+            )
+        return id
+
+    def get_topic(self, tid):
+        topic = self.model.get_topic(tid)
+        return topic
+
+    def get_topic_group(self, tid):
+        topic = self.get_topic(tid)
+        group_info = self.model.get_group_info(topic["gid"])
+        return group_info
+
+    def get_topic_messages(self, tid):
+        messages = self.model.get_topic_messages(tid, 30, 0)
+        return messages or []
+
+    def get_group_messages(self, gid):
+        messages = self.model.get_group_messages(gid, 30, 0)
+        return messages or []
+
+    def get_message(self, message_id):
+        message = self.model.get_message(message_id)
+        return message
+
+
 class GroupIndexHandler(MessageBaseHandler):
     def render_group(self, gid, messages, is_topic=False, **kwargs):
         group_info = self.get_group_info(gid)
         if not group_info:
-            self.write_error(403)
+            self.render_404_page()
             return
 
         bulletins = self.get_bulletins(gid)
         members = self.get_group_members(gid)
         self.render(
-                "group.html",
-                bulletins=bulletins,
-                messages=messages,
-                members=members,
-                group_info=group_info,
-                is_topic=is_topic,
-                **kwargs
-            )
+            "group.html",
+            bulletins=bulletins,
+            messages=messages,
+            members=members,
+            group_info=group_info,
+            is_topic=is_topic,
+            **kwargs
+        )
 
     def get(self, gid):
         messages = self.get_group_messages(gid)
@@ -240,70 +282,52 @@ class TopicIndexHandler(GroupIndexHandler):
             ancestor_topics = self.get_ancestor_topics(topic).__reversed__()
             self.render_group(gid, messages, is_topic=True, ancestor_topics=ancestor_topics)
         else:
-            self.write_error(403)
+            self.render_404_page()
+
+
+class MessageHandler(MessageBaseHandler):
+    @asynchronous
+    def get(self, id):
+        self.init_content(id)
+        self.add(self)
+
+    def post(self, id):
+        self.init_content(id)
+        data = self.request.body
+        self.on_message(data)
+
+    # return handler which should be delete
+    def write_message(self, message):
+        if self.request.connection.stream.closed():
+            return
+        self.write(message)
+        self.finish()
+        return self
+
+
+class GroupMessageHandler(MessageHandler):
+    pass
+
+
+class TopicMessageHandler(MessageHandler):
+    pass
 
 
 class MessageSocketHandler(MessageBaseHandler, WebSocketHandler):
-    @property
-    def manager(self):
-        cls = type(self)
-        if not hasattr(cls, "_manager"):
-            cls._manager = dict()
-        return cls._manager
-
-    @property
-    def user_id(self):
-        return self.session.load().get("uid")
-
-    def init_content(self, id):
-        super(MessageSocketHandler, self).init_content(id)
-        self.id = id
-
-    def add(self):
-        if not self.manager.has_key(self.id):
-            self.manager[self.id] = set()
-        self.manager[self.id].add(self)
-
-    def remove(self):
-        self.manager.get(self.id).discard(self)
-
-    def send_message(self, message):
-        for handler in self.manager[self.id]:
-            handler.write_message(message)
-
-    def can_send_message(self):
-        member_info = self.model.get_member_info(self.gid, self.user_id)
-        if member_info:
-            return True
-        else:
-            return False
+    def error(self, message):
+        self.write_message(message)
 
     def open(self, id):
         self.init_content(id)
-        self.add()
-
-    def on_message(self, message):
-        if self.can_send_message():
-            msg = json_decode(message)
-            msg = self.save_and_render_message(msg)
-            if msg:
-                self.send_message(msg)
-            else:
-                pass
-                # self.write_message("failed")
+        self.add(self)
 
     def on_close(self):
-        self.remove()
+        self.remove(self)
 
 
-class GroupMessageHandler(MessageSocketHandler):
-    def init_content(self, gid):
-        super(GroupMessageHandler, self).init_content(gid)
-        self.gid = gid
+class GroupMessageSocketHandler(MessageSocketHandler):
+    pass
 
 
-class TopicMessageHandler(MessageSocketHandler):
-    def init_content(self, tid):
-        super(TopicMessageHandler, self).init_content(tid)
-        self.gid = self.get_topic(tid)["gid"]
-        self.reply_id = tid
+class TopicMessageSocketHandler(MessageSocketHandler):
+    pass

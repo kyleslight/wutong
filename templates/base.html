@@ -263,10 +263,10 @@
                 <div class="myCurrentNoteArea">
                     <div class="myCurrentNoteHeader">
                         <input class="myCurrentNoteTitle" value="" placeholder="标题">
-                        <div class="myCurrentNoteTime">10-22 12:30</div>
+                        <div class="myCurrentNoteTime"></div>
                     </div>
                     <textarea class="myCurrentNoteContent" placeholder="添加内容">
-                        
+
                     </textarea>
                     <div class="myCurrentNoteOption">
                         <a href="#" id="deleteCurrentNote" class="formButton">删除</a>
@@ -340,11 +340,13 @@
                     <p class="f1">&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
             {% end %}
         </div>
+        {% block js %}
         <script type="text/javascript" src={{ static_url("js/jquery.js") }}></script>
         <script type="text/javascript" src={{ static_url("js/header.js") }}></script>
         <script type="text/javascript" src={{ static_url("js/ui.js") }}></script>
         <script type="text/javascript" src={{ static_url("js/imageUpload.js") }}></script>
         <script type="text/javascript" charset="utf-8" src="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/js/page_context.js"></script>
+        {% end %}
         {% block editor_js %}
         {% end %}
         {% block extra_js %}
