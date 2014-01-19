@@ -211,7 +211,7 @@ function file_upload(work) {
 	var fd = new FormData();
 
 	xhr.open('POST', '/upload', true);
-	// xhr.setRequestHeader("Content-type", "multipart/form-data");
+	xhr.setRequestHeader("Content-type", "multipart/form-data");
 
 	xhr.addEventListener('readystatechange', function(e){
 		if(xhr.readyState == 4) {

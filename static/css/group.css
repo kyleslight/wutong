@@ -787,6 +787,17 @@ li.topicOutter{
 }
 li.topicOutter .topicTalkContent{
 	color: #DDD;
+	white-space: nowrap;
+	overflow: hidden;
+	display: block;
+	list-style-type: decimal;
+	height: 18px;
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+	text-overflow: ellipsis;
+	/*padding: 4px;*/
+	width: 820px;
+	line-height: 22px;
 }
 li.topicOutter a{
 	transition: 0.2s;

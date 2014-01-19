@@ -4,10 +4,12 @@ var _showwel_flag = true;
 var elapseTime = 5000;
 var topOfSight=150;
 var editingParaNum=-1;
-var editableOpusChild=$(".opusMain").children("div,p,table,blockquote");
 var is_image_view=false;
+var editableOpusChild=$(".opusMain").children("div,p,table,blockquote");;
 
 $(document).ready(function(){
+
+    editableOpusChild=$(".opusMain").children("div,p,table,blockquote");
     // initializing the opus and side commnet
     init();
 
@@ -131,7 +133,21 @@ $(document).ready(function(){
         activeParaChange(indexOfPara);
 
         return false;
-    })
+    });
+
+    editableOpusChild.click(function(){
+        if ($(".opusSideCommentWrap").css("display")=="none"){
+            return false;
+        };
+        $(".nullOpusSideCommentNav").css("display","none");
+
+        // when active para change
+        var indexOfPara=editableOpusChild.index($(this));
+        activeParaChange(indexOfPara);
+        // toLeftPara(indexOfPara);
+
+        return false;
+    });
 
     // edit the side comment of this para
     $(".sideCommentEdit").click(function(){
@@ -181,7 +197,7 @@ $(document).ready(function(){
             addListNav.after(data);
             $(".opusSideCommentList"+editingParaNum).eq(1).css({"background":"pink","width":"268px"});
             if (addListNav.hasClass("nullOpusSideCommentNav")) {
-                var preNav='<li class="opusSideCommentList opusSideCommentList'+editingParaNum+' opusSideCommentNav" style="width:253px">'
+                var preNav='<li class="opusSideCommentList opusSideCommentList'+editingParaNum+' opusSideCommentNav" style="width:253px" onclick="toLeftPara('+editingParaNum+')">'
                         +'第'+editingParaNum+'段评论('+'<span class="numOfParaComent">'+($("#sideCommentNode"+editingParaNum).children().size()-1)+'</span>'+')'
                         +'</li>';
                 addListNav.after(preNav);
@@ -274,7 +290,6 @@ function init(){
         };
     });
     // other set
-    editableOpusChild.addClass("opusMainChildren");
     $(".opusCommentList").last().addClass("noBorderButtom");
     // console.log($(".opusMain").children().eq(0).attr("class"));
     if ($(".opusMain").children().eq(0).hasClass("imageUpload")) {
@@ -344,13 +359,16 @@ function expandSideComment(){
     $("#expandSideComment").text("收起侧评");
     $('html,body').animate({scrollTop:top},10);
     $('#buttomCommentSend').css({"margin-right":"-17px"});
+    editableOpusChild=$(".opusMain").children("div,p,table,blockquote");
+    editableOpusChild.addClass("opusMainChildren").addClass("pointerPara");
+    // init();
 }
 
 function foldSideComment(){
     $("#expandSideComment").text("展开侧评");
     $(".opusSideCommentWrap").fadeOut(50);
     $(".activeOpusPara").removeClass("activeOpusPara");
-    editableOpusChild.removeClass("activeOpusPara");
+    editableOpusChild.removeClass("activeOpusPara").removeClass("pointerPara");
     editableOpusChild.css({"color":"rgb(68,68,68)","opacity":"1.0"});
     var top=$(window).scrollTop();
     $(".readMain").removeClass("floatReadMain");
@@ -364,7 +382,9 @@ function foldSideComment(){
 }
 
 function toLeftPara(paraID){
-    var paraOffTop=editableOpusChild.eq((paraID+1)).offset().top;
-    $(window).scrollTop(paraOffTop);
+    var paraOffTop=editableOpusChild.eq((paraID)).offset().top-170;
+    $('html,body').animate({scrollTop:paraOffTop+"px"},function(){
+        activeParaChange(paraID);
+    });
 }
 

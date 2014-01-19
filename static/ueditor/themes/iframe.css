@@ -1,7 +1,7 @@
 /*可以在这里添加你自己的css*/
 .view{
-	padding: 5px;
-	padding-top: 2px;
+	padding: 2px;
+	padding-top: 0px;
 	margin-top: 0;
 }
 pre{
@@ -18,7 +18,7 @@ p{
 	border: 0px;
 	font-family: 'Microsoft Yahei', 'Helvetica Neue', 'Luxi Sans', 'DejaVu Sans', Tahoma, 'Hiragino Sans GB', STHeiti;
 	font-size: 15px;
-	line-height: 23px;
+	line-height: 17px;
 	vertical-align: baseline;
 	color: rgb(68, 68, 68);
 	white-space: normal;
@@ -48,13 +48,20 @@ a{
 	color: #680;
 }
 
-blockquote{
+blockquote {
 	background: url('image/quote.png') no-repeat scroll left 11px transparent;
+	margin-left: 0px;
 	min-height: 30px;
-	padding: 17px 40px 0;
+	padding-top: 10px;
+	padding-left: 9px;
+	color: #AAA !important;
+	margin-left: 28px;
+	min-height: 30px;
 }
 blockquote p{
-	color: #999;
+	color: #AAA !important;
+	min-height: 30px;
+	margin-left: 28px;
 }
 
 

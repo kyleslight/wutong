@@ -62,14 +62,14 @@ li img:hover{
 }
 
 blockquote {
-background: url('image/quote.png') no-repeat scroll left 11px transparent;
-color: #999999;
-margin-left: 28px;
-min-height: 30px;
-padding: 17px 40px 0;
+	background: url('image/quote.png') no-repeat scroll left 11px transparent;
+	margin-left: 0px;
+	min-height: 30px;
+	padding-top: 10px;
+	padding-left: 19px;
 }
 blockquote p{
-	color: #999999;
+	color: #AAA !important;
 	margin-left: 28px;
 	min-height: 30px;
 	padding: 17px 40px 0;

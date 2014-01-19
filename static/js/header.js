@@ -83,7 +83,7 @@ $(document).ready(function() {
         // $("#msgNum").removeClass("tremble");
     })
 
-    testTremble();
+    // testTremble();
 
 
     // login and register
@@ -216,6 +216,10 @@ $(document).ready(function() {
                 for (var i = 0; i < data.length; i++) {
                     var preNoteList='<a href="#" id="'+data[i].id+'" class="myNoteList" onclick="selectNote('+data[i].id+')">'+data[i].title+'</a>';
                     $(".myNoteListWrap").prepend(preNoteList);
+                };
+                if (data.length==0) {
+                    $("#deleteCurrentNote,#saveCurrentNote").hide();
+                    $("#createNewNote").show();
                 };
             });
         });

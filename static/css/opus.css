@@ -269,6 +269,7 @@ td,tbody,table{
 	padding-right: 5px;
 	/*padding-left: 10px;*/
 	padding-bottom: 10px;
+	overflow-y: hidden;
 }
 
 .activeOpusPara{
@@ -280,6 +281,9 @@ td,tbody,table{
 }
 .activeOpusPara img{
 	box-shadow: 0 0 20px 3px #680;
+}
+.pointerPara{
+	/*cursor: pointer;*/
 }
 .opusSideCommentList{
 	margin: 0 auto;
@@ -304,6 +308,7 @@ td,tbody,table{
 	box-shadow: 0 0 10px #AAA;
 	font-size: 1.2em;
 	font-weight: 900;
+	cursor: pointer;
 	transition: 2s;
 	-moz-transition:2s;
 	-webkit-transition:2s;
