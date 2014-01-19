@@ -83,7 +83,7 @@ class UserModel(object):
         memo = self.db.getjson(select, memo_id)
         return memo
 
-    def get_memos(self, uid, limit=5, offset=0):
+    def get_memos(self, uid, limit, offset):
         select = '''SELECT array_to_json(array_agg(aj))
                       FROM (
                             SELECT *
@@ -102,6 +102,10 @@ class UserModel(object):
                      where id = %s
                        and uid = %s'''
         return self.db.execute(update, title, content, memo_id, uid)
+
+    def delete_memo(self, uid, memo_id):
+        delete = 'delete from memo where id = %s and uid = %s'
+        return self.db.execute(delete, memo_id, uid)
 
     def get_collections(self, uid, limit=5, offset=0):
         select = 'SELECT get_article_collections(%s, %s, %s)'

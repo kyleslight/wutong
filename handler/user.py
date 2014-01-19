@@ -115,12 +115,33 @@ class RegisterHandler(UserBaseHandler):
             return
         title = u"欢迎加入梧桐"
         content = u"{url}".format(
-            url = "http://localhost:8888/account/check?r=" + hashuid
+            url = "http://localhost:8888/account/check?activate_account&v=" + hashuid
         )
-        if sendmail.send(title, content, email):
-            self.write("success")
+        if not sendmail.send(title, content, email):
+            self.write("failed")
+
+
+class AccountCheckHandler(UserBaseHandler):
+    def get(self):
+        args = self.request.arguments
+        if 'activate_account' in args:
+            self.activate_account_by_email()
+        elif 'is_account_exists' in args:
+            self.is_account_exists()
+
+    def activate_account_by_email(self):
+        hashuid = self.get_argument('v')
+        uid = self.model.do_activate(hashuid)
+        if uid:
+            self.set_authenticated(uid)
         else:
             self.write("failed")
+        self.redirect("/")
+
+    def is_account_exists(self):
+        account = self.get_argument('v')
+        uid = self.model.get_uid(account)
+        self.write('true' if uid else 'false')
 
 
 class UserinfoHandler(UserBaseHandler):
@@ -161,21 +182,6 @@ class UserinfoHandler(UserBaseHandler):
         self.model.update_user_info(userinfo['uid'], **userinfo)
 
 
-class CheckMailHandler(UserBaseHandler):
-    def get(self):
-        hashuid = self.get_argument("r")
-        uid = self.check_mail(hashuid)
-        if uid:
-            self.set_authenticated(uid)
-            self.write("success")
-        else:
-            self.write("error")
-        self.redirect("/")
-
-    def check_mail(self, hashuid):
-        return self.model.do_activate(hashuid)
-
-
 class AvatarHandler(UserBaseHandler):
     @authenticated
     def post(self):
@@ -212,7 +218,11 @@ class AvatarHandler(UserBaseHandler):
 class MemoHandler(UserBaseHandler):
     @authenticated
     def get(self):
-        memos = self.model.get_memos(self.user_id)
+        page = self.get_argument('page', 1)
+        size = self.get_argument('size', 10)
+
+        offset = (page - 1) * size
+        memos = self.model.get_memos(self.user_id, limit=size, offset=offset)
         memos = json_encode(memos)
         self.write(memos)
 
@@ -244,6 +254,15 @@ class UpdateMemoHandler(UserBaseHandler):
             memo = self.model.get_memo(memo_id)
             self.write(json_encode(memo))
         else:
+            self.write('failed')
+
+
+class DeleteMemoHandler(UserBaseHandler):
+    @authenticated
+    def post(self):
+        memo_id = self.get_argument('memo_id')
+
+        if not self.model.delete_memo(self.user_id, memo_id):
             self.write('failed')
 
 

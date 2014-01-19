@@ -55,8 +55,14 @@ class BaseHandler(RequestHandler):
         module_path = self.get_module_path()
         return self.render_string(os.path.join(module_path, module_name), **kwargs)
 
+    def render_404_page(self):
+        self.render('404.html')
+
     def get(self):
-        self.write_error(404)
+        self.render_404_page()
 
     def post(self):
         self.write_error(403)
+
+    def error(self, message):
+        self.write(message)

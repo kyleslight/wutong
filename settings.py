@@ -18,20 +18,23 @@ urls = [
     (r"/u/info", user.UserinfoHandler),
     (r"/u/memo", user.MemoHandler),
     (r"/u/memo/update", user.UpdateMemoHandler),
+    (r"/u/memo/delete", user.DeleteMemoHandler),
     (r"/u/collection", user.CollectionHandler),
     (r"/u/permission", user.PermissionHandler),
     (r"/login", user.LoginHandler),
     (r"/logout", user.LogoutHandler),
     (r"/register", user.RegisterHandler),
-    (r"/account/check", user.CheckMailHandler),
+    (r"/account/check", user.AccountCheckHandler),
     (r"/g/browse", group.BrowseHandler),
     (r"/g/create", group.CreateHandler),
     (r"/g/(\d+)", group.GroupIndexHandler),
     (r"/g/(\d+)/info", group.GroupinfoHandler),
+    (r"/g/(\d+)/message/websocket", group.GroupMessageSocketHandler),
     (r"/g/(\d+)/message", group.GroupMessageHandler),
     (r"/g/(\d+)/join", group.JoinHandler),
     (r"/g/(\d+)/permission", group.PermissionHandler),
     (r"/t/(\d+)", group.TopicIndexHandler),
+    (r"/t/(\d+)/message/websocket", group.TopicMessageSocketHandler),
     (r"/t/(\d+)/message", group.TopicMessageHandler),
     (r"/a/browse", article.BrowseArticleHandler),
     (r"/a/create", article.CreateArticleHandler),
@@ -52,9 +55,15 @@ define("dbpasswd", default=os.getenv("WUTONG_DB_PASSWD", "wutong"), type=str)
 options.parse_command_line()
 
 if options.debug:
-    class DebugHandler(RequestHandler):
+    class DebugHandler(base.BaseHandler):
         def get(self, subpath):
-            self.render(subpath)
+            valids = ['html', 'htm', 'xml']
+            suffix = subpath.rsplit('.', 1)[-1]
+
+            if suffix in valids:
+                self.render(subpath)
+            else:
+                self.render_404_page()
 
     urls.append((r"/(.*)", DebugHandler))
     options.dbname += "_test"

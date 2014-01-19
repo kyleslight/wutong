@@ -8,12 +8,11 @@ var _showwel_flag = true;
 var userInfo;
 var groupInfo;
 var gid = parseInt(location.pathname.slice(3));
-var url = "ws://" + location.host + location.pathname + "/message";
-var msg_socket = new WebSocket(url);
-msg_socket.onclose = function() {
-    // long pull
-};
 var gurl;
+var WebSocket = window.WebSocket || window.MozWebSocket;
+var msg_socket;
+var removeMessage;
+
 if(location.pathname.slice(0,2)=="/t"){
     gurl=$("#groupTitleName").attr("href");
 }else{
@@ -21,8 +20,6 @@ if(location.pathname.slice(0,2)=="/t"){
 };
 
 $(document).ready(function() {
-
-
     renderMaleAndFemale();
     var groupMottoPrimaryWidth = $("#groupMotto").width();
     if (groupMottoPrimaryWidth > 425) {
@@ -197,25 +194,16 @@ $(document).ready(function() {
     });
     $(".topicTalkContent img").click(function(){
         var imgUrl=$(this).attr("src");
-        
+
     });
 
-    function removeMessage() {
+    removeMessage = function () {
         var thedata = $("#communication").children().size();
         if (thedata > 30) {
             for (var i = 30; i < thedata; i++) {
                 $("#communication").children("li").eq(i).remove();
             }
         }
-    }
-
-    msg_socket.onmessage = function(e) {
-        var data = e.data;
-        if (!data)
-            return;
-        $("#communication").prepend(data);
-        showParaFirst();
-        removeMessage();
     }
 
     // init ueditor
@@ -233,6 +221,7 @@ $(document).ready(function() {
     checkGroupPremission();
 
     showParaFirst();
+    connect_message_server();
 });
 
 function unsyncGroupBulletin() {
@@ -287,8 +276,7 @@ function submitChatData() {
     message = {
         "content": chatCon,
     };
-    message = JSON.stringify(message);
-    msg_socket.send(message);
+    msg_socket.sendJSON(message);
 }
 
 function submitExpandChatData() {
@@ -312,8 +300,7 @@ function submitExpandChatData() {
     message = {
         "content": expandChatCon,
     };
-    message = JSON.stringify(message);
-    msg_socket.send(message);
+    msg_socket.sendJSON(message);
 
     // $(window.frames["ueditor_1"].document).find("body.view").html("");
     expandEditor.setContent("");
@@ -336,8 +323,7 @@ function submitTopicData() {
         title: topicTitle,
         content: topicCon,
     };
-    message = JSON.stringify(message);
-    msg_socket.send(message);
+    msg_socket.sendJSON(message);
 
     editor.setContent("");
     $("#topicTitle").val("");
@@ -400,3 +386,117 @@ String.prototype.httpHtml = function() {
     var reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g;
     return this.replace(reg, '<a href="$1$2" target="_blank">$1$2</a>');
 }
+
+// ----------------------------------------------------------------------------
+// 自适应连接
+function connect_message_server() {
+    if (WebSocket) {
+        console.log('use websocket way to get/send message');
+        connect_message_server_use_websocket();
+    } else {
+        console.log('use ajax way to get/send message');
+        connect_message_server_use_ajax();
+    }
+}
+
+function connect_message_server_use_ajax(first_message) {
+    var url = location.pathname + "/message";
+    msg_socket = {
+        reconnect_time: 1,
+        sendJSON: function(obj) {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(obj),
+                contentType: "application/json",
+                success: function(data) {
+                    if (data == 'not login') {
+                        alert('请先登录');
+                        return;
+                    }
+                },
+                error: function() {
+                    console.log('sendJSON error');
+                }
+            });
+        },
+        onmessage: function() {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(data) {
+                    $("#communication").prepend(data);
+                    showParaFirst();
+                    removeMessage();
+                    msg_socket.reconnect_time = 1;
+                    msg_socket.onmessage();
+                },
+                error: function() {
+                    msg_socket.connect_state = 'closed';
+                    setTimeout(msg_socket.onmessage, msg_socket.reconnect_time * 1000);
+                    if (msg_socket.reconnect_time < 30) {
+                        msg_socket.reconnect_time *= 2;
+                    }
+                }
+            });
+        },
+    };
+
+    msg_socket.onmessage();
+    if (first_message) {
+        msg_socket.sendJSON(first_message);
+    }
+}
+
+function connect_message_server_use_websocket() {
+    var url = "ws://" + location.host + location.pathname + "/message/websocket";
+    msg_socket = new WebSocket(url);
+    msg_socket.onopen = socket_onopen;
+    msg_socket.onclose = socket_onclose;
+    msg_socket.onmessage = socket_onmessage;
+    msg_socket.sendJSON = socket_sendJSON;
+    // 若3秒后连接不成功, 则切换成ajax方式
+    setTimeout(function() {
+        if (msg_socket.readyState != msg_socket.OPEN) {
+            connect_message_server_use_ajax();
+        }
+    }, 3000);
+}
+
+function socket_onopen() {
+    WebSocket.reconnect_time = 1;
+}
+
+function socket_onclose() {
+    console.log("网络中断, " + WebSocket.reconnect_time + "秒后重新连接");
+    setTimeout(connect_message_server_use_websocket, WebSocket.reconnect_time * 1000);
+    if (WebSocket.reconnect_time < 30) {
+        WebSocket.reconnect_time *= 2;
+    }
+}
+
+function socket_onmessage(e) {
+    var data = e.data;
+    if (!data) {
+        console.log('websocket onmessage error: ', data);
+        return;
+    } else if (data == 'not login') {
+        alert('请先登录');
+        return;
+    } else {
+        $("#communication").prepend(data);
+        showParaFirst();
+        removeMessage();
+    }
+}
+
+function socket_sendJSON(obj) {
+    if (msg_socket.readyState == msg_socket.OPEN) {
+        var data = JSON.stringify(obj);
+        msg_socket.send(data);
+    } else {
+        connect_message_server_use_ajax(obj);
+    }
+}
+
+// ----------------------------------------------------------------------------
