@@ -383,7 +383,7 @@ function showParaFirst(){
 }
 
 String.prototype.httpHtml = function() {
-    var reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g;
+    var reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-|:)+)/g;
     return this.replace(reg, '<a href="$1$2" target="_blank">$1$2</a>');
 }
 

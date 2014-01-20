@@ -168,6 +168,17 @@ td,tbody,table{
 .opusTag a{
 	margin-right: 10px;
 }
+.opusReference{
+	float: left;
+	margin-top: 10px;
+}
+.opusReference div{
+	float: left;
+}
+.opusReferenceCon{
+	/*float: left;*/
+	width: 900px;
+}
 .opusSeries{
 	margin-top: 10px;
 }

@@ -63,7 +63,7 @@ $(document).ready(function(){
             title:$("#title").val(),
             foreword:$("#foreword").val(),
             mainText:mainText,
-            reference:$("#reference").val(),
+            reference:preReference($("#reference").val()),
             tags:[  $(".activeFirstClass").val()+" "+
                     $("#otherTags").val()],
             suit:$("#outterSuit").val(),
@@ -92,7 +92,7 @@ $(document).ready(function(){
                     +    temTextData.mainText
                     +'</div>'
                     +'<div class="opusSuffixes">'
-                    +    '<div class="opusReference">参考来源：<a href="#">'+temTextData.reference+'</a>'
+                    +    '<div class="opusReference">参考来源：'+temTextData.reference
                     +    '</div>'
                     +    '<div class="opusTag">Tags： '+temTextData.tags
                     +    '</div>'
@@ -134,8 +134,12 @@ $(document).ready(function(){
         $("#opusTag").val(transTags);
         $("#opusSuit").val($("#outterSuit").val());
         $("#opusCooperation").val($("#outterCooperation").val());
+        var referenceCon=preReference($("#reference").val());       
+        $("#reference").val(referenceCon);
+
         var theForm=document.getElementById("textdata");
-        theForm.submit();
+        console.log(theForm);
+        // theForm.submit();
     });
 
     $(".inputTip a").click(function(){
@@ -214,9 +218,9 @@ function isPublic(bottonId){
 }
 
 function deleteBrPara(string){
-    var deletaBrReg=/<p>(<br\/>)+<\/p>/g;
-    var deleteSpaceReg=/<p>(&nbsp;| &nbsp;)+<\/p>/g;
-    string=string.replace(deletaBrReg,"<br/>");
+    // var deletaBrReg=/<p>(<br\/>)+<\/p>/g;
+    var deleteSpaceReg=/<p>(&nbsp;| &nbsp;|<br\/>)+<\/p>/g;
+    // string=string.replace(deletaBrReg,"<br/>");
     string=string.replace(deleteSpaceReg,"<br/>");
     return string;
 }
@@ -249,6 +253,18 @@ function changeOpusItem(title,foreword,mainText,resource,tags,subtleChange){
     }else{
         $("#forewordForm").removeClass("forewordFormNoBottomLine");
     }
+}
+
+function preReference(reference){
+    reference=reference.replace(/</g,"&lt").replace(/>/g,"&gt");
+    reference=reference.httpHtml();
+    reference=reference.toString().replace(/(\r)*\n/g,"<br />").replace(/\s/g," ");
+    return reference;
+}
+
+String.prototype.httpHtml = function() {
+    var reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-|:)+)/g;
+    return this.replace(reg, '<a href="$1$2" target="_blank">$1$2</a>');
 }
 
 

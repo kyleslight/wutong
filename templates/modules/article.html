@@ -33,15 +33,15 @@
 </div>
 
 <div class="opusSuffixes">
-    {% if article["reference"] %}
-    <div class="opusReference">参考来源：<a href="#">{{ article["reference"] }}</a>
-    </div>
-    {% end %}
     <div class="opusTag">Tags：
         {% for tag in article['tags'] %}
         <a href="#">{{ tag['name'] }}</a>
         {% end %}
     </div>
+    {% if article["reference"] %}
+    <div class="opusReference"><div>参考来源：</div><div class="opusReferenceCon">{{ article["reference"] }}</div>
+    </div>
+    {% end %}
     {% if None %}
     <div class="opusSeries">所属文辑其他文章：
         <a href="#">other1</a>

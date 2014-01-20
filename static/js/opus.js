@@ -298,10 +298,13 @@ function init(){
         $(".opusMain").children().css({"background":"none"});
         $(".opusMainTitle").css({"color":"black"});
         $(".readMain").css({"box-shadow":"none"});
-        // $(".opusSuffixes a").css({"color":"white"});
-        // $(".opusComment").css({"border-top":"1px solid white"});
+        $(".opusSuffixes a").css({"color":"rgba(102,0,0,0.64)"});
+        $(".opusComment").css({"border-top":"1px solid rgba(102,0,0,0.64)"});
         $("#edui1").css({"border":"1px solid lightblue"});
     };
+    var reference=$(".opusReferenceCon").text();
+    console.log(reference);
+    $(".opusReferenceCon").empty().append(reference);
 }
 
 function topPartHeight(){

@@ -275,6 +275,10 @@ $(document).ready(function() {
         if (activeNoteID==-1) {
             return false;
         };
+        if ($(".myCurrentNoteTitle").val()=="") {
+            alert("请填写标题");
+            return false;
+        };
         $.post("/u/memo/update",{
             "memo_id":activeNoteID,
             "title":$(".myCurrentNoteTitle").val(),
