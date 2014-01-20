@@ -25,7 +25,7 @@ CREATE TABLE "user" (
     -- 简介
     intro varchar(2000),
     -- 签名
-    motton varchar(1000),
+    motto varchar(1000),
     -- 头像url
     avatar varchar(255),
     register_date timestamp NOT NULL DEFAULT now(),
@@ -115,7 +115,7 @@ CREATE TABLE "group" (
     uid integer REFERENCES "user"(uid) NOT NULL,
     name varchar(32) NOT NULL,
     intro varchar(200),
-    motton varchar(100),
+    motto varchar(100),
     description varchar(500),
     foundtime timestamp NOT NULl DEFAULT now(),
     -- 头像url
@@ -172,9 +172,10 @@ CREATE TABLE topic (
     gid integer REFERENCES "group"(gid) NOT NULL,
     uid integer REFERENCES "user"(uid) NOT NULL,
     content varchar(400000) NOT NULL,
-    reply_id integer REFERENCES topic(tid),
     submit_time timestamp NOT NULL DEFAULT now(),
+    reply_id integer REFERENCES topic(tid),
     last_reply_time timestamp,
+    reply_times integer DEFAULT 0,
     title varchar(5000),
     level int CHECK (level BETWEEN 0 AND 3) DEFAULT 0
 );
@@ -275,8 +276,8 @@ CREATE TABLE group_chat (
     gid integer REFERENCES "group"(gid) NOT NULL,
     uid integer REFERENCES "user"(uid) NOT NULL,
     content varchar(400000) NOT NULL,
-    reply_id integer REFERENCES topic(tid),
-    submit_time timestamp NOT NULL DEFAULT now()
+    submit_time timestamp NOT NULL DEFAULT now(),
+    reply_id integer REFERENCES topic(tid)
 );
 
 
@@ -319,7 +320,7 @@ CREATE OR REPLACE VIEW group_member_info_v
   AS
 SELECT gu.*,
        u.penname, u.avatar,
-       u.motton, u.intro,
+       u.motto, u.intro,
        u.sex, u.age, u.address
   FROM group_user gu,
        user_info_v u
@@ -360,6 +361,7 @@ CREATE OR REPLACE VIEW group_message_v
   AS
 SELECT *,
        submit_time AS "last_reply_time",
+       NULL AS "reply_times",
        NULL AS "title",
        NULL AS "level"
   FROM group_chat_v gc
@@ -466,7 +468,7 @@ CREATE OR REPLACE FUNCTION update_user_info(
   _age integer,
   _address varchar,
   _intro varchar,
-  _motton varchar,
+  _motto varchar,
   _avatar varchar)
   RETURNS integer
 AS $$
@@ -479,7 +481,7 @@ AS $$
          age = _age,
          address = _address,
          intro = _intro,
-         motton = _motton,
+         motto = _motto,
          avatar = _avatar
    WHERE uid = _uid
    RETURNING uid;
@@ -602,17 +604,17 @@ CREATE OR REPLACE FUNCTION create_group(
     uid integer,
     name varchar,
     intro varchar DEFAULT NULL,
-    motton varchar DEFAULT NULL,
+    motto varchar DEFAULT NULL,
     avatar varchar DEFAULT NULL,
     banner varchar DEFAULT NULL,
     is_public bool DEFAULT true)
   RETURNS integer
 AS $$
     INSERT INTO "group" (
-        uid, name, intro, motton,
+        uid, name, intro, motto,
         avatar, banner, is_public)
     VALUES (
-        uid, name, intro, motton,
+        uid, name, intro, motto,
         avatar, banner, is_public)
     RETURNING gid;
 $$ LANGUAGE SQL;
@@ -739,6 +741,49 @@ AS $$
               FROM group_topic_v
              WHERE gid = $1
              ORDER BY tid DESC
+             LIMIT $2
+            OFFSET $3
+        ) j;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_recent_topics(
+    _limit integer,
+    _offset integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(j))
+      FROM (
+            SELECT gt.*,
+                   g.name as "group_name"
+              FROM group_topic_v gt,
+                   "group" g
+             WHERE gt.gid = g.gid
+             ORDER BY last_reply_time DESC
+             LIMIT $1
+            OFFSET $2
+        ) j;
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_user_recent_group_topics(
+    _uid integer,
+    _limit integer,
+    _offset integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(j))
+      FROM (
+            SELECT gt.*,
+                   g.name as "group_name"
+              FROM group_topic_v gt,
+                   "group" g,
+                   group_user gu
+             WHERE gt.gid = g.gid
+               AND gu.gid = g.gid
+               AND gu.uid = $1
+               AND gu.is_member
+             ORDER BY last_reply_time DESC
              LIMIT $2
             OFFSET $3
         ) j;
@@ -1212,7 +1257,10 @@ CREATE OR REPLACE FUNCTION topic_after_t()
 AS $$
 BEGIN
     IF (TG_OP = 'INSERT') THEN
-        UPDATE topic SET last_reply_time = now() WHERE tid = NEW.tid;
+        UPDATE topic
+           SET last_reply_time = now(),
+               reply_times = reply_times + 1
+         WHERE tid = NEW.tid;
         RETURN NEW;
     END IF;
     RETURN NULL;
@@ -1225,7 +1273,10 @@ CREATE OR REPLACE FUNCTION group_chat_after_t()
 AS $$
 BEGIN
     IF (TG_OP = 'INSERT') THEN
-        UPDATE topic SET last_reply_time = now() WHERE tid = NEW.reply_id;
+        UPDATE topic
+           SET last_reply_time = now(),
+               reply_times = reply_times + 1
+         WHERE tid = NEW.reply_id;
         RETURN NEW;
     END IF;
     RETURN NULL;

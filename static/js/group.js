@@ -450,6 +450,7 @@ function connect_message_server_use_ajax(first_message) {
 
 function connect_message_server_use_websocket() {
     var url = "ws://" + location.host + location.pathname + "/message/websocket";
+    WebSocket.reconnect_time = 1;
     msg_socket = new WebSocket(url);
     msg_socket.onopen = socket_onopen;
     msg_socket.onclose = socket_onclose;

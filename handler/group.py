@@ -75,22 +75,33 @@ class PermissionHandler(GroupBaseHandler):
 
 
 class BrowseHandler(GroupBaseHandler):
+    """"""
     def get_mygroups(self, user_id):
         return self.usermodel.get_user_groups(user_id)
 
-    def get_group_dynamic(self, user_id):
-        return []
+    def get_recent_topics(self, size):
+        return self.model.get_recent_topics(size, 0)
+
+    def get_recent_group_topics(self, uid, size):
+        return self.model.get_user_recent_group_topics(uid, size, 0)
 
     def get(self):
         user = self.get_current_user()
         if user:
-            mygroups = self.get_mygroups(user['uid'])
-            self.render('group-navigation.html',
-                        user=user,
-                        mygroups=mygroups,
-                        topics=[])
+            uid = user['uid']
+            mygroups = self.get_mygroups(uid)
+            recent_group_topics = self.get_recent_group_topics(uid, 10)
+            recent_topics = self.get_recent_topics(10)
         else:
-            self.write('not login')
+            mygroups = []
+            recent_group_topics = []
+            recent_topics = self.get_recent_topics(20)
+
+        self.render('group-navigation.html',
+                    user=user,
+                    mygroups=mygroups,
+                    recent_group_topics=recent_group_topics,
+                    recent_topics=recent_topics)
 
 
 class CreateHandler(GroupBaseHandler):

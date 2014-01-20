@@ -17,9 +17,12 @@ def main():
 
 if __name__ == "__main__":
     if settings["debug"]:
-        import __builtin__
-        import q
-        __builtin__.__dict__['q'] = q
+        try:
+            import __builtin__
+            import q
+            __builtin__.__dict__['q'] = q
+        except ImportError:
+            pass
     try:
         main()
     except KeyboardInterrupt as e:

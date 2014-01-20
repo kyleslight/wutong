@@ -1,13 +1,15 @@
-#运行测试,添加测试数据
-```bash
-sh configure.sh test
-```
-默认只添加一个测试用户, 若想增加多个测试用户, 在后面添加参数, 如:
-`sh configure.sh 10`
+#配置
+添加一个测试用户
+`sh configure.sh test`
+添加10个测试用户
+`sh configure.sh test 10`
+####环境变量
+ * WUTONG_EMAIL_SMTP
+ * WUTONG_EMAIL_ADDR
+ * WUTONG_EMAIL_PASSWD
 
 #运行
-[访问地址 localhost:8888](http://127.0.0.1:8888)
-`sh run.sh`
+[`sh run.sh`](http://127.0.0.1:8888)
 
 #依赖
  * python-tornado

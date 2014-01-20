@@ -5,6 +5,7 @@
 {% block extra_div %}
     <div class="groupNavWarp">
         <div class="groupNav">
+            {% if user %}
             <div class="userGroupInfo">
                 <a class="userImg" href="#"><img src="{{ avatarurl(user['avatar']) }}" /></a>
                 <a class="userName" href="#">{{ user['penname'] }}</a>
@@ -56,14 +57,39 @@
                     <a href="#" class="groupTag">从零开始玩耳机</a>
                 </div>
             </div>
+            {% end %}
             <div class="groupMainWrap">
                 <div class="groupDynamic">
-                    <h class="groupDynamicHeader">小组动态»</h>
-                    {% for topic in topics %}
+                    {% if recent_group_topics %}
+                    <h class="groupDynamicHeader">我的小组动态»</h>
+                    {% for topic in recent_group_topics %}
                     <li class="groupDynamicList">
-                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ topic['avatar'] }}"></a>
+                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ avatarurl(topic['avatar']) }}"></a>
                         <div class="groupDynamicContent">
-                            <a href="#" class="groupDynamicTitle">{{ topic['title'] }}</a>
+                            <a href="/t/{{ topic['tid'] }}" class="groupDynamicTitle">{{ topic['title'] }}</a>
+                            <div class="groupDynamicInfo">
+                                <a href="#" class="groupDynamicAuthor">{{ topic['penname'] }}</a>
+                                <div class="groupDynamicFrom">
+                                    来自 <a href="#">{{ topic['group_name'] }}</a> 小组
+                                    <span class="groupDynamicMemberNum">{{ topic['reply_times'] }}</span>人次参与
+                                </div>
+                            </div>
+                            <div class="groupDynamicBrief">
+                                {% raw topic['content'] %}
+                            </div>
+                            <div class="groupDynamicDetal">
+                                <span class="groupDynamicTime">{{ prettytime(topic['submit_time']) }}</span>
+                            </div>
+                        </div>
+                    </li>
+                    {% end %}
+                    {% end %}
+                    <h class="groupDynamicHeader">全站小组动态»</h>
+                    {% for topic in recent_topics %}
+                    <li class="groupDynamicList">
+                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ avatarurl(topic['avatar']) }}"></a>
+                        <div class="groupDynamicContent">
+                            <a href="/t/{{ topic['tid'] }}" class="groupDynamicTitle">{{ topic['title'] }}</a>
                             <div class="groupDynamicInfo">
                                 <a href="#" class="groupDynamicAuthor">{{ topic['penname'] }}</a>
                                 <div class="groupDynamicFrom">
