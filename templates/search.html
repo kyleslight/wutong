@@ -1,0 +1,92 @@
+{% extends "base_hl.html" %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ static_url("css/search.css") }}" type="text/css" />
+{% end %}
+{% block extra_div %}
+    <div class="searchWrap">
+        <div class="search">
+            <div class="searchTypeFliter">
+                <a href="#" class="searchType activeSearchType">综合</a><a href="#" class="searchType">作品</a><a href="#" class="searchType">成员</a><a href="#" class="searchType">小组</a><a href="#" class="searchType">话题</a>
+            </div>
+            <div class="searchBox">
+                <form id="mainSearchData" action="/search" name="searchData" target="_blank">
+                    <input name="keyWord" type="text" class="input" id="mainSearchBox" autocomplete="off" accesskey="s" placeholder="寻找作品，成员，小组，话题" x-webkit-speech x-webkit-grammar="builtin:translate" value="Kyleslight" />
+                    <a href="#" type="submit" id="mainSearchSubmitButton" class="formButton">搜索</a>
+                    <a href="#" id="searchAdvancedButton">高级选项</a>
+                </form>
+            </div>
+            <div class="rank">
+                排序方式：
+                <input type="radio" name="rank" value="相关度" checked="checked">相关度
+                <input type="radio" name="rank" value="推荐度">推荐度
+                <input type="radio" name="rank" value="时间">时间
+            </div>
+            <div class="searchAdvancedFliter">
+                <div>精确匹配：<input type="checkbox" name="accurateMatch" value="名称">名称<input type="checkbox" name="accurateMatch" value="Tag">Tag</div>
+                <div>相关范围：<input type="checkbox" name="relativeRange" value="与成员相关">与成员相关<input type="checkbox" name="relativeRange" value="与小组相关">与小组相关</div>
+                <div>时间范围：
+                    <select id="timeRange" name="timeRange">
+                        <option value="不限">不限</option>
+                        <option value="最近一天">最近一天</option>
+                        <option value="最近一周">最近一周</option>
+                        <option value="最近一月">最近一月</option>
+                        <option value="最近一年">最近一年</option>
+                    </select>
+                </div>
+            </div>
+            <div class="searchResultWrap">
+                <div class="searchResultFirstLine">本次搜索耗时<span>0.04</span>s，共找到<span>1024</span>个结果</div>
+                <div class="result">
+                   <li class="resultList">
+                       <img src="{{ static_url("avatar/wutong_normal.png") }}" class="resultImage">
+                       <div class="resultMain">
+                           <a href="#" class="resultTitle">Ten things we know to be true</a><span class="resultType">作品</span>
+                           <br/>
+                           <a href="#" class="resultUser">Kyleslight</a>
+                           <div class="resultBrief">
+                               We first wrote these “10 things” when Google was just a few years old. From time to time we revisit this list to see if it still holds true. We hope it does—and you can hold us to that.
+                           </div>
+                           <div class="resultAttached">
+                               <span class="resultTag">Tag：<a href="#">技术</a><a href="#">Google</a></span>
+                               <span class="resultTime">2-12 12:11</span>
+                           </div>
+                       </div>
+                   </li>
+                   <li class="resultList">
+                       <img src="{{ static_url("css/image/forumTest.jpg") }}" class="resultImage">
+                       <div class="resultMain">
+                           <a href="#" class="resultTitle">Kyleslight的同好会</a><span class="resultType">小组</span>
+                           <br/>
+                           <a href="#" class="resultUser">Kyleslight</a>
+                           <div class="resultBrief">
+                               这里是Kyleslight建立的交流共同兴趣的同好会，嗯，就是这样
+                           </div>
+                           <div class="resultAttached">
+                               <span class="resultTag">Tag：<a href="#">Kyleslight</a><a href="#">同好会</a></span>
+                               <span class="resultTime">2-12 12:11</span>
+                           </div>
+                       </div>
+                   </li>
+                   <li class="resultList">
+                       <img src="{{ static_url("avatar/wutong_normal.png") }}" class="resultImage">
+                       <div class="resultMain">
+                           <a href="#" class="resultTitle">Kyleslight</a><span class="resultType">成员</span>
+                           <br/>
+                           <!-- <a href="#" class="resultUser">Kyleslight</a> -->
+                           <div class="resultBrief">
+                               中二病嚴重患者 | 如果我的付出,可以为人类的未来增加一块基石的话,大概我就是为此而生的吧
+                           </div>
+                           <div class="resultAttached">
+                               <!-- <span class="resultTag">Tag：<a href="#">Kyleslight</a><a href="#">同好会</a></span> -->
+                               <span class="resultTime">2-12 12:11</span>
+                           </div>
+                       </div>
+                   </li>
+                </div>
+            </div>
+        </div>
+    </div>
+{% end %}
+{% block extra_js %}
+    <script type="text/javascript" src="{{ static_url("js/search.js") }}"></script>
+{% end %}

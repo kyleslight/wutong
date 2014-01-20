@@ -1,0 +1,152 @@
+.searchWrap{
+	width: 1062px;
+	margin: 0 auto;
+}
+.search{
+	float: left;
+	background: rgba(255,255,255,0.6);
+	width: 1020px;
+	padding: 20px;
+}
+.searchTypeFliter{
+	/*margin-left: 5px;*/
+}
+.searchType{
+	margin-right: 20px;
+}
+.searchType:hover{
+	color: #c1d739;
+}
+.activeSearchType{
+	color: #680;
+}
+.rank{
+	clear: both;
+}
+.rank a{
+	font-size: 0.9em;
+	margin-right: 10px;
+}
+.searchBox{
+	float: left;
+}
+#mainSearchData{
+	float: left;
+}
+#mainSearchBox{
+	float: left;
+	display: block;
+	width: 490px;
+	margin-left: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	height: 15px;
+	border:1px solid rgba(102,136,0,0.2);
+}
+#mainSearchSubmitButton{
+	float: left;
+	display: block;
+	background: rgba(102,136,0,0.8);
+	height: 13px;
+	padding: 8px 10px;
+	line-height: 14px;
+	margin-left: -1px;
+	margin-top: 15px;
+	border-left: 0;
+	border:1px solid rgba(102,136,0,0.2);
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+#mainSearchSubmitButton:hover{
+	color: white;
+	background: #c1d739;
+}
+#searchAdvancedButton{
+	margin-left: 25px;
+	margin-top: 30px;
+	display: block;
+	float: left;
+	font-size: 0.9em;
+	color: #aaa;
+}
+#searchAdvancedButton:hover{
+	color: #680;
+}
+.rank{
+	font-size: 0.8em;
+	color: #777;
+}
+.searchAdvancedFliter{
+	display: none;
+	font-size: 0.9em;
+	color: #777;
+	background: white;
+	padding: 10px;
+	margin-top: 10px;
+	border: 1px solid rgba(102,136,0,0.2);
+}
+.searchResultWrap{
+	border-top:1px solid #CCC;
+	margin-top: 20px;
+	padding-top: 10px;
+}
+.searchResultFirstLine{
+	font-size: 0.8em;
+	color: #999;
+}
+.searchResultFirstLine span{
+	color: #680;
+}
+.resultList{
+	float: left;
+	background: white;
+	width:980px;
+	margin: 5px 0 5px 0;
+	padding: 20px;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom: 2px solid #AAA;
+}
+.resultImage{
+	float: left;
+	width: 60px;
+	height: 60px;
+	margin-left: 6px;
+	border: 1px solid #AAA;
+	margin-top: 15px;
+}
+.resultMain{
+	float: left;
+}
+.resultTitle{
+	color: black;
+	font-size: 30px;
+	font-weight: 600;
+	margin-right: 20px;
+}
+.resultType{
+	color: #030;
+}
+.resultBrief{
+	color: #777;
+	font-size: 0.9em;
+	margin-top: 15px;
+	padding-left: 5px;
+	width: 875px;
+	border-left: 5px solid #680;
+}
+.resultAttached{
+	margin-top: 15px;
+	color: #AAA;
+}
+.resultTag a{
+	color: #680;
+	margin-right: 10px;
+	opacity: 0.7;
+}
+.resultTag a:hover{
+	color: #c1d739;
+}
+.resultTime{
+	float: right;
+}

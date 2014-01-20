@@ -219,7 +219,7 @@ class MemoHandler(UserBaseHandler):
     @authenticated
     def get(self):
         page = self.get_argument('page', 1)
-        size = self.get_argument('size', 10)
+        size = self.get_argument('size', 100)
 
         offset = (page - 1) * size
         memos = self.model.get_memos(self.user_id, limit=size, offset=offset)
