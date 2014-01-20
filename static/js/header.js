@@ -208,19 +208,22 @@ $(document).ready(function() {
             $(".myNote").fadeIn(500);
             // update note
             $.getJSON("/u/memo",function(data){
-                var noteNum=data.length-1;
-                activeNoteID=data[noteNum].id;
-                $(".myCurrentNoteTitle").val(data[noteNum].title);
-                $(".myCurrentNoteContent").val(data[noteNum].content);
-                $(".myCurrentNoteTime").text(data[noteNum].create_time.slice(0,10));
-                for (var i = 0; i < data.length; i++) {
-                    var preNoteList='<a href="#" id="'+data[i].id+'" class="myNoteList" onclick="selectNote('+data[i].id+')">'+data[i].title+'</a>';
-                    $(".myNoteListWrap").prepend(preNoteList);
-                };
-                if (data.length==0) {
+                $(".myNoteListWrap").empty();
+                if (data.length==undefined) {
                     $("#deleteCurrentNote,#saveCurrentNote").hide();
                     $("#createNewNote").show();
-                };
+                    return false;
+                }else{
+                    var noteNum=data.length-1;
+                    activeNoteID=data[noteNum].id;
+                    $(".myCurrentNoteTitle").val(data[noteNum].title);
+                    $(".myCurrentNoteContent").val(data[noteNum].content);
+                    $(".myCurrentNoteTime").text(data[noteNum].create_time.slice(0,10));
+                    for (var i = 0; i < data.length; i++) {
+                        var preNoteList='<a href="#" id="'+data[i].id+'" class="myNoteList" onclick="selectNote('+data[i].id+')">'+data[i].title+'</a>';
+                        $(".myNoteListWrap").prepend(preNoteList);
+                    };
+                }
             });
         });
     });
@@ -282,8 +285,26 @@ $(document).ready(function() {
             "memo_id":activeNoteID,
         },function(){
             alert("delete note success");
-            // TODO: refresh notes
-            $("#"+activeNoteID).text($(".myCurrentNoteTitle").val());
+            // // TODO: refresh notes
+            // $("#"+activeNoteID).text($(".myCurrentNoteTitle").val());
+            $.getJSON("/u/memo",function(data){
+                $(".myNoteListWrap").empty();
+                if (data.length==undefined) {
+                    $("#deleteCurrentNote,#saveCurrentNote").hide();
+                    $("#createNewNote").show();
+                    return false;
+                }else{
+                    var noteNum=data.length-1;
+                    activeNoteID=data[noteNum].id;
+                    $(".myCurrentNoteTitle").val(data[noteNum].title);
+                    $(".myCurrentNoteContent").val(data[noteNum].content);
+                    $(".myCurrentNoteTime").text(data[noteNum].create_time.slice(0,10));
+                    for (var i = 0; i < data.length; i++) {
+                        var preNoteList='<a href="#" id="'+data[i].id+'" class="myNoteList" onclick="selectNote('+data[i].id+')">'+data[i].title+'</a>';
+                        $(".myNoteListWrap").prepend(preNoteList);
+                    };
+                }
+            });
         });
     });
 
