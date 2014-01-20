@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 import random
 from tornado.escape import json_encode
 from tornado.web import authenticated
@@ -30,11 +31,21 @@ class UserBaseHandler(BaseHandler):
 
 class IndexHandler(UserBaseHandler):
     def get(self):
-        if True:
-            self.render('user_home.html')
-        else:
-            url = self.get_cookie('last_view')
-            self.redirect(url)
+        stay_urls = [
+            r'/user/(.+)',
+            r'/a/browse',
+            r'/a/create',
+            r'/g/browse',
+            r'/g/(\d+)',
+            r'/t/(\d+)',
+            r'/a/(\d+)',
+        ]
+        url = self.get_cookie('last_view')
+        for pattern in stay_urls:
+            if re.search(pattern, url):
+                self.redirect(url)
+                return
+        self.redirect('/a/browse')
 
 
 class HomeHandler(UserBaseHandler):
