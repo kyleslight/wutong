@@ -84,11 +84,11 @@
 	border-radius: 4px;
 }
 .opusShow{
-	padding-top: 20px;
+	padding: 20px;
 	background: white;
 	list-style: none;
 	float: left;
-	width: 1060px;
+	width: 1020px;
 	margin-bottom: 20px;
 	border-radius: 4px;
 	border-bottom: 2px solid #AAA;
@@ -107,12 +107,12 @@
 	float: left;
 	width: 60px;
 	height: 60px;
-	margin-left: 26px;
+	margin-left: 6px;
 	border: 1px solid #AAA;
 	margin-top: 15px;
 }
 .opusBasicInfo{
-	width: 950px;
+	width: 930px;
 	float: left;
 }
 .opusTitle{
@@ -133,8 +133,8 @@
 	width: 900px;
 	border-left: 5px solid #680;
 }
-.opusTag{
-	margin-top: 15px;
+.opusAttached{
+	margin-top: 10px;
 	color: #AAA;
 }
 .opusTag a{
@@ -147,8 +147,5 @@
 }
 .opusTime{
 	float: right;
-	color: #AAA;
-	margin-bottom: 5px;
-	margin-right: 40px;
-	font-size: 0.8em;
+	font-size: 0.95em;
 }

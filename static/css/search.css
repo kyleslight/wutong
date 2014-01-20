@@ -94,13 +94,17 @@
 	font-size: 0.8em;
 	color: #999;
 }
+
 .searchResultFirstLine span{
 	color: #680;
+}
+.result{
+	margin-top: 10px;
 }
 .resultList{
 	float: left;
 	background: white;
-	width:980px;
+	width: 980px;
 	margin: 5px 0 5px 0;
 	padding: 20px;
 	border-bottom-left-radius: 4px;
@@ -121,7 +125,7 @@
 .resultTitle{
 	color: black;
 	font-size: 30px;
-	font-weight: 600;
+	font-weight: 500;
 	margin-right: 20px;
 }
 .resultType{

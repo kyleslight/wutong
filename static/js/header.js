@@ -60,11 +60,13 @@ $(document).ready(function() {
         $(this).css("background", "white");
         $(this).children("#usernameHover").css("color", "#680");
         $(".userExpand").show();
+        $("#usernameHover").css({"color":"#680"});
     });
     $("#username").mouseleave(function() {
         $(this).css("background", "transparent");
         $(this).children("#usernameHover").css("color", "white");
         $(".userExpand").hide();
+        $("#usernameHover").css({"color":"white"});
     })
     $("#message").mouseover(function() {
         $("#msgNum").css({
@@ -223,6 +225,7 @@ $(document).ready(function() {
                         var preNoteList='<a href="#" id="'+data[i].id+'" class="myNoteList" onclick="selectNote('+data[i].id+')">'+data[i].title+'</a>';
                         $(".myNoteListWrap").prepend(preNoteList);
                     };
+                    $("#"+activeNoteID).addClass("activeMyNoteList");
                 }
             });
         });
@@ -240,6 +243,8 @@ $(document).ready(function() {
         $(".myCurrentNoteTime").text("");
         $("#deleteCurrentNote,#saveCurrentNote").hide();
         $("#createNewNote").show();
+        $(".myNoteList").removeClass("activeMyNoteList");
+        $("#addNote").addClass("activeMyNoteList").text("创建中...");
     });
     // create note
     $("#createNewNote").click(function(){
@@ -260,6 +265,9 @@ $(document).ready(function() {
             $(".myCurrentNoteTime").text(newNote.create_time.slice(0,10));
             $("#deleteCurrentNote,#saveCurrentNote").show();
             $("#createNewNote").hide();
+            $(".myNoteList").removeClass("activeMyNoteList");
+            $("#"+activeNoteID).addClass("activeMyNoteList");
+            $("#addNote").text("创建便笺");
         });
     });
     // update note
@@ -303,6 +311,7 @@ $(document).ready(function() {
                         var preNoteList='<a href="#" id="'+data[i].id+'" class="myNoteList" onclick="selectNote('+data[i].id+')">'+data[i].title+'</a>';
                         $(".myNoteListWrap").prepend(preNoteList);
                     };
+                    $("#"+activeNoteID).addClass("activeMyNoteList");
                 }
             });
         });
@@ -506,6 +515,9 @@ function selectNote(noteID){
     });
     $("#deleteCurrentNote,#saveCurrentNote").show();
     $("#createNewNote").hide();
+    $(".myNoteList").removeClass("activeMyNoteList");
+    $("#"+noteID).addClass("activeMyNoteList");
+    $("#addNote").text("创建便笺");
 }
 
 // insertImageState

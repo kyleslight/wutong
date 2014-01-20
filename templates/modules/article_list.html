@@ -11,13 +11,15 @@
             {{ article_list["description"] }}
         </div>
         {% end %}
-        {% if article_list["tags"] %}
-        <div class="opusTag">Tags：
-        {% for tag in article_list["tags"] %}
-            <a href="/tag/{{ tag["name"] }}">{{ tag["name"] }}</a>
-        {% end %}
+        <div class="opusAttached">
+            {% if article_list["tags"] %}
+            <span class="opusTag">Tags：
+            {% for tag in article_list["tags"] %}
+                <a href="/tag/{{ tag["name"] }}">{{ tag["name"] }}</a>
+            {% end %}
+            </span>
+            {% end %}
+            <span class="opusTime">{{ prettytime(article_list["submit_time"]) }}</span>
         </div>
-        {% end %}
-        <div class="opusTime">{{ prettytime(article_list["submit_time"]) }}</div>
     </div>
 </li>

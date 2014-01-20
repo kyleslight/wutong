@@ -286,6 +286,7 @@ blockquote p{
 	text-align: center;
 	border-top: 2px solid rgba(102,136,0,0.9);
 	color: #680;
+	cursor: pointer;
 	transition: 0.7s;
 	-moz-transition: 0.7s;
 	-webkit-transition: 0.7s;
@@ -601,7 +602,7 @@ blockquote p{
 	padding-top: 5px;
 	float: left;
 	width: 145px;
-	overflow: auto;
+	overflow-x: hidden;
 	height: 317px;
 	border-top: 1px dashed #680;
 }
@@ -615,7 +616,7 @@ blockquote p{
 	border-bottom-left-radius: 2px;
 	text-overflow:ellipsis;
 	padding: 4px;
-	width: 120px;
+	width: 123px;
 	line-height: 22px;
 }
 .myNoteList:hover{
@@ -623,6 +624,10 @@ blockquote p{
 	color: white;
 	font-weight: 900;
 	padding-left: 10px;
+}
+.activeMyNoteList{
+	background: #c1d739;
+	color: white;
 }
 .myCurrentNoteArea{
 	float: left;
