@@ -121,9 +121,8 @@ class Connection(object):
             result = True
         except Exception as e:
             dbsql = self.cur.mogrify(sql, args)
-            logging.error("SQL: `%s`", dbsql)
-            logging.error('-' * 80)
-            logging.error(str(e))
+            logging.error(" `%s` ", dbsql, '\n')
+            logging.error(str(e), '\n\n')
             result = False
         self.cnn.commit()
         return result

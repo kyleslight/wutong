@@ -4,7 +4,6 @@
 import unittest
 import util
 from model.group import GroupModel
-import q
 
 
 class GroupModelTest(unittest.TestCase):

@@ -56,7 +56,7 @@ class UserModel(object):
             kwargs.get('age'),
             kwargs.get('address'),
             kwargs.get('intro'),
-            kwargs.get('motton'),
+            kwargs.get('motto'),
             kwargs.get('avatar'),
         ]
 

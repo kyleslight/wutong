@@ -41,6 +41,16 @@ class GroupModel(object):
         topics = self.db.getjson(select, gid, limit, offset)
         return topics
 
+    def get_recent_topics(self, limit, offset):
+        select = 'SELECT get_recent_topics(%s, %s)'
+        topics = self.db.getjson(select, limit, offset)
+        return topics
+
+    def get_user_recent_group_topics(self, uid, limit, offset):
+        select = 'SELECT get_user_recent_group_topics(%s, %s, %s)'
+        topics = self.db.getjson(select, uid, limit, offset)
+        return topics
+
     def get_topic(self, topic_id):
         select = 'SELECT get_topic(%s)'
         topic = self.db.getjson(select, topic_id)
@@ -69,9 +79,9 @@ class GroupModel(object):
         bulletins = self.db.getjson(select, gid, limit, offset)
         return bulletins
 
-    def do_create(self, uid, name, intro=None, motton=None, avatar=None, banner=None, is_public=True):
+    def do_create(self, uid, name, intro=None, motto=None, avatar=None, banner=None, is_public=True):
         select = 'SELECT create_group(%s, %s, %s, %s, %s, %s, %s)'
-        gid = self.db.getfirstfield(select, uid, name, intro, motton, avatar, banner, is_public)
+        gid = self.db.getfirstfield(select, uid, name, intro, motto, avatar, banner, is_public)
         return gid
 
     def do_join_group(self, gid, uid):

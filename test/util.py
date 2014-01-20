@@ -13,8 +13,6 @@ from model.db import Pool
 from model.user import UserModel
 from model.group import GroupModel
 from model.article import ArticleModel
-import q
-__builtin__.__dict__['q'] = q
 
 
 dsn_test = "host=%s dbname=%s user=%s password=%s" % (
@@ -93,8 +91,8 @@ class TestDataGenerator(object):
             user["sex"] = user["gender"]
             user["address"] = user["location"]["city"] + user["location"]["state"]
             user["avatar"] = user["picture"]
-            user["intro"] = user["sha1_hash"]
-            user["motton"] = user["md5_hash"]
+            user["intro"] = ''.join([str(v) for v in user["location"].values()])
+            user["motto"] = ''.join([str(v) for v in user.values()])
             user["age"] = user["location"]["zip"][-2:]
             users.append(user)
 

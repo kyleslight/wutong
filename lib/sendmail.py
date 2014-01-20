@@ -12,8 +12,8 @@ import email
 from email.mime.text import MIMEText
 
 charset = 'utf-8'
-send_mail_host = 'smtp.exmail.qq.com'
-send_mail_user = 'wutong@sicun.org'
+send_mail_host = os.getenv('WUTONG_EMAIL_SMTP', 'smtp.exmail.qq.com')
+send_mail_user = os.getenv('WUTONG_EMAIL_ADDR', 'wutong@sicun.org')
 send_mail_pswd = os.getenv("WUTONG_EMAIL_PASSWD")
 send_mail_user_name = u'梧桐'
 send_mail_suffix = 'sicun.org'

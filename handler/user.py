@@ -30,14 +30,18 @@ class UserBaseHandler(BaseHandler):
 
 class IndexHandler(UserBaseHandler):
     def get(self):
-        url = self.get_cookie('last_view')
-        self.redirect(url)
+        if True:
+            self.render('user_home.html')
+        else:
+            url = self.get_cookie('last_view')
+            self.redirect(url)
 
 
 class HomeHandler(UserBaseHandler):
     def get(self, penname):
         uid = self.model.get_uid(penname)
         user_info = self.model.get_user_info(uid)
+        groups = self.usermodel.get_user_groups(uid)
         self.render('user.html', user=user_info)
 
 
@@ -176,7 +180,7 @@ class UserinfoHandler(UserBaseHandler):
         userinfo['age'] = self.get_argument('age', userinfo['age'])
         userinfo['address'] = self.get_argument('address', userinfo['address'])
         userinfo['intro'] = self.get_argument('intro', userinfo['intro'])
-        userinfo['motton'] = self.get_argument('motton', userinfo['motton'])
+        userinfo['motto'] = self.get_argument('motto', userinfo['motto'])
         # userinfo['avatar'] = self.get_argument('avatar', userinfo['avatar'])
 
         self.model.update_user_info(userinfo['uid'], **userinfo)
@@ -219,7 +223,7 @@ class MemoHandler(UserBaseHandler):
     @authenticated
     def get(self):
         page = self.get_argument('page', 1)
-        size = self.get_argument('size', 10)
+        size = self.get_argument('size', 100)
 
         offset = (page - 1) * size
         memos = self.model.get_memos(self.user_id, limit=size, offset=offset)
