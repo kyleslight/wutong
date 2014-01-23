@@ -811,6 +811,9 @@ blockquote p{
 	border-radius: 4px;
 	display: none;
 }
+.errorPromptBox a{
+	color: #c1d739;
+}
 #uploadImageBack{
 	display: block;
 	width: 56px;
