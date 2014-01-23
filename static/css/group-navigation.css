@@ -191,6 +191,9 @@
 	border-left: 3px solid #680;
 	padding-left: 5px;
 }
+.groupDynamicBrief p{
+	margin: 0;
+}
 .groupDynamicDetal{
 	margin-right: 20px;
 	float: right;

@@ -12,6 +12,8 @@ var gurl;
 var WebSocket = window.WebSocket || window.MozWebSocket;
 var msg_socket;
 var removeMessage;
+// communicationState -1:no foucus 0:chat focus 1:topic focus 2:expand chat focus
+var communicationState=-1;
 
 if(location.pathname.slice(0,2)=="/t"){
     gurl=$("#groupTitleName").attr("href");
@@ -35,7 +37,7 @@ $(document).ready(function() {
             url: gurl + "/join",
             type: "POST",
             success: function(data) {
-                alert("You have joined this group");
+                showError("你已加入本小组",2500);
                 $(".groupPrompt").slideUp();
             }
         });
@@ -179,19 +181,20 @@ $(document).ready(function() {
     $("#expandChatSubmitButton").click(function() {
         submitExpandChatData();
         return false;
-    })
+    });
     //for quick submit
+    $("#chatData").bind({
+        focus:function(){communicationState=0;},
+        blur:function(){communicationState=-1;}
+    });
     $(window).keyup(function(e) {
         var keyCode = e.keyCode;
-        if (keyCode == 13 && event.ctrlKey == 1) {
-            if ($(".topicSend").css("display") == "none") {
-                submitChatData();
-            } else {
-                submitTopicData();
-            }
-        }
+        if (keyCode==13&&e.ctrlKey) {
+            submitChatData();
+        };
         return false;
     });
+    
     $(".topicTalkContent img").click(function(){
         var imgUrl=$(this).attr("src");
 
@@ -240,7 +243,7 @@ function unsyncGroupBulletin() {
 function submitChatData() {
     chatCon = $("#chatData").val();
     if ($("#chatData").val().length > 1000) {
-        alert("请保持字数在1000字以内");
+        showError("请保持字数在1000字以内",2000);
         return;
     };
     if (chatCon == "<ex>") {
@@ -251,7 +254,7 @@ function submitChatData() {
         return;
     };
     if (chatCon.length == 0 || chatCon.toString().replace(/(\r)*\n/g, "").replace(/\s/g, "").length == 0) {
-        alert("请输入内容");
+        showError("请输入内容",2000);
         $("#communicationData").addClass("littleTremble");
         setTimeout(function() {
             $("#communicationData").removeClass("littleTremble");
@@ -261,7 +264,7 @@ function submitChatData() {
     var chatConBr=chatCon.match(/(\r)*\n/g);
     if (chatConBr) {
         if (chatConBr.length>30) {
-            alert("刷屏禁止");
+            showError("刷屏禁止",2000);
             return;
         };
     };
@@ -308,14 +311,19 @@ function submitExpandChatData() {
 }
 
 function submitTopicData() {
+    if(!checkLogin){
+        showError("请先登录",2000);
+        return false;
+    };
     var topicTitle = $('#topicTitle').val();
     var topicCon = $("#topicData").val();
     if (topicTitle.length == 0) {
-        alert("请输入话题标题");
+        showError("请输入话题标题",2000);
         return;
     };
     if (topicCon.length == 0 ) {
-        alert("请输入话题内容");
+        showError("请输入话题内容",2000);
+        return;
     };
 
     message = {
@@ -332,6 +340,10 @@ function submitTopicData() {
 }
 
 function checkGroupPremission(){
+    if (!checkLogin) {
+        showError("请先登录",2000);
+        return false;
+    };
     var cgpurl;
     if(location.pathname.slice(0,2)=="/t"){
         cgpurl=$("#groupTitleName").attr("href")+"/permission";
@@ -411,7 +423,11 @@ function connect_message_server_use_ajax(first_message) {
                 contentType: "application/json",
                 success: function(data) {
                     if (data == 'not login') {
-                        alert('请先登录');
+                        if (!checkLogin) {
+                            showError("请先登录",2000);
+                            return;
+                        };
+                        showError("若想参与该小组讨论请加入该小组",2500);
                         return;
                     }
                 },
@@ -482,8 +498,12 @@ function socket_onmessage(e) {
         console.log('websocket onmessage error: ', data);
         return;
     } else if (data == 'not login') {
-        alert('请先登录');
-        return;
+        if (!checkLogin) {
+            showError("请先登录",1000);
+            return false;
+        };
+        showError("若想参与该小组讨论请加入该小组",3000);
+        return false;
     } else {
         $("#communication").prepend(data);
         showParaFirst();

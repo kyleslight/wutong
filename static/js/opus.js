@@ -13,16 +13,6 @@ $(document).ready(function(){
     // initializing the opus and side commnet
     init();
 
-    $.getJSON("/u/info", function (data) {
-        var username;
-        username = data.penname;
-        $(".navrightoff").fadeOut(10,function(){
-            $(".navrighton").fadeIn(10);
-            $("#username").children("p").val(username);
-            $("#usernameHover").text(username);
-        });
-    });
-
     // scroll event
     $(window).scroll(function(){
         var top=$(window).scrollTop();
@@ -151,6 +141,10 @@ $(document).ready(function(){
 
     // edit the side comment of this para
     $(".sideCommentEdit").click(function(){
+        if (!checkLogin) {
+            showError("要发送侧评请先登录",2000);
+            return false;
+        };
         // when active para change
         var indexOfPara=$(".sideCommentEdit").index($(this));
         editingParaNum=indexOfPara;
@@ -186,6 +180,14 @@ $(document).ready(function(){
     // send editting side comment
     $("#sideCommentEditSend").click(function(){
         var content=$("#sideCommentEditData").val();
+        if (content.length==0) {
+            showError("侧评内容不能为空",2000);
+            return false;
+        };
+        if (content.length>280) {
+            showError("侧评发送字数超过280字数上限",2000);
+            return false;
+        };
         var url = location.pathname + '/comment/side';
         $.post(url,
         {
@@ -214,9 +216,20 @@ $(document).ready(function(){
     // send buttom comment
     // TODO: It's 'bottom' not 'buttom'
     $("#buttomCommentSend").click(function(){
+        if (!checkLogin) {
+            showError("要发送底评请先登录",2000);
+            return false;
+        };
+        if (BCeditor.getContentLength()==0) {
+            showError("底评内容不能为空",2000);
+            return false;
+        };
+        if (BCeditor.getContentLength()>10000) {
+            showError("底评发送字数超过10000字数上限",3000);
+            return false;
+        };
         var content=$("#opusCommentData").val();
         var url = location.pathname + '/comment/bottom';
-        // console.log(deleteBrPara(content));
         $.post(url,
         {
             'content': content,
@@ -224,10 +237,13 @@ $(document).ready(function(){
         },
         function(data, status) {
             // TODO: if 'failed'
+            if (status=="failed") {
+                showError("发送失败",2000);
+                return false;
+            };
             var buttomCommentShowBox = data;
             if ($(".opusCommentList").size()==0) {
                 $(".buttomComment").prepend(buttomCommentShowBox);
-
             }else{
                 $(".opusCommentList").last().removeClass("noBorderButtom");
                 $(".opusCommentList").last().after(buttomCommentShowBox);
@@ -303,7 +319,6 @@ function init(){
         $("#edui1").css({"border":"1px solid lightblue"});
     };
     var reference=$(".opusReferenceCon").text();
-    console.log(reference);
     $(".opusReferenceCon").empty().append(reference);
 }
 

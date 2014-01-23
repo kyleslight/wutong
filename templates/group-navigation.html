@@ -116,16 +116,16 @@
                 </div> -->
                 <div class="createGroup">
                     <div id="createGroupHeader"><p>申请创建小组»</p></div>
-                    <div class="createGroupItem">
+                    <form id="createGroupItem" action="/g/create" method="post">
                         <div class="groupItemWarp">
                             <span class="createGroupTip">小组类型：</span>
                             <div class="groupType">
                                 <div class="publicGroup">
-                                    <input type="radio" name="groupType" id="createPublicGroup" checked="checked" />公开小组
+                                    <input type="radio" name="is_public" id="createPublicGroup" checked="checked" />公开小组
                                     <p>所有梧桐成员与游客均可访问该小组内容，梧桐成员可随时提出申请加入该小组。申请创建成功者默认为该小组第一任组长</p>
                                 </div>
                                 <div class="privateGroup">
-                                    <input type="radio" name="groupType" id="createPrivateGroup" />非公开小组
+                                    <input type="radio" name="is_public" id="createPrivateGroup" />非公开小组
                                     <p>只有梧桐成员可访问该小组名片并提出申请加入该小组，组长需自行判断申请者是否有加入该小组的资格。申请创建成功者默认为该小组第一任组长</p>
                                 </div>
                             </div>
@@ -133,22 +133,22 @@
                         <div class="groupItemWarp">
                             <span class="createGroupTip">小组名称：</span>
                             <div class="groupName">
-                                <input type="text" name="groupName" id="createGroupName" class="textInputBox" />
+                                <input type="text" name="name" id="createGroupName" class="textInputBox" />
                             </div>
                         </div>
                         <div class="groupItemWarp">
                             <span class="createGroupTip">小组介绍：</span>
                             <div class="groupIntro">
-                                <textarea type="text" name="groupIntro" id="createGroupIntro" class="textInputBox"></textarea>
+                                <textarea type="text" name="intro" id="createGroupIntro" class="textInputBox"></textarea>
                             </div>
                         </div>
                         <div class="groupItemWarp">
                             <span class="createGroupTip">小组标签：</span>
                             <div class="groupTag">
-                                <input type="text" name="groupTag" id="creareGroupTag" class="textInputBox" />
+                                <input type="text" name="tags" id="creareGroupTag" class="textInputBox" />
                             </div>
                         </div>
-                    </div>
+                    </form>
                     <a href="#" id="createGroupSend" class="formButton">提交申请</a>
                     <a href="#" id="createGroupBack">返回</a>
                 </div>

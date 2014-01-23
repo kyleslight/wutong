@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	showFirstPara();
 	$("#createGroup").click(function(){
 		$(".groupDynamic").fadeOut();
 		$(".createGroup").fadeIn();
@@ -8,18 +9,8 @@ $(document).ready(function(){
 		$(".groupDynamic").fadeIn();		
 	});
 	$("#createGroupSend").click(function(){
-		var url = location.pathname.slice(0,-9) + '/g/create';
-		$.post(url,{
-			'name':$("#createGroupName").val(),
-			'intro':$("#createGroupIntro").val(),
-			'tags':$("#creareGroupTag").val(),
-			'is_public':isCreateGroupPublic(),
-		},function(data){
-			alert('小组"'+$("#createGroupName").val()+'"已成功申请');
-			$(".createGroup").fadeOut();
-			$(".groupDynamic").fadeIn();
-		});
-	})
+		document.getElementById("createGroupItem").submit();
+	});
 });
 
 function isCreateGroupPublic(){
@@ -27,4 +18,11 @@ function isCreateGroupPublic(){
 		return true;
 	};
 	return false;
+}
+
+function showFirstPara(){
+	$(".groupDynamicBrief").each(function(){
+        $(this).children().hide();
+        $(this).children().eq(0).show();
+    });
 }

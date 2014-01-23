@@ -5,7 +5,8 @@ var elapseTime = 5000;
 var opusShowTime=1000;
 
 $(document).ready(function(){
-    $(".write").hide();
+
+    initCreate();
 
     $("#IsPreviewBeforePublic").change(function(){
         if (!$(this).prop('checked')) {
@@ -31,8 +32,23 @@ $(document).ready(function(){
     $("#opusPreViewButton").click(function(){
         // check form
         if($("#title").val().length==0){
-            alert("请填写标题");
+            showError("请填写标题",2000);
             return false;
+        };
+        if($("#title").val().length>25){
+            showError("标题请保持在25字以内",2000);
+            return false;
+        };
+        if($("#foreword").val().length>200) {
+            showError("引言请保持在200字以内",2000)
+        };
+
+        var preTag=$("#otherTags").val().split(";");
+        for(var i=0;i<preTag.length;i++){
+            if (lessIllegalCharacter.test(preTag[i])) {
+                showError("Tag包含非法字符",2000);
+                return false;  
+            };
         };
 
         $("#imageUploadContainer").html("");
@@ -51,13 +67,18 @@ $(document).ready(function(){
             var mainText=$("#textArea").val();
         };
 
+        var mainTextLength=editor.getContentLength();
+        if (mainTextLength>30000) {
+            showError("作品正文长度超过30000的字数上限<br>请合理分割您的作品，分次上传",4000);
+            return false;
+        };
+
         if (mainText=="") {
-            alert("请添加正文/照片");
+            showError("请添加正文/照片",2000)
             return false;
         };
 
         $("#temTextData").html("");
-        $("#textdata,#opusPreViewButton,#previewBeforePublic").hide();
 
         var temTextData={
             title:$("#title").val(),
@@ -98,12 +119,21 @@ $(document).ready(function(){
                     +    '</div>'
                     +'</div>'
         $("#temTextData").prepend(temtText);
+
+        if ($(".opusMain").children().size()>700) {
+            showError("请保持您的正文在700段以内",4000);
+            $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").hide();
+            $("#textdata,#opusPreViewButton,#previewBeforePublic").show();
+            return false;
+        };
+
         if (temTextData.suit=="") {
             $(".opusAppositeness").hide();
         };
         if (temTextData.reference=="") {
             $(".opusReference").hide();
         };
+        $("#textdata,#opusPreViewButton,#previewBeforePublic").hide();
         $("#temTextData,#opusPreViewBack,#opusPublicSubmitButton,#opusPrivateSubmitButton").show();
     });
     $("#opusPreViewBack").click(function(){
@@ -139,7 +169,7 @@ $(document).ready(function(){
 
         var theForm=document.getElementById("textdata");
         console.log(theForm);
-        // theForm.submit();
+        theForm.submit();
     });
 
     $(".inputTip a").click(function(){
@@ -209,6 +239,14 @@ $(document).ready(function(){
     });
 
 });
+
+function initCreate(){
+    $.get("/u/info",function(data){
+        if (!data) {
+            showError("创作作品前请先登录",2000);
+        };
+    });
+}
 
 function isPublic(bottonId){
     if (bottonId=="opusPublicSubmitButton") {

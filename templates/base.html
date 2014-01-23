@@ -25,6 +25,7 @@
     </head>
     <body class="preload">
     <div class="mask"></div>
+    <div class="errorPromptBox">aaa</div>
     <a href="#" id="uploadImageBack"></a>
     {% block body %}
         <div class="header" id="header">
@@ -97,7 +98,10 @@
                     <div class="loginList"><span class="inputTip">密码</span>
                         <input class="input" id="loginPassword" type="password" name="password" placeholder="密码" />
                     </div>
-                    <div id="loginListlast" class="loginList"><a href="#" id="loginSubmitButton" class="formButton" name="submitButton" value="登陆">登入</a>  <a href="#" id="loginBack">返回</a>
+                    <div id="loginListlast" class="loginList"><a href="#" id="loginSubmitButton" class="formButton" name="submitButton" value="登陆">登入</a>  
+                    <div class="loginFunction">
+                        <a href="#" id="turnToRegisterBox">切换至注册</a><br><a href="#" id="loginBack">返回</a>
+                    </div>
                     </div>
                 </form>
             </div>
@@ -115,7 +119,10 @@
                     <div class="registerList"><span class="inputTip">重复密码</span>
                         <input class="input" id="registerRepassword" type="password" name="repassword" placeholder="重复密码" />
                     </div>
-                    <div id="registerListLast" class="registerList"><a href="#" id="registerSubmitButton" class="formButton" name="submitButton" value="注册">注册</a>  <a href="#" id="registerBack">返回</a>
+                    <div id="registerListLast" class="registerList"><a href="#" id="registerSubmitButton" class="formButton" name="submitButton" value="注册">注册</a>  
+                    <div class="registerFunction">
+                        <a href="#" id="turnToLoginBox">切换至登入</a><br><a href="#" id="registerBack">返回</a>
+                    </div>
                     </div>
                 </form>
             </div>

@@ -13,11 +13,15 @@ var isRegisterRepasswordFocus = false;
 var ueditor=null;
 var insertImageState=-1;
 var activeNoteID=-1;
+var illegalCharacter=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
+var lessIllegalCharacter=/[`~@#$%^&*()_+<>:"{},.\'[\]]/im;
+var checkLogin=false;
 
 // get unsync information
 unsycUser();
 
 $(document).ready(function() {
+    checkIsLogin();
 
     $(".preload").removeClass("preload");
     // get user info
@@ -102,10 +106,22 @@ $(document).ready(function() {
             }
             return false;
         });
-    })
+    });
     $("#loginPassword").blur(function() {
         isLoginPasswordFocus = false;
-    })
+    });
+    $("#turnToRegisterBox,#turnToLoginBox").click(function(){
+        if ($(this).attr("id")=="turnToRegisterBox") {
+            $("#loginBox").hide();
+            $("#registerBox").show();
+            $("#lrBoxWrap").height($("#registerBox").height());
+        }else{
+            $("#loginBox").show();
+            $("#registerBox").hide();
+            $("#lrBoxWrap").height($("#loginBox").height());
+        }
+        return false;
+    });
 
     $("#registerSubmitButton").click(function() {
         registerSubmit();
@@ -120,7 +136,7 @@ $(document).ready(function() {
             }
             return false;
         });
-    })
+    });
     $("#registerRepassword").blur(function() {
         isRegisterRepasswordFocus = false;
     })
@@ -131,12 +147,12 @@ $(document).ready(function() {
         $(".navrighton").fadeOut(function() {
             $(".navrightoff").fadeIn();
             if (location.pathname.slice(0,9)=="/a/create") {
-                $(".write").hide();
-                alert("要进入创作页请先登入");
+                showError("创作作品前请先登录",2000);
             };
         });
-        checkGroupPremission();
-    })
+        logOutEffect();
+        checkIsLogin();
+    });
 
     // loginBox and registerBox
     $("#login").click(function() {
@@ -249,7 +265,7 @@ $(document).ready(function() {
     // create note
     $("#createNewNote").click(function(){
         if ($(".myCurrentNoteTitle").val()=="") {
-            alert("请填写标题");
+            showError("请填写标题",2000);
             return false;
         };
         $.post("/u/memo",{
@@ -268,6 +284,7 @@ $(document).ready(function() {
             $(".myNoteList").removeClass("activeMyNoteList");
             $("#"+activeNoteID).addClass("activeMyNoteList");
             $("#addNote").text("创建便笺");
+            showError("便笺 "+newNote.title+" 创建成功",2000);
         });
     });
     // update note
@@ -276,7 +293,7 @@ $(document).ready(function() {
             return false;
         };
         if ($(".myCurrentNoteTitle").val()=="") {
-            alert("请填写标题");
+            showError("请填写标题",1500);
             return false;
         };
         $.post("/u/memo/update",{
@@ -284,7 +301,7 @@ $(document).ready(function() {
             "title":$(".myCurrentNoteTitle").val(),
             "content":$(".myCurrentNoteContent").val()
         },function(){
-            alert("save note success");
+            showError("成功保存便笺",1000);
             $("#"+activeNoteID).text($(".myCurrentNoteTitle").val());
         });
     });
@@ -296,7 +313,7 @@ $(document).ready(function() {
         $.post("/u/memo/delete",{
             "memo_id":activeNoteID,
         },function(){
-            alert("delete note success");
+            showError("成功删除便笺",1000);
             // // TODO: refresh notes
             // $("#"+activeNoteID).text($(".myCurrentNoteTitle").val());
             $.getJSON("/u/memo",function(data){
@@ -364,6 +381,22 @@ $(document).ready(function() {
 });
 
 // function for login and register
+function checkIsLogin(){
+    $.ajax({
+        url: "/u/info",
+        type: "GET",
+        dataType: "json",
+        async: false,
+        success: function(data) {
+            checkLogin=true;
+            return;
+        },
+        error:function(){
+            checkLogin=false;
+            return;
+        }
+    });
+}
 
 function loginBoxShow() {
     $("#loginBox").show().css("opacity", "0");
@@ -427,15 +460,16 @@ function registerBoxFade() {
 function loginSubmit() {
     var loginUsername = $("#loginUsername").val();
     var loginPassword = $("#loginPassword").val();
+    loginAction(loginUsername,loginPassword);
+}
+
+function loginAction(loginUsername,loginPassword){
     $.post("/login", {
         username: loginUsername,
         password: loginPassword
     }, function(data) {
         if (data == "failed") {
-            $("#loginBox").addClass("littleTremble");
-            setTimeout(function() {
-                $("#loginBox").removeClass("littleTremble");
-            }, 1000);
+            showError("登录失败",2000);
         }else{
             var username;
             $.getJSON("/u/info", function(data) {
@@ -457,6 +491,7 @@ function loginSubmit() {
             };
         }
     });
+    checkIsLogin();
 }
 
 function registerSubmit() {
@@ -464,19 +499,54 @@ function registerSubmit() {
         registerEmail = $("#registerEmail").val(),
         registerPassword = $("#registerPassword").val(),
         registerRepassword = $("#registerRepassword").val();
-    if (registerPassword != registerRepassword) {
-        alert("password and repassword must be the same vaule");
-        $("#loginBox").addClass("littleTremble");
-        setTimeout(function() {
-            $("#loginBox").removeClass("littleTremble");
-        }, 1000);
-        return;
+
+    // check username
+    if (registerUsername=="") {
+        showError("用户名不能为空",2000);
+        return false;
     };
+    if (illegalCharacter.test(registerUsername)) {
+        showError("用户名包含非法字符",2000);
+        return false;
+    };
+    if (registerUsername.length>20) {
+        showError("用户名请限定在20字以内",2000);
+        return false;
+    };
+    $.get("/account/check?is_account_exists&v="+registerUsername+"",function(data){
+        if (data=="true") {
+            showError("用户名 "+registerUsername+" 已存在",2000);
+            return false;
+        };
+    });
+
+    // check email
+    if (!checkEmail(registerEmail)) {
+        showError("Email地址不合法",2000);
+        return false;
+    };
+
+    // check password
+    if (registerPassword != registerRepassword) {
+        showError("两次密码不一致",2000);
+        return false;
+    };
+    if (registerPassword=="") {
+        showError("密码不能为空",2000);
+        return false;
+    };
+    if (registerPassword.length>30) {
+        showError("密码长度不能超过30",2000);
+        return false;
+    };
+
     $.post("/register", {
         username: registerUsername,
         password: registerPassword,
         email: registerEmail
     }, function() {
+        showError("欢迎加入梧桐,"+registerUsername+"!<br>目前是测试期间，不需要邮箱激活~",5000);
+        loginAction(registerUsername,registerPassword);
         registerBoxFade();
     });
 }
@@ -548,4 +618,45 @@ function initUeditor(UEstate){
 function activeItemChange(activeItem,activeClassName){
     $("."+activeClassName).removeClass(activeClassName);
     activeItem.addClass(activeClassName);
+}
+
+function logOutEffect(){
+    $(".myCollection").fadeOut(500, function() {
+        $(".myCollectionWarp").animate({
+            height: 0
+        });
+    });
+
+    $(".myNote").fadeOut(500, function() {
+        $(".myNoteWrap").animate({
+            height: 0
+        });
+    });
+
+    $(".myMessage").fadeOut(500, function() {
+        $(".myMessageWarp").animate({
+            height: 0
+        });
+    });
+}
+
+function checkEmail(e){ var i=e.length;     
+    var temp = e.indexOf('@');     
+    var tempd = e.indexOf('.');     
+    if (temp > 1) {     
+        if ((i-temp) > 3){     
+            if ((i-tempd)>0){     
+                return true;     
+            }     
+        }     
+    }     
+    return false;     
+}     
+
+function showError(errorStatement,duration){
+    $(".errorPromptBox").html(errorStatement);
+    $(".errorPromptBox").fadeIn();
+    setTimeout(function(){
+        $(".errorPromptBox").fadeOut();
+    },duration);
 }

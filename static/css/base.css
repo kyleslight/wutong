@@ -394,14 +394,25 @@ blockquote p{
 #loginSubmitButton{
 	margin-top: 10px;
 	margin-left: 150px;
-	margin-right: 95px;
+	margin-right: 54px;
+}
+.loginFunction,.registerFunction{
+	float: left;
+	font-size: 0.8em;
+	text-align: right;
+}
+.loginFunction{
+	margin-top: 15px;
+}
+.registerFunction{
+	margin-top: 4px;
+}
+.loginFunction a,.registerFunction a{
+	display: inline-block;
+	margin-bottom: 10px;
 }
 #loginBack{
-	font-size: 0.8em;
-	float: right;
-	display: block;
-	margin-top: 20px;
-	margin-right: 65px;
+	
 }
 
 /*registerBox*/
@@ -428,14 +439,7 @@ blockquote p{
 }
 #registerSubmitButton{
 	margin-left: 150px;
-	margin-right: 95px;
-}
-#registerBack{
-	font-size: 0.8em;
-	float: right;
-	display: block;
-	margin-top: 20px;
-	margin-right: 65px;
+	margin-right: 54px;
 }
 
 /*submit button*/
@@ -620,13 +624,13 @@ blockquote p{
 	line-height: 22px;
 }
 .myNoteList:hover{
-	background: #680;
+	background: #c1d739;
 	color: white;
 	font-weight: 900;
 	padding-left: 10px;
 }
 .activeMyNoteList{
-	background: #c1d739;
+	background: #680;
 	color: white;
 }
 .myCurrentNoteArea{
@@ -661,6 +665,7 @@ blockquote p{
 	resize:none;
 	border: 0;
 	outline: none;
+	font-family: "Microsoft YaHei";
 }
 .myCurrentNoteOption a{
 	width: 45px;
@@ -787,6 +792,23 @@ blockquote p{
 	height: 100%;
 	background: rgba(0,0,0,0.7);
 	z-index: 1001;
+	display: none;
+}
+.errorPromptBox{
+	position: fixed;
+	text-align: center;
+	background: rgba(0,0,0,0.8); 
+	color: white;
+	width: 600px;
+	left: 50%;
+	top: 40%;
+	margin-left: -300px;
+	padding: 20px 0;
+	z-index: 1002;
+	font-size: 1.2em;
+	box-shadow: 0 0 10px black;
+	border: 1px solid #CCC;
+	border-radius: 4px;
 	display: none;
 }
 #uploadImageBack{
