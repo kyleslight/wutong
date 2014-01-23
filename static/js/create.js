@@ -30,6 +30,10 @@ $(document).ready(function(){
     });
 
     $("#opusPreViewButton").click(function(){
+        if (!checkLogin) {
+            showError("请先登录再创作",2000);
+            return false;
+        };
         // check form
         if($("#title").val().length==0){
             showError("请填写标题",2000);
@@ -92,8 +96,7 @@ $(document).ready(function(){
             is_pushed:$("#puclicPush").prop('checked'),
             type:$(".activeOpusType").text()
         }
-        // console.log($("#title").val(),$("#foreword").val(),$("#reference").val(),($("#articleFirstClass").val()+$("#otherTags").val()),$("#suit").val(),$("#cooperation").val(),$("#puclicPush").prop('checked'));
-        // console.log(temTextData);
+
         var temTime=new Date();
         var temtText='<div class="opusBasicInfo">'
                     +    '<div class="firstLine">'

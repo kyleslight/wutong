@@ -5,7 +5,9 @@ var elapseTime = 5000;
 var topOfSight=150;
 var editingParaNum=-1;
 var is_image_view=false;
-var editableOpusChild=$(".opusMain").children("div,p,table,blockquote");;
+var editableOpusChild=$(".opusMain").children("div,p,table,blockquote");
+var sideCommentState=false;
+var opusScore=0;
 
 $(document).ready(function(){
 
@@ -140,30 +142,13 @@ $(document).ready(function(){
     });
 
     // edit the side comment of this para
+    editableOpusChild.dblclick(function(){
+        var indexOfPara=editableOpusChild.index($(this));
+        sideCommentShow(indexOfPara);
+    });
     $(".sideCommentEdit").click(function(){
-        if (!checkLogin) {
-            showError("要发送侧评请先登录",2000);
-            return false;
-        };
-        // when active para change
         var indexOfPara=$(".sideCommentEdit").index($(this));
-        editingParaNum=indexOfPara;
-        activeParaChange(indexOfPara);
-
-        // set position of editing area under the para
-        var buttomOfActivePara=editableOpusChild.eq(indexOfPara).offset().top+editableOpusChild.eq(indexOfPara).height()-60;
-        if (is_image_view) {
-            $(".sideCommentEditBox").css({"top":(buttomOfActivePara+30)+"px"});
-        }else{
-            $(".sideCommentEditBox").css({"top":buttomOfActivePara+"px"});
-        };
-        $(".sideCommentEditBox").fadeIn(100);
-
-        // auto focus on edit area
-        var sideCommentEditFocus = document.getElementById("sideCommentEditData");
-        sideCommentEditFocus.focus();
-
-        return false;
+        sideCommentShow(indexOfPara);
     });
 
     // fade the edit area
@@ -179,37 +164,82 @@ $(document).ready(function(){
 
     // send editting side comment
     $("#sideCommentEditSend").click(function(){
-        var content=$("#sideCommentEditData").val();
-        if (content.length==0) {
-            showError("侧评内容不能为空",2000);
+        sendSideComment();
+    });
+    // quick side comment send
+    $("#sideCommentEditData").bind({
+        focus:function(){sideCommentState=true;},
+        blur:function(){sideCommentState=false;}
+    });
+    $(window).keyup(function(e) {
+        var keyCode = e.keyCode;
+        if (keyCode==13&&e.ctrlKey&&sideCommentState) {
+            sendSideComment();
+        };
+        return false;
+    });
+
+    // collect opus
+    $("#collectOpus").click(function(){
+        var opusID=location.pathname.slice(3);
+        $.post("/u/collection",{
+            // 'article_id':opusID
+        },function(data){
+            console.log(data);
+        })
+    });
+
+    $("#scoreOpus").click(function(){
+        $(".scoreBoard").slideDown();
+        return false;
+    });
+    $(".scoreBar").hover(function(){
+        var indexOfHoverBar=$(".scoreBar").index($(this))+1;
+        $(".scoreBar").css({"background":"white"});
+        for(var i=0;i<indexOfHoverBar;i++){
+            var opacityOfBarBefore=i*0.08+0.2;
+            var backgroundColor='rgba(102,136,0,'+opacityOfBarBefore+')';
+            $(".scoreBar").eq(i).css({"background":backgroundColor});
+        };
+        $("#score").text(indexOfHoverBar);
+        switch(indexOfHoverBar){
+            case 1:$("#scoreDescription").text('/非常差，糟糕至极');break;
+            case 2:$("#scoreDescription").text('/非常差，但可以忍受');break;
+            case 3:$("#scoreDescription").text('/较差，将就着看');break;
+            case 4:$("#scoreDescription").text('/较差，总体上过得去');break;
+            case 5:$("#scoreDescription").text('/还行，有潜力');break;
+            case 6:$("#scoreDescription").text('/还行，有些地方不错');break;
+            case 7:$("#scoreDescription").text('/很好，推荐');break;
+            case 8:$("#scoreDescription").text('/很好，力荐');break;
+            case 9:$("#scoreDescription").text('/非常好，经典之作');break;
+            case 10:$("#scoreDescription").text('/非常好，登峰造及');break;
+            default:break;
+        };
+    });
+    $(".scoreBar").click(function(){
+        opusScore=$(".scoreBar").index($(this))+1;
+        $("#score").text(opusScore);
+        return false;
+    });
+    $(".scoreBarWrap").mouseleave(function(){
+        if (opusScore!=0) {return false;};
+        $(".scoreBar").css({"background":"white"});
+        $("#score").text("未评价");
+        $("#scoreDescription").text("");
+    });
+    $("#sendScore").click(function(){
+        if (opusScore==0) {
+            showError("请先进行评分再提交");
             return false;
         };
-        if (content.length>280) {
-            showError("侧评发送字数超过280字数上限",2000);
-            return false;
-        };
-        var url = location.pathname + '/comment/side';
-        $.post(url,
-        {
-            'content': content,
-            'paragraph_id': editingParaNum, // TODO: replace this
-        },
-        function(data) {
-            var addListNav=$("#sideCommentNode"+editingParaNum).children(".opusSideCommentNav");
-            addListNav.after(data);
-            $(".opusSideCommentList"+editingParaNum).eq(1).css({"background":"pink","width":"268px"});
-            if (addListNav.hasClass("nullOpusSideCommentNav")) {
-                var preNav='<li class="opusSideCommentList opusSideCommentList'+editingParaNum+' opusSideCommentNav" style="width:253px" onclick="toLeftPara('+editingParaNum+')">'
-                        +'第'+editingParaNum+'段评论('+'<span class="numOfParaComent">'+($("#sideCommentNode"+editingParaNum).children().size()-1)+'</span>'+')'
-                        +'</li>';
-                addListNav.after(preNav);
-                addListNav.remove();
-            };
-            $(".opusSideCommentList"+editingParaNum).eq(1).css({"background":"pink","width":"253px"});
-            $(".opusSideCommentList"+editingParaNum).eq(0).css("width","253px");
-            $("#sideCommentEditData").val("");
-            $(".sideCommentEditBox").fadeOut();
-        });
+        // send opusScore
+    });
+    $("#scoreBoardBeforeBack").click(function(){
+        $(".scoreBoard").slideUp();
+        opusScore=0;
+        $(".scoreBar").css({"background":"white"});
+        $("#score").text("未评价");
+        $("#scoreDescription").text("");
         return false;
     });
 
@@ -271,8 +301,10 @@ function init(){
 
     // initial para function bution
     for (var i =0; i<editableOpusChild.size(); i++) {
-        var viewCommentButton='<a href="#" class="sideCommentView">查看评论</a><a href="#" class="sideCommentEdit">编辑评论</a>';
-        editableOpusChild.eq(i).append(viewCommentButton);
+        var viewCommentButton=''
+        // +'<a href="#" class="sideCommentView">查看评论</a><br>'
+        +'<a href="#" class="sideCommentEdit" title="编辑侧评"><img /></a>';
+        editableOpusChild.eq(i).prepend(viewCommentButton);
     };
 
     // load sidecomment in sideCommentNode
@@ -365,6 +397,72 @@ function activeParaChange(indexOfPara){
     };
 }
 
+function sideCommentShow(indexOfPara){
+    if (!checkLogin) {
+        showError("要发送侧评请先登录",2000);
+        return false;
+    };
+    // when active para change
+    editingParaNum=indexOfPara;
+    activeParaChange(indexOfPara);
+
+    // set position of editing area under the para
+    var buttomOfActivePara=editableOpusChild.eq(indexOfPara).offset().top+editableOpusChild.eq(indexOfPara).height()-60;
+    if (is_image_view) {
+        $(".sideCommentEditBox").css({"top":(buttomOfActivePara+30)+"px"});
+    }else{
+        $(".sideCommentEditBox").css({"top":buttomOfActivePara+"px"});
+    };
+    $(".sideCommentEditBox").fadeIn(100);
+
+    // auto focus on edit area
+    var sideCommentEditFocus = document.getElementById("sideCommentEditData");
+    sideCommentEditFocus.focus();
+
+    return false;
+}
+
+function sendSideComment(){
+    var content=$("#sideCommentEditData").val();
+    if (content.length==0) {
+        showError("侧评内容不能为空",2000);
+        return false;
+    };
+    if (content.length>280) {
+        showError("侧评发送字数超过280字数上限",2000);
+        return false;
+    };
+
+    content=content.replace(/</g,"&lt").replace(/>/g,"&gt");
+    content=content.httpHtml();
+    content=content.toString().replace(/(\r)*\n/g,"<br />").replace(/\s/g," ");
+
+    var url = location.pathname + '/comment/side';
+    $.post(url,
+    {
+        'content': content,
+        'paragraph_id': editingParaNum, // TODO: replace this
+    },
+    function(data) {
+        data=data.replace(/&lt;br \/&gt;/g,"<br>").replace(/&lt;\/a&gt;/g,"</a>").replace(/&gt;/g,">").replace(/&lt;a/g,"<a").replace(/&quot;/g,"'");
+        var addListNav=$("#sideCommentNode"+editingParaNum).children(".opusSideCommentNav");
+        addListNav.after(data);
+        $(".opusSideCommentList"+editingParaNum).eq(1).css({"background":"pink","width":"268px"});
+        if (addListNav.hasClass("nullOpusSideCommentNav")) {
+            var preNav='<li class="opusSideCommentList opusSideCommentList'+editingParaNum+' opusSideCommentNav" style="width:253px" onclick="toLeftPara('+editingParaNum+')">'
+                    +'第'+editingParaNum+'段评论('+'<span class="numOfParaComent">'+($("#sideCommentNode"+editingParaNum).children().size()-1)+'</span>'+')'
+                    +'</li>';
+            addListNav.after(preNav);
+            addListNav.remove();
+        };
+        $(".opusSideCommentList"+editingParaNum).eq(1).css({"background":"pink","width":"253px"});
+        $(".opusSideCommentList"+editingParaNum).eq(0).css("width","253px");
+        $("#sideCommentEditData").val("");
+        $(".sideCommentEditBox").fadeOut();
+    });
+    return false;
+}
+
 function expandSideComment(){
     var top=$(window).scrollTop();
     $(".opusSideCommentWrap").removeClass("noTransition");
@@ -379,11 +477,10 @@ function expandSideComment(){
     $('#buttomCommentSend').css({"margin-right":"-17px"});
     editableOpusChild=$(".opusMain").children("div,p,table,blockquote");
     editableOpusChild.addClass("opusMainChildren").addClass("pointerPara");
-    // init();
 }
 
 function foldSideComment(){
-    $("#expandSideComment").text("展开侧评");
+    $("#expandSideComment").text("侧评");
     $(".opusSideCommentWrap").fadeOut(50);
     $(".activeOpusPara").removeClass("activeOpusPara");
     editableOpusChild.removeClass("activeOpusPara").removeClass("pointerPara");

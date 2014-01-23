@@ -5,7 +5,38 @@
 {% block extra_div%}
     <div class="read">
         <div class="readMain">
-            <a href="#" id="expandSideComment" accesskey="+">展开侧评</a>
+            <div class="scoreBoard">
+                <div class="scoreBoardFirstLine">对本作品进行评分</div>
+                <div class="scoreBoardBefore">
+                <span class="scoreBarWrap">
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                </span>
+                    <span class="scoreShow"><span id="score">未评价</span><span id="scoreDescription"></span></span>
+                    <div class="scoreBoardFunction">
+                        <a href="#" id="sendScore" class="formButton">提交</a><a href="#" id="scoreBoardBeforeBack">返回</a>
+                    </div>
+                </div>
+                <div class="scoreBoardAfter">
+                    
+                </div>
+            </div>
+            <div class="opusFunction">
+                <a href="#" id="expandSideComment">侧评</a>
+                <!-- 若访问者为作者，则不渲染评分 -->
+                <a href="#" id="scoreOpus">评分</a>
+                <!-- 若访问者非作者，则不渲染修改 -->
+                <a href="#" id="modifyOpus">修改</a>
+                <a href="#" id="collectOpus">收藏</a>
+            </div>
             <div class="sideCommentEditBox">
                 <textarea id="sideCommentEditData" placeholder="编辑侧评"></textarea>
                 <div class="sideCommentEditOption"><a href="#" id="sideCommentEditBack">返回</a><a href="#" id="sideCommentEditSend">发送</a></div>

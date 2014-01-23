@@ -61,6 +61,12 @@ li img:hover{
 	box-shadow: 0px 0px 1px 1px #CCC;
 }
 
+td,tbody,table{
+	border: 1px solid #999;
+	padding: 3px;
+	border-collapse:collapse;
+}
+
 blockquote {
 	background: url('image/quote.png') no-repeat scroll left 11px transparent;
 	margin-left: 0px;

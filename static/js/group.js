@@ -189,7 +189,7 @@ $(document).ready(function() {
     });
     $(window).keyup(function(e) {
         var keyCode = e.keyCode;
-        if (keyCode==13&&e.ctrlKey) {
+        if (keyCode==13&&e.ctrlKey&&communicationState==0) {
             submitChatData();
         };
         return false;
