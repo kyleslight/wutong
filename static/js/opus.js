@@ -165,6 +165,7 @@ $(document).ready(function(){
     // send editting side comment
     $("#sideCommentEditSend").click(function(){
         sendSideComment();
+        return false;
     });
     // quick side comment send
     $("#sideCommentEditData").bind({
