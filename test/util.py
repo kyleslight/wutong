@@ -43,10 +43,14 @@ class TestDataGenerator(object):
 
         self.gen_test_data()
 
-    def gen_database_table(self):
-        sqlpath = wutong_path("model/dbschema/") + "schema.sql"
-        sql = open(sqlpath, "r").read()
-        assert(self.db.execute(sql))
+    def initdb(self):
+        sql_dir = wutong_path("model/dbschema/")
+        paths = ["schema.sql", "function.sql"]
+        paths = [(sql_dir + p) for p in paths]
+
+        for path in paths:
+            sql = open(path, "r").read()
+            assert(self.db.execute(sql))
 
     def gen_admin_user(self):
         hashuid = self.user.do_register(self.admin['email'],
@@ -117,7 +121,7 @@ class TestDataGenerator(object):
             gid = self.group.do_create(
                 user['uid'],
                 '%s group by %s' % (random.random(), user['uid']),
-                is_public=random_bool()
+                is_public=random_bool(),
             )
             self.group.do_join_group(gid, self.admin["uid"])
             gids.append(gid)
@@ -201,7 +205,7 @@ class TestDataGenerator(object):
                 )
 
     def gen_test_data(self):
-        self.gen_database_table()
+        self.initdb()
         admin = self.gen_admin_user()
         users = self.gen_users()
         gids = self.gen_groups(users)

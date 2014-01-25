@@ -4,9 +4,11 @@
         <span class="opusAuthor">by <a href="#">{{ article["author"] }}</a></span>
         <div class="opusData">
             <div class="opusViewed">浏览：{{ article["views"] }}</div>
-            <div class="opusGrade">得分：8.5</div>
-            <div class="opusCollected">收藏：102</div>
-            <div class="opusForwarded">转发：378</div>
+            <div class="opusGrade">评分：{{ article["score"] }}</div>
+            <div class="opusCollected">收藏：{{article["collections"] }}</div>
+            {% if None %}
+            <div class="opusForwarded">转发：0</div>
+            {% end %}
         </div>
     </div>
     <div class="authorBasicInfo">
@@ -33,13 +35,14 @@
 </div>
 
 <div class="opusSuffixes">
-    <div class="opusTag">Tags：
+    <div class="opusTag">标签：
         {% for tag in article['tags'] %}
-        <a href="#">{{ tag['name'] }}</a>
+        <a href="/tag/{{ tag['name'] }}">{{ tag['name'] }}</a>
         {% end %}
     </div>
     {% if article["reference"] %}
-    <div class="opusReference"><div>参考来源：</div><div class="opusReferenceCon">{{ article["reference"] }}</div>
+    <div class="opusReference"><div>参考来源：</div>
+    <div class="opusReferenceCon">{{ article["reference"] }}</div>
     </div>
     {% end %}
     {% if None %}

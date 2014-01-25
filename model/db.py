@@ -24,6 +24,51 @@ class Pool(object):
         for i in xrange(self.min_size):
             self._new_connection()
 
+    def call(self, funcname, *args, **kwargs):
+        sql = 'select %s({args})' % funcname
+        func = kwargs.get('function') or self.execute
+        return func(sql, *args)
+
+    def select(self, *arg, **kwargs):
+        raise NotImplementedError
+
+    def insert(self, table, d):
+        """
+        :arg string table:
+        :arg dict d:
+        """
+        sql = 'insert into "%s" ({keys}) values ({values})' % table
+        keys = ','.join(['"%s"' % k for k in d.keys()])
+        values = ','.join(['%s' for i in xrange(len(d.keys()))])
+
+        sql = sql.format(keys=keys, values=values)
+        return self.execute(sql, *d.values())
+
+    def update(self, table, d, where=None):
+        """
+        :arg string table:
+        :arg dict d:
+        :arg string where:
+        """
+        sql = "update %s set ({keys}) = ({values}) {where}" % table
+        keys = ','.join(['"%s"' % k for k in d.keys()])
+        values = ','.join(['%s' for i in xrange(len(d.keys()))])
+        where = 'where ' + where if where else ''
+
+        sql = sql.format(keys=keys, values=values, where=where)
+        return self.execute(sql, *d.values())
+
+    def delete(self, table, where=None):
+        """
+        :arg string table:
+        :arg string where:
+        """
+        sql = "delete from %s {where}" % table
+        where = 'where ' + where if where else ''
+
+        sql = sql.format(where=where)
+        return self.execute(sql)
+
     def execute(self, sql, *args):
         return self._get_connection().execute(sql, *args)
 

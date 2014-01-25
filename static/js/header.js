@@ -152,6 +152,7 @@ $(document).ready(function() {
         });
         logOutEffect();
         checkIsLogin();
+        window.location = location.pathname;
     });
 
     // loginBox and registerBox
@@ -461,6 +462,8 @@ function loginSubmit() {
     var loginUsername = $("#loginUsername").val();
     var loginPassword = $("#loginPassword").val();
     loginAction(loginUsername,loginPassword);
+    if (location.pathname === '/g/browse')
+        window.location = location.pathname;
 }
 
 function loginAction(loginUsername,loginPassword){
@@ -640,18 +643,18 @@ function logOutEffect(){
     });
 }
 
-function checkEmail(e){ var i=e.length;     
-    var temp = e.indexOf('@');     
-    var tempd = e.indexOf('.');     
-    if (temp > 1) {     
-        if ((i-temp) > 3){     
-            if ((i-tempd)>0){     
-                return true;     
-            }     
-        }     
-    }     
-    return false;     
-}     
+function checkEmail(e){ var i=e.length;
+    var temp = e.indexOf('@');
+    var tempd = e.indexOf('.');
+    if (temp > 1) {
+        if ((i-temp) > 3){
+            if ((i-tempd)>0){
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 String.prototype.httpHtml = function() {
     var reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-|:)+)/g;
