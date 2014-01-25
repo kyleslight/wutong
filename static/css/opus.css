@@ -123,8 +123,8 @@ td,tbody,table{
 	border-top-right-radius: 0.3em;
 	border-bottom-right-radius: 0.3em;
 	border-bottom-left-radius: 0.3em;
-	-webkit-box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 4px;
-	box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 4px;
+	/*-webkit-box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 4px;
+	box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 4px;*/
 	box-sizing: border-box;
 }
 
@@ -161,7 +161,9 @@ td,tbody,table{
 	font-size: 0.9em;
 }
 .opusTag{
+	float: left;
 	margin-top: 10px;
+	margin-bottom: 20px;
 	color: #999;
 	width: 700px;
 }
@@ -193,7 +195,7 @@ td,tbody,table{
 }
 
 .opusComment{
-	/*float: left;*/
+	clear: both;
 	text-align: center;
 	/*width: 1020px;*/
 	padding: 20px 0;
@@ -294,7 +296,7 @@ td,tbody,table{
 	box-shadow: 0 0 20px 3px #680;
 }
 .pointerPara{
-	/*cursor: pointer;*/
+	cursor: default;
 }
 .opusSideCommentList{
 	margin: 0 auto;
@@ -360,6 +362,7 @@ td,tbody,table{
 	margin-top: 2px;
 	background-size:50% 35%;
 	box-shadow: 0 0 0 0 transparent;
+	opacity: 0.5;
 }
 .sideCommentEdit img{
 	box-shadow: none !important;
@@ -371,7 +374,7 @@ td,tbody,table{
 	background: rgba(0,0,0,0.8);
 	margin-left: 20px;
 	display: none;
-	z-index: 1000;
+	z-index: 600;
 	border-radius: 2px;
 	/*box-shadow: 0 0 0 10px rgba(0,0,0,0.8);*/
 	border: 1px solid #777;

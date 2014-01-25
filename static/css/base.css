@@ -153,11 +153,11 @@ blockquote p{
 }
 
 /*mark for this page*/
-#thisPage{
-	background:rgba(255,255,255,0.3);
+.thisPage{
+	background:rgba(255,255,255,0.5);
 	color: #680;
 }
-#thisPage:hover{
+.thisPage:hover{
 	background: white;
 }
 

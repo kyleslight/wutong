@@ -13,7 +13,7 @@
         {% end %}
         <div class="opusAttached">
             {% if article_list["tags"] %}
-            <span class="opusTag">Tags：
+            <span class="opusTag">
             {% for tag in article_list["tags"] %}
                 <a href="/tag/{{ tag["name"] }}">{{ tag["name"] }}</a>
             {% end %}

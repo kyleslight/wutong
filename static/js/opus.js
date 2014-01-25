@@ -143,6 +143,9 @@ $(document).ready(function(){
 
     // edit the side comment of this para
     editableOpusChild.dblclick(function(){
+        if ($(".opusSideCommentWrap").css("display")=="none") {
+            return false;
+        }
         var indexOfPara=editableOpusChild.index($(this));
         sideCommentShow(indexOfPara);
     });
@@ -230,7 +233,7 @@ $(document).ready(function(){
     });
     $("#sendScore").click(function(){
         if (opusScore==0) {
-            showError("请先进行评分再提交");
+            showError("请先进行评分再提交",2000);
             return false;
         };
         // send opusScore
@@ -267,7 +270,6 @@ $(document).ready(function(){
             'page_id': 0, // TODO: replace this
         },
         function(data, status) {
-            // TODO: if 'failed'
             if (status=="failed") {
                 showError("发送失败",2000);
                 return false;
@@ -445,6 +447,10 @@ function sendSideComment(){
         'paragraph_id': editingParaNum, // TODO: replace this
     },
     function(data) {
+        if (data=="failed") {
+            showError("发送失败",2000);
+            return false;
+        };
         data=data.replace(/&lt;br \/&gt;/g,"<br>").replace(/&lt;\/a&gt;/g,"</a>").replace(/&gt;/g,">").replace(/&lt;a/g,"<a").replace(/&quot;/g,"'");
         var addListNav=$("#sideCommentNode"+editingParaNum).children(".opusSideCommentNav");
         addListNav.after(data);

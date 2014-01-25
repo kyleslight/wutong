@@ -20,6 +20,8 @@ var checkLogin=false;
 // get unsync information
 unsycUser();
 
+highlightThisPage();
+
 $(document).ready(function() {
     checkIsLogin();
 
@@ -32,6 +34,7 @@ $(document).ready(function() {
             $(".navrighton").fadeIn(10);
             $("#username").children().val(username);
             $("#usernameHover").text(username);
+            $("#myHomepage").parent().attr("href","/user/"+username);
         });
         if (location.pathname.slice(0,9)=="/a/create") {
             $(".write").show();
@@ -479,6 +482,7 @@ function loginAction(loginUsername,loginPassword){
                     $(".navrighton").fadeIn();
                     $("#username").children().val(username);
                     $("#usernameHover").text(username);
+                    $("#myHomepage").parent().attr("href","/user/"+username);
                     loginBoxFade();
                 });
             });
@@ -651,6 +655,18 @@ function checkEmail(e){ var i=e.length;
         }     
     }     
     return false;     
+}
+
+function highlightThisPage(){
+    var pathURL=location.pathname;
+    if (pathURL.slice(0,2)=="/a"&&pathURL!="/a/create") {
+        $("#browse li").addClass("thisPage");
+    }else if(pathURL.slice(0,2)=="/g"||pathURL.slice(0,2)=="/t"){
+        $("#group li").addClass("thisPage");
+    }else if (pathURL=="/a/create") {
+        $("#create li").addClass("thisPage");
+    };
+    return;
 }     
 
 String.prototype.httpHtml = function() {
