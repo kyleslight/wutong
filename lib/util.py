@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Last Modified time: 2013-12-28 14:11:08
+# @Last Modified time: 2014-01-25 20:53:22
 
 import os
 import uuid
@@ -13,7 +13,7 @@ from datetime import datetime
 from tornado.web import create_signed_value, decode_signed_value
 
 
-def split(txt, seps):
+def split(txt, seps=u' ;；'):
     default_sep = seps[0]
     for sep in seps[1:]:
         txt = txt.replace(sep, default_sep)

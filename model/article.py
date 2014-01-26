@@ -3,7 +3,6 @@
 
 
 class ArticleModel(object):
-
     def __init__(self, db):
         self.db = db
 
@@ -34,22 +33,21 @@ class ArticleModel(object):
 
     def do_create(self,
                   uid,
-                  title,
-                  mainbody,
-                  subtitle=None,
+                  title, mainbody,
+                  tags=[],
                   description=None,
                   suit_for=None,
                   reference=None,
                   series=None,
                   resource=None,
-                  is_public=u'推送',
-                  tags=[]):
-        select = 'SELECT create_article(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+                  is_public=2,
+                  partner=None,
+                  **kwargs):
+        select = 'SELECT create_article(%s, %s, %s, %s, %s, %s, %s, %s, %s)'
         aid = self.db.getfirstfield(select,
                                     uid,
                                     title,
                                     mainbody,
-                                    subtitle,
                                     description,
                                     suit_for,
                                     reference,
@@ -57,6 +55,7 @@ class ArticleModel(object):
                                     resource,
                                     is_public)
         self.create_article_tags(aid, tags)
+        # self.add_article_partner(aid, partner)
         return aid
 
     def create_side_comment(self, aid, uid, content, paragraph_id):
@@ -91,3 +90,9 @@ class ArticleModel(object):
     def create_article_view(self, aid, uid=None, ip=None):
         select = 'SELECT create_article_view(%s, %s, %s)'
         return self.db.execute(select, aid, uid, ip)
+
+    def create_article_score(self, aid, uid, score):
+        return self.db.call('create_article_score', aid, uid, score)
+
+    def create_article_collection(self, aid, uid):
+        return self.db.call('create_article_collection', aid, uid)

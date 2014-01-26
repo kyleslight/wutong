@@ -25,6 +25,7 @@ urls = [
     (r"/logout", user.LogoutHandler),
     (r"/register", user.RegisterHandler),
     (r"/account/check", user.AccountCheckHandler),
+    (r"/tag/(.+)", base.BaseHandler),
     (r"/g/browse", group.BrowseHandler),
     (r"/g/create", group.CreateHandler),
     (r"/g/(\d+)", group.GroupIndexHandler),
@@ -39,6 +40,8 @@ urls = [
     (r"/a/browse", article.BrowseArticleHandler),
     (r"/a/create", article.CreateArticleHandler),
     (r"/a/(\d+)", article.OpusHandler),
+    (r"/a/(\d+)/score", article.ArticleScoreHandler),
+    (r"/a/(\d+)/collection", article.ArticleCollectionHandler),
     (r"/a/(\d+)/comment/bottom", article.BottomCommentHandler),
     (r"/a/(\d+)/comment/side", article.SideCommentHandler),
 ]
@@ -92,10 +95,11 @@ settings = dict(
         "MyModule": MyModule,
     },
     ui_methods = {
-        "encodestr": lambda h, x: util.encodestr(x),
-        "str2datetime": lambda h, x: util.str2datetime(x),
-        "prettytime": lambda h, x: util.prettytime(x),
-        "avatarurl": lambda h, x, *arg: util.avatarurl(x, *arg),
+        "encodestr": lambda handler, x: util.encodestr(x),
+        "str2datetime": lambda handler, x: util.str2datetime(x),
+        "prettytime": lambda handler, x: util.prettytime(x),
+        "avatarurl": lambda handler, x, *arg: util.avatarurl(x, *arg),
+        "getuser": lambda handler: handler.get_current_user(),
     },
     dsn="dbname=" + options.dbname      \
        +" user=" + options.dbuser       \

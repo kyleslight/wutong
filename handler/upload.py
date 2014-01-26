@@ -22,7 +22,7 @@ class FileHandler(BaseHandler):
 
     # download
     def get(self):
-        self.render('test_upload_image.html')
+        raise NotImplementedError
 
     # upload
     def post(self):
@@ -45,5 +45,4 @@ class FileHandler(BaseHandler):
                 fp.write(data)
         except:
             self.write('failed')
-        else:
-            self.write(filename)
+        self.write(filename)

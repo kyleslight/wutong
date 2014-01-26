@@ -12,23 +12,12 @@ class ArticleBaseHandler(BaseHandler):
     def model(self):
         return self.articlemodel
 
-    def create_article(self,
-                       title,
-                       mainbody,
-                       subtitle=None,
-                       description=None,
-                       suit_for=None,
-                       reference=None,
-                       partner=None,
-                       tags=[]):
-        article_id =  self.model.do_create(self.user_id,
-                                           title,
-                                           mainbody,
-                                           subtitle,
-                                           description,
-                                           suit_for,
-                                           reference)
-        self.model.create_article_tags(article_id, tags)
+    def create_article(self, title, mainbody, tags=[], **kwargs):
+        article_id =  self.model.do_create(
+            self.user_id,
+            title, mainbody,
+            tags, **kwargs
+        )
         return article_id
 
 
@@ -52,24 +41,51 @@ class OpusHandler(ArticleBaseHandler):
     def get(self, article_id):
         article = self.get_article(article_id)
         if article:
-            self.render('opus.html', article=article)
+            user = self.get_current_user()
+            self.render('opus.html', article=article, user=user)
         else:
             self.write_error(404)
 
 
 class CreateArticleHandler(ArticleBaseHandler):
-    def get_tags_from_str(self, tags):
-        top_tags = set([
+    top_tags = {
+        u'文章': set([
             u'学科', u'技术', u'教程', u'文学',
             u'发现', u'日常', u'随笔', u'娱乐',
             u'杂',
-        ])
-        seps = [u' ', u';', u'；']
+        ]),
+        u'片段': set([
+            u'问答', u'idea', u'状态', u'心情',
+            u'推荐', u'语录', u'段子', u'周边',
+            u'杂',
+        ]),
+        u'摄影': set([
+            u'人像', u'风光', u'纪实', u'静物',
+            u'动物', u'建筑', u'生态', u'游记',
+            u'杂',
+        ]),
+        u'绘画': set([
+            u'手绘', u'故事', u'CG', u'水彩',
+            u'纹案', u'建筑', u'平面', u'概念',
+            u'杂',
+        ]),
+        u'项目': set([
+            u'Web', u'Android', u'iOS', u'Linux',
+            u'Mac OS', u'Windows', u'平面', u'原型',
+            u'杂',
+        ]),
+    }
 
-        tags = util.split(tags, u' ,;；')
-        # if set(tags).isdisjoint(top_tags):
-            # tags = []
-        return tags
+    def get_tags_from_str(self, tags):
+        tags = util.split(tags)
+
+        # have any top tag ?
+        top_tags = set()
+        map(top_tags.update, self.top_tags.values())
+        for tag in tags:
+            if tag in top_tags:
+                return tags
+        return None
 
     def get(self):
         self.render('create.html')
@@ -78,28 +94,29 @@ class CreateArticleHandler(ArticleBaseHandler):
         if not self.get_current_user():
             self.write('not login')
             return
+
+        opus_type = self.get_argument('type')
         title = self.get_argument('title')
         mainbody = self.get_argument('textArea')
-        subtitle = self.get_argument('subtitle')
-        description = self.get_argument('describe')
-        suit_for = self.get_argument('suit')
-        reference = self.get_argument('reference')
-        partner = self.get_argument('partner')
         tags = self.get_argument('tags')
+        is_public = int(self.get_argument('is_public') == 'true')
+        is_public += int(self.get_argument('push') == 'true')
+        kwargs = dict(
+            description=self.get_argument('describe'),
+            suit_for=self.get_argument('suit'),
+            reference=self.get_argument('reference'),
+            series=self.get_argument('series'),
+            resource=self.get_argument('resource'),
+            partner=self.get_argument('cooperation'),
+            is_public=is_public,
+        )
 
         tags = self.get_tags_from_str(tags)
         if not tags:
             self.write('invalid tags')
             return
 
-        article_id = self.create_article(title,
-                                         mainbody,
-                                         subtitle,
-                                         description,
-                                         suit_for,
-                                         reference,
-                                         partner,
-                                         tags)
+        article_id = self.create_article(title, mainbody, tags, **kwargs)
         self.redirect('/a/%s' % article_id)
 
 
@@ -173,3 +190,28 @@ class BottomCommentHandler(CommentBaseHandler):
     def render_comment(self, comment):
         res = self.render_module_string('bottom_comment.html', comment=comment)
         return res
+
+
+class ArticleScoreHandler(ArticleBaseHandler):
+    def create_score(self, article_id, score):
+        return self.model.create_score(article_id, self.user_id, score)
+
+    @authenticated
+    def post(self, article_id):
+        article_id = int(article_id)
+        score = int(self.get_argument('score'))
+        if not (1 <= score <= 10):
+            self.write('out range')
+        if not self.create_score(article_id, score):
+            self.write('failed')
+
+
+class ArticleCollectionHandler(ArticleBaseHandler):
+    def create_collection(self, article_id):
+        return self.model.create_collection(article_id, self.user_id)
+
+    @authenticated
+    def post(self, article_id):
+        article_id = int(article_id)
+        if not self.create_collection(article_id):
+            self.write('failed')

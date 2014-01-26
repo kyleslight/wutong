@@ -5,8 +5,8 @@
 {% block extra_div %}
     <div class="groupNavWarp">
         <div class="groupNav">
-            {% if user %}
             <div class="userGroupInfo">
+                {% if user %}
                 <a class="userImg" href="#"><img src="{{ avatarurl(user['avatar']) }}" /></a>
                 <a class="userName" href="#">{{ user['penname'] }}</a>
                 <div class="myGroup">
@@ -21,6 +21,7 @@
                     <!-- <a href="#" id="myGroupMore">更多小组</a> -->
                     <a href="#" id="createGroup"> + 创建小组</a>
                 </div>
+                {% end %}
                 <div class="groupTagArea">
                     <div class="groupTagTitle">推荐Tag</div>
                     <h class="groupTagClass">兴趣»</h>
@@ -57,7 +58,6 @@
                     <a href="#" class="groupTag">从零开始玩耳机</a>
                 </div>
             </div>
-            {% end %}
             <div class="groupMainWrap">
                 <div class="groupDynamic">
                     {% if recent_group_topics %}

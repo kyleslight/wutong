@@ -155,6 +155,7 @@ $(document).ready(function() {
         });
         logOutEffect();
         checkIsLogin();
+        window.location = location.pathname;
     });
 
     // loginBox and registerBox
@@ -464,6 +465,8 @@ function loginSubmit() {
     var loginUsername = $("#loginUsername").val();
     var loginPassword = $("#loginPassword").val();
     loginAction(loginUsername,loginPassword);
+    if (location.pathname === '/g/browse')
+        window.location = location.pathname;
 }
 
 function loginAction(loginUsername,loginPassword){

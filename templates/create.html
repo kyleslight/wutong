@@ -19,6 +19,7 @@
                 <input id="opusTag" class="hideInput" type="text" name="tags" />
                 <input id="opusSuit" class="hideInput" type="text" name="suit" />
                 <input id="opusCooperation" class="hideInput" type="text" name="cooperation" />
+                <input id="opusPublic" class="hideInput" type="text" name="is_public" />
                 <div id="imageUploadContainer" class="none"></div>
 
                 <div id="resourceForm" class="formlist"><span class="inputTip">资源</span>
@@ -38,9 +39,9 @@
                     <a href="#" class="addImage"><span>+</span> 点击此处添加照片</a>
                 </div>
 
-				<div id="referenceForm" class="formlist"><span class="inputTip">引用来源</span> <textarea id="reference" class="input" type="text" name="reference" placeholder="这里注明引用来源，引用格式为'···:···;',冒号前为来源说明，冒号后为引用地址（可选）" draggable="false"></textarea></div>
+				<div id="referenceForm" class="formlist"><span class="inputTip">参考来源</span> <textarea id="reference" class="input" type="text" name="reference" placeholder="这里注明参考来源，引用格式为'···:···;',冒号前为来源说明，冒号后为引用地址（可选）" draggable="false"></textarea></div>
 
-				<div id="tagsForm" class="formlist"><span class="inputTip">Tags</span>
+				<div id="tagsForm" class="formlist"><span class="inputTip">标签</span>
                 <select id="articleFirstClass" class="firstClass activeFirstClass" name="articleFirstClass">
                     <option class="firstClassItem" value="学科">学科</option>
                     <option class="firstClassItem" value="技术">技术</option>
@@ -107,8 +108,8 @@
                     <div id="pushOptionForm" class="formlist">
                         <span class="inputTip">推送方式</span>
                         <div class="pushOption">
-                            <input type="radio" id="puclicPush" name="push" checked="checked" />推送
-                            <input type="radio" id="puclicNotPush" name="push" />不推送
+                            <input type="radio" id="puclicPush" name="push" checked="checked" value='true'/>推送
+                            <input type="radio" id="puclicNotPush" name="push" value='false'/>不推送
                         </div>
                     </div>
                 </div>

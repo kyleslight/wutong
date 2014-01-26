@@ -26,16 +26,19 @@
                     </div>
                 </div>
                 <div class="scoreBoardAfter">
-                    
+
                 </div>
             </div>
             <div class="opusFunction">
                 <a href="#" id="expandSideComment">侧评</a>
-                <!-- 若访问者为作者，则不渲染评分 -->
-                <a href="#" id="scoreOpus">评分</a>
-                <!-- 若访问者非作者，则不渲染修改 -->
+                {% if user %}
+                {% if article['uid'] == user['uid'] %}
                 <a href="#" id="modifyOpus">修改</a>
+                {% else %}
+                <a href="#" id="scoreOpus">评分</a>
                 <a href="#" id="collectOpus">收藏</a>
+                {% end %}
+                {% end %}
             </div>
             <div class="sideCommentEditBox">
                 <textarea id="sideCommentEditData" placeholder="编辑侧评"></textarea>

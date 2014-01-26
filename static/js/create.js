@@ -51,7 +51,7 @@ $(document).ready(function(){
         for(var i=0;i<preTag.length;i++){
             if (lessIllegalCharacter.test(preTag[i])) {
                 showError("Tag包含非法字符",2000);
-                return false;  
+                return false;
             };
         };
 
@@ -101,7 +101,7 @@ $(document).ready(function(){
         var temtText='<div class="opusBasicInfo">'
                     +    '<div class="firstLine">'
                     +        '<div class="opusTime">'+temTime.getFullYear()+' '+(temTime.getMonth()+1)+' '+temTime.getDate()+'</div>'
-                    +        '<span class="opusAuthor">by <a href="#">'+userInfo.penname+'</a></span>'
+                    +        '<span class="opusAuthor">by <a href="#">'+$("#usernameHover").text()+'</a></span>'
                     +    '</div>'
                     +    '<div class="opusTitle">'
                     +        '<div class="opusMainTitle">'+temTextData.title+'</div>'
@@ -144,7 +144,7 @@ $(document).ready(function(){
         $("#textdata,#opusPreViewButton,#previewBeforePublic").show();
     })
 
-    $("#opusPublicSubmitButton,#opusPrivateSubmitButton").click(function(){
+    $("#opusPublicSubmitButton, #opusPrivateSubmitButton").click(function (){
         if ($(".activeOpusType").text()=="摄影"||$(".activeOpusType").text()=="绘画") {
             $("#imageUploadContainer").html("");
             for(var i=0;i<$(".preImageUpload").size();i++){
@@ -167,11 +167,11 @@ $(document).ready(function(){
         $("#opusTag").val(transTags);
         $("#opusSuit").val($("#outterSuit").val());
         $("#opusCooperation").val($("#outterCooperation").val());
-        var referenceCon=preReference($("#reference").val());       
+        var referenceCon=preReference($("#reference").val());
         $("#reference").val(referenceCon);
+        $("#opusPublic").val(this.getAttribute('id') === "opusPublicSubmitButton");
 
         var theForm=document.getElementById("textdata");
-        console.log(theForm);
         theForm.submit();
     });
 
@@ -252,10 +252,7 @@ function initCreate(){
 }
 
 function isPublic(bottonId){
-    if (bottonId=="opusPublicSubmitButton") {
-        return true;
-    }else{return false;};
-    return false;
+    return bottonId == "opusPublicSubmitButton";
 }
 
 function deleteBrPara(string){

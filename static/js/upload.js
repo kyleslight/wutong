@@ -189,7 +189,7 @@ function file_upload(work) {
 
 /* Check if valid URL */
 function isurl(theurl) {
-	return /^\s*https?:\/\/.+$/.test(theurl);
+	return /^\s*https?:\/\/.+\..+$/.test(theurl);
 }
 
 /* Check if empty URL */
@@ -232,15 +232,15 @@ function after_upload(res) {
 			}
 			break;
 		case 'failed':
-				qli.work.status = 'failed';
-				qli.work.err = res.err;
-				qimg.style.backgroundImage = 'url(upload_error.png)';
-				qimg.style.backgroundSize = '200px 200px';
-				qimg.style.width = qprg.style.width = qli.style.width = '200px';
-				qimg.style.height = qprg.style.height = qli.style.height = '200px';
-				qli.style.marginTop = qli.marginBottom = '0';
-				qsel.style.paddingTop = '170px';
-				show_error(qli.work);
+			qli.work.status = 'failed';
+			qli.work.err = res.err;
+			qimg.style.backgroundImage = 'url(upload_error.png)';
+			qimg.style.backgroundSize = '200px 200px';
+			qimg.style.width = qprg.style.width = qli.style.width = '200px';
+			qimg.style.height = qprg.style.height = qli.style.height = '200px';
+			qli.style.marginTop = qli.marginBottom = '0';
+			qsel.style.paddingTop = '170px';
+			show_error(qli.work);
 			break;
 	}
 	changeinfo(true);

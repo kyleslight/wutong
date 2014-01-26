@@ -185,10 +185,8 @@ $(document).ready(function(){
 
     // collect opus
     $("#collectOpus").click(function(){
-        var opusID=location.pathname.slice(3);
-        $.post("/u/collection",{
-            // 'article_id':opusID
-        },function(data){
+        var collectionUrl=location.pathname+"/collection";
+        $.post(collectionUrl,function(data){
             console.log(data);
         })
     });
@@ -236,7 +234,12 @@ $(document).ready(function(){
             showError("请先进行评分再提交",2000);
             return false;
         };
-        // send opusScore
+        var scoreUrl=location.pathname+"/score";
+        $.post(scoreUrl,{
+            'score':parseInt($("#score").text())
+        },function(){
+            console.log(data);
+        });
     });
     $("#scoreBoardBeforeBack").click(function(){
         $(".scoreBoard").slideUp();
