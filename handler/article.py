@@ -194,7 +194,7 @@ class BottomCommentHandler(CommentBaseHandler):
 
 class ArticleScoreHandler(ArticleBaseHandler):
     def create_score(self, article_id, score):
-        return self.model.create_score(article_id, self.user_id, score)
+        return self.model.create_article_score(article_id, self.user_id, score)
 
     @authenticated
     def post(self, article_id):
@@ -208,7 +208,7 @@ class ArticleScoreHandler(ArticleBaseHandler):
 
 class ArticleCollectionHandler(ArticleBaseHandler):
     def create_collection(self, article_id):
-        return self.model.create_collection(article_id, self.user_id)
+        return self.model.create_article_collection(article_id, self.user_id)
 
     @authenticated
     def post(self, article_id):
