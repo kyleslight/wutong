@@ -62,6 +62,13 @@ $(document).ready(function() {
         }, 1000);
         return false;
     });
+
+    // search
+    $("#searchSubmitButton").click(function(){
+        searchStart();
+        return false;
+    });
+
     // navrighton effect
     $("#username").mouseover(function() {
         $(this).css("background", "white");
@@ -683,4 +690,32 @@ function showError(errorStatement,duration){
     setTimeout(function(){
         $(".errorPromptBox").fadeOut();
     },duration);
+}
+
+function showHint(searchKeyWord){
+    $(".searchSuggestions").empty();
+
+    // test search searchSuggestion
+    if (searchKeyWord=="") {return;};
+    var returnWordsNum=Math.floor(Math.random()*8)+2;
+    for(var i=0;i<returnWordsNum;i++){
+        var searchSuggestionWord=searchKeyWord+generateMixed(2);
+        var app='<a class="searchSuggestionsList" href="/search/'+searchSuggestionWord+'">'+searchSuggestionWord+'</a>';
+        console.log(app);
+        $(".searchSuggestions").prepend(app);
+    };
+}
+
+function searchStart(){
+
+}
+
+var chars = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+function generateMixed(n) {
+     var res = "";
+     for(var i = 0; i < n ; i ++) {
+         var id = Math.ceil(Math.random()*35);
+         res += chars[id];
+     }
+     return res;
 }

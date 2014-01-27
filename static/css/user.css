@@ -47,10 +47,13 @@
 .userName{
 	color: #444;
 	font-size: 1.5em;
+	text-align: center;
 }
 
 .otherAction{
 	margin-top: 10px;
+	margin-bottom: 10px;
+	text-align: center;
 }
 .otherAction a{
 	display: inline-block;
@@ -72,6 +75,47 @@
 
 .userExtendInfo{
 	margin-top: 20px;
+}
+#userInfoEdit,#userEditedSubmit,#userEditedBack{
+	float: left;
+	width: 200px;
+	background: #680;
+	color: #CCC;
+	padding: 5px 0;
+	display: block;
+	margin-top: 10px;
+	border-radius: 2px;
+	text-align: center;
+}
+#userInfoEdit:hover,#userEditedSubmit:hover,#userEditedBack:hover{
+	background: #c1d739;
+	color: white;
+}
+.edittingArea{
+	margin-top: 10px;
+	display: none;
+}
+.edittingArea .tip{
+	padding-top: 5px;
+	float: left;
+}
+.edittingItem,div.edittingItem{
+	float: left;
+	width: 152px;
+	border: 1px solid rgba(102,163,0,0.4);
+	padding: 5px;
+	border-radius: 2px;
+	font-size: 0.95em;
+}
+#edittingSex{
+	border: 0;
+	padding: 0;
+	padding-top: 5px;
+}
+#edittingMotto,#edittingIntro{
+	margin-top: 5px;
+	height: 50px;
+	resize:none;
 }
 .followInfo{
 	margin-top: 25px;
@@ -148,7 +192,13 @@
 
 .opusCommentPart{
 	display: none;
+	/*background: white;*/
+}
+.opusCommentPart .timeDivision{
 	background: white;
+	margin: 0;
+	padding-top: 10px;
+	padding-left: 10px;
 }
 .activeOpusCommentPart{
 	display: block;
@@ -179,7 +229,6 @@
 }
 
 .timeDivision{
-	float: left;
 	margin-left: 10px;
 	margin-bottom: 6px;
 	padding-top: 10px;
@@ -203,6 +252,23 @@
 	background: white;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
+}
+
+div.opusSeriesExpand{
+	display: none;
+}
+div.opusSeriesExpand,.opusSeriesExpand div{
+	float: none;
+}
+div.opusSeriesDescription{
+	color: #777;
+	font-size: 0.9em;
+	margin: 10px 0;
+}
+.opusSeriesExpandTitle{
+	display: inline-block;
+	clear: both;
+	margin: 10px 0;
 }
 
 #sideCommentReply{
@@ -287,4 +353,103 @@
 }
 .groupPart{
 	margin-top: 32px;
+}
+.forMore{
+	clear: both;
+	text-align: center;
+	background: #680;
+	padding: 5px;
+	margin-top: 5px;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom: 2px solid white;
+	transition: 1s;
+	-moz-transition: 1s;
+	-webkit-transition: 1s;
+	-o-transition: 1s;
+}
+.forMore a{
+	color: #CCC;
+}
+.forMore:hover{
+	background: #c1d739;
+	cursor: pointer;
+}
+.forMore:hover a{
+	color: white;
+}
+
+.opusSeriesEdit{
+	width: 700px;
+	/*height: 500px;*/
+	padding: 20px;
+	position: fixed;
+	z-index: 600;
+	background: rgba(255,255,255,0.95);
+	left: 50%;
+	top: 10%;
+	margin-left: -370px;
+	box-shadow: 0 0 10px #CCC;
+	display: none;
+}
+.introWords{
+	float: left;
+	margin-top: 20px;
+}
+#opusSeriesEditTitle{
+	width: 550px;
+	border: 1px solid rgba(102,163,0,0.4);
+}
+#opusSeriesEditDescription{
+	width: 550px;
+	border: 1px solid rgba(102,163,0,0.4);
+	display: inline;
+	height: 100px;
+}
+#opusSeriesEditPart2{
+	display: none;
+}
+.tip{
+	font-size: 0.9em;
+	color: #AAA;
+	margin: 0
+}
+.opusSeriesEditArea{
+	float: left;
+}
+.selectedOpus,.availableOpus{
+	float: left;
+	width: 300px;
+}
+.opusSeriesChange{
+	float: left;
+	width: 80px;
+	height: 60px;
+}
+#selectedOpusListWrap,#availableOpusListWrap{
+	border: 1px solid rgba(102,163,0,0.4);
+	height: 300px;
+	overflow: auto;
+}
+#selectedOpusListWrap li,#availableOpusListWrap li{
+	border-bottom: 1px solid rgba(102,163,0,0.4);
+	padding: 10px;
+	transition: 0.2s;
+	-moz-transition:0.2s;
+	-webkit-transition:0.2s;
+	-o-transition:0.2s;
+}
+#selectedOpusListWrap li:hover,#availableOpusListWrap li:hover{
+	border-bottom: 1px solid rgba(102,163,0,0.4);
+	padding: 10px;
+	background: #680;
+	color: white;
+	cursor: move;
+}
+.opusSeriesEditFunction{
+	float: left;
+	margin-top: 20px;
+}
+.opusSeriesEditFunction a{
+	margin-right: 20px;
 }

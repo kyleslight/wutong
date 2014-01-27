@@ -1,35 +1,79 @@
 {% extends "base_opus.html" %}
 {% block extra_css %}
-	<link rel="stylesheet" href="{{ static_url("css/user_home.css") }}" type="text/css" />
+	<link rel="stylesheet" href="{{ static_url("css/user.css") }}" type="text/css" />
 {% end %}
 {% block extra_div%}
  <div class="userHome">
  	<div class="userHomeInner">
+ 		<div class="opusSeriesEdit">
+ 			<h2>编辑作品系列</h2>
+ 			<div id="opusSeriesEditPart1">
+	 			<span class="introWords">作品系列标题：</span><input type="text" id="opusSeriesEditTitle" class="input" placeholder="填写标题，请控制在30字符以内（必填）"><br>
+	 			<span class="introWords">作品系列简介：</span><textarea id="opusSeriesEditDescription" class="input" placeholder="对该系列的简单介绍,请控制在500字符以内（可选）"></textarea>
+	 			<div class="opusSeriesEditFunction">
+	 				<a href="#" class="closeOpusSeriesEdit">放弃编辑</a><a href="#" id="opusSeriesEditNext">下一步</a>
+	 			</div>
+ 			</div>
+ 			<div id="opusSeriesEditPart2">
+	 			<p class="tip">请从以下备选的作品中选择作品并拖拽至该作品系列中</p>
+	 			<div class="opusSeriesEditArea">
+	 				<div class="selectedOpus">
+	 					<h3>已选作品<span id="selectedOpusNum">10</span></h3>
+		 				<div id="selectedOpusListWrap" ondrop="drop(event)" ondragover="allowDrop(event)">
+		 				</div>
+	 				</div>
+	 				<div class="opusSeriesChange">
+	 					
+	 				</div>
+	 				<div class="availableOpus">
+	 					<h3>备选作品<span id="availableOpusNum">10</span></h3>
+		 				<div id="availableOpusListWrap" ondrop="drop(event)" ondragover="allowDrop(event)">
+		 					<li class="availableOpusList" draggable="true" ondragstart="drag(event)" ondblclick="dropThisOpus(this)" id="opus1">available opus 1</li>
+		 					<li class="availableOpusList" draggable="true" ondragstart="drag(event)" ondblclick="dropThisOpus(this)" id="opus2">available opus 2</li>
+		 					<li class="availableOpusList" draggable="true" ondragstart="drag(event)" ondblclick="dropThisOpus(this)" id="opus3">available opus 3</li>
+		 					<li class="availableOpusList" draggable="true" ondragstart="drag(event)" ondblclick="dropThisOpus(this)" id="opus4">available opus 4</li>
+		 					<li class="availableOpusList" draggable="true" ondragstart="drag(event)" ondblclick="dropThisOpus(this)" id="opus5">available opus 5</li>
+		 				</div>
+	 				</div>
+	 			</div>
+ 				<div class="opusSeriesEditFunction"><a href="#" class="closeOpusSeriesEdit">放弃编辑</a><a href="#" id="opusSeriesEditPre">上一步</a><a href="#" id="opusSeriesEditFinish">完成</a></div>
+ 			</div>
+ 		</div>
 	 	<div class="userInfo">
 	 		<div class="userBasicInfo">
-	 			<div class="imageAndOtherAction">
-	 				<img class="userImage" src="{{ avatarurl(user["avatar"]) }}"/>
-	 				<div class="userName">{{ user['penname'] }}</div>
+ 				<img class="userImage" src="{{ avatarurl(user["avatar"]) }}"/>
+ 				<div class="userName">{{ user['penname'] }}</div>
+ 				<div class="editableArea">
 	 				<div class="userMotto">{{ user['motto'] }}</div>
 		 			<div class="otherAction">
 		 				<a href="#" id="follow">关注</a>
 		 				<a href="#" id="chat">会话</a>
 		 			</div>
-	 			</div>
-	 			<div class="userIntro">简介：<span>{{ user['intro'] }}</span></div>
-	 			<div class="userPrivateInfo">
-	 				私人信息：
-	 				<span class="userSex">
-		            {% if user["sex"] %}
-		                ♂
-		            {% else %}
-		                ♀
-		            {% end %}
-		            </span>
-		 			<span class="userAge">{{ user['age'] }}岁</span>
-		 			<span class="userCity">{{ user['address'] }}</span>
-	 			</div>
-	 			<div class="userTitle">头衔：<span>站长</span></div>
+			 		<div class="userIntro">简介：<span>{{ user['intro'] }}</span></div>
+		 			<div class="userPrivateInfo">
+		 				私人信息：
+		 				<span class="userSex">
+			            {% if user["sex"] %}
+			                ♂
+			            {% else %}
+			                ♀
+			            {% end %}
+			            </span>
+			 			<span class="userAge">{{ user['age'] }}岁</span>
+			 			<span class="userCity">{{ user['address'] }}</span>
+		 			</div>
+			 		<div class="userTitle">头衔：<span>站长</span></div>
+		 			<a href="#" id="userInfoEdit">编辑个人信息</a>
+		 		</div>
+		 		<div class="edittingArea">
+		 			<span class="tip">签名：</span><textarea id="edittingMotto" class="edittingItem"></textarea><br>
+		 			<span class="tip">简介：</span><textarea id="edittingIntro" class="edittingItem"></textarea><br>
+		 			<span class="tip">性别：</span><div id="edittingSex" class="edittingItem"><input type="radio" name="sex" id="edittingSexMale">男 <input type="radio" id="edittingSexFemale" name="sex">女</div><br>
+		 			<span class="tip">年龄：</span><input type="text" id="edittingAge" class="edittingItem" oninput="onlyNum()"><br>
+		 			<span class="tip">城市：</span><input type="text" id="edittingCity" class="edittingItem">
+		 			<a href="#" id="userEditedSubmit">完成</a>
+		 			<a href="#" id="userEditedBack">返回</a>
+		 		</div>
 	 		</div>
 	 		<div class="userExtendInfo">
 	 			<div class="userRegister">
@@ -71,7 +115,7 @@
 			<div class="myOpus">
 			<div class="myExtendPartFirstline"><a href="#">作品</a></div>
 				<div class="myOpusList opusPart activeOpusPart">
-					<a href="#" class="opusPartButton">作品列表</a>
+					<span href="#" class="opusPartButton">作品列表</span>
 					<li class="opusShow article">
 					    <div class="opusBasicInfo">
 					        <a href="#" class="opusTitle" >此间的少年</a>
@@ -112,15 +156,38 @@
 					        <div class="opusCollected">收藏：<span>118</span></div>
 					    </div>
 					</li>
+					<div class="forMore"><a href="#">查看更多作品</a></div>
 				</div>
 				<div class="myOpusSeriesList opusPart">
-					<a href="#" class="opusPartButton">作品系列列表</a>
+					<span href="#" class="opusPartButton">作品系列列表</span>
 					<li class="opusSeries" id="addOPusSeries">
-					    <a href="#">点击此处添加作品系列</a>
+						<!-- 非作者没有添加作品列表 -->
+					    <a href="#" id="createOpusSeries">点击此处添加作品系列</a>
 					</li>
 					<li class="opusSeries">
 					    <div class="opusSeriesInfo">
-					        <a href="#" class="opusSeriesTitle" ><span>镜</span> </a> 系列 <a href="#">展开</a>
+					        <a href="#" class="opusSeriesTitle" >镜 </a> 系列 
+					        <a href="#" class="editOpusSeries">编辑</a>
+					        <a href="#" class="expandOpusSeries">展开</a>
+					        <div class="opusSeriesExpand">
+					        	<div class="opusSeriesDescription">这里是作品系列的简介
+					        	</div>
+					        	<div class="opusSeriesExpandList">
+					        			<a href="#" class="opusSeriesExpandTitle" >彼间的老年</a>
+					        	</div>
+					        	<div class="opusSeriesExpandList">
+					        			<a href="#" class="opusSeriesExpandTitle" >彼间的老年</a>
+					        	</div>
+					        	<div class="opusSeriesExpandList">
+					        			<a href="#" class="opusSeriesExpandTitle" >彼间的老年</a>
+					        	</div>
+					        	<div class="opusSeriesExpandList">
+					        			<a href="#" class="opusSeriesExpandTitle" >彼间的老年</a>
+					        	</div>
+					        	<div class="opusSeriesExpandList">
+					        			<a href="#" class="opusSeriesExpandTitle" >彼间的老年</a>
+					        	</div>
+					        </div>
 					        <br/>
 					        <div class="opusSeriesTime">创建时间： <span>2014-2-13</span></div>
 					        <div class="opusSeriesGrade">平均得分： <span>9.4</span></div>
@@ -130,7 +197,28 @@
 					</li>
 					<li class="opusSeries">
 					    <div class="opusSeriesInfo">
-					        <a href="#" class="opusSeriesTitle" ><span>镜</span> </a> 系列 <a href="#">展开</a>
+					        <a href="#" class="opusSeriesTitle" >镜 </a> 系列 
+					        <a href="#" class="editOpusSeries">编辑</a>
+					        <a href="#" class="expandOpusSeries">展开</a>
+					        <div class="opusSeriesExpand">
+					        	<div class="opusSeriesDescription">这里是作品系列的简介
+					        	</div>
+					        	<div class="opusSeriesExpandList">
+					        			<a href="#" class="opusSeriesExpandTitle" >彼间的老年</a>
+					        	</div>
+					        	<div class="opusSeriesExpandList">
+					        			<a href="#" class="opusSeriesExpandTitle" >彼间的老年</a>
+					        	</div>
+					        	<div class="opusSeriesExpandList">
+					        			<a href="#" class="opusSeriesExpandTitle" >彼间的老年</a>
+					        	</div>
+					        	<div class="opusSeriesExpandList">
+					        			<a href="#" class="opusSeriesExpandTitle" >彼间的老年</a>
+					        	</div>
+					        	<div class="opusSeriesExpandList">
+					        			<a href="#" class="opusSeriesExpandTitle" >彼间的老年</a>
+					        	</div>
+					        </div>
 					        <br/>
 					        <div class="opusSeriesTime">创建时间： <span>2014-2-13</span></div>
 					        <div class="opusSeriesGrade">平均得分： <span>9.4</span></div>
@@ -138,9 +226,10 @@
 					        <div class="opusSeriesCollected">收藏：<span>118</span></div>
 					    </div>
 					</li>
+					<div class="forMore"><a href="#">查看更多作品系列</a></div>
 				</div>
 				<div class="opusComment opusPart">
-					<a href="#" class="opusPartButton">回复</a>
+					<span href="#" class="opusPartButton">回复</span>
 					<div class="opusCommentFirstLine"><a href="#" id="sideCommentReply" class="opusCommentButton activeOpusCommentButton">侧评回复</a><a href="#" class="opusCommentButton">底评回复</a></div>
 					<div class="sideComment opusCommentPart activeOpusCommentPart">
 						<div class="timeDivision">今天</div>
@@ -161,6 +250,7 @@
 								“心”者，是众生之本源。一切诸法，同归于心。万法是心之异名，分为八万四千，广则无穷无尽。心生，种种法生；心灭，种种法灭。所以道：“众星皆拱北，无水不朝东。”
 							</a>
 						</li>
+						<div class="forMore"><a href="#">查看更多侧评回复</a></div>
 					</div>
 					<div class="bottomComment opusCommentPart">
 						<div class="timeDivision">今天</div>
@@ -181,10 +271,11 @@
 								“心”者，是众生之本源。一切诸法，同归于心。万法是心之异名，分为八万四千，广则无穷无尽。心生，种种法生；心灭，种种法灭。所以道：“众星皆拱北，无水不朝东。”
 							</a>
 						</li>
+						<div class="forMore"><a href="#">查看更多底评回复</a></div>
 					</div>
 				</div>
 				<div class="recentOpusView opusPart">
-					<a href="#" class="opusPartButton">最近浏览</a>
+					<span href="#" class="opusPartButton">最近浏览</span>
 					<div class="timeDivision">今天</div>
 					<li class="recentOpusViewList">
 						<a href="#" class="recentOpusViewTitle">Lolita</a>
@@ -251,19 +342,21 @@
 							<span class="recentOpusViewTime">2014-2-14 15:32</span>
 						</span>
 					</li>
+					<div class="forMore"><a href="#">查看更多最近浏览</a></div>
 				</div>
 			</div>
 			<div class="myGroup">
 				<div class="myExtendPartFirstline"><a href="#">小组</a></div>
 				<div class="groupList groupPart">
-					<a href="#" class="groupPartButton">小组列表</a>
+					<span href="#" class="groupPartButton">小组列表</span>
 					<a href="#" class="groupName">Test_Group_1</a>
 					<a href="#" class="groupName">Test_Group_2</a>
 					<a href="#" class="groupName">Test_Group_3</a>
 					<a href="#" class="groupName">Test_Group_4</a>
+					<div class="forMore"><a href="#">查看更多小组</a></div>
 				</div>
 				<div class="groupReply groupPart">
-					<a href="#" class="groupPartButton">回复</a>
+					<span href="#" class="groupPartButton">回复</span>
 					<li class="groupReplyList">
 						<a href="#" class="replyAuthor">monsterdog</a>
 						<a href="#" class="groupReplyListContent">
@@ -285,6 +378,7 @@
 						</a>
 						<span>来自 <a href="#">此间的少年</a></span> <span> 1-12 20:30</span>
 					</li>
+					<div class="forMore"><a href="#">查看更多小组回复</a></div>
 				</div>
 			</div>
 		</div>
@@ -292,5 +386,5 @@
 </div>
 {% end %}
 {% block extra_js %}
-	<script type="text/javascript" src="{{ static_url("js/user_home.js") }}"></script>
+	<script type="text/javascript" src="{{ static_url("js/user.js") }}"></script>
 {% end %}
