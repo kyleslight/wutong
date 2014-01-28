@@ -193,8 +193,19 @@ class BottomCommentHandler(CommentBaseHandler):
 
 
 class ArticleScoreHandler(ArticleBaseHandler):
-    def create_score(self, article_id, score):
-        return self.model.create_article_score(article_id, self.user_id, score)
+    def get_score(self, article_id):
+        return self.model.get_article_score(article_id, self.user_id)
+
+    def create_or_update_score(self, article_id, score):
+        if self.get_score(article_id):
+            return self.model.update_article_score(article_id, self.user_id, score)
+        else:
+            return self.model.create_article_score(article_id, self.user_id, score)
+
+    @authenticated
+    def get(self, article_id):
+        score = self.get_score(article_id)
+        self.write(str(score))
 
     @authenticated
     def post(self, article_id):
@@ -202,16 +213,27 @@ class ArticleScoreHandler(ArticleBaseHandler):
         score = int(self.get_argument('score'))
         if not (1 <= score <= 10):
             self.write('out range')
-        if not self.create_score(article_id, score):
+        if not self.create_or_update_score(article_id, score):
             self.write('failed')
 
 
 class ArticleCollectionHandler(ArticleBaseHandler):
-    def create_collection(self, article_id):
-        return self.model.create_article_collection(article_id, self.user_id)
+    def is_collected(self, article_id):
+        return self.model.is_article_collected(article_id, self.user_id)
+
+    def create_or_delete_collection(self, article_id):
+        if self.is_collected(article_id):
+            return self.model.delete_article_collection(article_id, self.user_id)
+        else:
+            return self.model.create_article_collection(article_id, self.user_id)
+
+    @authenticated
+    def get(self, article_id):
+        state = self.is_collected(article_id)
+        self.write(state)
 
     @authenticated
     def post(self, article_id):
         article_id = int(article_id)
-        if not self.create_collection(article_id):
+        if not self.create_or_delete_collection(article_id):
             self.write('failed')

@@ -54,7 +54,6 @@ class IndexHandler(UserBaseHandler):
 
 class HomeHandler(UserBaseHandler):
     def get(self, penname):
-        q<>penname
         uid = self.model.get_uid(penname)
         user_info = self.model.get_user_info(uid)
         groups = self.usermodel.get_user_groups(uid)
@@ -304,12 +303,13 @@ class CollectionHandler(UserBaseHandler):
     def add_collection(self, article_id):
         return self.create_article_collection(self.user_id, article_id)
 
-    def get_collections(self, page_id=0):
-        return self.model.get_collections(self.user_id, offset=page_id)
+    def get_collections(self, page):
+        return self.model.get_collections(self.user_id, page)
 
     @authenticated
     def get(self):
-        collections = self.get_collections()
+        page = self.get_argument('page', 1)
+        collections = self.get_collections(page)
         self.write(json_encode(collections))
 
     @authenticated

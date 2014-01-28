@@ -1,8 +1,13 @@
 #配置
-添加一个测试用户
-`sh configure.sh test`
-添加10个测试用户
-`sh configure.sh test 10`
+###`sh configure.sh [unittest|testdata|updatedb]`  
+ * 运行单元测试  
+   `sh configure.sh unittest`  
+ * 单独更新数据库  
+   `sh configure.sh updatedb`  
+ * 生成测试用例  
+   `sh configure.sh testdata`  
+ * 添加10个测试用户  
+   `sh configure.sh testdata 10`
 ####环境变量
  * WUTONG_EMAIL_SMTP
  * WUTONG_EMAIL_ADDR

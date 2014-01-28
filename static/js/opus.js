@@ -186,13 +186,20 @@ $(document).ready(function(){
     // collect opus
     $("#collectOpus").click(function(){
         var collectionUrl=location.pathname+"/collection";
-        $.post(collectionUrl,function(data){
+        $.post(collectionUrl, function(data){
             console.log(data);
         })
     });
 
     $("#scoreOpus").click(function(){
         $(".scoreBoard").slideDown();
+        var url = location.pathname + '/score'
+        $.get(url, function(data) {
+            // TODO: if 已评分
+            if (data) {
+                console.log(data);
+            }
+        });
         return false;
     });
     $(".scoreBar").hover(function(){
@@ -237,8 +244,12 @@ $(document).ready(function(){
         var scoreUrl=location.pathname+"/score";
         $.post(scoreUrl,{
             'score':parseInt($("#score").text())
-        },function(){
-            console.log(data);
+        },function(data){
+            if (!data) {
+                $("#scoreBoardBeforeBack").click();
+            } else {
+                console.log(data);
+            }
         });
     });
     $("#scoreBoardBeforeBack").click(function(){

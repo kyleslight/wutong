@@ -15,8 +15,7 @@
         <link rel="shortcut icon" href={{ static_url("css/image/favicon.ico") }} />
         <link rel="stylesheet" href={{ static_url("css/base.css") }} type="text/css" />
         <link rel="stylesheet" href={{ static_url("css/animation.css") }} type="text/css" />
-        <link rel="stylesheet" type="text/css" href="{{ static_url('css/imageUpload.css') }}">
-        <link type="text/css" rel="stylesheet" href="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/style.css">
+        <link rel="stylesheet" href="{{ static_url('css/imageUpload.css') }}" type="text/css" >
         {% block editor_css %}
         {% end %}
         {% block extra_css %}
@@ -215,7 +214,7 @@
                             <div class="myMessagePartExpand">
                                 As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support.The 2D version of the application is currently in development with features including Sprites, improved Animation support, 2D Physics and more.These are the new features:
                             </div>
-                        </li>`
+                        </li>
                     </div>
                     <div class="PMPush myMessagePartContent">
                         <li class="myMessagePartList">
@@ -244,16 +243,27 @@
                     <a id="myCollectionFliter" class="myCollectionClassButton" href="#">筛选器</a>
                 </div>
                 <div class="myOpusCollection">
-                    <li class="myCollectionList">
-                    <a href="#"><img class="myCollectionAuthorImage" src="{{ static_url("css/image/test.png") }}" /></a>
-                        <div class="myCollectionRow">
-                            <a href="#" class="myCollectionTitle">基于Unity3D的互动应用</a><a class="myCollectionAuthor" href="#">Kyleslight</a>
+                    <script type="text/template" id="collection-template">
+                    {{!.}}
+                    <li id="myCollectionList" class="myCollectionList">
+                        <a href='/user/{{!author}}'>
+                            <img class='myCollectionAuthorImage' src='{{!avatar}}' />
+                        </a>
+                        <div class='myCollectionRow'>
+                            <a href='/a/{{!aid}}' class='myCollectionTitle'>{{!title}}</a>
+                            <a class='myCollectionAuthor' href='/user/{{!author}}'>{{!author}}</a>
                         </div>
-                        <div class="myCollectionRow">
-                            <div class="myCollectionTag"><a href="#">aaa</a><a href="#">bbb</a><a href="#">ccc</a></div>
-                            <span class="myCollectionTime">收藏时间 : 11-11 11:11</span>
+                        <div class='myCollectionRow'>
+                            <div class='myCollectionTag'>
+                                {{!tags}}
+                                <a href='/tag/{{!name}}'>{{!name}}</a>
+                                {{!/tags}}
+                            </div>
+                            <span class='myCollectionTime'>收藏时间: {{!create_time}}</span>
                         </div>
                     </li>
+                    {{!/.}}
+                    </script>
                 </div>
                 <div class="myTopicCollection">
                 </div>
@@ -291,8 +301,6 @@
             <ul id="result_zone">
                 <div class="clear"></div>
             </ul>
-
-
             <ul id="message_zone">
             </ul>
             <!-- Button and message in center -->
@@ -334,32 +342,27 @@
                 </div>
             </div>
         </section>
-
-    <!-- File info section -->
-    <!-- <aside id="info_zone" class="hide">
-    <a href="#" id="uploadImageLast">上一步</a>
-    </aside>  -->
-        {% block return_top %}
-        <a id="return_top" href="#" title="回到顶部" class="none"></a>
+    {% block return_top %}
+    <a id="return_top" href="#" title="回到顶部" class="none"></a>
+    {% end %}
+    {% block extra_div %}
+    {% end %}
+    <div class="footer" id="footer">
+        {% block footer %}
+        <p class="f1">&copy; 2014&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
         {% end %}
-        {% block extra_div %}
-        {% end %}
-        <div class="footer" id="footer">
-            {% block footer %}
-                    <p class="f1">&copy; 2013&nbsp;&nbsp;<a href="http://www.sicun.org/">Sicun Studio</a></p>
-            {% end %}
-        </div>
-        {% block js %}
-        <script type="text/javascript" src={{ static_url("js/jquery.js") }}></script>
-        <script type="text/javascript" src={{ static_url("js/header.js") }}></script>
-        <script type="text/javascript" src={{ static_url("js/ui.js") }}></script>
-        <script type="text/javascript" src={{ static_url("js/imageUpload.js") }}></script>
-        <script type="text/javascript" charset="utf-8" src="chrome-extension://cpngackimfmofbokmjmljamhdncknpmg/js/page_context.js"></script>
-        {% end %}
-        {% block editor_js %}
-        {% end %}
-        {% block extra_js %}
-        {% end %}
+    </div>
+    {% block js %}
+    <script type="text/javascript" src={{ static_url("js/markup.min.js") }}></script>
+    <script type="text/javascript" src={{ static_url("js/jquery.js") }}></script>
+    <script type="text/javascript" src={{ static_url("js/header.js") }}></script>
+    <script type="text/javascript" src={{ static_url("js/ui.js") }}></script>
+    <script type="text/javascript" src={{ static_url("js/imageUpload.js") }}></script>
+    {% end %}
+    {% block editor_js %}
+    {% end %}
+    {% block extra_js %}
+    {% end %}
     {% end %}
     </body>
 </html>

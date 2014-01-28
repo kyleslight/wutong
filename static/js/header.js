@@ -216,6 +216,12 @@ $(document).ready(function() {
     var numOfCollectionList = 1;
     var heightOfMycollection = 123 + numOfCollectionList * 55;
     $("#myCollection").click(function() {
+        var url = '/u/collection';
+        $.getJSON(url, function(data) {
+            // TODO: deal create_time
+            renderById('collection-template', data);
+        });
+        $("#myCollectionList");
         $(".myCollectionWarp").animate({
             height: heightOfMycollection
         }, function() {
@@ -654,17 +660,17 @@ function logOutEffect(){
     });
 }
 
-function checkEmail(e){ var i=e.length;     
-    var temp = e.indexOf('@');     
-    var tempd = e.indexOf('.');     
-    if (temp > 1) {     
-        if ((i-temp) > 3){     
-            if ((i-tempd)>0){     
-                return true;     
-            }     
-        }     
-    }     
-    return false;     
+function checkEmail(e){ var i=e.length;
+    var temp = e.indexOf('@');
+    var tempd = e.indexOf('.');
+    if (temp > 1) {
+        if ((i-temp) > 3){
+            if ((i-tempd)>0){
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 function highlightThisPage(){
@@ -677,7 +683,7 @@ function highlightThisPage(){
         $("#create li").addClass("thisPage");
     };
     return;
-}     
+}
 
 String.prototype.httpHtml = function() {
     var reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-|:)+)/g;
@@ -718,4 +724,11 @@ function generateMixed(n) {
          res += chars[id];
      }
      return res;
+}
+
+function renderById(idstr, jsondata) {
+    var id = '#' + idstr;
+    var template = $(id).html();
+    var innerHTML = Mark.up(template, jsondata);
+    $(id).after($(innerHTML));
 }
