@@ -24,11 +24,6 @@ class Pool(object):
         for i in xrange(self.min_size):
             self._new_connection()
 
-    def call(self, funcname, *args, **kwargs):
-        sql = 'select %s({args})' % funcname
-        func = kwargs.get('function') or self.execute
-        return func(sql, *args)
-
     def select(self, *arg, **kwargs):
         raise NotImplementedError
 
@@ -44,11 +39,12 @@ class Pool(object):
         sql = sql.format(keys=keys, values=values)
         return self.execute(sql, *d.values())
 
-    def update(self, table, d, where=None):
+    def update(self, table, d, where=None, wherevalues=[]):
         """
         :arg string table:
         :arg dict d:
         :arg string where:
+        :arg list wherevalues:
         """
         sql = "update %s set ({keys}) = ({values}) {where}" % table
         keys = ','.join(['"%s"' % k for k in d.keys()])
@@ -56,21 +52,47 @@ class Pool(object):
         where = 'where ' + where if where else ''
 
         sql = sql.format(keys=keys, values=values, where=where)
-        return self.execute(sql, *d.values())
+        values = d.values()
+        values.extend(wherevalues)
+        return self.execute(sql, *values)
 
-    def delete(self, table, where=None):
+    def delete(self, table, where=None, wherevalues=[]):
         """
         :arg string table:
         :arg string where:
+        :arg list wherevalues:
         """
         sql = "delete from %s {where}" % table
         where = 'where ' + where if where else ''
 
         sql = sql.format(where=where)
-        return self.execute(sql)
+        return self.execute(sql, *wherevalues)
 
     def execute(self, sql, *args):
         return self._get_connection().execute(sql, *args)
+
+    def callfirstfield(self, funcname, *args, **kwargs):
+        kwargs['function'] = self.getfirstfield
+        return self.call(funcname, *args, **kwargs)
+
+    def calljson(self, funcname, *args, **kwargs):
+        kwargs['function'] = self.getjson
+        return self.call(funcname, *args, **kwargs)
+
+    def callrow(self, funcname, *args, **kwargs):
+        kwargs['function'] = self.getrow
+        return self.call(funcname, *args, **kwargs)
+
+    def callrows(self, funcname, *args, **kwargs):
+        kwargs['function'] = self.getrows
+        return self.call(funcname, *args, **kwargs)
+
+    def call(self, funcname, *args, **kwargs):
+        sql = 'select %s({placeholder})' % funcname
+        placeholder = ','.join(['%s' for i in xrange(len(args))])
+        sql = sql.format(placeholder=placeholder)
+        func = kwargs.get('function') or self.execute
+        return func(sql, *args)
 
     def getfirstfield(self, sql, *args):
         return self._get_connection().getfirstfield(sql, *args)
@@ -132,12 +154,16 @@ class Connection(object):
         return self.cnn.isexecuting() or (self.cnn.closed == 0 and
                self.cnn.get_transaction_status() != TRANSACTION_STATUS_IDLE)
 
+    def mogrify(self, query, *args):
+        return self.cur.mogrify(query, args)
+
     def getrows(self, sql, *args):
         self.execute(sql, *args)
         try:
             result = self.cur.fetchall()
         except:
-            result = [[None]]
+            result = None
+        result = result or [[None]]
         return result
 
     def getrow(self, sql, *args):
@@ -145,7 +171,8 @@ class Connection(object):
         try:
             result = self.cur.fetchone()
         except:
-            result = [None]
+            result = None
+        result = result or [None]
         return result
 
     def getfirstfield(self, sql, *args):
@@ -160,12 +187,12 @@ class Connection(object):
         return result
 
     def execute(self, sql, *args):
-        if not args: args = None
+        args = args or None
+        result = True
         try:
             self.cur.execute(sql, args)
-            result = True
         except Exception as e:
-            dbsql = self.cur.mogrify(sql, args)
+            dbsql = self.mogrify(sql, args)
             logging.error(" `%s` ", dbsql, '\n')
             logging.error(str(e), '\n\n')
             result = False

@@ -107,9 +107,10 @@ class UserModel(object):
         delete = 'delete from memo where id = %s and uid = %s'
         return self.db.execute(delete, memo_id, uid)
 
-    def get_collections(self, uid, limit=5, offset=0):
-        select = 'SELECT get_article_collections(%s, %s, %s)'
-        return self.db.getjson(select, uid, limit, offset)
+    def get_collections(self, uid, page=1):
+        limit = 5
+        offset = (page - 1) * limit
+        return self.db.calljson('get_article_collections', uid, limit, offset)
 
     def create_collection(self, uid, aid):
         select = 'SELECT create_article_collection(%s, %s)'

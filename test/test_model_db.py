@@ -11,15 +11,25 @@ class PoolTest(unittest.TestCase):
     def setUpClass(cls):
         cls.db = Pool.instance(util.dsn_test)
         cls.sql = "select %s"
-        cls.db.execute("""CREATE TABLE _foo_test (
-                              id serial PRIMARY KEY,
-                              arg1 int,
-                              arg2 varchar(1024)
-                          )""")
+        cls.db.execute("""
+            CREATE TABLE _foo_test (
+              id serial PRIMARY KEY,
+              arg1 int,
+              arg2 varchar(1024)
+            );
+        """)
+        cls.db.execute("""
+            CREATE FUNCTION _foo_func(_arg int)
+              RETURNS int
+            AS $$
+                SELECT _arg
+            $$ LANGUAGE SQL;
+        """)
 
     @classmethod
     def tearDownClass(cls):
         cls.db.execute("DROP TABLE _foo_test")
+        cls.db.execute("DROP FUNCTION _foo_func(int)")
         cls.db.release()
 
     def test_getjson(self):
@@ -50,3 +60,7 @@ class PoolTest(unittest.TestCase):
     def test_delete(self):
         res = self.db.delete('_foo_test', where='1=1')
         self.assertTrue(res)
+
+    def test_call(self):
+        res = self.db.call('_foo_func', '1', function=self.db.getfirstfield)
+        self.assertEquals(res, 1)

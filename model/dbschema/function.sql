@@ -577,14 +577,31 @@ CREATE OR REPLACE FUNCTION is_article_author(
   _uid integer)
   RETURNS bool
 AS $$
-    SELECT CASE COALESCE(uid, 0)
-           WHEN 0
-           THEN false
-           ELSE true
-            END
+DECLARE
+    _res bool;
+BEGIN
+    SELECT true
       FROM article
      WHERE aid = _aid
-       AND uid = _uid;
+       AND uid = _uid
+      INTO _res;
+    IF _res IS NULL THEN
+        _res := false;
+    END IF;
+    RETURN _res;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION get_article_tags(_aid integer)
+  RETURNS json
+AS $$
+    SELECT array_to_json(array_agg(aj))
+      FROM (
+            SELECT name
+              FROM article_tag
+             WHERE aid = $1
+        ) aj;
 $$ LANGUAGE SQL;
 
 
@@ -596,10 +613,11 @@ CREATE OR REPLACE FUNCTION get_article_collections(
 AS $$
     SELECT array_to_json(array_agg(aj.*))
       FROM (
-            SELECT *
-              FROM article_collection_v
+            SELECT *,
+                   get_article_tags(a.aid) as "tags"
+              FROM article_collection_v a
              WHERE uid = $1
-             ORDER BY id
+             ORDER BY id DESC
              LIMIT $2
             OFFSET $3
          ) aj;
@@ -721,17 +739,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-CREATE OR REPLACE FUNCTION get_article_tags(_aid integer)
-  RETURNS json
-AS $$
-    SELECT array_to_json(array_agg(aj))
-      FROM (
-            SELECT name
-              FROM article_tag
-             WHERE aid = $1
-        ) aj;
-$$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION get_article_info(_aid integer)

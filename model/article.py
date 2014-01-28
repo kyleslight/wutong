@@ -87,12 +87,42 @@ class ArticleModel(object):
         select = 'SELECT get_article_tags(%s)'
         return self.db.getjson(select, aid)
 
+    def get_article_score(self, aid, uid):
+        select = 'select score from article_score where aid = %s and uid = %s'
+        return self.db.getfirstfield(select, aid, uid)
+
+    def is_article_collected(self, aid, uid):
+        select = 'select id from article_collection where aid = %s and uid = %s'
+        result = self.db.getfirstfield(select, aid, uid)
+        return True if result else False
+
     def create_article_view(self, aid, uid=None, ip=None):
         select = 'SELECT create_article_view(%s, %s, %s)'
         return self.db.execute(select, aid, uid, ip)
 
+    def update_article_score(self, aid, uid, score):
+        where = 'aid = %s and uid = %s'
+        wherevalues = (aid, uid)
+        return self.db.update(
+            'article_score',
+            {
+                'score': score
+            },
+            where=where,
+            wherevalues=wherevalues
+        )
+
     def create_article_score(self, aid, uid, score):
-        return self.db.call('create_article_score', aid, uid, score)
+        return self.db.callfirstfield('create_article_score', aid, uid, score)
 
     def create_article_collection(self, aid, uid):
-        return self.db.call('create_article_collection', aid, uid)
+        return self.db.callfirstfield('create_article_collection', aid, uid)
+
+    def delete_article_collection(self, aid, uid):
+        where = 'aid = %s and uid = %s'
+        wherevalues = (aid, uid)
+        return self.db.delete(
+            'article_collection',
+            where=where,
+            wherevalues=wherevalues
+        )
