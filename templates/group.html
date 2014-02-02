@@ -118,6 +118,55 @@
                     <div id="latestTopicOption"><a href="#" id="latestTopicUnfold">展开前6条</a>  <a href="#" id="latestTopicBack" class="optionBack">返回</a>
                     </div>
                 </div>
+                <div class="groupSetting" id="groupOptionShow5">
+                    <h2>小组个人设置</h2>
+                    <!-- 接受来自该小组成员的内容推送 -->
+                    <span class="tip">是否接受来自该小组成员的作品推送：</span>
+                    <input type="radio" name="groupReceivePush" id="groupReceivePush" checked="checked">是
+                    <input type="radio" name="groupReceivePush" id="groupNotReceivePush">否<br><br>
+                    <!-- 允许将自己的作品推送至小组其他成员 -->
+                    <span class="tip">是否是否允许将自己的作品推送至小组其他成员：</span>
+                    <input type="radio" name="groupPush" id="groupPush" checked="checked">是
+                    <input type="radio" name="groupPush" id="groupNotPush">否<br>
+
+                    <h2>小组组长管理</h2>
+                    <span class="tip">小组头像：</span> <a href="#">修改</a><br><br>
+                    <span class="tip">小组Banner：</span> <a href="#">修改</a><br><br>
+                    <span class="tip">小组签名：</span> <input type="text" id="groupMottoSetting" class="textInput" placeholder="小组签名"><br><br>
+                    <span class="tip">小组公告：</span>
+                    <span class="stip"></span><input type="text" id="groupBulletinTitle" class="textInput" placeholder="公告标题"><br>
+                    <span class="stip"></span><textarea id="groupBulletinContent" class="textInput" placeholder="公告内容"></textarea><br><br>
+                    <span class="tip">邀请他人：</span> <input type="text" class="textInput" placeholder="在受邀者的前加上@即可邀请他人加入小组，受邀者之间用空格或“;”隔开"><br><br>
+                    <span class="tip">管理小组成员：</span><br>
+                    <p class="intorWords">单击选择成员</p>
+                    <div class="groupMemberListWrap">
+                        <li href="#" class="groupMemberList" id="groupMem1"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_1</span></li>
+                        <li href="#" class="groupMemberList" id="groupMem2"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_2</span></li>
+                        <li href="#" class="groupMemberList" id="groupMem3"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_3</span></li>
+                        <li href="#" class="groupMemberList" id="groupMem4"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_4</span></li>
+                        <li href="#" class="groupMemberList" id="groupMem5"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_5</span></li>
+                        <li href="#" class="groupMemberList" id="groupMem6"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_6</span></li>
+                        <li href="#" class="groupMemberList" id="groupMem7"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_7</span></li>
+                        <li href="#" class="groupMemberList" id="groupMem8"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_8</span></li>
+                    </div>
+                    <div class="groupOption">
+                        <h2>操作</h2>
+                        <a href="#">解除小组成员</a>
+                        <!-- 如果该成员不是该小组副组长 -->
+                        <a href="#">任命为副组长</a>
+                        <!-- 如果该成员是该小组副组长 -->
+                        <a href="#">罢免副组长</a>
+                        <a href="#">推选该成员为组长</a>
+                    </div>
+                    <p class="intorWords">成员操作表单，请注意，只有提交表单后这些操作方可生效</p>
+                    <div class="groupMemActionLog">
+                        
+                    </div>
+                    <div class="groupSettingButton">
+                        <a href="#" id="groupSettingSubmit" class="formButton">提交</a>
+                        <a href="#" id="groupSettingBack" class="optionBack">返回</a>
+                    </div>
+                </div>
 
             </div>
             {% if is_topic %}
@@ -133,6 +182,9 @@
                     <span class='timeShow'>
                         {{ prettytime(topic["submit_time"]) }}
                     </span>
+                    <!-- 如果为该话题作者 -->
+                    <!-- <a href="#">删除</a> -->
+                    <a href="#" id="collectTopic">收藏该话题</a>
                     <div class='talkContent'>
                         {% raw topic["content"] %}
                     </div>

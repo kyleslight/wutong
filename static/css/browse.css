@@ -5,9 +5,9 @@
 .mainView{
 	float: left;
 	background: rgba(255,255,255,0.5);
-	border-radius: 7px;
+	/*border-radius: 7px;*/
 	padding: 20px;
-	margin-top: 20px;
+	/*margin-top: 20px;*/
 }
 .opusType{
 	float: left;
@@ -118,7 +118,7 @@
 .opusTitle{
 	color: black;
 	font-size: 30px;
-	font-weight: bold;
+	/*font-weight: bold;*/
 }
 .opusAuthor{
 	color: #444;
@@ -141,6 +141,7 @@
 	color: #680;
 	margin-right: 10px;
 	opacity: 0.7;
+	font-size: 0.9em;
 }
 .opusTag a:hover{
 	opacity: 1.0;

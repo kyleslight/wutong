@@ -594,6 +594,146 @@ textarea,input{
 	margin-top: 10px;
 	float: right;
 }
+
+/*Group Settings*/
+.groupSetting{
+	background: white;
+	width: 938px;
+	margin: 0 auto;
+	float: left;
+	/*margin-left: 100px;*/
+	padding: 10px;
+	background: white;
+	border-radius: 7px;
+	border: 1px solid #CCC;
+	/*display: none;*/
+	font-size: 0.9em;
+	padding-bottom: 20px;
+	display: none;
+}
+.textInput{
+	/*float: left;*/
+	width: 600px;
+	padding: 5px;
+	border: 1px solid rgba(102,136,0,0.4);
+	border-radius: 2px;
+}
+.groupSetting h2{
+	font-size: 1em;
+	color: darkgreen;
+	font-weight: normal;
+	border-bottom: 1px solid #CCC;
+}
+#groupBulletinContent{
+	margin-left: 74px;
+	margin-top: 5px;
+	height: 100px;
+	resize:none;
+}
+.stip{
+	float: left;
+	color: #999;
+}
+.groupMemberListWrap{
+	float: left;
+	width: 624px;
+	max-height: 270px;
+	overflow: auto;
+	/*border: 1px solid #CCC;*/
+	margin-left: 74px;
+	margin-bottom: 20px;
+}
+.groupMemberList{
+	background: #570;
+	color: white;
+	width: 203px;
+	height: 40px;
+	padding-top: 10px;
+	display: block;
+	float: left;
+	/*border: 1px solid white;*/
+	box-shadow: 0 0 0 1px white;
+}
+.groupMemberList:hover{
+	background: #8A2;
+	cursor: pointer;
+}
+.groupMemberList img{
+	width: 30px;
+	height: 30px;
+	border-radius: 4px;
+	box-shadow: none;
+	margin-right: 10px;
+}
+.groupMemberList img:hover{
+	box-shadow: none;
+}
+.groupMemberName{
+	/*padding-top: 5px;*/
+	float: left;
+	width: 120px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.intorWords{
+	font-size: 0.9em;
+	color: #AAA;
+	margin: 10px 0;
+	margin-left: 75px;
+	clear: both;
+}
+.groupOption{
+	padding: 10px;
+	float: left;
+	background: rgba(255,255,255,0.9);
+	width: 120px;
+	margin-left: 20px;
+	/*border: 1px solid #CCC;*/
+	border-radius: 4px;
+	/*display: none;*/
+	transition: 2s;
+	-moz-transition:2s;
+	-webkit-transition:2s;
+	-o-transition:2s;
+}
+.groupOption a{
+	display: block;
+	padding: 5px;
+}
+.groupOption a:hover{
+	background: #BD5;
+	color: white;
+}
+.selectedMember{
+	background: #BD5 !important;
+}
+.groupMemActionLog{
+	float: left;
+	/*padding: 10px;*/
+	margin-left: 75px;
+	/*background: rgba(0,0,0,0.1);*/
+	clear: both;
+}
+.groupMemActionList{
+	padding: 5px;
+	background: rgba(0,0,0,0.1);
+}
+.groupMemActionCacel{
+	margin-left: 20px;
+}
+.groupSettingButton{
+	clear: both;
+}
+#groupSettingSubmit{
+	/*clear: both;*/
+	margin-top: 20px;
+	margin-left: 75px;
+}
+#groupSettingBack{
+	/*clear: both;*/
+	margin-top: 50px;
+	margin-right: 20px;
+}
 /*Group Options*/
 .groupOptions{
 	clear: both;
@@ -684,6 +824,7 @@ textarea,input{
 
 #chatData{
 	float: left;
+	height: 30px;
 	min-height: 30px;
 	overflow-y:hidden; 
 	resize:none;
@@ -791,7 +932,7 @@ li.topicOutter .topicTalkContent{
 	overflow: hidden;
 	display: block;
 	list-style-type: decimal;
-	height: 18px;
+	/*height: 18px;*/
 	border-top-left-radius: 2px;
 	border-bottom-left-radius: 2px;
 	text-overflow: ellipsis;
@@ -977,6 +1118,12 @@ li.topicInner p img,li.topicInner .talkContent img{
 }
 .topicLocation a:hover{
 	color: white;
+}
+
+#collectTopic{
+	float: right;
+	font-size: 0.8em;
+	margin-right: 20px;
 }
 
 /*topic tag*/

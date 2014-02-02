@@ -165,7 +165,7 @@ td,tbody,table{
 	margin-top: 10px;
 	margin-bottom: 20px;
 	color: #999;
-	width: 700px;
+	/*width: 700px;*/
 }
 .opusTag a{
 	margin-right: 10px;
@@ -413,8 +413,8 @@ td,tbody,table{
 	padding: 4px;
 	margin-right: -10px;
 	color: white;
-	border-top-right-radius: 4px;
-	border-bottom-right-radius: 4px;
+	/*border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;*/
 	display: block;
 }
 #expandSideComment{
