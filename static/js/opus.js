@@ -187,18 +187,20 @@ $(document).ready(function(){
     $("#collectOpus").click(function(){
         var collectionUrl=location.pathname+"/collection";
         $.post(collectionUrl, function(data){
-            console.log(data);
-        })
+            showError("收藏成功",2000);
+            $("#collectOpus").fadeOut();
+            return false;
+        });
+        return false;
     });
 
     $("#scoreOpus").click(function(){
-        $(".scoreBoard").slideDown();
         var url = location.pathname + '/score'
         $.get(url, function(data) {
-            // TODO: if 已评分
-            if (data) {
-                console.log(data);
-            }
+            if (data!="None") {
+                showError("已对该作品进行评分，再次评分将覆盖原有记录",2000);
+            };
+            $(".scoreBoard").slideDown();
         });
         return false;
     });
@@ -245,10 +247,12 @@ $(document).ready(function(){
         $.post(scoreUrl,{
             'score':parseInt($("#score").text())
         },function(data){
-            if (!data) {
+            if (data=="None") {
                 $("#scoreBoardBeforeBack").click();
             } else {
-                console.log(data);
+                showError("评分成功",2000);
+                $("#scoreBoardBeforeBack").click();
+                return false;
             }
         });
     });

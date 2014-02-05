@@ -97,7 +97,22 @@ $(document).ready(function() {
             "box-shadow": "#AAA"
         });
         // $("#msgNum").removeClass("tremble");
-    })
+    });
+    $("#setting").click(function(){
+        $(".mySettingWrap").animate({
+            height:374
+        },function(){
+            $(".mySetting").fadeIn(500);
+        });
+        return false;
+    });
+    $("#mySettingBack").click(function(){
+        $(".mySetting").fadeOut(500,function(){
+            $(".mySettingWrap").animate({
+                height:0
+            });
+        });
+    });
 
     // testTremble();
 
@@ -218,10 +233,10 @@ $(document).ready(function() {
     $("#myCollection").click(function() {
         var url = '/u/collection';
         $.getJSON(url, function(data) {
+            $(".myCollectionList").remove();
             // TODO: deal create_time
             renderById('collection-template', data);
         });
-        $("#myCollectionList");
         $(".myCollectionWarp").animate({
             height: heightOfMycollection
         }, function() {
@@ -278,6 +293,7 @@ $(document).ready(function() {
         $("#createNewNote").show();
         $(".myNoteList").removeClass("activeMyNoteList");
         $("#addNote").addClass("activeMyNoteList").text("创建中...");
+        document.getElementsByClassName("myCurrentNoteTitle")[0].focus();
     });
     // create note
     $("#createNewNote").click(function(){
@@ -332,7 +348,9 @@ $(document).ready(function() {
         },function(){
             showError("成功删除便笺",1000);
             // // TODO: refresh notes
-            // $("#"+activeNoteID).text($(".myCurrentNoteTitle").val());
+            $(".myNoteListWrap").empty();
+            $(".myCurrentNoteTitle").val("");
+            $(".myCurrentNoteContent").val("");
             $.getJSON("/u/memo",function(data){
                 $(".myNoteListWrap").empty();
                 if (data.length==undefined) {
@@ -702,7 +720,11 @@ function showHint(searchKeyWord){
     $(".searchSuggestions").empty();
 
     // test search searchSuggestion
-    if (searchKeyWord=="") {return;};
+    if (searchKeyWord=="") {
+        $(".searchSuggestions").addClass("noBorderBottom");
+        return;
+    };
+    $(".searchSuggestions").removeClass("noBorderBottom");
     var returnWordsNum=Math.floor(Math.random()*8)+2;
     for(var i=0;i<returnWordsNum;i++){
         var searchSuggestionWord=searchKeyWord+generateMixed(2);

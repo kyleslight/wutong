@@ -17,6 +17,7 @@
 	color: #444;
 	font-size: 0.8em;
 	line-height: 1.5em;
+	box-shadow: 0 0 1px #CCC;
 }
 .userInfo div{
 	float: left;
@@ -188,6 +189,8 @@
 	padding:20px;
 	/*background: rgba(255,255,255,0.7);*/
 	height: 100%;
+	padding-right: 10px;
+	margin-left: 10px;
 }
 
 .opusCommentPart{

@@ -220,10 +220,11 @@ function updateOpusNum(){
 
 function onlyNum(){
     $(window).keyup(function(e) {
+        console.log(e.keyCode);
         if (!userAgeState) {
             return false;
         };
-        if(!((e.keyCode>=48&&e.keyCode<=57)||(e.keyCode>=96&&e.keyCode<=105)||e.keyCode==8)){
+        if(!((e.keyCode>=48&&e.keyCode<=57)||(e.keyCode>=96&&e.keyCode<=105)||e.keyCode==8||e.keyCode==229)){
             showError("请输入数字",2000);
             $("#edittingAge").val("");
         };

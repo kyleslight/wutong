@@ -152,6 +152,40 @@ $(document).ready(function() {
         });
         return false;
     })
+    $(".groupMemberList").click(function(){
+        // $(".groupOption").fadeOut(1);
+        $(".selectedMember").removeClass("selectedMember");
+        $(this).addClass("selectedMember");
+        // newPos=new Object();
+        // newPos.left=event.screenX+20;
+        // newPos.top=event.clientY+$(window).scrollTop();
+        // console.log(newPos);
+        // $(".groupOption").offset(newPos);
+        // $(".groupOption").show();
+        return false;
+    });
+    $(".groupOption a").click(function(){
+        var memAction=$(this).text();
+        var selectedMemberName=$(".selectedMember").children(".groupMemberName").text();
+        var app='<li class="groupMemActionList">'
+                +            '<span class="groupMemberActionName">'+selectedMemberName+'</span> 已添加至 <span class="groupMemActionCon">'
+                +memAction
+                +           '</span> 列表 <a href="#" class="groupMemActionCacel">取消</a>'
+                +        '</li>';
+        switch(memAction){
+            case "解除小组成员":console.log("a");break;
+            case "任命为副组长":console.log("b");break;
+            case "罢免副组长":console.log("c");break;
+            case "推选该成员为组长":console.log("d");break;
+            default:console.log("erroe");break;
+        };
+        $(".groupMemActionLog").append(app);
+        return false;
+    });
+    $(".groupMemActionLog").on("click",".groupMemActionCacel",function(){
+        $(this).parent().remove();
+        return false;
+    });
     // change send state
     $("#changeSendState").click(function() {
         if ($(".topicSend").css("display") == "none") {
@@ -198,6 +232,13 @@ $(document).ready(function() {
     $(".topicTalkContent img").click(function(){
         var imgUrl=$(this).attr("src");
 
+    });
+
+    $("#collectTopic").click(function(){
+        var collectionUrl=location.pathname+"/collection";
+        $.post(collectionUrl, function(data){
+            console.log(data);
+        })
     });
 
     removeMessage = function () {
