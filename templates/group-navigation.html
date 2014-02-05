@@ -7,8 +7,8 @@
         <div class="groupNav">
             <div class="userGroupInfo">
                 {% if user %}
-                <a class="userImg" href="#"><img src="{{ avatarurl(user['avatar']) }}" /></a>
-                <a class="userName" href="#">{{ user['penname'] }}</a>
+                <a class="userImg" href="/user/{{ user['penname'] }}"><img src="{{ avatarurl(user['avatar']) }}" /></a>
+                <a class="userName" href="/user/{{ user['penname'] }}">{{ user['penname'] }}</a>
                 <div class="myGroup">
                     <div class="myGroupTitle">我的小组</div>
                     {% if mygroups %}
@@ -25,37 +25,37 @@
                 <div class="groupTagArea">
                     <div class="groupTagTitle">推荐Tag</div>
                     <h class="groupTagClass">兴趣»</h>
-                    <a href="#" class="groupTag">旅行</a>
-                    <a href="#" class="groupTag">摄影</a>
-                    <a href="#" class="groupTag">影视</a>
-                    <a href="#" class="groupTag">音乐</a>
-                    <a href="#" class="groupTag">文学</a>
-                    <a href="#" class="groupTag">游戏</a>
-                    <a href="#" class="groupTag">动漫</a>
-                    <a href="#" class="groupTag">运动</a>
-                    <a href="#" class="groupTag">戏曲</a>
-                    <a href="#" class="groupTag">桌游</a>
+                    <a href="?tag=旅行" class="groupTag">旅行</a>
+                    <a href="?tag=摄影" class="groupTag">摄影</a>
+                    <a href="?tag=影视" class="groupTag">影视</a>
+                    <a href="?tag=音乐" class="groupTag">音乐</a>
+                    <a href="?tag=文学" class="groupTag">文学</a>
+                    <a href="?tag=游戏" class="groupTag">游戏</a>
+                    <a href="?tag=动漫" class="groupTag">动漫</a>
+                    <a href="?tag=运动" class="groupTag">运动</a>
+                    <a href="?tag=戏曲" class="groupTag">戏曲</a>
+                    <a href="?tag=桌游" class="groupTag">桌游</a>
                     <h class="groupTagClass">学术»</h>
-                    <a href="#" class="groupTag">人文</a>
-                    <a href="#" class="groupTag">社科</a>
-                    <a href="#" class="groupTag">自然</a>
-                    <a href="#" class="groupTag">建筑</a>
-                    <a href="#" class="groupTag">国学</a>
-                    <a href="#" class="groupTag">语言</a>
-                    <a href="#" class="groupTag">宗教</a>
-                    <a href="#" class="groupTag">哲学</a>
-                    <a href="#" class="groupTag">软件</a>
-                    <a href="#" class="groupTag">硬件</a>
-                    <a href="#" class="groupTag">互联网</a>
+                    <a href="?tag=人文" class="groupTag">人文</a>
+                    <a href="?tag=社科" class="groupTag">社科</a>
+                    <a href="?tag=自然" class="groupTag">自然</a>
+                    <a href="?tag=建筑" class="groupTag">建筑</a>
+                    <a href="?tag=国学" class="groupTag">国学</a>
+                    <a href="?tag=语言" class="groupTag">语言</a>
+                    <a href="?tag=宗教" class="groupTag">宗教</a>
+                    <a href="?tag=哲学" class="groupTag">哲学</a>
+                    <a href="?tag=软件" class="groupTag">软件</a>
+                    <a href="?tag=硬件" class="groupTag">硬件</a>
+                    <a href="?tag=互联网" class="groupTag">互联网</a>
                     <h class="groupTagClass">技术»</h>
-                    <a href="#" class="groupTag">C语言</a>
-                    <a href="#" class="groupTag">Twitter</a>
-                    <a href="#" class="groupTag">印象笔记</a>
-                    <a href="#" class="groupTag">kindle</a>
-                    <a href="#" class="groupTag">Python初学者</a>
-                    <a href="#" class="groupTag">Calibre</a>
-                    <a href="#" class="groupTag">信息安全</a>
-                    <a href="#" class="groupTag">从零开始玩耳机</a>
+                    <a href="?tag=C语言" class="groupTag">C语言</a>
+                    <a href="?tag=Twitter" class="groupTag">Twitter</a>
+                    <a href="?tag=印象笔记" class="groupTag">印象笔记</a>
+                    <a href="?tag=kindle" class="groupTag">kindle</a>
+                    <a href="?tag=Python初学者" class="groupTag">Python初学者</a>
+                    <a href="?tag=Calibre" class="groupTag">Calibre</a>
+                    <a href="?tag=信息安全" class="groupTag">信息安全</a>
+                    <a href="?tag=从零开始玩耳机" class="groupTag">从零开始玩耳机</a>
                 </div>
             </div>
             <div class="groupMainWrap">
@@ -64,13 +64,13 @@
                     <h class="groupDynamicHeader">我的小组动态»</h>
                     {% for topic in recent_group_topics %}
                     <li class="groupDynamicList">
-                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ avatarurl(topic['avatar']) }}"></a>
+                        <a href="/user/{{ topic['penname'] }}" class="groupDynamicAuthorImg"><img src="{{ avatarurl(topic['avatar']) }}"></a>
                         <div class="groupDynamicContent">
                             <a href="/t/{{ topic['tid'] }}" class="groupDynamicTitle">{{ topic['title'] }}</a>
                             <div class="groupDynamicInfo">
-                                <a href="#" class="groupDynamicAuthor">{{ topic['penname'] }}</a>
+                                <a href="/user/{{ topic['penname'] }}" class="groupDynamicAuthor">{{ topic['penname'] }}</a>
                                 <div class="groupDynamicFrom">
-                                    来自 <a href="#">{{ topic['group_name'] }}</a> 小组
+                                    来自 <a href="/g/{{ topic['gid'] }}">{{ topic['group_name'] }}</a> 小组
                                     <span class="groupDynamicMemberNum">{{ topic['reply_times'] }}</span>人次参与
                                 </div>
                             </div>
@@ -87,13 +87,13 @@
                     <h class="groupDynamicHeader">全站小组动态»</h>
                     {% for topic in recent_topics %}
                     <li class="groupDynamicList">
-                        <a href="#" class="groupDynamicAuthorImg"><img src="{{ avatarurl(topic['avatar']) }}"></a>
+                        <a href="/user/{{ topic['penname'] }}" class="groupDynamicAuthorImg"><img src="{{ avatarurl(topic['avatar']) }}"></a>
                         <div class="groupDynamicContent">
                             <a href="/t/{{ topic['tid'] }}" class="groupDynamicTitle">{{ topic['title'] }}</a>
                             <div class="groupDynamicInfo">
-                                <a href="#" class="groupDynamicAuthor">{{ topic['penname'] }}</a>
+                                <a href="/user/{{ topic['penname'] }}" class="groupDynamicAuthor">{{ topic['penname'] }}</a>
                                 <div class="groupDynamicFrom">
-                                    来自 <a href="#">{{ topic['group_name'] }}</a> 小组
+                                    来自 <a href="/g/{{ topic['gid'] }}">{{ topic['group_name'] }}</a> 小组
                                     <span class="groupDynamicMemberNum">{{ topic['reply_times'] }}</span>人次参与
                                 </div>
                             </div>

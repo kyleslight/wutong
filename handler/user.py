@@ -13,8 +13,18 @@ from lib import sendmail
 from lib import util
 from base import BaseHandler
 
-
+# -- 'wutong'::url 回复了你的话题 'test_topic'::url
+# -- wutong 在 test_group 小组提到了你
+# -- wutong 评论了你的文章 test_article
+# -- wutong 任命你为 test_group 的 leader
+# -- 恭喜你获得了 article_master 成就
+# -- 恭喜你获得了 king_of_stupid 头衔
 class UserBaseHandler(BaseHandler):
+    _type_table = {
+        '1': 'normal',
+        'z': 'admin',
+    }
+
     @property
     def model(self):
         return self.usermodel

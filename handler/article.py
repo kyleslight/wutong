@@ -8,6 +8,14 @@ from lib import util
 
 
 class ArticleBaseHandler(BaseHandler):
+    _type_table = {
+        '1': 'draft',
+        '2': 'private',
+        '3': 'public',
+        '4': 'publish',
+    }
+
+
     @property
     def model(self):
         return self.articlemodel
@@ -22,13 +30,20 @@ class ArticleBaseHandler(BaseHandler):
 
 
 class BrowseArticleHandler(ArticleBaseHandler):
-    def get_article_list(self, sort, page_id=0):
-        article_list = self.model.get_article_list(sort, 30, page_id)
-        return article_list or []
-
     def get(self, sort=None):
-        article_list = self.get_article_list(sort, 0)
-        self.render('browse.html', article_list=article_list)
+        try:
+            tag = self.get_argument('tag')
+            page = int(self.get_argument('page', 1))
+            size = int(self.get_argument('size', 20))
+        except ValueError:
+            page = 1
+            size = 20
+
+        if tag:
+            articles = self.model.get_articles_by_tag(tag, page, size)
+        else:
+            articles = self.model.get_articles(page, size)
+        self.render('browse.html', article_list=articles)
 
 
 class OpusHandler(ArticleBaseHandler):

@@ -12,9 +12,9 @@
         {% block meta_description %}
         <meta name="Description" content="梧桐" />
         {% end %}
-        <link rel="shortcut icon" href={{ static_url("css/image/favicon.ico") }} />
-        <link rel="stylesheet" href={{ static_url("css/base.css") }} type="text/css" />
-        <link rel="stylesheet" href={{ static_url("css/animation.css") }} type="text/css" />
+        <link rel="shortcut icon" href="{{ static_url('css/image/favicon.ico') }}" />
+        <link rel="stylesheet" href="{{ static_url('css/base.css') }}" type="text/css" />
+        <link rel="stylesheet" href="{{ static_url('css/animation.css') }}" type="text/css" />
         <link rel="stylesheet" href="{{ static_url('css/imageUpload.css') }}" type="text/css" >
         {% block editor_css %}
         {% end %}
@@ -353,11 +353,11 @@
         {% end %}
     </div>
     {% block js %}
-    <script type="text/javascript" src={{ static_url("js/markup.min.js") }}></script>
-    <script type="text/javascript" src={{ static_url("js/jquery.js") }}></script>
-    <script type="text/javascript" src={{ static_url("js/header.js") }}></script>
-    <script type="text/javascript" src={{ static_url("js/ui.js") }}></script>
-    <script type="text/javascript" src={{ static_url("js/imageUpload.js") }}></script>
+    <script type="text/javascript" src="{{ static_url("js/markup.min.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/jquery.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/header.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/ui.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/imageUpload.js") }}"></script>
     {% end %}
     {% block editor_js %}
     {% end %}

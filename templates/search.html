@@ -10,7 +10,7 @@
             </div>
             <div class="searchBox">
                 <form id="mainSearchData" action="/search" name="searchData" target="_blank">
-                    <input name="keyWord" type="text" class="input" id="mainSearchBox" autocomplete="off" accesskey="s" placeholder="寻找作品，成员，小组，话题" x-webkit-speech x-webkit-grammar="builtin:translate" value="Kyleslight" />
+                    <input name="keyWord" type="text" class="input" id="mainSearchBox" autocomplete="off" accesskey="s" placeholder="寻找作品，成员，小组，话题" x-webkit-speech x-webkit-grammar="builtin:translate" value="{{ query }}" />
                     <a href="#" type="submit" id="mainSearchSubmitButton" class="formButton">搜索</a>
                     <a href="#" id="searchAdvancedButton">高级选项</a>
                 </form>
@@ -35,53 +35,49 @@
                 </div>
             </div>
             <div class="searchResultWrap">
-                <div class="searchResultFirstLine">本次搜索耗时<span>0.04</span>s，共找到<span>1024</span>个结果</div>
+                <div class="searchResultFirstLine">本次搜索耗时
+                  <span>{{ time }}</span>s，共找到<span>{{ total_found }}</span>个结果
+                </div>
                 <div class="result">
-                   <li class="resultList">
-                       <img src="{{ static_url("avatar/wutong_normal.png") }}" class="resultImage">
+                    {% for result in results %}
+                    {% if result %}
+                    <li class="resultList">
+                       <img src="{{ result["avatar"] }}" class="resultImage">
                        <div class="resultMain">
-                           <a href="#" class="resultTitle">Ten things we know to be true</a><span class="resultType">作品</span>
+                           {% if result['type'] == 'opus' %}
+                           <a href="/a/{{ result['id'] }}" class="resultTitle">{{ result["title"] }}</a>
+                           {% elif result['type'] == 'group' %}
+                           <a href="/g/{{ result['id'] }}" class="resultTitle">{{ result["title"] }}</a>
+                           {% elif result['type'] == 'user' %}
+                           <a href="/user/{{ result['title'] }}" class="resultTitle">{{ result["title"] }}</a>
+                           {% end %}
+                           <!-- <span class="resultType">{{ result["type"] }} </span> -->
                            <br/>
-                           <a href="#" class="resultUser">Kyleslight</a>
+                           {% if result['type'] != 'user' %}
+                           <a href="/user/{{ result["username"] }}" class="resultUser">{{ result["username"] }}</a>
+                           {% end %}
                            <div class="resultBrief">
-                               We first wrote these “10 things” when Google was just a few years old. From time to time we revisit this list to see if it still holds true. We hope it does—and you can hold us to that.
+                           {{ result["intro"] }}
                            </div>
                            <div class="resultAttached">
-                               <span class="resultTag">Tag：<a href="#">技术</a><a href="#">Google</a></span>
-                               <span class="resultTime">2-12 12:11</span>
+                               {% if result['type'] != 'user' %}
+                               <span class="resultTag">
+                                   {% for tag in result['tags'] %}
+                                   <a href="/tag/{{ tag['name'] }}">{{ tag['name'] }}</a>
+                                   {% end %}
+                               </span>
+                               {% end %}
+                               <span class="resultTime">{{ prettytime(result['time']) }}</span>
                            </div>
                        </div>
                    </li>
-                   <li class="resultList">
-                       <img src="{{ static_url("css/image/forumTest.jpg") }}" class="resultImage">
-                       <div class="resultMain">
-                           <a href="#" class="resultTitle">Kyleslight的同好会</a><span class="resultType">小组</span>
-                           <br/>
-                           <a href="#" class="resultUser">Kyleslight</a>
-                           <div class="resultBrief">
-                               这里是Kyleslight建立的交流共同兴趣的同好会，嗯，就是这样
-                           </div>
-                           <div class="resultAttached">
-                               <span class="resultTag">Tag：<a href="#">Kyleslight</a><a href="#">同好会</a></span>
-                               <span class="resultTime">2-12 12:11</span>
-                           </div>
-                       </div>
-                   </li>
-                   <li class="resultList">
-                       <img src="{{ static_url("avatar/wutong_normal.png") }}" class="resultImage">
-                       <div class="resultMain">
-                           <a href="#" class="resultTitle">Kyleslight</a><span class="resultType">成员</span>
-                           <br/>
-                           <!-- <a href="#" class="resultUser">Kyleslight</a> -->
-                           <div class="resultBrief">
-                               中二病嚴重患者 | 如果我的付出,可以为人类的未来增加一块基石的话,大概我就是为此而生的吧
-                           </div>
-                           <div class="resultAttached">
-                               <!-- <span class="resultTag">Tag：<a href="#">Kyleslight</a><a href="#">同好会</a></span> -->
-                               <span class="resultTime">2-12 12:11</span>
-                           </div>
-                       </div>
-                   </li>
+                   {% end %}
+                   {% end %}
+                   {% if not results %}
+                   <script type="text/javascript">
+                       alert('not results');
+                   </script>>
+                   {% end %}
                 </div>
             </div>
         </div>

@@ -1,5 +1,6 @@
 # !/usr/bin/env python
 # encoding=utf8
+
 import uuid
 import psycopg2
 import logging
@@ -71,29 +72,6 @@ class Pool(object):
     def execute(self, sql, *args):
         return self._get_connection().execute(sql, *args)
 
-    def callfirstfield(self, funcname, *args, **kwargs):
-        kwargs['function'] = self.getfirstfield
-        return self.call(funcname, *args, **kwargs)
-
-    def calljson(self, funcname, *args, **kwargs):
-        kwargs['function'] = self.getjson
-        return self.call(funcname, *args, **kwargs)
-
-    def callrow(self, funcname, *args, **kwargs):
-        kwargs['function'] = self.getrow
-        return self.call(funcname, *args, **kwargs)
-
-    def callrows(self, funcname, *args, **kwargs):
-        kwargs['function'] = self.getrows
-        return self.call(funcname, *args, **kwargs)
-
-    def call(self, funcname, *args, **kwargs):
-        sql = 'select %s({placeholder})' % funcname
-        placeholder = ','.join(['%s' for i in xrange(len(args))])
-        sql = sql.format(placeholder=placeholder)
-        func = kwargs.get('function') or self.execute
-        return func(sql, *args)
-
     def getfirstfield(self, sql, *args):
         return self._get_connection().getfirstfield(sql, *args)
 
@@ -105,6 +83,26 @@ class Pool(object):
 
     def getrows(self, sql, *args):
         return self._get_connection().getrows(sql, *args)
+
+    def callfirstfield(self, funcname, *args):
+        return self.call(funcname, *args, function=self.getfirstfield)
+
+    def calljson(self, funcname, *args):
+        """return list or dict object, if none result, return {}"""
+        return self.call(funcname, *args, function=self.getjson)
+
+    def callrow(self, funcname, *args):
+        return self.call(funcname, *args, function=self.getrow)
+
+    def callrows(self, funcname, *args):
+        return self.call(funcname, *args, function=self.getrows)
+
+    def call(self, funcname, *args, **kwargs):
+        sql = 'select %s({placeholder})' % funcname
+        placeholder = ','.join(['%s' for i in xrange(len(args))])
+        sql = sql.format(placeholder=placeholder)
+        func = kwargs.get('function') or self.execute
+        return func(sql, *args)
 
     def release(self):
         count_busy = 0
@@ -188,13 +186,13 @@ class Connection(object):
 
     def execute(self, sql, *args):
         args = args or None
-        result = True
+        result = False
         try:
             self.cur.execute(sql, args)
+            result = True
+        except psycopg2.IntegrityError as err:
+            logging.error("[%s]%s", err.pgcode, err)
         except Exception as e:
-            dbsql = self.mogrify(sql, args)
-            logging.error(" `%s` ", dbsql, '\n')
-            logging.error(str(e), '\n\n')
-            result = False
+            logging.error(e)
         self.cnn.commit()
         return result

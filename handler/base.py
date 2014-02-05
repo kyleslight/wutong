@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 from tornado.web import RequestHandler
 from tornado.websocket import WebSocketHandler
@@ -7,6 +10,19 @@ import lib.util
 
 
 class BaseHandler(RequestHandler):
+    def _get_readable_type(self, key, type_table=None):
+        if type_table is None:
+            type_table = self._type_table
+        return type_table.get(key)
+
+    def _get_sql_type(self, key, type_table=None):
+        if type_table is None:
+            type_table = self._type_table
+        for k, v in type_table.items():
+            if v == key:
+                return k
+        return None
+
     def __init__(self, *args, **kwargs):
         super(BaseHandler, self).__init__(*args, **kwargs)
         self.session = Session(self)
@@ -65,4 +81,4 @@ class BaseHandler(RequestHandler):
         self.write_error(403)
 
     def error(self, message):
-        self.write(message)
+        self.write('ERROR:' + message)

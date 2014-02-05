@@ -1,399 +1,552 @@
 /*
- Host     : localhost
- Database : PostgreSQL
- Port     : 5432
- Encoding : utf-8
-*/
-
-SET client_min_messages = ERROR;
-SET client_encoding = 'UTF8';
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
+ * host     : localhost
+ * database : postgresql
+ * port     : 5432
+ * encoding : utf-8
+ */
 
 -------------------------------------------------------------------------------
--- sequence
+-- setting
 -------------------------------------------------------------------------------
+set client_min_messages = error;
+set client_encoding = 'utf8';
+create extension if not exists pgcrypto;
 
-DROP SEQUENCE IF EXISTS message_seq CASCADE;
-CREATE SEQUENCE message_seq;
+-------------------------------------------------------------------------------
+-- domain
+-------------------------------------------------------------------------------
+drop domain if exists email cascade;
+create domain email as text;
 
+drop domain if exists url cascade;
+create domain url as text;
+
+drop domain if exists sort cascade;
+create domain sort as char(1);
 
 -------------------------------------------------------------------------------
 -- table
 -------------------------------------------------------------------------------
-
-DROP TABLE IF EXISTS "user" CASCADE;
-CREATE TABLE "user" (
-    uid serial PRIMARY KEY,
-    email varchar(50) UNIQUE NOT NULL,
-    penname varchar(32) UNIQUE NOT NULL,
-    phone varchar(18) UNIQUE,
-    password varchar(128) NOT NULL,
-    realname varchar(32),
-    -- true == man
+drop table if exists "user" cascade;
+create table "user" (
+    uid serial primary key,
+    nickname text unique,
+    email email,
+    password text,
+    avatar url,
+    realname text,
+    phone text,
     sex bool,
-    age smallint CHECK (age BETWEEN 1 AND 130 OR age IS NULL),
-    -- 位置
-    address varchar(1000),
+    birthday date,
+    address text,
     -- 简介
-    intro varchar(2000),
+    intro text,
     -- 签名
-    motto varchar(1000),
-    -- 头像url
-    avatar varchar(255),
-    register_date timestamp NOT NULL DEFAULT now(),
+    motto text,
+    register_ip inet,
+    register_time timestamp default now(),
     -- 被警告次数
-    warnned_times int NOT NULL DEFAULT 0,
+    warned_num smallint default 0,
     -- 邮箱激活
-    is_activated bool NOT NULL DEFAULT false,
-    is_forbid bool NOT NULL DEFAULT false,
-    is_deleted bool NOT NULL DEFAULT false,
-    is_admin bool NOT NULL DEFAULT false
+    is_activated bool default false,
+    is_forbid bool default false,
+    is_deleted bool default false,
+    type sort default '1'
 );
 
 
--- 用户头衔
-DROP TABLE IF EXISTS user_title CASCADE;
-CREATE TABLE user_title (
-    id serial PRIMARY KEY,
-    uid int REFERENCES "user"(uid) NOT NULL,
-    name varchar(20) NOT NULL,
-    create_time timestamp NOT NULL DEFAULT now()
+-- NOTICE: 所有 `base_` 开头的table均不用于存放数据, 仅仅被子表继承或查询用
+-- 定义父表的注意事项:
+-- 1.不要定义primary key
+-- 2.不要使用serial类型
+drop table if exists base_setting cascade;
+create table base_setting (
+    -- relate_id int,
+    content json,
+    modify_time timestamp default now()
+);
+
+drop table if exists user_setting cascade;
+create table user_setting (
+    id serial primary key,
+    uid int
+) inherits (base_setting);
+
+
+drop table if exists user_ip cascade;
+create table user_ip (
+    id serial primary key,
+    uid int,
+    login_ip inet,
+    login_time timestamp default now()
 );
 
 
-DROP TABLE IF EXISTS notification CASCADE;
-CREATE TABLE notification (
-    id serial PRIMARY KEY,
-    -- 发送者
-    uid int REFERENCES "user"(uid) NOT NULL,
-    -- 接收者
-    receiver varchar(32) REFERENCES "user"(penname),
-    title varchar(500),
-    content varchar(27262),
-    type varchar(6) CHECK (type IN ('公告', '回复', '推送', '私信')),
-    url varchar(255),
-    is_viewed bool DEFAULT false,
-    create_time timestamp NOT NULL DEFAULT now()
+drop table if exists user_honor cascade;
+create table user_honor (
+    id serial primary key,
+    uid int,
+    type sort,
+    time timestamp default now()
 );
 
 
-DROP TABLE IF EXISTS memo CASCADE;
-CREATE TABLE memo (
-    id serial PRIMARY KEY,
-    uid int REFERENCES "user"(uid) NOT NULL,
-    title varchar(500),
-    content varchar(27262),
-    create_time timestamp NOT NULL DEFAULT now()
+drop table if exists user_message cascade;
+create table user_message (
+    id serial primary key,
+    uid int,
+    -- 字典, 存储键值对
+    content json,
+    type sort,
+    is_viewed bool default false,
+    time timestamp default now()
 );
 
 
-DROP TABLE IF EXISTS article CASCADE;
-CREATE TABLE article (
-    aid serial PRIMARY KEY,
-    -- 创建者
-    uid int REFERENCES "user"(uid) NOT NULL,
-    title varchar(500) NOT NULL,
-    mainbody varchar(272629) NOT NULL,
-    -- 描述
-    description varchar(1000),
+drop table if exists base_session cascade;
+create table base_session (
+    uid int,
+    content text,
+    reply_time timestamp default now(),
+    create_time timestamp default now()
+);
+
+drop table if exists user_whisper cascade;
+create table user_whisper (
+    id serial primary key,
+    another_uid int
+) inherits (base_session);
+
+drop table if exists user_memo cascade;
+create table user_memo (
+    id serial primary key,
+    uid int,
+    title text,
+    body text,
+    modify_time timestamp default now(),
+    create_time timestamp default now()
+);
+
+
+drop table if exists user_relationship cascade;
+create table user_relationship (
+    id serial primary key,
+    uid int,
+    another_uid int,
+    -- 1: block   2: star   3: friend
+    relate_level sort,
+    time timestamp default now()
+);
+
+
+drop table if exists base_opus cascade;
+create table base_opus (
+    uid int,
+    title text,
+    mainbody text,
+    -- 引言
+    intro text,
     -- 适合
-    suit_for varchar(1000),
+    suit_for text,
     -- 参考来源
-    reference varchar(1000),
+    refers text[],
     -- 系列
-    series varchar(500),
+    series text,
     -- 资源
-    resource varchar(2550),
-    submit_time timestamp NOT NULL DEFAULT now(),
-    last_modify_time timestamp,
-    -- 公开性 --> '不公开', '不推送', '推送'
-    is_public int CHECK (is_public BETWEEN 0 AND 2) DEFAULT 2,
-    is_deleted bool NOT NULL DEFAULT false
+    resources text[],
+    create_time timestamp default now(),
+    -- 1=草稿, 2=私有, 3=公开不推送, 4=公开并推送
+    public_level sort default '4'
+);
+
+drop table if exists article cascade;
+create table article (
+    aid serial primary key,
+    modify_time timestamp default now(),
+    is_deleted bool default false
+) inherits (base_opus);
+
+drop table if exists article_backup cascade;
+create table article_backup (
+    id serial primary key
+) inherits (base_opus);
+
+
+drop table if exists article_setting cascade;
+create table article_setting (
+    id serial primary key,
+    aid int
+) inherits (base_setting);
+
+
+drop table if exists base_tag cascade;
+create table base_tag (
+    -- relate_id int,
+    content text
+);
+
+drop table if exists article_tag cascade;
+create table article_tag (
+    id serial primary key,
+    aid int
+) inherits (base_tag);
+
+
+drop table if exists article_honor cascade;
+create table article_honor (
+    id serial primary key,
+    aid int,
+    content text,
+    type sort,
+    time timestamp default now()
 );
 
 
-DROP TABLE IF EXISTS article_history CASCADE;
-CREATE TABLE article_history (
-    id serial PRIMARY KEY,
-    aid int REFERENCES article(aid) NOT NULL,
-    title varchar(500) NOT NULL,
-    mainbody varchar(272629) NOT NULL,
-    description varchar(1000),
-    suit_for varchar(1000),
-    reference varchar(1000),
-    series varchar(500),
-    resource varchar(255),
-    modify_time timestamp NOT NULL DEFAULT now()
+drop table if exists base_article_user cascade;
+create table base_article_user (
+    aid int,
+    uid int
 );
 
+drop table if exists article_coeditor cascade;
+create table article_coeditor (
+    id serial primary key
+) inherits (base_article_user);
 
-DROP TABLE IF EXISTS article_user CASCADE;
-CREATE TABLE article_user (
-    auid serial PRIMARY KEY,
-    aid int REFERENCES article(aid) NOT NULL,
-    uid int REFERENCES "user"(uid) NOT NULL,
-    -- 用户对文章的评分
-    score int CHECK (score BETWEEN 1 AND 10),
-    -- 合作编辑
-    is_coeditor bool NOT NULL DEFAULT false,
-    -- 收藏
-    is_collected bool NOT NULL DEFAULT false,
-    -- 转发
-    is_forwarded bool NOT NULL DEFAULT false,
-    CHECK (is_coeditor OR is_collected OR is_forwarded),
-    UNIQUE (aid, uid)
+drop table if exists article_view cascade;
+create table article_view (
+    id serial primary key,
+    ip inet,
+    time timestamp default now()
+) inherits (base_article_user);
+
+
+drop table if exists article_score cascade;
+create table article_score (
+    id serial primary key,
+    score smallint,
+    time timestamp default now()
+) inherits (base_article_user);
+
+drop table if exists article_collection cascade;
+create table article_collection (
+    id serial primary key,
+    time timestamp default now()
+) inherits (base_article_user);
+
+drop table if exists article_forwarded cascade;
+create table article_forwarded (
+    id serial primary key,
+    ip inet,
+    time timestamp default now()
+) inherits (base_article_user);
+
+
+drop table if exists base_article_comment cascade;
+create table base_article_comment (
+    aid int,
+    uid int,
+    content text,
+    modify_time timestamp default now(),
+    create_time timestamp default now()
 );
 
+drop table if exists article_bottom_comment cascade;
+create table article_bottom_comment (
+    id serial primary key,
+    rank int
+) inherits (base_article_comment);
 
--- 文章评论
-DROP TABLE IF EXISTS article_comment CASCADE;
-CREATE TABLE article_comment (
-    id serial PRIMARY KEY,
-    aid int REFERENCES article(aid) NOT NULL,
-    uid int REFERENCES "user"(uid) NOT NULL,
-    content varchar(200) NOT NULL,
+drop table if exists article_side_comment cascade;
+create table article_side_comment (
+    id serial primary key,
     -- 段落id
-    paragraph_id varchar(50),
-    -- 侧评
-    is_side bool NOT NULL DEFAULT false,
-    floor int DEFAULT 1,
-    create_time timestamp NOT NULL DEFAULT now()
-);
+    paragraph_id text
+) inherits (base_article_comment);
 
 
--- 文章读者群
-DROP TABLE IF EXISTS article_appositeness CASCADE;
-CREATE TABLE article_appositeness (
-    id serial PRIMARY KEY,
-    aid int REFERENCES article(aid) NOT NULL,
-    name varchar(20) NOT NULL,
-    create_time timestamp NOT NULL DEFAULT now()
-);
-
-
--- 文章标签
-DROP TABLE IF EXISTS article_tag CASCADE;
-CREATE TABLE article_tag (
-    id serial PRIMARY KEY,
-    aid int REFERENCES article(aid) NOT NULL,
-    name varchar(20) NOT NULL,
-    create_time timestamp NOT NULL DEFAULT now()
-);
-
-
--- 文章成就
-DROP TABLE IF EXISTS article_honor CASCADE;
-CREATE TABLE article_honor (
-    id serial PRIMARY KEY,
-    aid int REFERENCES article(aid) NOT NULL,
-    name varchar(20) NOT NULL,
-    create_time timestamp NOT NULL DEFAULT now()
-);
-
-
--- 浏览过文章的用户
-DROP TABLE IF EXISTS article_view CASCADE;
-CREATE TABLE article_view (
-    id serial PRIMARY KEY,
-    aid int REFERENCES article(aid) NOT NULL,
-    uid int REFERENCES "user"(uid),
-    ip varchar(40),
-    view_time timestamp NOT NULL DEFAULT now()
-);
-
-
--- 收藏文章的用户
-DROP TABLE IF EXISTS article_collection CASCADE;
-CREATE TABLE article_collection (
-    id serial PRIMARY KEY,
-    aid int REFERENCES article(aid) NOT NULL,
-    uid int REFERENCES "user"(uid) NOT NULL,
-    create_time timestamp NOT NULL DEFAULT now(),
-    UNIQUE (aid, uid)
-);
-
-
--- 文章的评分
-DROP TABLE IF EXISTS article_score CASCADE;
-CREATE TABLE article_score (
-    id serial PRIMARY KEY,
-    aid int REFERENCES article(aid) NOT NULL,
-    uid int REFERENCES "user"(uid) NOT NULL,
-    score int CHECK (score BETWEEN 1 AND 10) NOT NULL,
-    create_time timestamp NOT NULL DEFAULT now(),
-    UNIQUE (aid, uid)
-);
-
-
-DROP TABLE IF EXISTS "group" CASCADE;
-CREATE TABLE "group" (
-    gid serial PRIMARY KEY,
+drop table if exists "group" cascade;
+create table "group" (
+    gid serial primary key,
     -- 创建者
-    uid int REFERENCES "user"(uid) NOT NULL,
-    name varchar(32) NOT NULL,
-    intro varchar(200),
-    motto varchar(100),
-    description varchar(500),
-    foundtime timestamp NOT NULl DEFAULT now(),
-    -- 头像url
-    avatar varchar(255),
-    -- 图片url
-    banner varchar(255),
-    -- 公开性
-    is_public bool NOT NULL DEFAULT true,
-    -- 成员数
-    member_number int DEFAULT 1
+    uid int,
+    name text,
+    avatar url,
+    intro text,
+    motto text,
+    -- 图片
+    banner url,
+    public_level sort default '3',
+    create_time timestamp default now()
 );
 
 
-DROP TABLE IF EXISTS group_user CASCADE;
-CREATE TABLE group_user (
-    guid serial PRIMARY KEY,
-    gid int REFERENCES "group"(gid) NOT NULL,
-    uid int REFERENCES "user"(uid) NOT NULL,
-    -- 组长
-    is_leader bool NOT NULL DEFAULT false,
-    -- 副组长
-    is_subleader bool NOT NULL DEFAULT false,
-    -- 组员
-    is_member bool NOT NULL DEFAULT true,
-    join_time timestamp DEFAULT now(),
-    UNIQUE (gid, uid)
+drop table if exists group_setting cascade;
+create table group_setting (
+    id serial primary key,
+    gid int
+) inherits (base_setting);
+
+
+drop table if exists group_tag cascade;
+create table group_tag (
+    id serial primary key,
+    gid int
+) inherits (base_tag);
+
+
+drop table if exists base_group_user cascade;
+create table base_group_user (
+    gid int,
+    uid int
 );
 
+drop table if exists group_member cascade;
+create table group_member (
+    id serial primary key,
+    -- 1=申请加入, 2=成员, 3=副组长, 4=组长
+    position_level sort default '1',
+    join_time timestamp default now()
+) inherits (base_group_user);
 
--- 小组公告
-DROP TABLE IF EXISTS group_bulletin CASCADE;
-CREATE TABLE group_bulletin (
-    id serial PRIMARY KEY,
-    gid int REFERENCES "group"(gid) NOT NULL,
-    uid int REFERENCES "user"(uid) NOT NULL,
-    title varchar(5000) NOT NULL,
-    content varchar(400000) NOT NULL,
-    submit_time timestamp NOT NULL DEFAULT now()
+
+drop table if exists group_member_setting cascade;
+create table group_member_setting (
+    id serial primary key,
+    gid int,
+    uid int
+) inherits (base_setting);
+
+
+drop table if exists group_topic cascade;
+create table group_topic (
+    tid serial primary key,
+    gid int,
+    title text,
+    father_id int,
+    ancestor_id int,
+    on_top bool
+) inherits (base_session);
+
+drop table if exists group_message cascade;
+create table group_message (
+    id serial primary key,
+    gid int,
+    tid int,
+    on_top bool
+) inherits (base_session);
+
+
+drop table if exists group_topic_collection cascade;
+create table group_topic_collection (
+    id serial primary key,
+    uid int,
+    tid int,
+    time timestamp default now()
 );
-
-
--- 小组topic
-DROP TABLE IF EXISTS topic CASCADE;
-CREATE TABLE topic (
-    tid int PRIMARY KEY DEFAULT nextval('message_seq'),
-    gid int REFERENCES "group"(gid) NOT NULL,
-    uid int REFERENCES "user"(uid) NOT NULL,
-    content varchar(400000) NOT NULL,
-    submit_time timestamp NOT NULL DEFAULT now(),
-    reply_id int REFERENCES topic(tid),
-    last_reply_time timestamp,
-    reply_times int DEFAULT 0,
-    title varchar(5000),
-    level int CHECK (level BETWEEN 0 AND 3) DEFAULT 0
-);
-
-
-DROP TABLE IF EXISTS group_chat CASCADE;
-CREATE TABLE group_chat (
-    id int PRIMARY KEY DEFAULT nextval('message_seq'),
-    gid int REFERENCES "group"(gid) NOT NULL,
-    uid int REFERENCES "user"(uid) NOT NULL,
-    content varchar(400000) NOT NULL,
-    submit_time timestamp NOT NULL DEFAULT now(),
-    reply_id int REFERENCES topic(tid)
-);
-
 
 --------------------------------------------------------------------------------
 -- view
 --------------------------------------------------------------------------------
 
-CREATE OR REPLACE VIEW user_info_v
-  AS
-SELECT u.*
-  FROM "user" u;
+-- 所有后缀为`_base`的view都不应该直接通过`psycopg2`调用
+-- 而只用做支撑其它sql语句
+drop view if exists user_base cascade;
+create view user_base
+  as
+select uid,
+       nickname,
+       avatar
+  from "user";
 
+drop view if exists user_show cascade;
+create view user_show
+  as
+select u.*
+  from "user" u;
 
-CREATE OR REPLACE VIEW article_info_v
-  AS
-SELECT a.*, u.avatar, u.penname AS author
-  FROM article a,
+drop view if exists article_tag_base cascade;
+create view article_tag_base
+  as
+select aid,
+       array_agg(content) as "tags"
+  from article_tag
+ group by aid;
+
+drop view if exists article_base cascade;
+create view article_base
+  as
+select a.aid,
+       a.title,
+       a.intro,
+       a.modify_time,
+       a.public_level,
+       a.is_deleted,
+       at.tags,
+       u.nickname as "author",
+       u.avatar as "author_avatar"
+  from article a,
+       article_tag_base at,
+       user_base u
+ where a.uid = u.uid
+   and a.aid = at.aid;
+
+drop view if exists article_goalinfo cascade;
+create view article_goalinfo
+  as
+select a.aid,
+       count(v.id) as "view_num",
+       avg(s.score) as "avg_score",
+       count(c.id) as "collection_num",
+       count(f.id) as "forwarded_num"
+  from article a,
+       article_view v,
+       article_score s,
+       article_collection c,
+       article_forwarded f
+ where a.aid = v.aid
+   and a.aid = s.aid
+   and a.aid = c.aid
+   and a.aid = f.aid
+ group by a.aid;
+
+-- 所有后缀为`_show`的view都含有渲染所需要的全部数据
+-- 也可能会包含有不应该被客户端知晓的数据, 因此不应该被直接传给客户端
+drop view if exists article_show cascade;
+create view article_show
+  as
+select a.*,
+       at.tags,
+       u.nickname as "author",
+       u.avatar as "author_avatar"
+  from article a,
+       article_tag_base at,
+       user_base u
+ where a.uid = u.uid
+   and a.aid = at.aid;
+
+drop view if exists article_bottom_comment_show cascade;
+create view article_bottom_comment_show
+  as
+select c.*,
+       u.nickname as "creater",
+       u.avatar as "creater_avatar"
+  from article_bottom_comment c,
+       user_base u
+ where c.uid = u.uid;
+
+drop view if exists article_side_comment_show cascade;
+create view article_side_comment_show
+  as
+select c.*,
+       u.nickname as "creater",
+       u.avatar as "creater_avatar"
+  from article_side_comment c,
+       user_base u
+ where c.uid = u.uid;
+
+drop view if exists group_base cascade;
+create view group_base
+  as
+select g.gid,
+       g.name,
+       g.avatar
+  from "group" g;
+
+drop view if exists group_member_show cascade;
+create view group_member_show
+  as
+select gm.*,
+       u.nickname,
+       u.avatar
+  from group_member gm,
+       user_base u
+ where gm.uid = u.uid;
+
+drop view if exists group_show cascade;
+create view group_show
+  as
+select g.*,
+       u.nickname as "creater",
+       u.avatar as "creater_avatar",
+       gm.nickname as "leader",
+       gm.avatar as "leader_avatar",
+       (select count(id) from group_member_show where gid = g.gid) as "number"
+  from "group" g,
+       user_base u,
+       group_member_show gm
+ where g.uid = u.uid
+   and g.gid = gm.gid
+   and gm.position_level = '4';
+
+drop view if exists group_topic_base cascade;
+create view group_topic_base
+  as
+select t.*,
+       u.nickname as "creater",
+       u.avatar as "creater_avatar",
+       (select count(id) from group_message where tid = t.tid) +
+       (select count(tid) from group_topic where father_id = t.tid) as "number"
+  from group_topic t,
+       user_base u
+ where t.uid = u.uid;
+
+drop view if exists group_topic_show cascade;
+create view group_topic_show
+  as
+select t.*,
+       (select row_to_json(j.*) from (select tid, title from group_topic where tid = t.father_id) j) as "father",
+       (select row_to_json(j.*) from (select tid, title from group_topic where tid = t.ancestor_id) j) as "ancestor"
+  from group_topic_base t,
+       user_base u
+ where t.uid = u.uid;
+
+drop view if exists group_message_show cascade;
+create view group_message_show
+  as
+select m.*,
+       u.nickname as "creater",
+       u.avatar as "creater_avatar"
+  from group_message m,
+       user_base u
+ where m.uid = u.uid;
+
+drop view if exists user_collected_article_show cascade;
+create view user_collected_article_show
+  as
+select a.*,
+       c.time as "collect_time"
+  from article_collection c,
+       article_base a,
        "user" u
- WHERE a.uid = u.uid;
+ where c.uid = u.uid
+   and c.aid = a.aid;
 
+drop view if exists user_collected_topic_show cascade;
+create view user_collected_topic_show
+  as
+select t.*,
+       c.time as "collect_time"
+  from group_topic_collection c,
+       group_topic_base t,
+       "user" u
+ where c.uid = u.uid
+   and c.tid = t.tid;
 
-CREATE OR REPLACE VIEW article_comment_v
-  AS
-SELECT c.*, u.avatar, u.penname
-  FROM article_comment c,
-       user_info_v u
- WHERE c.uid = u.uid;
+drop view if exists article_search cascade;
+create view article_search
+  as
+select *
+  from article_show;
 
+drop view if exists group_search cascade;
+create view group_search
+  as
+select *
+  from group_show;
 
-CREATE OR REPLACE VIEW article_collection_v
-  AS
-SELECT ac.*,
-       a.title, a.author, a.avatar
-  FROM article_collection ac,
-       article_info_v a
- WHERE ac.aid = a.aid;
-
-
-CREATE OR REPLACE VIEW group_member_info_v
-  AS
-SELECT gu.*,
-       u.penname, u.avatar,
-       u.motto, u.intro,
-       u.sex, u.age, u.address
-  FROM group_user gu,
-       user_info_v u
- WHERE gu.is_member
-   AND gu.uid = u.uid;
-
-
-CREATE OR REPLACE VIEW group_info_v
-  AS
-SELECT g.*,
-       u.penname AS founder,
-       gm.penname AS leader
-  FROM "group" g,
-       "user" u,
-       group_member_info_v gm
- WHERE g.uid = u.uid
-   AND g.gid = gm.gid
-   AND gm.is_leader;
-
-
-CREATE OR REPLACE VIEW group_topic_v
-  AS
-SELECT u.penname, u.avatar, t.*
-  FROM topic t,
-       user_info_v u
- WHERE t.uid = u.uid;
-
-
-CREATE OR REPLACE VIEW group_chat_v
-  AS
-SELECT u.penname, u.avatar, gc.*
-  FROM group_chat gc,
-       user_info_v u
- WHERE gc.uid = u.uid;
-
-
-CREATE OR REPLACE VIEW group_message_v
-  AS
-SELECT *,
-       submit_time AS "last_reply_time",
-       NULL AS "reply_times",
-       NULL AS "title",
-       NULL AS "level"
-  FROM group_chat_v gc
- UNION
-SELECT *
-  FROM group_topic_v gt;
-
-
-CREATE OR REPLACE VIEW group_bulletin_v
-  AS
-SELECT gb.*, u.penname, u.avatar
-  FROM group_bulletin gb,
-       user_info_v u
- WHERE gb.uid = u.uid;
+drop view if exists user_search cascade;
+create view user_search
+  as
+select *
+  from user_show;

@@ -21,11 +21,11 @@ function execute_sql {
 }
 
 function unittest {
-    echo "run unittest"
-    res=$(py.test test 2>&1)
+    echo "run unittest..."
+    py.test test
     if [ ! $? -eq 0 ]
     then
-        echo "$res"
+        echo "ERROR: unittest"
         exit 1
     fi
 }
@@ -42,12 +42,29 @@ function gentestdata {
     echo 'finished!'
 }
 
+function clean {
+    psql -l | grep -wo wutong_test 1>/dev/null 2>&1 && dropdb wutong_test
+    rm -vf ./**/*.pyc ./*.pyc ./static/uploads/* ./avatar/*.png
+}
+
+function run {
+    if ! ps aux | grep memcached | grep -v "grep memcached";then
+        memcached &
+    fi
+    python main.py $@
+}
 
 case "$1" in
+    "run" )
+        run ${@:2}
+        ;;
+    "clean" )
+        clean
+        ;;
     "unittest" )
         unittest
         ;;
-    "testdata" )
+    "gendata" )
         gentestdata ${2-1}
         ;;
     "updatedb" )

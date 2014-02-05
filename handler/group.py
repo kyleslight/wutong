@@ -9,6 +9,13 @@ from lib import util
 
 
 class GroupBaseHandler(BaseHandler):
+    _type_table = {
+        '1': 'private',
+        '2': 'public',
+        '3': 'publish',
+    }
+
+
     @property
     def model(self):
         return self.groupmodel
@@ -75,33 +82,42 @@ class PermissionHandler(GroupBaseHandler):
 
 
 class BrowseHandler(GroupBaseHandler):
-    """"""
-    def get_mygroups(self, user_id):
-        return self.usermodel.get_user_groups(user_id)
-
-    def get_recent_topics(self, size):
-        return self.model.get_recent_topics(size, 0)
-
-    def get_recent_group_topics(self, uid, size):
-        return self.model.get_user_recent_group_topics(uid, size, 0)
+    """
+    ?tag=xxx&page=1&size=20
+    ?size=20
+    """
+    default_size = 20
 
     def get(self):
-        user = self.get_current_user()
-        if user:
-            uid = user['uid']
-            mygroups = self.get_mygroups(uid)
-            recent_group_topics = self.get_recent_group_topics(uid, 10)
-            recent_topics = self.get_recent_topics(10)
-        else:
-            mygroups = []
-            recent_group_topics = []
-            recent_topics = self.get_recent_topics(20)
+        try:
+            tag = self.get_argument('tag')
+            page = int(self.get_argument('page', 1))
+            size = int(self.get_argument('size', self.default_size))
+        except ValueError:
+            page = 1
+            size = self.default_size
 
-        self.render('group-navigation.html',
-                    user=user,
-                    mygroups=mygroups,
-                    recent_group_topics=recent_group_topics,
-                    recent_topics=recent_topics)
+        user = self.get_current_user()
+        mygroups = self.usermodel.get_user_groups(user['uid']) if user else []
+
+        if tag:
+            recent_group_topics = []
+            recent_topics = self.model.get_topics_by_tag(tag, page, size)
+        else:
+            if user:
+                size /= 2
+                recent_group_topics = self.model.get_user_topics(user['uid'], 1, size)
+            else:
+                recent_group_topics = []
+            recent_topics = self.model.get_topics(1, size)
+
+        self.render(
+            'group-navigation.html',
+            user=user,
+            mygroups=mygroups,
+            recent_group_topics=recent_group_topics,
+            recent_topics=recent_topics
+        )
 
 
 class CreateHandler(GroupBaseHandler):

@@ -4,8 +4,8 @@
 import os
 import uuid
 from tornado.options import define, options
-from tornado.web import TemplateModule, RequestHandler
-from handler import base, group, user, article, upload
+from tornado.web import UIModule, TemplateModule, RequestHandler
+from handler import base, group, user, article, upload, search
 import lib.util
 from lib.session import Session
 from lib import util
@@ -14,6 +14,7 @@ from lib import util
 urls = [
     (r"/", user.IndexHandler),
     (r"/upload", upload.FileHandler),
+    (r"/search", search.SearchHandler),
     (r"/user/(.+)", user.HomeHandler),
     (r"/u/info", user.UserinfoHandler),
     (r"/u/memo", user.MemoHandler),
@@ -73,6 +74,7 @@ if options.debug:
 else:
     urls.append((r".*", base.BaseHandler))
 
+
 class MyModule(TemplateModule):
     def render(self, path, **kwargs):
         path = os.path.join("modules", path)
@@ -101,11 +103,13 @@ settings = dict(
         "avatarurl": lambda handler, x, *arg: util.avatarurl(x, *arg),
         "getuser": lambda handler: handler.get_current_user(),
     },
-    dsn="dbname=" + options.dbname      \
-       +" user=" + options.dbuser       \
-       +" password=" + options.dbpasswd \
-       +" host=" + options.dbhost       \
-       +" port=" + str(options.dbport)
+    dsn="dbname=%s user=%s password=%s host=%s port=%s" % (
+        options.dbname,
+        options.dbuser,
+        options.dbpasswd,
+        options.dbhost,
+        str(options.dbport),
+    )
 )
 settings['avatar_path'] = os.path.join(settings['static_path'], "avatar")
 
