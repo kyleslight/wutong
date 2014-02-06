@@ -824,15 +824,20 @@ textarea,input{
 
 #chatData{
 	float: left;
-	height: 30px;
-	min-height: 30px;
-	overflow-y:hidden; 
+	min-height: 35px;
+	background: white;
+	outline: none;
+	overflow-y:auto; 
 	resize:none;
 	border: 1px solid #680;
 	border-radius: 4px;
 	width: 762px;
 	margin-left: 0;
+	font-size: 14px;
 	line-height: 15px;
+	padding: 5px 2px;
+	/*padding: 0;*/
+	/*padding: 5px 0;*/
 /*	transition: 0.1s;
 	-moz-transition:0.1s;
 	-webkit-transition:0.1s;
@@ -958,6 +963,7 @@ li.topicOutter p img{
 	border-radius: 2px;
 	width: 100px;
 	height: auto;
+	cursor: url('image/big.cur'),auto;
 }
 li.topicOutter .talkAction{
 	font-size: 0.8em;
@@ -1010,16 +1016,26 @@ li.chat .talkContent img{
 }
 .talkContent{
 	word-break:break-all;
+	word-wrap:break-word;
 	font-size: 0.9em;
 	clear: both;
 	margin-top: 10px;
 	margin-right: 13px;
+}
+li.chat .talkContent{
+	/*font-size: 1em;*/
+	font-family: "MicrosoftYahei"
 }
 .talkContent a{
 	color: #680;
 }
 .talkContent p{
 	margin: 0;
+}
+pre.talkContent{
+	margin:0;
+	margin-top: 10px;
+	padding-bottom: -10px;
 }
 .timeShow{
 	float: right;

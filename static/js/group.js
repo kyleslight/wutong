@@ -1,6 +1,5 @@
 var isLoginBox = false;
 var isRegisterBox = false;
-var isOtherOptionShow = false;
 var activeIndex = -1;
 var elapseTime = 4500;
 var shortElapseTime = 4000;
@@ -23,6 +22,11 @@ if(location.pathname.slice(0,2)=="/t"){
 
 $(document).ready(function() {
     renderMaleAndFemale();
+
+    $(window).scroll(function(){
+        scrollLoading(".communication");
+    });
+
     var groupMottoPrimaryWidth = $("#groupMotto").width();
     if (groupMottoPrimaryWidth > 425) {
         $("#groupMotto").css({
@@ -49,69 +53,64 @@ $(document).ready(function() {
     })
 
     // groupItem
+    var waittingFlag=false;
     $(".groupOptions a").click(function() {
-        if (_showwel_flag == true) {
-            _showwel_flag = false;
-            setTimeout(function() {
-                _showwel_flag = true;
-            }, shortElapseTime);
-            checkIsOtherOptionShow();
-            var indexOfDetailItem = $(".groupOptions a").index($(this));
-            switch (indexOfDetailItem) {
-                case (0):
-                    unsyncGroupBulletin();
-                    break;
-            }
-            if (isOtherOptionShow) {
-                $("#groupOptionShow" + activeIndex).removeClass("active").addClass("outOfView");
-                $("#groupOptionShow" + activeIndex).animate({
-                    left: "-9topicTagList60px"
-                }, 1500, function() {
-                    $(this).slideUp(400);
-                    $("#groupOptionShow" + indexOfDetailItem).addClass("prepare").css("left", "960px").show(function() {
-                        var prepareHeight = $(this).height() + 25 + "px";
-                        $(".groupItem").animate({
-                            height: prepareHeight
-                        }, 1000, function() {
-                            $("#groupOptionShow" + activeIndex).addClass("none");
-                        });
-                        $("#groupOptionShow" + indexOfDetailItem).animate({
-                            left: "0px"
-                        }, 1000, function() {
-                            $(this).removeClass("prepare").addClass("active");
+        if (!waittingFlag) {
+            waittingFlag=true;
+            setTimeout(function(){
+                waittingFlag=false;
+            },2000);
+        }else{
+            return false;
+        }
+        var indexOfDetailItem = $(".groupOptions a").index($(this));
+        var groupOptionShowBox=$(".groupOptionShow").eq(indexOfDetailItem);
+        if ($(".active").length==0) {
+            groupOptionShowBox.addClass("prepare").css("left", "960px").show(function() {
+                $(".groupItem").slideDown(500, function() {
+                    groupOptionShowBox.removeClass("prepare").addClass("active").animate({
+                        left: 0
+                    }, 500);
+                });
+            });
+        }else{
+            var activeIndexOfDetailItem=$(".groupOptionShow").index($(".active"));
+            if (activeIndexOfDetailItem==indexOfDetailItem) {
+                return false;
+            };
+            $(".active").animate({
+                left:-960
+            },500,function(){ 
+                $(".groupItem").css({height:$(".active").innerHeight()});
+                $(".active").hide().removeClass("active");
+                $(".groupItem").animate({
+                    height:groupOptionShowBox.innerHeight()
+                },500,function(){
+                    groupOptionShowBox.addClass("prepare").css("left", "960px").show(function(){
+                        groupOptionShowBox.animate({
+                            left: 0
+                        }, 500, function() {
+                            groupOptionShowBox.removeClass("prepare").addClass("active");
                             $(".groupItem").css("height", "auto");
                         });
                     });
-
                 });
-            } else {
-                $("#groupOptionShow" + indexOfDetailItem).addClass("prepare").css("left", "960px").show(function() {
-                    $(".groupItem").slideDown(500, function() {
-                        $("#groupOptionShow" + indexOfDetailItem).removeClass("prepare").addClass("active").animate({
-                            left: '0px'
-                        }, 1500);
-                    });
-                });
-            }
-            return false;
-        }
+            });
+        };
+        return false;
     })
     // group item back
     $(".optionBack").click(function() {
         var indexOfOptionBack = $(".optionBack").index($(this));
-        $("#groupOptionShow" + indexOfOptionBack).removeClass("active").addClass("outOfView");
-        $("#groupOptionShow" + indexOfOptionBack).animate({
-            left: "-960px"
-        }, 1500, function() {
-            $(".groupItem").slideUp(500, function() {
-                $("#groupOptionShow" + indexOfOptionBack).removeClass("outOfView").hide();
+        var groupOptionBack=$(".groupOptionShow").eq(indexOfOptionBack);
+        groupOptionBack.animate({
+            left: -960
+        },500,function() {
+            $(".groupItem").slideUp(1000, function() {
+                groupOptionBack.hide().removeClass("active");;
             });
             $(".bulletinCon").fadeOut(500);
-            // isOtherOptionShow=false;
         });
-        for (var i = 0; i < $(".groupOptions a").length; i++) {
-            $("#groupOptionShow" + i).removeClass("active");
-        };
         return false;
     })
     // bulletin content show
@@ -200,7 +199,7 @@ $(document).ready(function() {
             });
         }
         return false;
-    })
+    });
 
     // submit communication data
     var chatCon;
@@ -228,6 +227,10 @@ $(document).ready(function() {
         };
         return false;
     });
+    // for paste
+    $("#chatData").on("postpaste", function() {
+        console.log(1);
+    }); 
     
     $(".topicTalkContent img").click(function(){
         var imgUrl=$(this).attr("src");
@@ -282,19 +285,20 @@ function unsyncGroupBulletin() {
 // function for submit data
 
 function submitChatData() {
-    chatCon = $("#chatData").val();
-    if ($("#chatData").val().length > 1000) {
+    chatCon = $("#chatData").html();
+    // return false;
+    if (chatCon.replace(/<div>/g,"").replace(/<\/div>/g,"").replace(/<br>/g,"").length > 1000) {
         showError("请保持字数在1000字以内",2000);
         return;
     };
-    if (chatCon == "<ex>") {
+    if (chatCon == "&lt;ex&gt;") {
         $(".normalChatSend").slideUp(500, function() {
             $(".expandChatSend").slideDown(1000);
         });
-        $("#chatData").val("");
+        $("#chatData").html("");
         return;
     };
-    if (chatCon.length == 0 || chatCon.toString().replace(/(\r)*\n/g, "").replace(/\s/g, "").length == 0) {
+    if (chatCon.length == 0 || chatCon.toString().replace(/(\r)*\n/g, "").replace(/\s/g," ").length == 0) {
         showError("请输入内容",2000);
         $("#communicationData").addClass("littleTremble");
         setTimeout(function() {
@@ -302,20 +306,25 @@ function submitChatData() {
         }, 1000);
         return;
     };
-    var chatConBr=chatCon.match(/(\r)*\n/g);
+    var chatConBr=chatCon.match(/<br>/g);
+    var chatConEnter=chatCon.match(/<div>/g);
     if (chatConBr) {
         if (chatConBr.length>30) {
             showError("刷屏禁止",2000);
             return;
         };
     };
-    chatCon=chatCon.replace(/</g,"&lt").replace(/>/g,"&gt");
+    if (chatConEnter) {
+        if (chatConEnter.length>30) {
+            showError("刷屏禁止",2000);
+            return;
+        };
+    };
+    // chatCon=chatCon.replace(/</g,"&lt").replace(/>/g,"&gt");
     chatCon=chatCon.httpHtml();
     chatCon=chatCon.toString().replace(/(\r)*\n/g,"<br />").replace(/\s/g," ");
 
-    $("#chatData").val("");
-    var chatBox=document.getElementById("chatData");
-    chatBox.style.height = "30px";
+    $("#chatData").html("");
     // send message to server, TODO: please refactor
     message = {
         "content": chatCon,
@@ -407,17 +416,6 @@ function checkGroupPremission(){
     });
 }
 
-function checkIsOtherOptionShow() {
-    for (var i = 0; i < $(".groupOptions a").length; i++) {
-        if ($("#groupOptionShow" + i).hasClass("active")) {
-            isOtherOptionShow = true;
-            activeIndex = i;
-            return;
-        };
-    };
-    isOtherOptionShow = false;
-}
-
 function renderMaleAndFemale() {
     $(".memberSex").each(function() {
         if ($(this).text() == "♂") {
@@ -438,6 +436,32 @@ function showParaFirst(){
 String.prototype.httpHtml = function() {
     var reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-|:)+)/g;
     return this.replace(reg, '<a href="$1$2" target="_blank">$1$2</a>');
+}
+
+function turnToPlainText(e){
+    var sel, range; 
+    e.preventDefault();
+    var data=e.clipboardData.getData('Text');
+    var chatBox=document.getElementById('chatData');
+    // chatBox.innerHTML+=data;
+    sel = window.getSelection(); 
+    var range=window.getSelection().getRangeAt(0);
+    range.deleteContents();
+    var el = document.createElement('p');
+    el.innerHTML = data;  
+    var frag = document.createDocumentFragment(), node, lastNode; 
+    while ((node = el.firstChild)) { 
+        lastNode = frag.appendChild(node); 
+    } 
+    range.insertNode(frag); 
+    if (lastNode) { 
+        range = range.cloneRange(); 
+        range.setStartAfter(lastNode); 
+        range.collapse(true); 
+        sel.removeAllRanges(); 
+        sel.addRange(range); 
+    } 
+    // var chatBoxLength=chatBox.innerHTML.length;
 }
 
 // ----------------------------------------------------------------------------

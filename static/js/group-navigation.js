@@ -1,5 +1,8 @@
 $(document).ready(function(){
 	showFirstPara();
+	$(window).scroll(function(){
+		scrollLoading(".groupDynamic");
+	});
 	$("#createGroup").click(function(){
 		$(".groupDynamic").fadeOut();
 		$(".createGroup").fadeIn();

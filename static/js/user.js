@@ -167,6 +167,16 @@ $(document).ready(function(){
         };
         return false;
     });
+    $(".forMore").click(function(){
+        var parentName=$(this).prev().attr("id");
+        loadingShow("#"+parentName);
+        $(this).hide();
+        setTimeout(function(){
+            testLoad("#"+parentName);
+            $("#"+parentName).next().show();
+        },2000);
+        return false;
+    });
 });
 
 function checkSex(){

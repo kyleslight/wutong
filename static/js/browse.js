@@ -15,11 +15,6 @@ $(document).ready(function(){
             $("#usernameHover").text(username);
         });
     });
-
-    $("#return_top").click(function(){
-        $('html,body').animate({scrollTop:0},1000);
-        return false;
-    });
     $("#artsubmitButton").click(function(){
         // with(this){
             with(arttitle){
@@ -43,17 +38,7 @@ $(document).ready(function(){
         return false;
     })
     $(window).scroll(function(){
-        var top=$(window).scrollTop();
-        if(top>200){
-            var realHeight=(top+(window.screen.availHeight)/2)+'px';
-            $('#return_top').removeClass('none');
-            $('#return_top').stop();
-            $('#return_top').animate({top:realHeight},500);
-        }
-        else{
-            $('#return_top').addClass('none');
-        }
-        return false;
+        scrollLoading(".opus");
     })
 
     $(".opusTypeItem").click(function(){
