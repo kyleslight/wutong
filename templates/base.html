@@ -69,9 +69,8 @@
                         <div class="navrightonOption">
 
                             <a id="message" href="#">
-                                <!-- unread messages number -->
-                                <!-- update this when login -->
-                                <li>消息<span id="msgNum">19</span></li>
+                                <li>消息<span id="msgNum">
+                                </span></li>
                             </a>
                             <a id="setting" href="#">
                                 <li>设置</li>
@@ -244,25 +243,23 @@
                 </div>
                 <div class="myOpusCollection">
                     <script type="text/template" id="collection-template">
-                    {{!.}}
-                    <li id="myCollectionList" class="myCollectionList">
-                        <a href='/user/{{!author}}'>
-                            <img class='myCollectionAuthorImage' src='{{!avatar}}' />
-                        </a>
-                        <div class='myCollectionRow'>
-                            <a href='/a/{{!aid}}' class='myCollectionTitle'>{{!title}}</a>
-                            <a class='myCollectionAuthor' href='/user/{{!author}}'>{{!author}}</a>
-                        </div>
-                        <div class='myCollectionRow'>
-                            <div class='myCollectionTag'>
-                                {{!tags}}
-                                <a href='/tag/{{!name}}'>{{!name}}</a>
-                                {{!/tags}}
+                        <li id="myCollectionList" class="myCollectionList">
+                            <a href='/user/{{!author}}'>
+                                <img class='myCollectionAuthorImage' src='{{!avatar}}' />
+                            </a>
+                            <div class='myCollectionRow'>
+                                <a href='/a/{{!aid}}' class='myCollectionTitle'>{{!title}}</a>
+                                <a class='myCollectionAuthor' href='/user/{{!author}}'>{{!author}}</a>
                             </div>
-                            <span class='myCollectionTime'>收藏时间: {{!create_time}}</span>
-                        </div>
-                    </li>
-                    {{!/.}}
+                            <div class='myCollectionRow'>
+                                <div class='myCollectionTag'>
+                                    {{!tags}}
+                                    <a href='/tag/{{!name}}'>{{!name}}</a>
+                                    {{!/tags}}
+                                </div>
+                                <span class='myCollectionTime'>收藏时间: {{!create_time}}</span>
+                            </div>
+                        </li>
                     </script>
                 </div>
                 <div class="myTopicCollection">
@@ -276,7 +273,12 @@
             <div class="myNote">
                 <div class="myNoteListWrapOutter">
                     <a href="#" id="addNote" class="myNoteList">创建便笺</a>
-                    <div class="myNoteListWrap">
+                    <script type="text/template" id="memo-template">
+                        <a href='#' id='No_memo_{{!id}}' class='myNoteList' onclick='selectNote({{!id}})'>
+                            {{!title}}
+                        </a>
+                    </script>
+                    <div class="myNoteListWrap" id='_memo_template'>
                     </div>
                 </div>
                 <div class="myCurrentNoteArea">
@@ -372,6 +374,7 @@
     <script type="text/javascript" src="{{ static_url("js/jquery.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/header.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/ui.js") }}"></script>
+    <!-- TODO -->
     <script type="text/javascript" src="{{ static_url("js/imageUpload.js") }}"></script>
     {% end %}
     {% block editor_js %}

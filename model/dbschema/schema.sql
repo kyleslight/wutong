@@ -1,9 +1,7 @@
-/*
- * host     : localhost
- * database : postgresql
- * port     : 5432
- * encoding : utf-8
- */
+-- host     : localhost
+-- database : postgresql
+-- port     : 5432
+-- encoding : utf-8
 
 -------------------------------------------------------------------------------
 -- setting
@@ -27,11 +25,13 @@ create domain sort as char(1);
 -------------------------------------------------------------------------------
 -- table
 -------------------------------------------------------------------------------
-drop table if exists "user" cascade;
-create table "user" (
+
+-- `user`是`postgresql`的关键字, 所以换个名
+drop table if exists myuser cascade;
+create table myuser (
     uid serial primary key,
     nickname text unique,
-    email email,
+    email email unique,
     password text,
     avatar url,
     realname text,
@@ -122,7 +122,7 @@ create table user_memo (
     id serial primary key,
     uid int,
     title text,
-    body text,
+    content text,
     modify_time timestamp default now(),
     create_time timestamp default now()
 );
@@ -265,8 +265,9 @@ create table article_side_comment (
 ) inherits (base_article_comment);
 
 
-drop table if exists "group" cascade;
-create table "group" (
+-- `group`是`postgresql`的关键字, 所以换个名
+drop table if exists mygroup cascade;
+create table mygroup (
     gid serial primary key,
     -- 创建者
     uid int,
@@ -357,13 +358,13 @@ create view user_base
 select uid,
        nickname,
        avatar
-  from "user";
+  from myuser;
 
 drop view if exists user_show cascade;
 create view user_show
   as
 select u.*
-  from "user" u;
+  from myuser u;
 
 drop view if exists article_tag_base cascade;
 create view article_tag_base
@@ -451,7 +452,7 @@ create view group_base
 select g.gid,
        g.name,
        g.avatar
-  from "group" g;
+  from mygroup g;
 
 drop view if exists group_member_show cascade;
 create view group_member_show
@@ -472,7 +473,7 @@ select g.*,
        gm.nickname as "leader",
        gm.avatar as "leader_avatar",
        (select count(id) from group_member_show where gid = g.gid) as "number"
-  from "group" g,
+  from mygroup g,
        user_base u,
        group_member_show gm
  where g.uid = u.uid
@@ -518,7 +519,7 @@ select a.*,
        c.time as "collect_time"
   from article_collection c,
        article_base a,
-       "user" u
+       myuser u
  where c.uid = u.uid
    and c.aid = a.aid;
 
@@ -529,9 +530,10 @@ select t.*,
        c.time as "collect_time"
   from group_topic_collection c,
        group_topic_base t,
-       "user" u
+       myuser u
  where c.uid = u.uid
    and c.tid = t.tid;
+
 
 drop view if exists article_search cascade;
 create view article_search

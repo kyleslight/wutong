@@ -1,23 +1,67 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Last Modified time: 2014-01-25 20:53:22
+# @Last Modified time: 2014-02-07 12:59:31
 
 import os
+import re
 import uuid
+import time
+import string
+import random
 try:
     import Image
 except ImportError:
     from PIL import Image
 from hashlib import sha1
 from datetime import datetime
+from Crypto.Cipher import AES
+from Crypto import Random
 from tornado.web import create_signed_value, decode_signed_value
 
+
+def has_illegal_char(s):
+    chars = set("""`~!@#$%^&*()_+<>?:;'"[]{},./\\| \t\n\r""")
+    if set(s).intersection(chars):
+        return True
+    return False
+
+def is_email(email):
+    pattern = re.compile(r'^[\.\w]{1,}[@]\w+[.]\w+$')
+    if pattern.match(email):
+        return True
+    return False
+
+def is_phone(phone):
+    pattern = re.compile(r'^13\d{1}\d{8}$|15[0189]{1}\d{8}$|189\d{8}$')
+    if pattern.match(phone):
+        return True
+    return False
+
+def is_time(time):
+    return True if str2time(time) else False
+
+def str2time(s):
+    """
+    convert `str` to `struct_time`
+    """
+    t = None
+    try:
+        t = time.strptime(s, "%Y-%m-%d")
+    except ValueError:
+        try:
+            t = time.strptime(s, "%Y-%m-%d %H:%M:%S")
+        except:
+            pass
+    return t
 
 def split(txt, seps=u' ;；'):
     default_sep = seps[0]
     for sep in seps[1:]:
         txt = txt.replace(sep, default_sep)
     return [i.strip() for i in txt.split(default_sep)]
+
+def random_string(size, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
 
 def hexstring(salt, string):
     hexstr = sha1((salt + string).encode("utf-8"))
@@ -39,6 +83,21 @@ def encodestr(s):
 def decodestr(encrpstr):
     secret, name = _secret_and_name()
     return decode_signed_value(secret, name, encrpstr)
+
+def encrypt(s):
+    key = bytes(random_string(16))
+    iv = random_string(8).encode("hex")
+    cipher = AES.new(key, AES.MODE_CFB, iv)
+    encrys = (key + cipher.encrypt(bytes(s)) + iv).encode("hex")
+    return encrys
+
+def decrypt(s):
+    s = s.decode("hex")
+    key = s[:16]
+    iv = s[-16:]
+    s = s[16:-16]
+    cipher = AES.new(key, AES.MODE_CFB, iv)
+    return cipher.decrypt(s)
 
 def str2datetime(s):
     return datetime.strptime(s, "%Y-%m-%d %H:%M:%S.%f")

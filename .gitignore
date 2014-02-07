@@ -2,3 +2,5 @@
 *.php
 *.idea
 *.swp
+./static/avatar/*.(png|jpg|gif)
+./static/uploads/*

@@ -44,7 +44,7 @@ function gentestdata {
 
 function clean {
     psql -l | grep -wo wutong_test 1>/dev/null 2>&1 && dropdb wutong_test
-    rm -vf ./**/*.pyc ./*.pyc ./static/uploads/* ./avatar/*.png
+    rm -vf ./**/*.pyc ./*.pyc ./static/uploads/* ./static/avatar/*.png
 }
 
 function run {
@@ -104,11 +104,11 @@ exit(sig)
         execute_sql "schema.sql"
         execute_sql "function.sql"
 
-        if is_cmd_exists "py.test"
-        then
-            unittest
-        fi
+        # if is_cmd_exists "py.test"
+        # then
+        #     unittest
+        # fi
         # TODO: remove
-        gentestdata
+        # gentestdata
         ;;
 esac

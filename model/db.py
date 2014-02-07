@@ -25,52 +25,17 @@ class Pool(object):
         for i in xrange(self.min_size):
             self._new_connection()
 
-    def select(self, *arg, **kwargs):
-        raise NotImplementedError
-
-    def insert(self, table, d):
-        """
-        :arg string table:
-        :arg dict d:
-        """
-        sql = 'insert into "%s" ({keys}) values ({values})' % table
-        keys = ','.join(['"%s"' % k for k in d.keys()])
-        values = ','.join(['%s' for i in xrange(len(d.keys()))])
-
-        sql = sql.format(keys=keys, values=values)
-        return self.execute(sql, *d.values())
-
-    def update(self, table, d, where=None, wherevalues=[]):
-        """
-        :arg string table:
-        :arg dict d:
-        :arg string where:
-        :arg list wherevalues:
-        """
-        sql = "update %s set ({keys}) = ({values}) {where}" % table
-        keys = ','.join(['"%s"' % k for k in d.keys()])
-        values = ','.join(['%s' for i in xrange(len(d.keys()))])
-        where = 'where ' + where if where else ''
-
-        sql = sql.format(keys=keys, values=values, where=where)
-        values = d.values()
-        values.extend(wherevalues)
-        return self.execute(sql, *values)
-
-    def delete(self, table, where=None, wherevalues=[]):
-        """
-        :arg string table:
-        :arg string where:
-        :arg list wherevalues:
-        """
-        sql = "delete from %s {where}" % table
-        where = 'where ' + where if where else ''
-
-        sql = sql.format(where=where)
-        return self.execute(sql, *wherevalues)
-
     def execute(self, sql, *args):
         return self._get_connection().execute(sql, *args)
+
+    def insert(self, table, d):
+        return self._get_connection().insert(table, d)
+
+    def update(self, table, d, where=None, wherevalues=[]):
+        return self._get_connection().update(table, d, where, wherevalues)
+
+    def delete(self, table, where=None, wherevalues=[]):
+        return self._get_connection().delete(table, where, wherevalues)
 
     def getfirstfield(self, sql, *args):
         return self._get_connection().getfirstfield(sql, *args)
@@ -196,3 +161,44 @@ class Connection(object):
             logging.error(e)
         self.cnn.commit()
         return result
+
+    def insert(self, table, d):
+        """
+        :arg string table:
+        :arg dict d:
+        """
+        sql = 'insert into "%s" ({keys}) values ({values})' % table
+        keys = ','.join(['"%s"' % k for k in d.keys()])
+        values = ','.join(['%s' for i in xrange(len(d.keys()))])
+
+        sql = sql.format(keys=keys, values=values)
+        return self.execute(sql, *d.values()) and self.cur.rowcount > 0
+
+    def update(self, table, d, where=None, wherevalues=[]):
+        """
+        :arg string table:
+        :arg dict d:
+        :arg string where:
+        :arg list wherevalues:
+        """
+        sql = "update %s set ({keys}) = ({values}) {where}" % table
+        keys = ','.join(['"%s"' % k for k in d.keys()])
+        values = ','.join(['%s' for i in xrange(len(d.keys()))])
+        where = 'where ' + where if where else ''
+
+        sql = sql.format(keys=keys, values=values, where=where)
+        values = d.values()
+        values.extend(wherevalues)
+        return self.execute(sql, *values) and self.cur.rowcount > 0
+
+    def delete(self, table, where=None, wherevalues=[]):
+        """
+        :arg string table:
+        :arg string where:
+        :arg list wherevalues:
+        """
+        sql = "delete from %s {where}" % table
+        where = 'where ' + where if where else ''
+
+        sql = sql.format(where=where)
+        return self.execute(sql, *wherevalues) and self.cur.rowcount > 0
