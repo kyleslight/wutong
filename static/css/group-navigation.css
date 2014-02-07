@@ -146,7 +146,7 @@
 	padding-top: 10px;
 	padding-bottom: 5px;
 	border-radius: 4px;
-	border-bottom: 2px solid #680;
+	border-bottom: 2px solid #B5C550;
 }
 .groupDynamicAuthorImg img{
 	margin-top: 14px;
@@ -187,8 +187,14 @@
 	font-size: 0.8em;
 	color: #999;
 	margin-top: 5px;
-	border-left: 3px solid #680;
+	border-left: 3px solid #B5C550;
 	padding-left: 5px;
+}
+.groupDynamicBrief img{
+	border-radius: 2px;
+	width: 100px;
+	height: auto;
+	cursor: url('image/big.cur'),auto;
 }
 .groupDynamicBrief p{
 	margin: 0;

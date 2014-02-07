@@ -81,7 +81,9 @@ $(document).ready(function(){
             var url = location.pathname + '/comment/bottom';
             $(".opusCommentList").remove();
             $.getJSON(url, function(data) {
-                $(".buttomComment").prepend(data);
+                $(".buttomCommentCon").prepend(data);
+                $(".buttomCommentCon").children().last().addClass("noBorderButtom");
+                // initPage(pageNum,BCNum,thisPageNum);
             });
         }else{
             $(this).text("展开底部评论");
@@ -299,7 +301,7 @@ $(document).ready(function(){
                 $(".opusCommentList").last().removeClass("noBorderButtom");
                 $(".opusCommentList").last().after(buttomCommentShowBox);
             };
-            $(".opusCommentList").last().addClass("noBorderButtom");
+            $(".buttomCommentCon").children().last().addClass("noBorderButtom");
             BCeditor.setContent("");
         });
         return false;

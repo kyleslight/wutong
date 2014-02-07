@@ -54,7 +54,7 @@ ui_msg = {
 };
 prop = {
     size_limit: 67108864,
-    upload_count: 300
+    upload_count: 30
 }
 
 /* Handler for URL upload */
@@ -216,6 +216,10 @@ function file_upload(work) {
 	xhr.addEventListener('readystatechange', function(e){
 		if(xhr.readyState == 4) {
 			if(xhr.status == 200) {
+				if (xhr.responseText=="failed") {
+					showError("图像上传失败",2000);
+					return;
+				};
 				var imageUploadUrl='/static/uploads/'+xhr.responseText;
 				insertImageAll(imageUploadUrl);
 			}
@@ -281,17 +285,21 @@ function after_upload(res) {
 			}else {
 				qimg.style.backgroundImage = 'url("'+res.thumb+'")';
 			}
+			showError("图片上传失败");
+			hideImageUpload();
 			break;
 		case 'failed':
-				qli.work.status = 'failed';
-				qli.work.err = res.err;
-				qimg.style.backgroundImage = 'url(upload_error.png)';
-				qimg.style.backgroundSize = '200px 200px';
-				qimg.style.width = qprg.style.width = qli.style.width = '200px';
-				qimg.style.height = qprg.style.height = qli.style.height = '200px';
-				qli.style.marginTop = qli.marginBottom = '0';
-				qsel.style.paddingTop = '170px';
-				show_error(qli.work);
+			qli.work.status = 'failed';
+			qli.work.err = res.err;
+			qimg.style.backgroundImage = 'url(upload_error.png)';
+			qimg.style.backgroundSize = '200px 200px';
+			qimg.style.width = qprg.style.width = qli.style.width = '200px';
+			qimg.style.height = qprg.style.height = qli.style.height = '200px';
+			qli.style.marginTop = qli.marginBottom = '0';
+			qsel.style.paddingTop = '170px';
+			show_error(qli.work);
+			showError("图片上传失败");
+			hideImageUpload();
 			break;
 	}
 	changeinfo(true);
@@ -301,8 +309,8 @@ function insertImageAll(imgUrl){
 	switch(insertImageState){
 					case 0:
 					editor.execCommand( 'insertimage', {
-			         	src:imgUrl
-			    	} );break;
+			         	src:imgUrl,
+			    	} );console.log("case0");break;
 			    	case 1:
 			    	// console.log(imgUrl);
 			    	var imgUrlStr="'"+imgUrl+"'";
@@ -317,19 +325,22 @@ function insertImageAll(imgUrl){
 			        $("#preImageContainer").append(appImage);break;
 			    	case 2:
 			    	BCeditor.execCommand( 'insertimage', {
-			         	src:imgUrl
+			         	src:imgUrl,
+			         	onerror:"this.src='{{ static_url("+'css/image/error.jpg'+") }}'"
 			    	} );break;
 			    	case 3:
 			    	expandEditor.execCommand( 'insertimage', {
-			         	src:imgUrl
+			         	src:imgUrl,
+			         	onerror:"this.src='{{ static_url("+'css/image/error.jpg'+") }}'"
 			    	} );break;
 			    	case 4:
 			    	editor.execCommand( 'insertimage', {
-			         	src:imgUrl
+			         	src:imgUrl,
+			         	onclick:"showBigImage(this.src)"
 			    	} );break;
 			    	default:break;
 				}
-	$("#first_load,#result_zone,#message_zone,.mask,#uploadImageBack,#main").hide();
+	hideImageUpload();
 }
 
 function deletePreImage(deleteObj){
@@ -362,6 +373,10 @@ function imageMoveUp(imgUrl){
 	};
 	upImage.prev().before(upImage.clone());
 	upImage.remove();
+}
+
+function hideImageUpload(){
+	$("#first_load,#result_zone,#message_zone,.mask,#uploadImageBack,#main").hide();
 }
 
 function imageMoveDown(imgUrl){

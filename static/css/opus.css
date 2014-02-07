@@ -9,10 +9,10 @@ td,tbody,table{
 }
 
 #edui1{
-	border: 1px solid lightblue;
+	border: 1px solid #B5C550;
 }
 #edui1_toolbarboxouter{
-	border-bottom: 1px solid lightblue;
+	border-bottom: 1px solid #B5C550;
 }
 
 .read{
@@ -201,17 +201,17 @@ td,tbody,table{
 	padding: 20px 0;
 	padding-bottom: 0;
 	margin-top: 60px;
-	border-top:1px solid lightblue;
+	border-top:1px solid #B5C550;
 }
 .opusComment a{
 	/*color: rgba(16,158,255,0.7);*/
-	color: lightblue;
+	color: #B5C550;
 	font-size: 1.5em;
 	/*font-weight: 900;*/
 }
 
 .opusCommentList{
-	border-bottom: 1px solid lightblue;
+	border-bottom: 1px solid #B5C550;
 	text-align: left;
 	list-style: none;
 	float: left;
@@ -528,11 +528,11 @@ td,tbody,table{
 
 #buttomCommentSend{
 	float: right;
-	background: lightblue;
+	background: #B5C550;
 	color: white;
 }
 #buttomCommentSend:hover{
-	background: rgba(16,158,255,1);
+	background: #ECFF77;
 }
 
 .opusMainChildren{

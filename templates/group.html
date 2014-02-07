@@ -29,9 +29,9 @@
                 </div>
             </div>
             <div class="groupOptions">
-                <a href="#">
+                <!-- <a href="#">
                     <div class='groupOptionItem'>公告</div>
-                </a>
+                </a> -->
                 <a href="#">
                     <div class='groupOptionItem'>名片</div>
                 </a>
@@ -41,29 +41,29 @@
                 <a href="#">
                     <div class='groupOptionItem'>作品</div>
                 </a>
-                <a href="#">
+                <!-- <a href="#">
                     <div class='groupOptionItem'>计划</div>
-                </a>
+                </a> -->
                 <a href="#">
                     <div class='groupOptionItem'>设置</div>
                 </a>
             </div>
             <div class="groupItem">
                 <!-- bulletin -->
-                <div class="bulletin" id="groupOptionShow0">
+                <!-- <div class="bulletin" id="groupOptionShow0">
                     {% for bulletin in bulletins %}
                         {% module MyModule("bulletin.html", bulletin=bulletin) %}
                     {% end %}
                     <div id="bulletinOption"><a href="#" id="unfold">展开前6条</a>  <a href="#" id="bulletinBack" class="optionBack">返回</a>
                     </div>
-                </div>
+                </div> -->
                 <!-- information card -->
-                <div class="infoCard" id="groupOptionShow1">
+                <div class="infoCard groupOptionShow" id="groupOptionShow1">
                     {% module MyModule("group_info.html", group_info=group_info) %}
                     <a href="#" class="optionBack">返回</a>
                 </div>
                 <!-- member -->
-                <div class="member" id="groupOptionShow2">
+                <div class="member groupOptionShow" id="groupOptionShow2">
                     {% for member in members %}
                         {% module MyModule("member_info.html", member=member) %}
                     {% end %}
@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <!-- works -->
-                <div class="works" id="groupOptionShow3">
+                <div class="works groupOptionShow" id="groupOptionShow3">
                     <div id="worksOption">
                         <div class="worksMainOption"><a id="articalOption" href="#">文章</a><a id="frangmentOption" href="#">小品</a>
                         </div>
@@ -104,8 +104,7 @@
                     <div class="articalDirectionOption"><a href="#">上一页</a><a href="#">下一页</a><a href="#" class="optionBack">返回</a>
                     </div>
                 </div>
-                <div class="latestTopic" id="groupOptionShow4">
-                <!-- {}  -->
+                <!-- <div class="latestTopic" id="groupOptionShow4">
                     <li class="latestTopicList">
                         <img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
                         <span class="latestTopicTitle">梧桐项目部署</span>
@@ -114,11 +113,10 @@
                             <span class="latestTopicTime">2-2 13:24</span>
                         </div>
                     </li>
-                <!-- {}  -->
                     <div id="latestTopicOption"><a href="#" id="latestTopicUnfold">展开前6条</a>  <a href="#" id="latestTopicBack" class="optionBack">返回</a>
                     </div>
-                </div>
-                <div class="groupSetting" id="groupOptionShow5">
+                </div> -->
+                <div class="groupSetting groupOptionShow" id="groupOptionShow5">
                     <h2>小组个人设置</h2>
                     <!-- 接受来自该小组成员的内容推送 -->
                     <span class="tip">是否接受来自该小组成员的作品推送：</span>
@@ -200,8 +198,9 @@
                             <a href="#" id="changeSendState">切换至话题模式</a>
                             <div class="chatSend">
                                 <div class="normalChatSend">
-                                    <textarea id="chatData" class="input" type="text" name="chatConData" placeholder="" accesskey="c" onpropertychange="this.style.height = (this.scrollHeight-50) + 'px';" oninput="
-                                    this.style.height = (this.scrollHeight-20) + 'px';"></textarea>
+                                    <div id="chatData" class="input" type="text" name="chatConData" placeholder="" accesskey="c" contenteditable="true"  
+                                    onpaste="turnToPlainText(event);"
+                                    ></div>
                                     <a href="#" id="chatSubmitButton" class="formButton" name="submitButton" value="发送" title="用ctrl+enter组合键也是可以的哦~">发送</a>
                                 </div>
                                 <div class="expandChatSend">

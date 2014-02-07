@@ -235,6 +235,7 @@ $(document).ready(function() {
         }, function() {
             $(".myCollection").fadeIn(500);
         });
+        return false;
     });
     $("#myCollectionBack").click(function() {
         $(".myCollection").fadeOut(500, function() {
@@ -242,7 +243,18 @@ $(document).ready(function() {
                 height: 0
             });
         });
-    })
+        return false;
+    });
+    $(".myCollectionClassButton").click(function(){
+        var indexOfCollBut=$(".myCollectionClassButton").index($(this));
+        console.log(indexOfCollBut);
+        if ($(".myCollectionCon").eq(indexOfCollBut).css("display")!="none") {
+            return false;
+        };
+        $(".myCollectionCon").hide();
+        $(".myCollectionCon").eq(indexOfCollBut).show();
+        return false;
+    });
     // my note
     $("#myNote").click(function() {
         $(".myNoteWrap").animate({
@@ -463,6 +475,22 @@ $(document).ready(function() {
     $("#registerUsername").bind('input', lengthLimit(30));
     $("#registerPassword").bind('input', lengthLimit(30));
     $("#registerRepassword").bind('input', lengthLimit(30));
+    });
+
+    $(".communication").on("click",".topicOutter .topicTalkContent img",function(){
+        var imgUrl=$(this).attr("src");
+        showBigImage(imgUrl);
+        return false;
+    });
+    $(".groupDynamic").on("click",".groupDynamicBrief img",function(){
+        var imgUrl=$(this).attr("src");
+        showBigImage(imgUrl);
+        return false;
+    });
+    $("#bigImageBack,.bigImage img").click(function(){
+        $(".mask,.bigImage,#bigImageBack").hide();
+        return false;
+    });
 });
 
 function lengthLimit(length) {
@@ -891,4 +919,156 @@ function renderTemplatePrepend(temp, obj, target) {
     } else {
         $(temp).prepend($(innerHTML));
     }
+}
+
+function showBigImage(url){
+    $(".mask").show();
+    $(".bigImage img,.preBigImage img").attr("src",url);
+    var imgDomWidth=document.getElementById("preBigImageCon").width;
+    console.log(imgDomWidth);
+    var imgHeight=$(".preBigImage img").height();
+    console.log(imgHeight,$(window).height());
+    if (imgHeight<$(window).height()) {
+        var marginTop=($(window).height()-imgHeight)/2;
+        console.log(marginTop);
+        $(".bigImage img").css({"margin-top":marginTop+"px"});
+    }else{
+        $(".bigImage img").css({"margin-top":"0px"});
+    }
+    $(".bigImage").fadeIn();
+}
+
+var testLoadTime=0;
+function scrollLoading(loadEle){
+    if (testLoadTime>3) {
+        return false;
+    };
+    if (testLoadTime==3) {
+        loadingHide(loadEle);
+        $(loadEle).append("<div class='testLoadContent'>再怎么找也没有啦╮(￣▽￣)╭</div>");
+        testLoadTime+=1;
+        return false;
+    };
+    var top=$(window).scrollTop();
+    var buttom=top+$(window).height();
+    var opusTop=$(loadEle).scrollTop();
+    var opusButtom=opusTop+$(loadEle).height();
+    if(buttom>opusButtom&&($(loadEle).has(".loadingBox").length==0)){
+        loadingShow(loadEle);
+        setTimeout(function(){
+            $(loadEle).append($(loadEle).children().clone());
+            testLoad(loadEle);
+        },2000);
+    };
+    return false;
+}
+
+function loadingShow(loadEle){
+    var loadingBox=$(".loadingBoxWrap").html();
+    $(loadEle).append(loadingBox);
+}
+
+function loadingHide(loadEle){
+    $(loadEle).children(".loadingBox").remove();
+}
+
+function testLoad(loadEle){
+    loadingHide(loadEle);
+    testLoadTime+=1;
+}
+
+function initPage(p){
+    var pageOut={
+        pageInfo:'<span class="pageInfo">共'+p.pageNum+'页/'+p.BCNum+'条'+p.turnType+'</span>',
+        firstPage:'<a href="javascript:(0)" onclick="turnPage(1,'+"'"+p.turnEle+"'"+')">首页</a>',
+        lastPage:'<a href="javascript:void(0)" onclick="turnPage('+p.pageNum+','+"'"+p.turnEle+"'"+')">末页</a>',
+        prePage:'<a href="javascript:void(0)" onclick="turnPage('+(p.thisPageNum-1)+','+"'"+p.turnEle+"'"+')">上一页</a>',
+        nextPage:'<a href="javascript:void(0)" onclick="turnPage('+(p.thisPageNum+1)+','+"'"+p.turnEle+"'"+')">下一页</a>'
+    };
+    var turnContainer=$(p.turnBox);
+    turnContainer.addClass("turnContainer");
+    turnContainer.empty();
+    if (p.BCNum==0) {
+        turnContainer.append("<span class='noBC'>目前还没有任何"+p.turnType+"呢</span>");
+        return false;
+    };
+    if (p.pageNum==1) {
+        return false;
+    };
+    if (p.pageNum<=10) {
+        turnContainer.append(pageOut.pageInfo);
+        for(var i=1;i<=p.pageNum;i++){
+            forThisPage();
+        };
+        if (p.pageNum!=1) {
+            if (p.thisPageNum!=p.pageNum) {
+                turnContainer.append(pageOut.nextPage);
+            };
+        };
+        return false;
+    };
+    if (p.thisPageNum<(p.pageNum-5)&&p.thisPageNum<=5) {
+        turnContainer.append(pageOut.pageInfo);
+        if (p.thisPageNum!=1) {
+            turnContainer.append(pageOut.firstPage);
+        };
+        for(var i=1;i<=10;i++){
+            forThisPage();
+        };
+        if (p.thisPageNum!=p.pageNum) {
+            turnContainer.append(pageOut.nextPage);
+            turnContainer.append(pageOut.lastPage);
+        };
+        return false;
+    };
+    if (p.thisPageNum<(p.pageNum-5)) {
+        turnContainer.append(pageOut.pageInfo);
+        turnContainer.append(pageOut.firstPage);
+        for(var i=(p.thisPageNum-4);i<=(p.thisPageNum+5);i++){
+           forThisPage();
+        };
+        if (p.thisPageNum!=p.pageNum) {
+            turnContainer.append(pageOut.nextPage);
+            turnContainer.append(pageOut.lastPage);
+        };
+        return false;
+    };
+    turnContainer.append(pageOut.pageInfo);
+    turnContainer.append(pageOut.firstPage);
+    if ((p.thisPageNum+5)<p.pageNum) {
+        for(var i=(p.thisPageNum-4);i<=p.pageNum;i++){
+            forThisPage();
+        };
+    }else{
+        var minus=p.pageNum-p.thisPageNum;
+        for(var i=(p.thisPageNum-(9-minus));i<=p.pageNum;i++){
+            forThisPage();
+        };
+    }
+    if (p.thisPageNum!=p.pageNum) {
+        turnContainer.append(pageOut.nextPage);
+        turnContainer.append(pageOut.lastPage);
+    };
+
+    function forThisPage(){
+        if (i==p.thisPageNum) {
+            turnContainer.append('<a href="javascript:void(0)" onclick="turnPage('+i+','+"'"+p.turnEle+"'"+')" class="HLThisPage">'+i+'</a>');
+        }else{
+            turnContainer.append('<a href="javascript:void(0)" onclick="turnPage('+i+','+"'"+p.turnEle+"'"+')">'+i+'</a>');
+        }
+    }
+    return false;
+}
+
+function turnPage(i,turnEle){
+    var op={
+        pageNum:p.pageNum,
+        BCNum:p.BCNum,
+        thisPageNum:i,
+        turnEle:p.turnEle,
+        turnBox:p.turnBox,
+        turnType:p.turnType
+    };
+    initPage(op);
+    return false;
 }
