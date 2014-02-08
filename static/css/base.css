@@ -717,7 +717,7 @@ a.searchSuggestionsList:hover{
 .myCurrentNoteOption a{
 	width: 45px;
 	padding:3px 5px;
-	height: 19px;
+	height: auto;
 	margin-top: 5px;
 	margin-left: 10px;
 	text-align: center;

@@ -152,15 +152,8 @@ $(document).ready(function() {
         return false;
     })
     $(".groupMemberList").click(function(){
-        // $(".groupOption").fadeOut(1);
         $(".selectedMember").removeClass("selectedMember");
         $(this).addClass("selectedMember");
-        // newPos=new Object();
-        // newPos.left=event.screenX+20;
-        // newPos.top=event.clientY+$(window).scrollTop();
-        // console.log(newPos);
-        // $(".groupOption").offset(newPos);
-        // $(".groupOption").show();
         return false;
     });
     $(".groupOption a").click(function(){
@@ -226,15 +219,6 @@ $(document).ready(function() {
             submitChatData();
         };
         return false;
-    });
-    // for paste
-    $("#chatData").on("postpaste", function() {
-        console.log(1);
-    }); 
-    
-    $(".topicTalkContent img").click(function(){
-        var imgUrl=$(this).attr("src");
-
     });
 
     $("#collectTopic").click(function(){
@@ -443,7 +427,6 @@ function turnToPlainText(e){
     e.preventDefault();
     var data=e.clipboardData.getData('Text');
     var chatBox=document.getElementById('chatData');
-    // chatBox.innerHTML+=data;
     sel = window.getSelection(); 
     var range=window.getSelection().getRangeAt(0);
     range.deleteContents();
@@ -461,7 +444,6 @@ function turnToPlainText(e){
         sel.removeAllRanges(); 
         sel.addRange(range); 
     } 
-    // var chatBoxLength=chatBox.innerHTML.length;
 }
 
 // ----------------------------------------------------------------------------
@@ -570,6 +552,8 @@ function socket_onmessage(e) {
         showError("若想参与该小组讨论请加入该小组",3000);
         return false;
     } else {
+        console.log(data);
+        data=data.replace(/<script/g,"&lt;script").replace(/<\/script>/g,"&lt;/script&gt;");
         $("#communication").prepend(data);
         showParaFirst();
         removeMessage();

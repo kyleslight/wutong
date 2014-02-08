@@ -189,6 +189,7 @@ $(document).ready(function(){
     $("#collectOpus").click(function(){
         var collectionUrl=location.pathname+"/collection";
         $.post(collectionUrl, function(data){
+            console.log(data);
             showError("收藏成功",2000);
             $("#collectOpus").fadeOut();
             return false;

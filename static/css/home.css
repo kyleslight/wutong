@@ -1,0 +1,11 @@
+body{
+	background: url('image/bg.jpg');
+}
+.header{
+	background: rgba(0,0,0,0.9);
+	border-bottom: 0;
+	z-index: 2;
+}
+.bg{
+	width: 100%;
+}
