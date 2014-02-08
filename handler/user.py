@@ -13,11 +13,11 @@ from lib import util
 from base import BaseHandler
 
 
-def login(self):
+def login(self, user_id=None, user=None):
     """
     `self` is `BaseHandler` object
     """
-    user = self.current_user
+    user = user or self.get_current_user(user_id)
     self.session['uid'] = user['uid']
     cnt = self.muser.get_unread_msg_count(user['uid'])
     user = self.get_pure_user()
@@ -85,7 +85,7 @@ class LoginHandler(BaseHandler):
             return
         user = self.muser.do_login(nickname_or_email, password)
         if user:
-            login(self)
+            login(self, user=user)
         else:
             self.write_errmsg('password or account error')
 
@@ -117,7 +117,7 @@ class RegisterHandler(BaseHandler):
             self.muser.update_user_info(user_id, avatar=avatar)
             self.send_mail(email, user_id)
             # 前端负责登录
-            # login()
+            # login(self, user_id=user_id)
         except Exception as e:
             gen_log.error(e)
 
@@ -176,9 +176,7 @@ class AccountHandler(BaseHandler):
         value = self.get_argument('v')
         user_id = util.decrypt(value)
         if self.muser.do_activate_account(user_id):
-            self.session['uid'] = user_id
-            user = self.get_pure_user()
-            self.write_json(user)
+            login(self, user_id=user_id)
         else:
             self.write_errmsg('activate account failed')
 
@@ -200,7 +198,7 @@ class AccountHandler(BaseHandler):
 class UserinfoHandler(BaseHandler):
     @authenticated
     def get(self):
-        login(self)
+        login(self, user=self.current_user)
 
     @authenticated
     def post(self):
@@ -246,22 +244,22 @@ class UserinfoHandler(BaseHandler):
 
     def do_check(self):
         if self._check_key('nickname', util.has_illegal_char) is True:
-            self.write_errmsg('contain illegal char')
+            self.write_errmsg('invalid nickname')
             return
         if self._check_key('email', util.is_email) is False:
-            self.write_errmsg('invalid email address')
+            self.write_errmsg('invalid email')
             return
         if self._check_key('phone', util.is_phone) is False:
-            self.write_errmsg('invalid phone number')
+            self.write_errmsg('invalid phone')
             return
         if self._check_key('birthday', util.is_time) is False:
-            self.write_errmsg('invalid time format')
+            self.write_errmsg('invalid time')
             return
         if self._check_key('realname', util.has_illegal_char) is True:
-            self.write_errmsg('contain illegal char')
+            self.write_errmsg('invalid realname')
             return
         if self._check_key('sex', lambda s: s in ('true', 'false')) is False:
-            self.write_errmsg('invalid sex string')
+            self.write_errmsg('invalid sex')
             return
         # if not self._check_key('address', lambda s: s):
         #     self.write_errmsg('invalid address')
@@ -387,6 +385,7 @@ class MemoHandler(BaseHandler):
             self.write_errmsg('delete memo failed')
 
 
+# TODO
 class CollectionHandler(BaseHandler):
     def add_collection(self, article_id):
         return self.create_article_collection(self.user_id, article_id)
@@ -406,6 +405,7 @@ class CollectionHandler(BaseHandler):
         self.write(self.add_collection(article_id))
 
 
+# TODO
 class AutoCompletionHandler(BaseHandler):
     def get(self):
         query = self.get_argument('q')

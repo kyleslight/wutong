@@ -44,7 +44,7 @@ function gentestdata {
 
 function clean {
     psql -l | grep -wo wutong_test 1>/dev/null 2>&1 && dropdb wutong_test
-    rm -vf ./**/*.pyc ./*.pyc ./static/uploads/* ./static/avatar/*.png
+    rm -vf ./static/uploads/* ./static/avatar/*.png ./*.pyc ./**/*.pyc
 }
 
 function run {

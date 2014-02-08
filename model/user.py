@@ -74,10 +74,10 @@ class UserModel(object):
             tmp[key] = item['sum']
         return tmp
 
-    def get_collections(self, uid, page, size):
-        limit = size
-        offset = (page - 1) * size
-        return self.db.calljson('get_user_memos', uid, limit, offset)
+    # def get_collections(self, uid, page, size):
+    #     limit = size
+    #     offset = (page - 1) * size
+    #     return self.db.calljson('get_user_memos', uid, limit, offset)
 
     # def create_collection(self, uid, aid):
     #     select = 'SELECT create_article_collection(%s, %s)'

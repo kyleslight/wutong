@@ -26,6 +26,7 @@ highlightThisPage();
 $(document).ready(function() {
     checkIsLogin();
 
+    // TODO: highlight
     if (location.pathname == "/a/create") {
 
     } else if (location.pathname == '/a/browse') {
@@ -33,6 +34,7 @@ $(document).ready(function() {
     } else if (location.pathname == '/g/browse') {
 
     };
+
     $(".preload").removeClass("preload");
     // return to top icon show
     $(window).scroll(function() {
@@ -48,7 +50,7 @@ $(document).ready(function() {
             $('#return_top').addClass('none');
         }
         return false;
-    })
+    });
     // return to top
     $("#return_top").click(function() {
         $('html,body').animate({
@@ -75,7 +77,7 @@ $(document).ready(function() {
         $(this).children("#usernameHover").css("color", "white");
         $(".userExpand").hide();
         $("#usernameHover").css({"color":"white"});
-    })
+    });
     $("#message").mouseover(function() {
         $("#msgNum").css({
             "background": "pink",
@@ -475,7 +477,6 @@ $(document).ready(function() {
     $("#registerUsername").bind('input', lengthLimit(30));
     $("#registerPassword").bind('input', lengthLimit(30));
     $("#registerRepassword").bind('input', lengthLimit(30));
-    });
 
     $(".communication").on("click",".topicOutter .topicTalkContent img",function(){
         var imgUrl=$(this).attr("src");
@@ -661,7 +662,7 @@ function checkEmailExist(email, callback){
 function checkUsername(username){
     if (illegalCharacter.test(username)) {
         setError("用户名包含非法字符");
-    } else if (username.length < 2) {
+    } else if (0 < username.length < 2) {
         setError("用户名长度不能小于2位");
     } else if (username.length > 20) {
         setError("用户名请限定在30字以内");

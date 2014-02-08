@@ -158,9 +158,9 @@ as $$
                 create_time
            from user_memo
           where uid = _uid
+          order by id desc
           limit _limit
          offset _offset
-          order by id desc
       ) aj;
 $$ language sql;
 
@@ -183,20 +183,20 @@ begin
 end;
 $$ language plpgsql;
 
-create or replace function
-get_article_collections(_uid int, _limit int, _offset int) returns json
-as $$
-  select array_to_json(array_agg(aj))
-    from
-      (
-         select *
-           from article_collection
-          where uid = _uid
-          limit _limit
-         offset _offset
-          order by id desc
-      ) aj;
-$$ language sql;
+-- create or replace function
+-- get_article_collections(_uid int, _limit int, _offset int) returns json
+-- as $$
+--   select array_to_json(array_agg(aj))
+--     from
+--       (
+--          select *
+--            from article_collection
+--           where uid = _uid
+--           limit _limit
+--          offset _offset
+--           order by id desc
+--       ) aj;
+-- $$ language sql;
 
 -- create or replace function
 -- get_article_tags(_aid int)
