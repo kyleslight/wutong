@@ -1,5 +1,6 @@
 # !/usr/bin/env python
 # encoding=utf8
+
 import uuid
 import psycopg2
 import logging
@@ -24,75 +25,17 @@ class Pool(object):
         for i in xrange(self.min_size):
             self._new_connection()
 
-    def select(self, *arg, **kwargs):
-        raise NotImplementedError
-
-    def insert(self, table, d):
-        """
-        :arg string table:
-        :arg dict d:
-        """
-        sql = 'insert into "%s" ({keys}) values ({values})' % table
-        keys = ','.join(['"%s"' % k for k in d.keys()])
-        values = ','.join(['%s' for i in xrange(len(d.keys()))])
-
-        sql = sql.format(keys=keys, values=values)
-        return self.execute(sql, *d.values())
-
-    def update(self, table, d, where=None, wherevalues=[]):
-        """
-        :arg string table:
-        :arg dict d:
-        :arg string where:
-        :arg list wherevalues:
-        """
-        sql = "update %s set ({keys}) = ({values}) {where}" % table
-        keys = ','.join(['"%s"' % k for k in d.keys()])
-        values = ','.join(['%s' for i in xrange(len(d.keys()))])
-        where = 'where ' + where if where else ''
-
-        sql = sql.format(keys=keys, values=values, where=where)
-        values = d.values()
-        values.extend(wherevalues)
-        return self.execute(sql, *values)
-
-    def delete(self, table, where=None, wherevalues=[]):
-        """
-        :arg string table:
-        :arg string where:
-        :arg list wherevalues:
-        """
-        sql = "delete from %s {where}" % table
-        where = 'where ' + where if where else ''
-
-        sql = sql.format(where=where)
-        return self.execute(sql, *wherevalues)
-
     def execute(self, sql, *args):
         return self._get_connection().execute(sql, *args)
 
-    def callfirstfield(self, funcname, *args, **kwargs):
-        kwargs['function'] = self.getfirstfield
-        return self.call(funcname, *args, **kwargs)
+    def insert(self, table, d):
+        return self._get_connection().insert(table, d)
 
-    def calljson(self, funcname, *args, **kwargs):
-        kwargs['function'] = self.getjson
-        return self.call(funcname, *args, **kwargs)
+    def update(self, table, d, where=None, wherevalues=[]):
+        return self._get_connection().update(table, d, where, wherevalues)
 
-    def callrow(self, funcname, *args, **kwargs):
-        kwargs['function'] = self.getrow
-        return self.call(funcname, *args, **kwargs)
-
-    def callrows(self, funcname, *args, **kwargs):
-        kwargs['function'] = self.getrows
-        return self.call(funcname, *args, **kwargs)
-
-    def call(self, funcname, *args, **kwargs):
-        sql = 'select %s({placeholder})' % funcname
-        placeholder = ','.join(['%s' for i in xrange(len(args))])
-        sql = sql.format(placeholder=placeholder)
-        func = kwargs.get('function') or self.execute
-        return func(sql, *args)
+    def delete(self, table, where=None, wherevalues=[]):
+        return self._get_connection().delete(table, where, wherevalues)
 
     def getfirstfield(self, sql, *args):
         return self._get_connection().getfirstfield(sql, *args)
@@ -105,6 +48,26 @@ class Pool(object):
 
     def getrows(self, sql, *args):
         return self._get_connection().getrows(sql, *args)
+
+    def callfirstfield(self, funcname, *args):
+        return self.call(funcname, *args, function=self.getfirstfield)
+
+    def calljson(self, funcname, *args):
+        """return list or dict object, if none result, return {}"""
+        return self.call(funcname, *args, function=self.getjson)
+
+    def callrow(self, funcname, *args):
+        return self.call(funcname, *args, function=self.getrow)
+
+    def callrows(self, funcname, *args):
+        return self.call(funcname, *args, function=self.getrows)
+
+    def call(self, funcname, *args, **kwargs):
+        sql = 'select %s({placeholder})' % funcname
+        placeholder = ','.join(['%s' for i in xrange(len(args))])
+        sql = sql.format(placeholder=placeholder)
+        func = kwargs.get('function') or self.execute
+        return func(sql, *args)
 
     def release(self):
         count_busy = 0
@@ -188,13 +151,54 @@ class Connection(object):
 
     def execute(self, sql, *args):
         args = args or None
-        result = True
+        result = False
         try:
             self.cur.execute(sql, args)
+            result = True
+        except psycopg2.IntegrityError as err:
+            logging.error("[%s]%s", err.pgcode, err)
         except Exception as e:
-            dbsql = self.mogrify(sql, args)
-            logging.error(" `%s` ", dbsql, '\n')
-            logging.error(str(e), '\n\n')
-            result = False
+            logging.error(e)
         self.cnn.commit()
         return result
+
+    def insert(self, table, d):
+        """
+        :arg string table:
+        :arg dict d:
+        """
+        sql = 'insert into "%s" ({keys}) values ({values})' % table
+        keys = ','.join(['"%s"' % k for k in d.keys()])
+        values = ','.join(['%s' for i in xrange(len(d.keys()))])
+
+        sql = sql.format(keys=keys, values=values)
+        return self.execute(sql, *d.values()) and self.cur.rowcount > 0
+
+    def update(self, table, d, where=None, wherevalues=[]):
+        """
+        :arg string table:
+        :arg dict d:
+        :arg string where:
+        :arg list wherevalues:
+        """
+        sql = "update %s set ({keys}) = ({values}) {where}" % table
+        keys = ','.join(['"%s"' % k for k in d.keys()])
+        values = ','.join(['%s' for i in xrange(len(d.keys()))])
+        where = 'where ' + where if where else ''
+
+        sql = sql.format(keys=keys, values=values, where=where)
+        values = d.values()
+        values.extend(wherevalues)
+        return self.execute(sql, *values) and self.cur.rowcount > 0
+
+    def delete(self, table, where=None, wherevalues=[]):
+        """
+        :arg string table:
+        :arg string where:
+        :arg list wherevalues:
+        """
+        sql = "delete from %s {where}" % table
+        where = 'where ' + where if where else ''
+
+        sql = sql.format(where=where)
+        return self.execute(sql, *wherevalues) and self.cur.rowcount > 0

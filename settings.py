@@ -4,8 +4,8 @@
 import os
 import uuid
 from tornado.options import define, options
-from tornado.web import TemplateModule, RequestHandler
-from handler import base, group, user, article, upload
+from tornado.web import UIModule, TemplateModule, RequestHandler
+from handler import base, group, user, article, upload, search
 import lib.util
 from lib.session import Session
 from lib import util
@@ -13,19 +13,24 @@ from lib import util
 
 urls = [
     (r"/", user.IndexHandler),
-    (r"/upload", upload.FileHandler),
-    (r"/user/(.+)", user.HomeHandler),
-    (r"/u/info", user.UserinfoHandler),
-    (r"/u/memo", user.MemoHandler),
-    (r"/u/memo/update", user.UpdateMemoHandler),
-    (r"/u/memo/delete", user.DeleteMemoHandler),
-    (r"/u/collection", user.CollectionHandler),
-    (r"/u/permission", user.PermissionHandler),
     (r"/login", user.LoginHandler),
     (r"/logout", user.LogoutHandler),
     (r"/register", user.RegisterHandler),
-    (r"/account/check", user.AccountCheckHandler),
+    (r"/account", user.AccountHandler),
+    (r"/upload", upload.FileHandler),
+    (r"/search", search.SearchHandler),
     (r"/tag/(.+)", base.BaseHandler),
+    (r"/user/(.+)", user.HomeHandler),
+    (r"/u/info", user.UserinfoHandler),
+    (r"/u/memo", user.MemoHandler),
+    (r"/u/collection", user.CollectionHandler),
+    (r"/a/browse", article.BrowseHandler),
+    (r"/a/create", article.CreateHandler),
+    (r"/a/(\d+)", article.OpusHandler),
+    (r"/a/(\d+)/score", article.ArticleScoreHandler),
+    (r"/a/(\d+)/collection", article.ArticleCollectionHandler),
+    (r"/a/(\d+)/comment/bottom", article.BottomCommentHandler),
+    (r"/a/(\d+)/comment/side", article.SideCommentHandler),
     (r"/g/browse", group.BrowseHandler),
     (r"/g/create", group.CreateHandler),
     (r"/g/(\d+)", group.GroupIndexHandler),
@@ -37,13 +42,6 @@ urls = [
     (r"/t/(\d+)", group.TopicIndexHandler),
     (r"/t/(\d+)/message/websocket", group.TopicMessageSocketHandler),
     (r"/t/(\d+)/message", group.TopicMessageHandler),
-    (r"/a/browse", article.BrowseArticleHandler),
-    (r"/a/create", article.CreateArticleHandler),
-    (r"/a/(\d+)", article.OpusHandler),
-    (r"/a/(\d+)/score", article.ArticleScoreHandler),
-    (r"/a/(\d+)/collection", article.ArticleCollectionHandler),
-    (r"/a/(\d+)/comment/bottom", article.BottomCommentHandler),
-    (r"/a/(\d+)/comment/side", article.SideCommentHandler),
 ]
 
 
@@ -73,6 +71,7 @@ if options.debug:
 else:
     urls.append((r".*", base.BaseHandler))
 
+
 class MyModule(TemplateModule):
     def render(self, path, **kwargs):
         path = os.path.join("modules", path)
@@ -101,11 +100,13 @@ settings = dict(
         "avatarurl": lambda handler, x, *arg: util.avatarurl(x, *arg),
         "getuser": lambda handler: handler.get_current_user(),
     },
-    dsn="dbname=" + options.dbname      \
-       +" user=" + options.dbuser       \
-       +" password=" + options.dbpasswd \
-       +" host=" + options.dbhost       \
-       +" port=" + str(options.dbport)
+    dsn="dbname=%s user=%s password=%s host=%s port=%s" % (
+        options.dbname,
+        options.dbuser,
+        options.dbpasswd,
+        options.dbhost,
+        str(options.dbport),
+    )
 )
 settings['avatar_path'] = os.path.join(settings['static_path'], "avatar")
 

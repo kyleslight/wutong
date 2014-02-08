@@ -7,97 +7,97 @@ class GroupModel(object):
         self.db = db
 
     def get_group_info(self, gid):
-        select = 'SELECT get_group_info(%s)'
-        group_info = self.db.getjson(select, gid)
-        return group_info
+        return self.db.calljson('get_group_info', gid)
 
     def get_message(self, message_id):
-        select = 'SELECT get_group_message(%s)'
-        message = self.db.getjson(select, message_id)
-        return message
+        return self.db.calljson('get_group_message', message_id)
 
-    def get_group_messages(self, gid, limit, offset):
-        select = 'SELECT get_group_messages(%s, %s, %s)'
-        messages = self.db.getjson(select, gid, limit, offset)
-        return messages
+    def get_group_messages(self, gid, page, size):
+        limit = size
+        offset = (page - 1) * size
+        messages = self.db.getjson('get_group_messages', gid, limit, offset)
+        return messages or []
 
-    def get_topic_messages(self, tid, limit, offset):
-        select = 'SELECT get_topic_messages(%s, %s, %s)'
-        messages = self.db.getjson(select, tid, limit, offset)
-        return messages
+    def get_topic_messages(self, tid, page, size):
+        limit = size
+        offset = (page - 1) * size
+        messages = self.db.calljson('get_topic_messages', tid, limit, offset)
+        return messages or []
 
-    def get_chats(self, gid, limit, offset):
-        select = 'SELECT get_group_chats(%s, %s, %s)'
-        group_chats = self.db.getjson(select, gid, limit, offset)
-        return group_chats
+    def get_chat(self, chat_id):
+        return self.db.calljson('get_group_chat', chat_id)
 
-    def get_chat(self, id):
-        select = 'SELECT get_group_chat(%s)'
-        chat = self.db.getjson(select, id)
-        return chat
-
-    def get_topics(self, gid, limit, offset):
-        select = 'SELECT get_topics(%s, %s, %s)'
-        topics = self.db.getjson(select, gid, limit, offset)
-        return topics
-
-    def get_recent_topics(self, limit, offset):
-        select = 'SELECT get_recent_topics(%s, %s)'
-        topics = self.db.getjson(select, limit, offset)
-        return topics
-
-    def get_user_recent_group_topics(self, uid, limit, offset):
-        select = 'SELECT get_user_recent_group_topics(%s, %s, %s)'
-        topics = self.db.getjson(select, uid, limit, offset)
-        return topics
+    def get_chats(self, gid, page, size):
+        limit = size
+        offset = (page - 1) * size
+        group_chats = self.db.calljson('get_group_chats', gid, limit, offset)
+        return group_chats or []
 
     def get_topic(self, topic_id):
-        select = 'SELECT get_topic(%s)'
-        topic = self.db.getjson(select, topic_id)
-        return topic
+        return self.db.calljson('get_topic', topic_id)
 
-    def get_topic_topics(self, topic_id, limit, offset):
-        select = 'SELECT get_topic_topics(%s, %s, %s)'
-        topics = self.db.getjson(select, topic_id, limit, offset)
-        return topics
+    def get_topics(self, page, size):
+        limit = size
+        offset = (page - 1) * size
+        topics = self.db.calljson('get_topics', limit, offset)
+        return topics or []
 
-    def get_topic_chats(self, topic_id, limit, offset):
-        select = 'SELECT get_topic_chats(%s, %s, %s)'
-        chats = self.db.getjson(select, topic_id, limit, offset)
-        return chats
+    def get_topics_by_tag(self, tag, page, size):
+        limit = size
+        offset = (page - 1) * size
+        topics = self.db.calljson('get_topics_by_tag', tag, limit, offset)
+        return topics or []
+
+    def get_user_topics(self, uid, page, size):
+        limit = size
+        offset = (page - 1) * size
+        topics = self.db.calljson('get_user_topics', limit, offset)
+        return topics or []
+
+    def get_group_topics(self, gid, page, size):
+        limit = size
+        offset = (page - 1) * size
+        topics = self.db.calljson('get_group_topics', gid, limit, offset)
+        return topics or []
+
+    def get_topic_topics(self, topic_id, page, size):
+        limit = size
+        offset = (page - 1) * size
+        topics = self.db.calljson('get_topic_topics', topic_id, limit, offset)
+        return topics or []
+
+    def get_topic_chats(self, topic_id, page, size):
+        limit = size
+        offset = (page - 1) * size
+        chats = self.db.calljson('get_topic_chats', topic_id, limit, offset)
+        return chats or []
 
     def get_member_info(self, gid, uid):
-        select = 'SELECT get_group_member_info(%s, %s)'
-        return self.db.getjson(select, gid, uid)
+        return self.db.calljson('get_group_member_info', gid, uid)
 
-    def get_group_members(self, gid, limit, offset):
-        select = 'SELECT get_group_members(%s, %s, %s)'
-        return self.db.getjson(select, gid, limit, offset)
+    def get_group_members(self, gid, page, size):
+        limit = size
+        offset = (page - 1) * size
+        members = self.db.calljson('get_group_members', gid, limit, offset)
+        return members or []
 
-    def get_bulletins(self, gid, limit, offset):
-        select = 'SELECT get_group_bulletins(%s, %s, %s)'
-        bulletins = self.db.getjson(select, gid, limit, offset)
-        return bulletins
+    def get_bulletins(self, gid, page, size):
+        limit = size
+        offset = (page - 1) * size
+        bulletins = self.db.calljson('get_group_bulletins', gid, limit, offset)
+        return bulletins or []
 
-    def do_create(self, uid, name, intro=None, motto=None, avatar=None, banner=None, is_public=True):
-        select = 'SELECT create_group(%s, %s, %s, %s, %s, %s, %s)'
-        gid = self.db.getfirstfield(select, uid, name, intro, motto, avatar, banner, is_public)
-        return gid
+    def join_group(self, gid, uid):
+        return self.db.call('join_group', gid, uid)
 
-    def do_join_group(self, gid, uid):
-        select = 'SELECT join_group(%s, %s)'
-        return self.db.execute(select, gid, uid)
+    def create_group(self, uid, name, intro=None, motto=None, avatar=None, banner=None, is_public=True):
+        return self.db.callfirstfield('create_group', uid, name, intro, motto, avatar, banner, is_public)
 
-    def do_create_topic(self, gid, uid, title, content, reply_id=None):
-        select = 'SELECT create_topic(%s, %s, %s, %s, %s)'
-        topic_id = self.db.getfirstfield(select, gid, uid, title, content, reply_id)
-        return topic_id
+    def create_topic(self, gid, uid, title, content, reply_id=None):
+        return self.db.callfirstfield('create_topic', gid, uid, title, content, reply_id)
 
-    def do_create_chat(self, gid, uid, content, reply_id=None):
-        select = 'SELECT create_group_chat(%s, %s, %s, %s)'
-        id = self.db.getfirstfield(select, gid, uid, content, reply_id)
-        return id
+    def create_chat(self, gid, uid, content, reply_id=None):
+        return self.db.callfirstfield('create_group_chat', gid, uid, content, reply_id)
 
-    def do_create_bulletin(self, gid, uid, title, content):
-        select = 'SELECT create_group_bulletin(%s, %s, %s, %s)'
-        return self.db.getfirstfield(select, gid, uid, title, content)
+    def create_bulletin(self, gid, uid, title, content):
+        return self.db.callfirstfield('create_group_bulletin', gid, uid, title, content)

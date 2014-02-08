@@ -11,10 +11,17 @@ class ArticleModel(object):
         article_info = self.db.getjson(select, aid)
         return article_info
 
-    def get_article_list(self, sort, limit, offset):
-        select = 'SELECT get_article_list(%s, %s, %s)'
-        article_list = self.db.getjson(select, sort, limit, offset)
-        return article_list
+    def get_articles(self, page, size):
+        limit = size
+        offset = (page - 1) * size
+        articles = self.db.calljson('get_articles', limit, offset)
+        return articles or []
+
+    def get_articles_by_tag(self, tag, page, size):
+        limit = size
+        offset = (page - 1) * size
+        articles = self.db.calljson('get_articles_by_tag', tag, limit, offset)
+        return articles or []
 
     def get_comment(self, comment_id):
         select = 'SELECT get_comment(%s)'

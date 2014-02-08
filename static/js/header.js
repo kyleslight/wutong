@@ -13,9 +13,10 @@ var isRegisterRepasswordFocus = false;
 var ueditor=null;
 var insertImageState=-1;
 var activeNoteID=-1;
-var illegalCharacter=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
+var illegalCharacter=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]\s/im;
 var lessIllegalCharacter=/[`~@#$%^&*()_+<>:"{},.\'[\]]/im;
 var checkLogin=false;
+var user;
 
 // get unsync information
 unsycUser();
@@ -25,21 +26,16 @@ highlightThisPage();
 $(document).ready(function() {
     checkIsLogin();
 
+    // TODO: highlight
+    if (location.pathname == "/a/create") {
+
+    } else if (location.pathname == '/a/browse') {
+
+    } else if (location.pathname == '/g/browse') {
+
+    };
+
     $(".preload").removeClass("preload");
-    // get user info
-    $.getJSON("/u/info", function (data) {
-        var username;
-        username = data.penname;
-        $(".navrightoff").fadeOut(10,function(){
-            $(".navrighton").fadeIn(10);
-            $("#username").children().val(username);
-            $("#usernameHover").text(username);
-            $("#myHomepage").parent().attr("href","/user/"+username);
-        });
-        if (location.pathname.slice(0,9)=="/a/create") {
-            $(".write").show();
-        };
-    });
     // return to top icon show
     $(window).scroll(function() {
         var top = $(window).scrollTop();
@@ -54,7 +50,7 @@ $(document).ready(function() {
             $('#return_top').addClass('none');
         }
         return false;
-    })
+    });
     // return to top
     $("#return_top").click(function() {
         $('html,body').animate({
@@ -81,7 +77,7 @@ $(document).ready(function() {
         $(this).children("#usernameHover").css("color", "white");
         $(".userExpand").hide();
         $("#usernameHover").css({"color":"white"});
-    })
+    });
     $("#message").mouseover(function() {
         $("#msgNum").css({
             "background": "pink",
@@ -234,8 +230,7 @@ $(document).ready(function() {
         var url = '/u/collection';
         $.getJSON(url, function(data) {
             $(".myCollectionList").remove();
-            // TODO: deal create_time
-            renderById('collection-template', data);
+            renderTemplateAfter('#collection-template', data);
         });
         $(".myCollectionWarp").animate({
             height: heightOfMycollection
@@ -270,21 +265,26 @@ $(document).ready(function() {
             $(".myNote").fadeIn(500);
             // update note
             $.getJSON("/u/memo",function(data){
+                var err = getError();
+                if (err) {
+                    // TODO
+                    return;
+                }
                 $(".myNoteListWrap").empty();
-                if (data.length==undefined) {
+                if (data.length == undefined) {
                     $("#deleteCurrentNote,#saveCurrentNote").hide();
                     $("#createNewNote").show();
                     return false;
-                }else{
+                } else {
+                    data.forEach(function(item) {
+                        renderTemplatePrepend('#memo-template', item, '.myNoteListWrap');
+                    });
                     var noteNum=data.length-1;
                     activeNoteID=data[noteNum].id;
                     $(".myCurrentNoteTitle").val(data[noteNum].title);
                     $(".myCurrentNoteContent").val(data[noteNum].content);
+                    // TODO: show pretty time
                     $(".myCurrentNoteTime").text(data[noteNum].create_time.slice(0,10));
-                    for (var i = 0; i < data.length; i++) {
-                        var preNoteList='<a href="#" id="'+data[i].id+'" class="myNoteList" onclick="selectNote('+data[i].id+')">'+data[i].title+'</a>';
-                        $(".myNoteListWrap").prepend(preNoteList);
-                    };
                     $("#"+activeNoteID).addClass("activeMyNoteList");
                 }
             });
@@ -309,18 +309,19 @@ $(document).ready(function() {
     });
     // create note
     $("#createNewNote").click(function(){
-        if ($(".myCurrentNoteTitle").val()=="") {
-            showError("请填写标题",2000);
-            return false;
-        };
-        $.post("/u/memo",{
-            "title":$(".myCurrentNoteTitle").val(),
-            "content":$(".myCurrentNoteContent").val()
-        },function(data){
-            var newNote=eval ("(" + data + ")");
-            var newNoteTitle='<a href="#" id="'+newNote.id+'" class="myNoteList" onclick="selectNote('+newNote.id+')">'+newNote.title+'</a>';
-            activeNoteID=newNote.id;
-            $(".myNoteListWrap").prepend(newNoteTitle);
+        var title = $(".myCurrentNoteTitle").val();
+        var content = $(".myCurrentNoteContent").val();
+        $.post("/u/memo?create",{
+            "title": title,
+            "content": content
+        }, function(data){
+            var err = getError(data);
+            if (err) {
+                // TODO
+                return;
+            }
+            var newNote = data;
+            renderTemplatePrepend('#memo-template', newNote, '.myNoteListWrap');
             $(".myCurrentNoteTitle").val(newNote.title);
             $(".myCurrentNoteContent").val(newNote.content);
             $(".myCurrentNoteTime").text(newNote.create_time.slice(0,10));
@@ -329,7 +330,6 @@ $(document).ready(function() {
             $(".myNoteList").removeClass("activeMyNoteList");
             $("#"+activeNoteID).addClass("activeMyNoteList");
             $("#addNote").text("创建便笺");
-            showError("便笺 "+newNote.title+" 创建成功",2000);
         });
     });
     // update note
@@ -337,16 +337,17 @@ $(document).ready(function() {
         if (activeNoteID==-1) {
             return false;
         };
-        if ($(".myCurrentNoteTitle").val()=="") {
-            showError("请填写标题",1500);
-            return false;
-        };
-        $.post("/u/memo/update",{
-            "memo_id":activeNoteID,
+        $.post("/u/memo?update",{
+            "id":activeNoteID,
             "title":$(".myCurrentNoteTitle").val(),
             "content":$(".myCurrentNoteContent").val()
         },function(){
-            showError("成功保存便笺",1000);
+            var err = getError(data);
+            if (err) {
+                // TODO
+                return;
+            }
+            showError("成功保存便笺");
             $("#"+activeNoteID).text($(".myCurrentNoteTitle").val());
         });
     });
@@ -355,33 +356,15 @@ $(document).ready(function() {
         if (activeNoteID==-1) {
             return false;
         };
-        $.post("/u/memo/delete",{
-            "memo_id":activeNoteID,
-        },function(){
-            showError("成功删除便笺",1000);
-            // // TODO: refresh notes
-            $(".myNoteListWrap").empty();
-            $(".myCurrentNoteTitle").val("");
-            $(".myCurrentNoteContent").val("");
-            $.getJSON("/u/memo",function(data){
-                $(".myNoteListWrap").empty();
-                if (data.length==undefined) {
-                    $("#deleteCurrentNote,#saveCurrentNote").hide();
-                    $("#createNewNote").show();
-                    return false;
-                }else{
-                    var noteNum=data.length-1;
-                    activeNoteID=data[noteNum].id;
-                    $(".myCurrentNoteTitle").val(data[noteNum].title);
-                    $(".myCurrentNoteContent").val(data[noteNum].content);
-                    $(".myCurrentNoteTime").text(data[noteNum].create_time.slice(0,10));
-                    for (var i = 0; i < data.length; i++) {
-                        var preNoteList='<a href="#" id="'+data[i].id+'" class="myNoteList" onclick="selectNote('+data[i].id+')">'+data[i].title+'</a>';
-                        $(".myNoteListWrap").prepend(preNoteList);
-                    };
-                    $("#"+activeNoteID).addClass("activeMyNoteList");
-                }
-            });
+        $.post("/u/memo?delete",{
+            "id":activeNoteID,
+        },function(data){
+            var err = getError(data);
+            if (err) {
+                // TODO
+                return;
+            }
+            $("#No_memo_" + activeNoteID).remove();
         });
     });
 
@@ -424,7 +407,76 @@ $(document).ready(function() {
     $("#uploadImageBack").click(function(){
         $("section#main,#uploadImageBack,#info_zone,.mask").hide();
         return false;
+    })
+
+    $("#loginUsername").blur(function () {
+        var account = $("#loginUsername").val();
+        if (checkEmail(account, seterr=false)) {
+            checkEmailExist(account, function(b) {
+                if (!b)
+                    perror("邮箱不存在");
+            });
+        } else {
+            checkUsernameExist(account, function(b) {
+                if (!b)
+                    perror("用户名不存在");
+            });
+        }
+        invokeBlur(this);
     });
+
+    $("#registerUsername").blur(function () {
+        var username = $("#registerUsername").val();
+        if (checkUsername(username)) {
+            checkUsernameExist(username, function(b) {
+                if (b)
+                    perror("用户名 "+username+" 已存在");
+            });
+        }
+        invokeBlur(this);
+    });
+
+    $("#registerEmail").blur(function () {
+        var email = $("#registerEmail").val();
+        if (checkEmail(email)) {
+            checkEmailExist(email, function(b) {
+                if (b) {
+                    perror("邮箱 " + email + " 已存在");
+                }
+            });
+        }
+        invokeBlur(this);
+    });
+
+    $("#registerPassword").blur(function () {
+        var password = $("#registerPassword").val();
+        checkPassword(password);
+        invokeBlur(this);
+    });
+
+    $("#loginUsername").focus(function () {
+        invokeFocus(this);
+    });
+    $("#loginPassword").focus(function () {
+        invokeFocus(this);
+    });
+    $("#registerUsername").focus(function () {
+        invokeFocus(this);
+    });
+    $("#registerEmail").focus(function () {
+        invokeFocus(this);
+    });
+    $("#registerPassword").focus(function () {
+        invokeFocus(this);
+    });
+    $("#registerRepassword").focus(function () {
+        invokeFocus
+    });
+
+    $("#loginUsername").bind('input', lengthLimit(30));
+    $("#registerUsername").bind('input', lengthLimit(30));
+    $("#registerPassword").bind('input', lengthLimit(30));
+    $("#registerRepassword").bind('input', lengthLimit(30));
 
     $(".communication").on("click",".topicOutter .topicTalkContent img",function(){
         var imgUrl=$(this).attr("src");
@@ -442,22 +494,32 @@ $(document).ready(function() {
     });
 });
 
+function lengthLimit(length) {
+    return function () {
+        this.value = this.value.slice(0, length);
+    }
+}
+// get error message from recv
+function getError(recv) {
+    var obj = {};
+    try {
+        obj = JSON.parse(recv);
+    } catch (e) {
+        obj = recv;
+    }
+    if (!obj || obj.errno === undefined || obj.errno == 0)
+        return null;
+    else
+        return obj.msg;
+}
+
 // function for login and register
 function checkIsLogin(){
-    $.ajax({
-        url: "/u/info",
-        type: "GET",
-        dataType: "json",
-        async: false,
-        success: function(data) {
-            checkLogin=true;
-            return;
-        },
-        error:function(){
-            checkLogin=false;
-            return;
-        }
-    });
+    if (user) {
+        checkLogin=true;
+    } else {
+        checkLogin=false;
+    }
 }
 
 function loginBoxShow() {
@@ -522,9 +584,7 @@ function registerBoxFade() {
 function loginSubmit() {
     var loginUsername = $("#loginUsername").val();
     var loginPassword = $("#loginPassword").val();
-    loginAction(loginUsername,loginPassword);
-    if (location.pathname === '/g/browse')
-        window.location = location.pathname;
+    loginAction(loginUsername, loginPassword);
 }
 
 function loginAction(loginUsername,loginPassword){
@@ -532,87 +592,143 @@ function loginAction(loginUsername,loginPassword){
         username: loginUsername,
         password: loginPassword
     }, function(data) {
-        if (data == "failed") {
+        var err = getError(data);
+        if (err) {
             showError("登录失败",2000);
-        }else{
-            var username;
-            $.getJSON("/u/info", function(data) {
-                console.log(data);
-                username = data.penname;
-                $(".navrightoff").fadeOut(function() {
-                    $(".navrighton").fadeIn();
-                    $("#username").children().val(username);
-                    $("#usernameHover").text(username);
-                    $("#myHomepage").parent().attr("href","/user/"+username);
-                    loginBoxFade();
-                });
-            });
-            unsycUser();
-            if(location.pathname.slice(0,2)=="/t"||location.pathname.slice(0,2)=="/g"){
-                checkGroupPremission();
-            };
-            if (location.pathname.slice(0,9)=="/a/create") {
-                $(".write").show();
-            };
+        } else {
+            user = data;
+            window.location.reload();
         }
     });
     checkIsLogin();
 }
 
-function registerSubmit() {
-    var registerUsername = $("#registerUsername").val(),
-        registerEmail = $("#registerEmail").val(),
-        registerPassword = $("#registerPassword").val(),
-        registerRepassword = $("#registerRepassword").val();
+var invoked_focus;
+var invoked_blur;
+var errmsg;
 
-    // check username
-    if (registerUsername=="") {
-        showError("用户名不能为空",2000);
-        return false;
-    };
-    if (illegalCharacter.test(registerUsername)) {
-        showError("用户名包含非法字符",2000);
-        return false;
-    };
-    if (registerUsername.length>20) {
-        showError("用户名请限定在20字以内",2000);
-        return false;
-    };
-    $.get("/account/check?is_account_exists&v="+registerUsername+"",function(data){
-        if (data=="true") {
-            showError("用户名 "+registerUsername+" 已存在",2000);
-            return false;
-        };
+var _invoked_ids = new Array(3);
+function setInvokedId(obj) {
+    _invoked_ids.shift();
+    var tmp = obj.id;
+    _invoked_ids.push(tmp);
+}
+
+function setError(msg) {
+    errmsg = msg;
+}
+
+function perror(msg) {
+    if (msg)
+        errmsg = msg;
+    if (errmsg && invoked_blur && invoked_focus &&
+            (_invoked_ids[0] !== _invoked_ids[_invoked_ids.length - 1])) {
+        showError(errmsg, 1000);
+        errmsg = invoked_blur = invoked_focus = null;
+    }
+}
+
+function invokeBlur(obj) {
+    invoked_blur = true;
+    perror();
+}
+
+function invokeFocus(obj) {
+    invoked_focus = true;
+    setInvokedId(obj);
+    perror();
+}
+
+function checkUsernameExist(username, callback){
+    $.getJSON("/account?check_username&v=" + username, function(data) {
+        if (data.msg == 1) {
+            callback(true);
+        } else if (data.msg == 0){
+            callback(false);
+        }
     });
+}
 
-    // check email
-    if (!checkEmail(registerEmail)) {
-        showError("Email地址不合法",2000);
-        return false;
-    };
+function checkEmailExist(email, callback){
+    $.getJSON("/account?check_email&v=" + email, function(data) {
+        if (data.msg == 1) {
+            callback(true);
+        } else if (data.msg == 0){
+            callback(false);
+        }
+    });
+}
 
-    // check password
-    if (registerPassword != registerRepassword) {
-        showError("两次密码不一致",2000);
-        return false;
-    };
-    if (registerPassword=="") {
-        showError("密码不能为空",2000);
-        return false;
-    };
-    if (registerPassword.length>30) {
-        showError("密码长度不能超过30",2000);
-        return false;
-    };
+function checkUsername(username){
+    if (illegalCharacter.test(username)) {
+        setError("用户名包含非法字符");
+    } else if (0 < username.length < 2) {
+        setError("用户名长度不能小于2位");
+    } else if (username.length > 20) {
+        setError("用户名请限定在30字以内");
+    } else {
+        return true;
+    }
+    return false;
+}
 
+function checkPassword(password){
+    if (password.length < 6) {
+        setError("密码长度不能小于6位");
+    } else if (password.length > 30) {
+        setError("密码长度不能超过30");
+    } else {
+        return true;
+    }
+    return false;
+}
+
+function checkEmail(email, seterr){
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (re.test(email)) {
+        return true;
+    } else {
+        if (seterr !== false && email) {
+            setError("Email地址不合法");
+        }
+    }
+    return false;
+}
+
+function registerSubmit() {
+    var username = $("#registerUsername").val();
+    var password = $("#registerPassword").val();
+    var email = $("#registerEmail").val();
+
+    if (!(checkUsername(username) && checkEmail(email) && checkPassword(password))) {
+        perror();
+        return;
+    }
+    if (username == "") {
+        showError("用户名不能为空");
+        return;
+    }
+    if (email == "") {
+        showError("Email不能为空");
+        return;
+    }
+    if (password == "") {
+        showError("用户名不能为空");
+        return;
+    }
     $.post("/register", {
-        username: registerUsername,
-        password: registerPassword,
-        email: registerEmail
-    }, function() {
-        showError("欢迎加入梧桐,"+registerUsername+"!<br>目前是测试期间，不需要邮箱激活~",5000);
-        loginAction(registerUsername,registerPassword);
-        registerBoxFade();
+        nickname: username,
+        password: password,
+        email: email
+    }, function(data) {
+        var err = getError(data);
+        if (err) {
+            // TODO
+        } else {
+            showError("欢迎加入梧桐, " + username + "!<br>目前是测试期间，不需要邮箱激活~",5000);
+            loginAction(username, password);
+            registerBoxFade();
+        }
     });
 }
 
@@ -634,18 +750,34 @@ function unsycUser() {
         dataType: "json",
         async: false,
         success: function(data) {
-            userInfo = data
-            $(".navrightoff").fadeOut(10, function() {
-                $(".navrighton").fadeIn(10);
-                $("#usernameHover").text(userInfo.penname);
-            });
+            var err = getError(data);
+            if (err) {
+                // TODO
+            } else {
+                user = data;
+                var replynum = user.msg_count.reply;
+                var pushnum = user.msg_count.push;
+
+                $("#replyNum").html(replynum);
+                $("#opusPushNum").html(pushnum);
+                $("#msgNum").html(replynum + pushnum);
+                $(".navrightoff").fadeOut(10,function(){
+                    $(".navrighton").fadeIn(10);
+                    $("#username").children().val(user.nickname);
+                    $("#usernameHover").text(user.nickname);
+                    $("#myHomepage").parent().attr("href","/user/"+user.nickname);
+                });
+                if (location.pathname.slice(0,9)=="/a/create") {
+                    $(".write").show();
+                };
+            }
         }
     });
 }
 
 function selectNote(noteID){
-    $.getJSON("/u/memo/update",{
-        "memo_id":noteID
+    $.getJSON("/u/memo",{
+        "id":noteID
     },function(data){
         $(".myCurrentNoteTitle").val(data.title);
         $(".myCurrentNoteContent").val(data.content);
@@ -705,18 +837,6 @@ function logOutEffect(){
     });
 }
 
-function checkEmail(e){ var i=e.length;
-    var temp = e.indexOf('@');
-    var tempd = e.indexOf('.');
-    if (temp > 1) {
-        if ((i-temp) > 3){
-            if ((i-tempd)>0){
-                return true;
-            }
-        }
-    }
-    return false;
-}
 
 function highlightThisPage(){
     var pathURL=location.pathname;
@@ -735,7 +855,10 @@ String.prototype.httpHtml = function() {
     return this.replace(reg, '<a href="$1$2" target="_blank">$1$2</a>');
 }
 
-function showError(errorStatement,duration){
+function showError(errorStatement, duration){
+    if (!errorStatement)
+        return;
+    duration = duration || 1000;
     $(".errorPromptBox").html(errorStatement);
     $(".errorPromptBox").fadeIn();
     setTimeout(function(){
@@ -775,11 +898,28 @@ function generateMixed(n) {
      return res;
 }
 
-function renderById(idstr, jsondata) {
-    var id = '#' + idstr;
-    var template = $(id).html();
-    var innerHTML = Mark.up(template, jsondata);
-    $(id).after($(innerHTML));
+function renderTemplateString(temp, obj) {
+    var template = $(temp).html();
+    var innerHTML = Mark.up(template, obj);
+    return innerHTML;
+}
+
+function renderTemplateAfter(temp, obj, target) {
+    var innerHTML = renderTemplateString(temp, obj);
+    if (target) {
+        $(target).after($(innerHTML));
+    } else {
+        $(temp).after($(innerHTML));
+    }
+}
+
+function renderTemplatePrepend(temp, obj, target) {
+    var innerHTML = renderTemplateString(temp, obj);
+    if (target) {
+        $(target).prepend($(innerHTML));
+    } else {
+        $(temp).prepend($(innerHTML));
+    }
 }
 
 function showBigImage(url){

@@ -121,7 +121,7 @@ class TestDataGenerator(object):
             gid = self.group.do_create(
                 user['uid'],
                 '%s group by %s' % (random.random(), user['uid']),
-                is_public=random_bool(),
+                is_public=random.randint(0, 2),
             )
             self.group.do_join_group(gid, self.admin["uid"])
             gids.append(gid)

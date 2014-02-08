@@ -23,7 +23,7 @@
 		 				</div>
 	 				</div>
 	 				<div class="opusSeriesChange">
-	 					
+
 	 				</div>
 	 				<div class="availableOpus">
 	 					<h3>备选作品<span id="availableOpusNum">10</span></h3>
@@ -42,16 +42,22 @@
 	 	<div class="userInfo">
 	 		<div class="userBasicInfo">
  				<img class="userImage" src="{{ avatarurl(user["avatar"]) }}"/>
- 				<div class="userName">{{ user['penname'] }}</div>
+ 				<div class="userName">{{ user['nickname'] }}</div>
  				<div class="editableArea">
-	 				<div class="userMotto">{{ user['motto'] }}</div>
+	 				<div class="userMotto">
+		 				{{ user['motto'] }}
+	 				</div>
 		 			<div class="otherAction">
+		 			{% if not user['editable'] %}
 		 				<a href="#" id="follow">关注</a>
 		 				<a href="#" id="chat">会话</a>
+		 			{% end %}
 		 			</div>
+		 			{% if user['intro'] %}
 			 		<div class="userIntro">简介：<span>{{ user['intro'] }}</span></div>
+			 		{% end %}
 		 			<div class="userPrivateInfo">
-		 				私人信息：
+			            {% if user["sex"] is not None %}
 		 				<span class="userSex">
 			            {% if user["sex"] %}
 			                ♂
@@ -59,11 +65,18 @@
 			                ♀
 			            {% end %}
 			            </span>
-			 			<span class="userAge">{{ user['age'] }}岁</span>
+			            {% end %}
+			            {% if user["birthday"] %}
+			 			<span class="userAge">{{ user['birthday'] }}岁</span>
+			            {% end %}
+			            {% if user["address"] %}
 			 			<span class="userCity">{{ user['address'] }}</span>
+			            {% end %}
 		 			</div>
 			 		<div class="userTitle">头衔：<span>站长</span></div>
+			 		{% if user['editable'] %}
 		 			<a href="#" id="userInfoEdit">编辑个人信息</a>
+		 			{% end %}
 		 		</div>
 		 		<div class="edittingArea">
 		 			<span class="tip">签名：</span><textarea id="edittingMotto" class="edittingItem"></textarea><br>
@@ -77,22 +90,19 @@
 	 		</div>
 	 		<div class="userExtendInfo">
 	 			<div class="userRegister">
-	 				注册时间：<span class="userRegisterTime">{{ prettytime(user['register_date']) }}</span>
+	 				注册时间：<span class="userRegisterTime">{{ prettytime(user['register_time']) }}</span>
 	 			</div>
 	 			<div class="userEmail">
 	 				邮箱：<span class="userEmailAddress">{{ user['email'] }}</span>
 	 			</div>
 	 			<div class="userHonourAndWarn">
-	 				<div class="userHonourAndWarnFirstLine">得分与警告信息</div>
-	 				<li class="userGrade">总得分：<span>3604</span></li>
-	 				<li class="userReadGrade">阅历得分：<span>122</span></li>
-	 				<li class="userOpusGrade">作品得分：<span>3056</span></li>
-	 				<li class="userGroupGrade">小组得分：<span>304</span></li>
+	 				<li class="userGrade">积分：<span></span></li>
 	 			</div>
 	 		</div>
 	 		<div class="followInfo">
 				<div class="followOther">
-					<div class="followOtherFirstLine">Ta关注了<span id="follerOtherNum">111</span>人 | <a href="#">更多</a></div>
+					<div class="followOtherFirstLine">
+					Ta 关注了<span id="follerOtherNum">111</span>人 | <a href="#">更多</a></div>
 					<div class="followOtherList followList">
 						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></a></li>
 						<li><a href="#"><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><span>loggerhaed</span></a></li>
@@ -101,7 +111,9 @@
 					</div>
 				</div>
 				<div class="otherFollow">
-					<div class="otherFollowFirstLine"><span>1111</span>人关注了Ta | <a href="#">更多</a></div>
+					<div class="otherFollowFirstLine">
+						<span>1111</span>人关注了 Ta | <a href="#">更多</a>
+					</div>
 					<div class="otherFollowList followList">
 						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></a></li>
 						<li><a href="#"><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><span>loggerhaed</span></a></li>
@@ -169,7 +181,7 @@
 						</li>
 						<li class="opusSeries">
 						    <div class="opusSeriesInfo">
-						        <a href="#" class="opusSeriesTitle" >镜 </a> 系列 
+						        <a href="#" class="opusSeriesTitle" >镜 </a> 系列
 						        <a href="#" class="editOpusSeries">编辑</a>
 						        <a href="#" class="expandOpusSeries">展开</a>
 						        <div class="opusSeriesExpand">
@@ -200,7 +212,7 @@
 						</li>
 						<li class="opusSeries">
 						    <div class="opusSeriesInfo">
-						        <a href="#" class="opusSeriesTitle" >镜 </a> 系列 
+						        <a href="#" class="opusSeriesTitle" >镜 </a> 系列
 						        <a href="#" class="editOpusSeries">编辑</a>
 						        <a href="#" class="expandOpusSeries">展开</a>
 						        <div class="opusSeriesExpand">
