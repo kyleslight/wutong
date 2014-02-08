@@ -267,7 +267,7 @@ class UserinfoHandler(BaseHandler):
 
     def do_update(self):
         user = self.current_user
-        if not self.muser.update_user_info(user['uid'], self.info):
+        if not self.muser.update_user_info(user['uid'], **self.info):
             self.write_errmsg('unknown error')
 
     def _check_key(self, key, callback):
@@ -335,7 +335,7 @@ class MemoHandler(BaseHandler):
                 self.write_error(403)
         else:
             page = self.get_argument('page', 1)
-            size = self.get_argument('size', 10)
+            size = self.get_argument('size', 100)
             memos = self.muser.get_memos(self.user_id, page, size)
             self.write_json(memos)
 

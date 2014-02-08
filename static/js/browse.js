@@ -4,17 +4,6 @@ var _showwel_flag = true;
 var elapseTime = 5000;
 var indexOfOpusType=-1;
 $(document).ready(function(){
-    // basic
-    $.getJSON("/u/info", function (data) {
-        var username;
-        console.log(data);
-        username = data.penname;
-        $(".navrightoff").fadeOut(10,function(){
-            $(".navrighton").fadeIn(10);
-            $("#username").children().val(username);
-            $("#usernameHover").text(username);
-        });
-    });
     $("#artsubmitButton").click(function(){
         // with(this){
             with(arttitle){
@@ -39,7 +28,7 @@ $(document).ready(function(){
     })
     $(window).scroll(function(){
         scrollLoading(".opus");
-    })
+    });
 
     $(".opusTypeItem").click(function(){
         if ($(".opusTypeItem").index($(this))==indexOfOpusType) {

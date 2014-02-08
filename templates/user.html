@@ -53,10 +53,8 @@
 		 				<a href="#" id="chat">会话</a>
 		 			{% end %}
 		 			</div>
-		 			{% if user['intro'] %}
-			 		<div class="userIntro">简介：<span>{{ user['intro'] }}</span></div>
-			 		{% end %}
 		 			<div class="userPrivateInfo">
+
 			            {% if user["sex"] is not None %}
 		 				<span class="userSex">
 			            {% if user["sex"] %}
@@ -67,12 +65,15 @@
 			            </span>
 			            {% end %}
 			            {% if user["birthday"] %}
-			 			<span class="userAge">{{ user['birthday'] }}岁</span>
+			 			<span class="userAge">{{ user['birthday'] }}</span>
 			            {% end %}
 			            {% if user["address"] %}
 			 			<span class="userCity">{{ user['address'] }}</span>
 			            {% end %}
 		 			</div>
+		 			{% if user['intro'] %}
+			 		<div class="userIntro">简介：<span>{{ user['intro'] }}</span></div>
+			 		{% end %}
 			 		<div class="userTitle">头衔：<span>站长</span></div>
 			 		{% if user['editable'] %}
 		 			<a href="#" id="userInfoEdit">编辑个人信息</a>
@@ -82,7 +83,7 @@
 		 			<span class="tip">签名：</span><textarea id="edittingMotto" class="edittingItem"></textarea><br>
 		 			<span class="tip">简介：</span><textarea id="edittingIntro" class="edittingItem"></textarea><br>
 		 			<span class="tip">性别：</span><div id="edittingSex" class="edittingItem"><input type="radio" name="sex" id="edittingSexMale">男 <input type="radio" id="edittingSexFemale" name="sex">女</div><br>
-		 			<span class="tip">年龄：</span><input type="text" id="edittingAge" class="edittingItem" oninput="onlyNum()"><br>
+		 			<span class="tip">生日：</span><input type="text" id="edittingAge" class="edittingItem" oninput="onlyNum()"><br>
 		 			<span class="tip">城市：</span><input type="text" id="edittingCity" class="edittingItem">
 		 			<a href="#" id="userEditedSubmit">完成</a>
 		 			<a href="#" id="userEditedBack">返回</a>
@@ -104,9 +105,9 @@
 					<div class="followOtherFirstLine">
 					Ta 关注了<span id="follerOtherNum">111</span>人 | <a href="#">更多</a></div>
 					<div class="followOtherList followList">
-						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></a></li>
-						<li><a href="#"><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><span>loggerhaed</span></a></li>
-						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></a></li>
+						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><div class="followName">loggerhaed</div></a></li>
+						<li><a href="#"><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><div class="followName">loggerhaed</div></a></li>
+						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><div class="followName">loggerhaed</div></a></li>
 						<!-- 只列出最近8人 -->
 					</div>
 				</div>
@@ -115,9 +116,9 @@
 						<span>1111</span>人关注了 Ta | <a href="#">更多</a>
 					</div>
 					<div class="otherFollowList followList">
-						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></a></li>
-						<li><a href="#"><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><span>loggerhaed</span></a></li>
-						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><span>loggerhaed</span></a></li>
+						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><div class="followName">loggerhaed</div></a></li>
+						<li><a href="#"><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><div class="followName">loggerhaed</div></a></li>
+						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><div class="followName">loggerhaed</div></a></li>
 						<!-- 只列出最近8人 -->
 					</div>
 				</div>

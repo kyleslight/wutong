@@ -74,6 +74,11 @@
 	text-align: left;
 }
 
+.userSex{
+	font-size: 1.2em;
+	font-weight: bolder;
+}
+
 .userExtendInfo{
 	margin-top: 20px;
 }
@@ -137,9 +142,8 @@
 	width: 40px;
 	height: 40px;
 	margin: 0;
-	/*margin-right: 5px;*/
 }
-.followList span{
+div.followName{
 	wiwhite-space: nowrap;
 	overflow: hidden;
 	display: block;
@@ -148,6 +152,7 @@
 	border-top-left-radius: 2px;
 	border-bottom-left-radius: 2px;
 	text-overflow: ellipsis;
+	font-size: 0.9em;
 	padding: 4px;
 	width: 40px;
 	line-height: 22px;

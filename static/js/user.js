@@ -1,4 +1,6 @@
 var userAgeState=false;
+var dateRe=/\d{4}-\d{2}-\d{2}/im;
+var dateLessRe=/\d{4}-\d{1}-\d{1}/im;
 
 $(document).ready(function(){
 
@@ -51,26 +53,44 @@ $(document).ready(function(){
         return false;
     });
     $("#userEditedSubmit").click(function(){
-        var userEdittingInfo={
-            'motto':$("#edittingMotto").val(),
-            'intro':$("#edittingIntro").val(),
-            'sex':checkSex(),
-            'age':parseInt($("#edittingAge").val()),
-            'city':$("#edittingCity").val()
-        };
-        if (userEdittingInfo.motto.length>50) {
+        var userEdittingInfo={};
+        var motto = $("#edittingMotto").val(),
+            intro = $("#edittingIntro").val(),
+            sex   = checkSex(),
+            birthday = $("#edittingAge").val(),
+            address = $("#edittingCity").val();
+
+        if (motto.length>50) {
             showError("请保持签名在50字以内",2000);
             return false;
+        }else if (motto.length!=0) {
+            userEdittingInfo.motto = motto;
         };
-        if (userEdittingInfo.intro.length>50) {
+
+        if (intro.length>50) {
             showError("请保持个人简介在50字以内",2000);
             return false;
+        }else if (intro.length!=0) {
+            userEdittingInfo.intro = intro;
         };
-        if (userEdittingInfo.age<3||userEdittingInfo.age>80) {
-            showError("年龄须在合理范围内",2000);
+
+        if (sex!="") {
+            userEdittingInfo.sex = sex;
+        };
+
+        if (!dataCheck(birthday)&&birthday.length!=0) {
+            showError("日期格式应为 xxxx-xx-xx<br>或 xxxx-x-x",2000);
             return false;
+        }else if (birthday.length!=0) {
+            userEdittingInfo.birthday = birthday;
         };
-        console.log(userEdittingInfo);
+
+        if (address.length!=0) {
+            userEdittingInfo.address = address;
+        };
+        $.post("/u/info",userEdittingInfo,function(a){
+            self.location = location.pathname;
+        });
         return false;
     });
 
@@ -181,11 +201,11 @@ $(document).ready(function(){
 
 function checkSex(){
     if ($("#edittingSexMale").prop('checked')) {
-        return "male";
+        return true;
     }else if ($("#edittingSexFemale").prop('checked')) {
-        return "female";
+        return false;
     };
-    return "not checked";
+    return;
 }
 
 function threePartHeight(){
@@ -228,17 +248,10 @@ function updateOpusNum(){
     $("#availableOpusNum").text($("#availableOpusListWrap").children().size());
 }
 
-function onlyNum(){
-    $(window).keyup(function(e) {
-        console.log(e.keyCode);
-        if (!userAgeState) {
-            return false;
-        };
-        if(!((e.keyCode>=48&&e.keyCode<=57)||(e.keyCode>=96&&e.keyCode<=105)||e.keyCode==8||e.keyCode==229)){
-            showError("请输入数字",2000);
-            $("#edittingAge").val("");
-        };
-    });
+function dataCheck(dataStr){
+    if (dateRe.test(dataStr) || dateLessRe.test(dataStr)) {
+        return true;
+    };
     return false;
 }
 
