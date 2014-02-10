@@ -16,6 +16,9 @@ var activeNoteID=-1;
 var illegalCharacter=/[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]\s/im;
 var lessIllegalCharacter=/[`~@#$%^&*()_+<>:"{},.\'[\]]/im;
 var checkLogin=false;
+var searchInputState=false;
+var searchSugNum=-1;
+var eveCode=-1;
 var user;
 
 // get unsync information
@@ -56,6 +59,23 @@ $(document).ready(function() {
     $("#searchSubmitButton").click(function(){
         searchStart();
         return false;
+    });
+    $(window).keyup(function(e){
+        if (e.keyCode==38&&searchSugNum==-1) {
+            return;
+        };
+        eveCode=e.keyCode;
+        selectSearchSug(e.keyCode);
+    });
+    $(".searchSuggestions").on("mouseover",".searchSuggestionsList",function(){
+        $(".searchSuggestionsList").removeClass("activeSug");
+        $(this).addClass("activeSug");
+        searchSugNum=$(".searchSuggestionsList").index($(this));
+    });
+    $("#mainSearchBox").on("mouseover","#keyWord",function(){
+        $(".searchSuggestionsList").removeClass("activeSug");
+        searchSugNum=-1;
+        $(this).focus();
     });
 
     // navrighton effect
@@ -827,21 +847,63 @@ function showError(errorStatement, duration){
 }
 
 function showHint(searchKeyWord){
+    
+    if (eveCode==40||eveCode==38) {
+        return;
+    };
+    if (searchKeyWord.replace(/\s/g,"").length==0&&searchKeyWord!="") {
+        return;
+    };
+
     $(".searchSuggestions").empty();
+    searchSugNum=-1;
 
     // test search searchSuggestion
     if (searchKeyWord=="") {
         $(".searchSuggestions").addClass("noBorderBottom");
+        if (location.pathname=="/home.html") {
+            $("#quickBrowse").html("浏 览").css("font-size","1.5em");
+            $("#quickCreate").html("创 作").css("font-size","1.5em");
+            $("#quickGroup").html("小 组").css("font-size","1.5em");
+        };
         return;
     };
     $(".searchSuggestions").removeClass("noBorderBottom");
     var returnWordsNum=Math.floor(Math.random()*8)+2;
     for(var i=0;i<returnWordsNum;i++){
         var searchSuggestionWord=searchKeyWord+generateMixed(2);
-        var app='<a class="searchSuggestionsList" href="/search/'+searchSuggestionWord+'">'+searchSuggestionWord+'</a>';
-        console.log(app);
+        var app='<a class="searchSuggestionsList" href="/search/'+searchSuggestionWord+'" >'+searchSuggestionWord+'</a>';
         $(".searchSuggestions").prepend(app);
     };
+
+    // in home page
+    if (location.pathname=="/home.html") {
+        $("#quickBrowse").html("选择与 <span class='searchKeyWord'>"+searchKeyWord+"</span> <br>最相关的作品阅读").css("font-size","0.8em");
+        $("#quickCreate").html("以 <span class='searchKeyWord'>"+searchKeyWord+"</span> <br>为标题开始作品创作").css("font-size","0.8em");
+        $("#quickGroup").html("进入以 <span class='searchKeyWord'>"+searchKeyWord+"</span> <br>为名的小组").css("font-size","0.8em");
+    };
+}
+
+function selectSearchSug(keyCode){
+    if (keyCode==40&&searchSugNum==-1) {
+        searchSugNum+=1;
+        $(".activeSug").removeClass("activeSug");
+        $(".searchSuggestions").children().eq(searchSugNum).addClass("activeSug");
+        $("#keyWord").blur();
+    }else if (keyCode==40&&(searchSugNum+1)!=$(".searchSuggestions").children().size()) {
+        searchSugNum+=1;
+        $(".activeSug").removeClass("activeSug");
+        $(".searchSuggestions").children().eq(searchSugNum).addClass("activeSug");
+    }else if (keyCode==38&&searchSugNum!=0) {
+        searchSugNum-=1;
+        $(".activeSug").removeClass("activeSug");
+        $(".searchSuggestions").children().eq(searchSugNum).addClass("activeSug");
+    }else if (keyCode==38&&searchSugNum==0) {
+        searchSugNum-=1;
+        $(".activeSug").removeClass("activeSug");
+        $("#keyWord").focus();
+    };
+    return;
 }
 
 function searchStart(){

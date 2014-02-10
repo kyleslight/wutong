@@ -1,11 +1,114 @@
 body{
-	background: url('image/bg.jpg');
+	background: url('http://imgcdn.ph.126.net/lq7Lq0egfSM2yFVUL63ycg==/905505000178420928.jpg') repeat-y;
+	background-size: 100%;
 }
 .header{
-	background: rgba(0,0,0,0.9);
+	background: rgba(102,136,0,0.7);
 	border-bottom: 0;
 	z-index: 2;
 }
 .bg{
 	width: 100%;
 }
+#browse,#create,#group{
+	display: none;
+}
+#lrBoxWrap {
+	background: rgba(0,0,0,0.2);
+}
+
+.mainView{
+	margin-top: 20px;
+	text-align: center;
+}
+.banner{
+	color: rgba(255,255,255,0.9);
+	font-size: 7em;
+	clear: both;
+}
+.quickButtonWrap{
+	margin-top: 40px;
+	margin-bottom: 10px;
+}
+.quickButton{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding-top:12px;
+	display: inline-block;
+	background:rgba(102,136,0,1);
+	color: #CCC;
+	width: 220px;
+	height: 41px;
+	text-align: center;
+	font-size: 1.5em;
+	margin:0 10px;
+	border-radius: 3px;
+	border: 1px solid rgba(255,255,255,0.4);
+	box-shadow: 0 0 5px rgba(255,255,255,0.2);
+}
+.quickButton:hover{
+	background:rgba(174,208,72,0.9);
+	color: white;
+}
+.searchKeyWord{
+	color: darkred;
+}
+#searchBox{
+	/*display: none;*/
+}
+#mainSearchBox{
+	width: 100%;
+	height: 100px;
+}
+#searchData{
+	display: block;
+	float: none;
+	width: 600px;
+	margin: 0 auto;
+}
+#keyWord{
+	width: 572px;
+	border-radius: 2px;
+}
+#searchSubmitButton{
+	background: url("image/search.png") no-repeat;
+	background-size:40px 30px;
+	margin-left: -47px;
+	z-index: 101;
+	border-radius: 2px;
+	border-left: 0;
+}
+#searchSubmitButton:hover{
+	opacity: 1;
+	background: url("image/search.png") 5px no-repeat;
+	background-size:40px 30px;
+	border:1px solid rgba(255,255,255,0.7);
+	border-left: 0;
+}
+#mainSearchBox div.searchSuggestions {
+	position: absolute;
+	margin: 0 auto;
+	display: none;
+	top: auto;
+	margin-top: 51px;
+	margin-left: 10px;
+	background: white;
+	width: 577px;
+	z-index: 100;
+	text-align: left;
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+.f1{
+	color: white;
+}
+.f1 a{
+	color: #CE6;
+}
+.f1 a:hover{
+	color: #CE6;
