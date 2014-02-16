@@ -109,8 +109,27 @@
                 </div>
                 <div class="buttomComment">
                     <div class="buttomCommentCon">
-                        <!-- bottom_comment begin -->
-                        <!-- bottom_comment end -->
+                        <script type="text/template" id="bottom-comment-template">
+                            <li class="opusCommentList" style="display: list-item;">
+                                <a class="userImage" href="/user/{{!nickname}}">
+                                    <img src="{{!avatar}}">
+                                </a>
+                                <div class="opusCommentMain">
+                                    <div class="opusCommentListFirstLine">
+                                        <div class="userName">
+                                            <a href="/user/{{!nickname}}">{{!nickname}}</a>
+                                        </div>
+                                        <span class="opusCommentPosition">#{{!floor}}</span>
+                                        <div class="timeShow">
+                                            {{!create_time}}
+                                        </div>
+                                    </div>
+                                    <div class="opusCommentContent">
+                                        {{!content}}
+                                    </div>
+                                </div>
+                            </li>
+                        </script>
                     </div>
                     <div class="BCTurnPage"></div>
                     <form method="post">
@@ -123,8 +142,14 @@
 
         <div class="opusSideCommentWrap">
             <div class="opusSideComment">
-                <!-- side_comment begin -->
-                <!-- side_comment end -->
+                <script type="text/template" id="side-comment-template">
+                    <li class="opusSideCommentList opusSideCommentList{{!paragraph_id}}" >
+                        <a href="/user/{{!nickname}}" class="opusSideCommentListUserName">{{!nickname}}</a>
+                        <div class="opusSideCommentContent">
+                            {{!content}}
+                        </div>
+                    </li>
+                </script>
             </div>
         </div>
     </div>

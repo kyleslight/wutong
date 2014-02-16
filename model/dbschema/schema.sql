@@ -316,7 +316,7 @@ drop table if exists group_member cascade;
 create table group_member (
     id serial primary key,
     -- 1=申请加入, 2=成员, 3=副组长, 4=组长
-    position_level sort default '1',
+    position_level sort,
     join_time timestamp default now()
 ) inherits (base_group_user);
 

@@ -331,6 +331,27 @@ begin
 end;
 $$ language plpgsql;
 
+create or replace function
+get_mygroups(_uid int, _limit int, _offset int) returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+         select *
+           from group_base
+          where gid in
+             (
+                select gid
+                  from group_member
+                 where uid = _uid
+                   and position_level = '4'
+                 order by join_time desc
+                 limit _limit
+                offset _offset
+             )
+      ) aj;
+$$ language sql;
+
 
 create or replace function
 create_article(
@@ -643,651 +664,227 @@ as $$
 declare
     _tmp json;
 begin
+  select row_to_json(j.*) into _tmp
+    from
+      (
+         select *
+           from group_show
+          where gid = _gid
+      ) j;
+
   return _tmp;
 end;
 $$ language plpgsql;
--- create or replace function
--- get_group_sessions(_gid int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select *
---               from
---                 (
---                     select row_to_json(j.*)::text, j.reply_time
---                       from
---                         (
---                             select *
---                               from group_topic
---                              where gid = _gid
---                         ) j
---                     union
---                     select row_to_json(j.*)::text, j.reply_time
---                       from
---                         (
---                             select *
---                               from group_message
---                              where gid = _gid
---                         ) j
---                 ) s
---              order by s.reply_time
---         ) aj;
--- $$ language sql;
 
-
--- create or replace function
--- get_notifications(_uid int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select *
---               from notification
---              where uid = _uid
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- create_notification(
---     _uid int,
---     _nickname varchar,
---     _title varchar,
---     _content varchar,
---     _type varchar,
---     _url varchar)
---   returns int
--- as $$
--- declare
---     _tmp int;
--- begin
---     insert into notification
---         (uid, receiver, title, content, type, url)
---     values
---         (_uid, _nickname, _title, _content, _type, _url)
---     returning id into _tmp;
---     return _tmp;
--- end;
--- $$ language plpgsql;
-
-
--- create or replace function
--- get_user_groups(_uid int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select g.gid, g.name
---               from group_user gu,
---                    "group" g
---              where gu.uid = _uid
---                and gu.gid = g.gid
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_group_permission(_gid int, _uid int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select *
---               from group_user
---              where gid = _gid
---                and uid = _uid
---         ) j;
--- $$ language sql;
-
-
--- create or replace function
--- get_group_info(_gid int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select *
---               from group_info_v
---              where gid = _gid
---         ) j;
--- $$ language sql;
-
-
--- create or replace function
--- create_group(
---     _uid int,
---     _name varchar,
---     _intro varchar,
---     _motto varchar,
---     _avatar varchar,
---     _banner varchar,
---     _is_public bool)
---   returns int
--- as $$
---     insert into "group"
---         (uid, name, intro, motto, avatar, banner, is_public)
---     values
---         (_uid, _name, _intro, _motto, _avatar, _banner, _is_public)
---     returning gid;
--- $$ language sql;
-
-
--- create or replace function
--- join_group(_gid int, _uid int)
---   returns int
--- as $$
---     insert into group_user
---         (gid, uid)
---     select _gid, _uid
---      where not exists
---         (
---             select guid
---               from group_user
---              where gid = _gid
---                and uid = _uid
---         )
---     returning guid;
--- $$ language sql;
-
-
--- create or replace function
--- get_group_tags(_gid int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select name
---               from group_tag
---              where gid = _gid
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_group_member_info(_gid int, _uid int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select *
---               from group_member_info_v
---              where gid = _gid
---                and uid = _uid
---         ) j;
--- $$ language sql;
-
-
--- create or replace function
--- get_group_members(_gid int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select *
---               from group_member_info_v
---              where gid = _gid
---              order by guid desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_group_chats(_gid int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select *
---               from group_chat_v
---              where gid = _gid
---              order by id desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_group_chat(_id int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select *
---               from group_chat_v
---              where id = _id
---         ) j;
--- $$ language sql;
-
-
--- create or replace function
--- create_topic(
---     _gid int,
---     _uid int,
---     _title varchar,
---     _content varchar,
---     _reply_id int)
---   returns int
--- as $$
---     insert into topic
---         (gid, uid, title, content, reply_id)
---     values
---         (_gid, _uid, _title, _content, _reply_id)
---     returning tid;
--- $$ language sql;
-
-
--- create or replace function
--- get_topics(_limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select gt.*,
---                    g.name as "group_name"
---               from group_topic_v gt,
---                    "group" g
---              where gt.gid = g.gid
---              order by last_reply_time desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_topics_by_tag(_tag varchar, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select gt.*,
---                    g.name as "group_name"
---               from group_topic_v gt,
---                    "group" g,
---                    group_tag g_tag
---              where gt.gid = g.gid
---                and gt.gid = g_tag.gid
---                and g_tag.name = _tag
---              order by last_reply_time desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_group_topics(_gid int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select *
---               from group_topic_v
---              where gid = _gid
---              order by tid desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_user_topics(_uid int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select gt.*,
---                    g.name as "group_name"
---               from group_topic_v gt,
---                    "group" g,
---                    group_user gu
---              where gt.gid = g.gid
---                and gu.gid = g.gid
---                and gu.uid = _uid
---                and gu.is_member
---              order by last_reply_time desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_topic(_tid int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select *
---               from group_topic_v
---              where tid = _tid
---         ) j;
--- $$ language sql;
-
-
--- create or replace function
--- get_topic_topics(_reply_id int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select *
---               from group_topic_v
---              where reply_id = _reply_id
---              order by tid desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_topic_chats(_reply_id int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select *
---               from group_chat_v
---              where reply_id = _reply_id
---              order by id desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- create_group_chat(
---     _gid int,
---     _uid int,
---     _content varchar,
---     _reply_id int)
---   returns int
--- as $$
---     insert into group_chat
---         (gid, uid, content, reply_id)
---     values
---         (_gid, _uid, _content, _reply_id)
---     returning id;
--- $$ language sql;
-
-
--- create or replace function
--- get_topic_messages(_tid int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select *
---               from group_message_v
---              where reply_id = _tid
---              order by last_reply_time desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_group_message(_message_id int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select *
---               from group_message_v
---              where id = _message_id
---         ) j;
--- $$ language sql;
-
-
--- create or replace function
--- get_group_messages(_gid int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select *
---               from group_message_v
---              where gid = _gid
---                and reply_id is null
---              order by last_reply_time desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_topic_messages(_tid int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select *
---               from group_message_v
---              where reply_id = _tid
---              order by last_reply_time desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_group_bulletins(_gid int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select *
---               from group_bulletin_v
---              where gid = _gid
---              order by id desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- create_group_bulletin(
---     _gid int,
---     _uid int,
---     _title varchar,
---     _content varchar)
---   returns int
--- as $$
---     insert into group_bulletin
---         (gid, uid, title, content)
---     values
---         (_gid, _uid, _title, _content)
---     returning id;
--- $$ language sql;
-
-
--- create or replace function
--- is_article_author(_aid int, _uid int)
---   returns bool
--- as $$
--- declare
---     _res bool;
--- begin
---     select true
---       from article
---      where aid = _aid
---        and uid = _uid
---       into _res;
---     if _res is null then
---         _res := false;
---     end if;
---     return _res;
--- end;
--- $$ language plpgsql;
-
-
-
--- create or replace function
--- get_article_collections(_uid int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj.*))
---       from
---         (
---             select *,
---                    get_article_tags(a.aid) as "tags"
---               from article_collection_v a
---              where uid = _uid
---              order by id desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
-
--- create or replace function
--- create_article_view(_aid int, _uid int, _ip varchar)
---   returns int
--- as $$
---     insert into article_view
---         (aid, uid, ip)
---     select _aid, _uid, _ip
---      where not exists
---         (
---             select uid, ip
---               from article_view
---              where aid = _aid
---                and (uid = _uid or ip = _ip)
---         )
---     returning id;
--- $$ language sql;
-
-
--- create or replace function
--- create_article_collection(_aid int, _uid int)
---   returns int
--- as $$
---     insert into article_collection
---         (aid, uid)
---     select _aid, _uid
---      where not
---         (
---             select is_article_author(_aid, _uid)
---         )
---     returning id;
--- $$ language sql;
-
-
--- create or replace function
--- create_article_score(_aid int, _uid int, _score int)
---   returns int
--- as $$
---     insert into article_score
---         (aid, uid, score)
---     select _aid, _uid, _score
---      where not
---         (
---             select is_article_author(_aid, _uid)
---         )
---     returning id;
--- $$ language sql;
-
-
--- create or replace function
--- count_article_view(_aid int)
---   returns bigint
--- as $$
---     select count(aid)
---       from article_view
---      where aid = _aid
--- $$ language sql;
-
-
--- create or replace function
--- count_article_collection(_aid int)
---   returns bigint
--- as $$
---     select count(aid)
---       from article_collection
---      where aid = _aid
--- $$ language sql;
-
-
--- create or replace function
--- calc_article_score(_aid int)
---   returns numeric
--- as $$
---     select coalesce(avg(score), 0)
---       from article_score
---      where aid = _aid
--- $$ language sql;
-
-
--- create or replace function
--- get_article_info(_aid int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select *,
---                    (select get_article_tags($1)) as "tags",
---                    (select count_article_view($1)) as "views",
---                    (select calc_article_score($1)) as "score",
---                    (select count_article_collection($1)) as "collections"
---               from article_info_v
---              where aid = _aid
---         ) j;
--- $$ language sql;
-
-
-
--- create or replace function
--- get_comment(_id int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select *
---               from article_comment_v
---              where id = _id
---         ) j;
--- $$ language sql;
-
+create or replace function
+get_topic_homepage(_tid int) returns json
+as $$
+declare
+    _tmp json;
+begin
+  -- TODO
+  return _tmp;
+end;
+$$ language plpgsql;
+create or replace function
+
+get_group_sessions(_gid int, _limit int, _offset int)
+  returns json
+as $$
+    select array_to_json(array_agg(aj))
+      from
+        (
+            select *
+              from
+                (
+                   select row_to_json(j.*)::text, j.reply_time
+                     from
+                       (
+                          select *
+                            from group_topic
+                           where gid = _gid
+                       ) j
+                    union
+                   select row_to_json(j.*)::text, j.reply_time
+                     from
+                       (
+                          select *
+                            from group_message
+                           where gid = _gid
+                       ) j
+                ) s
+             order by s.reply_time desc
+             limit _limit
+            offset _offset
+        ) aj;
+$$ language sql;
+
+create or replace function
+get_topic_sessions(_tid int, _limit int, _offset int)
+  returns json
+as $$
+    select array_to_json(array_agg(aj))
+      from
+        (
+            select *
+              from
+                (
+                   select row_to_json(j.*)::text, j.reply_time
+                     from
+                       (
+                          select *
+                            from group_topic
+                           where father_id = _tid
+                       ) j
+                    union
+                   select row_to_json(j.*)::text, j.reply_time
+                     from
+                       (
+                          select *
+                            from group_message
+                           where tid = _tid
+                       ) j
+                ) s
+             order by s.reply_time desc
+             limit _limit
+            offset _offset
+        ) aj;
+$$ language sql;
+
+create or replace function
+get_user_groups(_uid int, _limit int, _offset int)
+  returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+         select *
+           from group_base
+          where gid in
+             (
+                select gid
+                  from group_member
+                 where uid = _uid
+                   and position_level > '1'
+                 order by join_time desc
+                 limit _limit
+                offset _offset
+             )
+      ) aj;
+$$ language sql;
+
+create or replace function
+get_mygroup_topics(_uid int, _limit int, _offset int)
+  returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+         select *
+           from group_topic_base
+          where gid in
+             (
+                select gid
+                  from group_member
+                 where uid = _uid
+                   and position_level > '1'
+             )
+          order by reply_time desc
+          limit _limit
+         offset _offset
+      ) aj;
+$$ language sql;
+
+create or replace function
+get_topics(_limit int, _offset int)
+  returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+         select *
+           from group_topic_base
+          order by reply_time desc
+          limit _limit
+         offset _offset
+      ) aj;
+$$ language sql;
+
+create or replace function
+create_group(_uid int, _name text, _intro text, _public_level sort)
+  returns int
+as $$
+declare
+  _tmp int;
+begin
+  insert into mygroup
+      (uid, name, intro, public_level)
+  values
+      (_uid, _name, _intro, _public_level)
+  returning gid into _tmp;
+
+  insert into group_member
+      (uid, gid, position_level)
+  values
+      (_uid, _tmp, '4');
+
+  return _tmp;
+end;
+$$ language plpgsql;
+
+create or replace function
+update_group_tags(_gid int, _tags text[]) returns void
+as $$
+declare
+  _tag text;
+begin
+  PERFORM id
+     from group_tag
+    where gid = _gid;
+  if FOUND then
+    delete from group_tag where gid = _gid;
+  end if;
+  foreach _tag in array _tags
+  loop
+    insert into group_tag (gid, content) values (_gid, _tag);
+  end loop;
+end;
+$$ language plpgsql;
+
+create or replace function
+join_group(_gid int, _uid int) returns int
+as $$
+declare
+  _tmp sort;
+begin
+  select position_level into _tmp
+    from group_member
+   where gid = _gid
+     and uid = _uid;
+
+  if _tmp is null then
+    select public_level into _tmp
+      from mygroup
+     where gid = _gid;
+    if _tmp > '1' then
+      _tmp := '2';
+    else
+      _tmp := '1';
+    end if;
+
+    -- TODO: send message to group leader
+    insert into group_member
+        (gid, uid, position_level)
+    values
+        (_gid, _uid, _tmp);
+    return 0;
+  elsif _tmp = '1' then
+    return 1;
+  else
+    return 2;
+  end if;
+end;
+$$ language plpgsql;
 
 -- create or replace function
 -- get_search_opus(_aid int)

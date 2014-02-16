@@ -111,6 +111,12 @@ class UserModel(object):
             tmp[key] = item['sum']
         return tmp
 
+    def get_mygroups(self, uid, page, size):
+        limit = size
+        offset = (page - 1) * limit
+        return self.db.calljson('get_mygroups', uid, limit, offset)
+
+
     # def get_user_groups(self, uid, limit=5, offset=0):
     #     select = 'SELECT get_user_groups(%s, %s, %s)'
     #     return self.db.getjson(select, uid, limit, offset)

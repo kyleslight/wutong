@@ -20,7 +20,7 @@ urls = [
     # (r"/upload", upload.FileHandler),
     # (r"/search", search.SearchHandler),
     # (r"/tag/(.+)", base.BaseHandler),
-    # (r"/user/(.+)", user.HomeHandler),
+    (r"/user/(.+)", user.HomeHandler),
     (r"/u/info", user.UserinfoHandler),
     (r"/u/memo", user.MemoHandler),
     (r"/u/message", user.MessageHandler),
@@ -31,9 +31,9 @@ urls = [
     (r"/a/(\d+)/update", article.UpdateHandler),
     (r"/a/(\d+)/comment", article.CommentHandler),
     (r"/a/(\d+)/interact", article.InteractHandler),
-    # (r"/g/browse", group.BrowseHandler),
-    # (r"/g/create", group.CreateHandler),
-    # (r"/g/(\d+)", group.GroupIndexHandler),
+    (r"/g/browse", group.BrowseHandler),
+    (r"/g/create", group.CreateHandler),
+    (r"/g/(\d+)", group.GroupHandler),
     # (r"/g/(\d+)/info", group.GroupinfoHandler),
     # (r"/g/(\d+)/message/websocket", group.GroupMessageSocketHandler),
     # (r"/g/(\d+)/message", group.GroupMessageHandler),
@@ -64,7 +64,8 @@ if options.debug:
             if suffix in valids:
                 self.render(subpath)
             else:
-                self.render_404_page()
+                # self.render_404_page()
+                pass
 
     urls.append((r"/(.*)", DebugHandler))
     options.dbname += "_test"

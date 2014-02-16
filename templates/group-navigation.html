@@ -7,13 +7,15 @@
         <div class="groupNav">
             <div class="userGroupInfo">
                 {% if user %}
-                <a class="userImg" href="/user/{{ user['penname'] }}"><img src="{{ avatarurl(user['avatar']) }}" /></a>
-                <a class="userName" href="/user/{{ user['penname'] }}">{{ user['penname'] }}</a>
+                <a class="userImg" href="/user/{{ user['nickname'] }}"><img src="{{ avatarurl(user['avatar']) }}" /></a>
+                <a class="userName" href="/user/{{ user['nickname'] }}">{{ user['nickname'] }}</a>
                 <div class="myGroup">
                     <div class="myGroupTitle">我的小组</div>
-                    {% if mygroups %}
-                    {% for group in mygroups %}
-                    <a class="myGroupListWrap" href="/g/{{ group['gid'] }}"><li class="myGroupList">{{ group['name'] }}</li></a>
+                    {% if user['groups'] %}
+                    {% for group in user['groups'] %}
+                    <a class="myGroupListWrap" href="/g/{{ group['gid'] }}">
+                        <li class="myGroupList">{{ group['name'] }}</li>
+                    </a>
                     {% end %}
                     {% else %}
                     <a href="#"><li class="noGroup">我还没有加入任何小组</li></a>
@@ -25,7 +27,7 @@
                 <div class="groupTagArea">
                     <div class="groupTagTitle">推荐Tag</div>
                     <h class="groupTagClass">兴趣»</h>
-                    <a href="?tag=旅行" class="groupTag">旅行</a>
+                    <a href="/search?type=group&tag=旅行" class="groupTag">旅行</a>
                     <a href="?tag=摄影" class="groupTag">摄影</a>
                     <a href="?tag=影视" class="groupTag">影视</a>
                     <a href="?tag=音乐" class="groupTag">音乐</a>
@@ -60,15 +62,15 @@
             </div>
             <div class="groupMainWrap">
                 <div class="groupDynamic">
-                    {% if recent_group_topics %}
+                    {% if user['topics'] %}
                     <h class="groupDynamicHeader">我的小组动态»</h>
-                    {% for topic in recent_group_topics %}
+                    {% for topic in user['topics'] %}
                     <li class="groupDynamicList">
-                        <a href="/user/{{ topic['penname'] }}" class="groupDynamicAuthorImg"><img src="{{ avatarurl(topic['avatar']) }}"></a>
+                        <a href="/user/{{ topic['nickname'] }}" class="groupDynamicAuthorImg"><img src="{{ avatarurl(topic['avatar']) }}"></a>
                         <div class="groupDynamicContent">
                             <a href="/t/{{ topic['tid'] }}" class="groupDynamicTitle">{{ topic['title'] }}</a>
                             <div class="groupDynamicInfo">
-                                <a href="/user/{{ topic['penname'] }}" class="groupDynamicAuthor">{{ topic['penname'] }}</a>
+                                <a href="/user/{{ topic['nickname'] }}" class="groupDynamicAuthor">{{ topic['nickname'] }}</a>
                                 <div class="groupDynamicFrom">
                                     来自 <a href="/g/{{ topic['gid'] }}">{{ topic['group_name'] }}</a> 小组
                                     <span class="groupDynamicMemberNum">{{ topic['reply_times'] }}</span>人次参与
@@ -85,13 +87,13 @@
                     {% end %}
                     {% end %}
                     <h class="groupDynamicHeader">全站小组动态»</h>
-                    {% for topic in recent_topics %}
+                    {% for topic in topics %}
                     <li class="groupDynamicList">
-                        <a href="/user/{{ topic['penname'] }}" class="groupDynamicAuthorImg"><img src="{{ avatarurl(topic['avatar']) }}"></a>
+                        <a href="/user/{{ topic['nickname'] }}" class="groupDynamicAuthorImg"><img src="{{ avatarurl(topic['avatar']) }}"></a>
                         <div class="groupDynamicContent">
                             <a href="/t/{{ topic['tid'] }}" class="groupDynamicTitle">{{ topic['title'] }}</a>
                             <div class="groupDynamicInfo">
-                                <a href="/user/{{ topic['penname'] }}" class="groupDynamicAuthor">{{ topic['penname'] }}</a>
+                                <a href="/user/{{ topic['nickname'] }}" class="groupDynamicAuthor">{{ topic['nickname'] }}</a>
                                 <div class="groupDynamicFrom">
                                     来自 <a href="/g/{{ topic['gid'] }}">{{ topic['group_name'] }}</a> 小组
                                     <span class="groupDynamicMemberNum">{{ topic['reply_times'] }}</span>人次参与

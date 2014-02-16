@@ -12,9 +12,10 @@ class ArticleModel(object):
             'publish': '4',
         }
 
-    def do_create(self, user_id, title, mainbody, **kwargs):
-        public_level = kwargs.get('public_level')
-        public_level = self.article_map_table[public_level]
+    def do_create(self, user_id, title, mainbody, public_level, **kwargs):
+        public_level = self.article_map_table.get(public_level)
+        if not public_level:
+            raise Exception('error public level')
         article_id = self.db.callfirstfield(
             'create_article',
             user_id, title, mainbody,

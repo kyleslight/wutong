@@ -322,11 +322,14 @@ class MemoHandler(BaseHandler):
 class CollectionHandler(BaseHandler):
     @authenticated
     def get(self):
-        collection_type = self.get_argument('type')
-        page = self.get_argument('page', 1)
-        size = self.get_argument('size', 5)
-        collections = self.muser.get_collections(self.user_id, collection_type, page, size)
-        self.write_json(collections)
+        try:
+            collection_type = self.get_argument('type')
+            page = int(self.get_argument('page', 1))
+            size = int(self.get_argument('size', 5))
+            collections = self.muser.get_collections(self.user_id, collection_type, page, size)
+            self.write_json(collections)
+        except Exception as e:
+            self.write_errmsg(e)
 
     @authenticated
     def post(self):
@@ -344,16 +347,20 @@ class MessageHandler(BaseHandler):
     -- wutong 在 test_group 小组提到了你
     -- wutong 评论了你的文章 test_article
     -- wutong 任命你为 test_group 的 leader
+    -- wutong 申请加入你的 test_group 小组
     -- 恭喜你获得了 article_master 成就
     -- 恭喜你获得了 king_of_stupid 头衔
     """
     @authenticated
     def get(self):
-        msg_type = self.get_argument('type')
-        page = self.get_argument('page', 1)
-        size = self.get_argument('size', 5)
-        msgs = self.muser.get_messages(self.user_id, msg_type, page, size)
-        self.write_json(msgs)
+        try:
+            msg_type = self.get_argument('type')
+            page = int(self.get_argument('page', 1))
+            size = int(self.get_argument('size', 5))
+            msgs = self.muser.get_messages(self.user_id, msg_type, page, size)
+            self.write_json(msgs)
+        except Exception as e:
+            self.write_errmsg(e)
 
     @authenticated
     def post(self):
