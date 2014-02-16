@@ -74,7 +74,13 @@
 		 			{% if user['intro'] %}
 			 		<div class="userIntro">简介：<span>{{ user['intro'] }}</span></div>
 			 		{% end %}
-			 		<div class="userTitle">头衔：<span>站长</span></div>
+			 		{% if user['user_titles'] %}
+			 		<div class="userTitle">头衔：
+			 			{% for title in user['user_titles'] %}
+					 		<span>{{ title }}</span>
+			 			{% end %}
+			 		</div>
+			 		{% end %}
 			 		{% if user['editable'] %}
 		 			<a href="#" id="userInfoEdit">编辑个人信息</a>
 		 			{% end %}
@@ -97,29 +103,48 @@
 	 				邮箱：<span class="userEmailAddress">{{ user['email'] }}</span>
 	 			</div>
 	 			<div class="userHonourAndWarn">
-	 				<li class="userGrade">积分：<span></span></li>
+	 				<li class="userGrade">积分：<span>{{ user['score'] }}</span></li>
 	 			</div>
 	 		</div>
 	 		<div class="followInfo">
 				<div class="followOther">
 					<div class="followOtherFirstLine">
-					Ta 关注了<span id="follerOtherNum">111</span>人 | <a href="#">更多</a></div>
+						Ta 关注了<span id="follerOtherNum">{{ user["star_num"] }}</span>人
+						{% if user["star_num"] > 8 %}
+						 | <a href="#">更多</a>
+						{% end %}
+					</div>
 					<div class="followOtherList followList">
-						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><div class="followName">loggerhaed</div></a></li>
-						<li><a href="#"><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><div class="followName">loggerhaed</div></a></li>
-						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><div class="followName">loggerhaed</div></a></li>
-						<!-- 只列出最近8人 -->
+					{% if user['stars'] %}
+						{% for u in user['stars'] %}
+							<li>
+								<a href="/user/{{ u['nickname'] }}">
+									<img src="{{ avatarurl(u["avatar"]) }}"><br/>
+									<div class="followName">{{ u['nickname'] }}</div>
+								</a>
+							</li>
+						{% end %}
+					{% end %}
 					</div>
 				</div>
 				<div class="otherFollow">
 					<div class="otherFollowFirstLine">
-						<span>1111</span>人关注了 Ta | <a href="#">更多</a>
+						<span>{{ user["follower_num"] }}</span>人关注了 Ta
+						{% if user["follower_num"] > 8 %}
+						 | <a href="#">更多</a>
+						{% end %}
 					</div>
 					<div class="otherFollowList followList">
-						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><div class="followName">loggerhaed</div></a></li>
-						<li><a href="#"><img src="{{ static_url("avatar/random/1.jpg") }}"><br/><div class="followName">loggerhaed</div></a></li>
-						<li><a href="#"><img src="{{ static_url("avatar/random/2.jpg") }}"><br/><div class="followName">loggerhaed</div></a></li>
-						<!-- 只列出最近8人 -->
+					{% if user['followers'] %}
+						{% for u in user['followers'] %}
+							<li>
+								<a href="/user/{{ u['nickname'] }}">
+									<img src="{{ avatarurl(u["avatar"]) }}"><br/>
+									<div class="followName">{{ u['nickname'] }}</div>
+								</a>
+							</li>
+						{% end %}
+					{% end %}
 					</div>
 				</div>
 			</div>
@@ -128,56 +153,30 @@
 			<div class="myOpus">
 			<div class="myExtendPartFirstline">作品</div>
 				<div class="myOpusList opusPart activeOpusPart">
+					{% if user['articles'] %}
 					<div id="myOpusList">
 						<span href="#" class="opusPartButton">作品列表</span>
-						<li class="opusShow article">
-						    <div class="opusBasicInfo">
-						        <a href="#" class="opusTitle" >此间的少年</a>
-						        <br/>
-						        <div class="opusTime">创作时间： <span>2014-2-13</span></div>
-						        <div class="opusGrade">得分： <span>9.4</span></div>
-						        <div class="opusViewed">浏览：<span>1158</span></div>
-						        <div class="opusCollected">收藏：<span>118</span></div>
-						    </div>
-						</li>
-						<li class="opusShow article">
-						    <div class="opusBasicInfo">
-						        <a href="#" class="opusTitle" >彼间的老年</a>
-						        <br/>
-						        <div class="opusTime">创作时间： <span>2014-2-13</span></div>
-						        <div class="opusGrade">得分： <span>9.4</span></div>
-						        <div class="opusViewed">浏览：<span>1158</span></div>
-						        <div class="opusCollected">收藏：<span>118</span></div>
-						    </div>
-						</li>
-						<li class="opusShow article">
-						    <div class="opusBasicInfo">
-						        <a href="#" class="opusTitle" >此间的少年</a>
-						        <br/>
-						        <div class="opusTime">创作时间： <span>2014-2-13</span></div>
-						        <div class="opusGrade">得分： <span>9.4</span></div>
-						        <div class="opusViewed">浏览：<span>1158</span></div>
-						        <div class="opusCollected">收藏：<span>118</span></div>
-						    </div>
-						</li>
-						<li class="opusShow article">
-						    <div class="opusBasicInfo">
-						        <a href="#" class="opusTitle" >此间的少年</a>
-						        <br/>
-						        <div class="opusTime">创作时间： <span>2014-2-13</span></div>
-						        <div class="opusGrade">得分： <span>9.4</span></div>
-						        <div class="opusViewed">浏览：<span>1158</span></div>
-						        <div class="opusCollected">收藏：<span>118</span></div>
-						    </div>
-						</li>
+							{% for article in user['articles'] %}
+								<li class="opusShow article">
+								    <div class="opusBasicInfo">
+								        <a href="/a/{{ article['aid'] }}" class="opusTitle" >article['title']</a>
+								        <br/>
+								        <div class="opusTime">创作时间： <span>{{ article['create_time'] }}</span></div>
+								        <div class="opusGrade">得分： <span>{{ article['avg_score'] }}</span></div>
+								        <div class="opusViewed">浏览：<span>{{ article['view_num'] }}</span></div>
+								        <div class="opusCollected">收藏：<span>{{ article['collected_num'] }}</span></div>
+								    </div>
+								</li>
+							{% end %}
 					</div>
+					{% end %}
 					<div class="forMore"><a href="#">查看更多作品</a></div>
 				</div>
+<!--
 				<div class="myOpusSeriesList opusPart">
 					<div id="myOpusSeriesList">
 						<span href="#" class="opusPartButton">作品系列列表</span>
 						<li class="opusSeries" id="addOPusSeries">
-							<!-- 非作者没有添加作品列表 -->
 						    <a href="#" id="createOpusSeries">点击此处添加作品系列</a>
 						</li>
 						<li class="opusSeries">
@@ -245,6 +244,7 @@
 					</div>
 					<div class="forMore"><a href="#">查看更多作品系列</a></div>
 				</div>
+-->
 				<div class="opusComment opusPart">
 					<span href="#" class="opusPartButton">回复</span>
 					<div class="opusCommentFirstLine"><a href="#" id="sideCommentReply" class="opusCommentButton activeOpusCommentButton">侧评回复</a><a href="#" class="opusCommentButton">底评回复</a></div>
@@ -295,78 +295,23 @@
 						<div class="forMore"><a href="#">查看更多底评回复</a></div>
 					</div>
 				</div>
+				{% if user['viewed_articles'] %}
 				<div class="recentOpusView opusPart">
 					<div id="recentOpusView">
 						<span href="#" class="opusPartButton">最近浏览</span>
-						<div class="timeDivision">今天</div>
+						{% for article in user['viewed_articles'] %}
 						<li class="recentOpusViewList">
-							<a href="#" class="recentOpusViewTitle">Lolita</a>
+							<a href="/a/{{ article['aid'] }}" class="recentOpusViewTitle">{{ article['title'] }}</a>
 							<span class="recentOpusViewDetail">
-								by <a href="#" class="recentOpusViewAuthor">Nabokov</a>
-								<span class="recentOpusViewTime">2014-2-14 15:32</span>
+								by <a href="/user/{{ article['author'] }}" class="recentOpusViewAuthor">{{ article['author'] }}</a>
+								<span class="recentOpusViewTime">{{ prettytime(article['view_time']) }}</span>
 							</span>
 						</li>
-						<li class="recentOpusViewList">
-							<a href="#" class="recentOpusViewTitle">Lolita</a>
-							<span class="recentOpusViewDetail">
-								by <a href="#" class="recentOpusViewAuthor">Nabokov</a>
-								<span class="recentOpusViewTime">2014-2-14 15:32</span>
-							</span>
-						</li>
-						<li class="recentOpusViewList">
-							<a href="#" class="recentOpusViewTitle">Lolita</a>
-							<span class="recentOpusViewDetail">
-								by <a href="#" class="recentOpusViewAuthor">Nabokov</a>
-								<span class="recentOpusViewTime">2014-2-14 15:32</span>
-							</span>
-						</li>
-						<li class="recentOpusViewList">
-							<a href="#" class="recentOpusViewTitle">Lolita</a>
-							<span class="recentOpusViewDetail">
-								by <a href="#" class="recentOpusViewAuthor">Nabokov</a>
-								<span class="recentOpusViewTime">2014-2-14 15:32</span>
-							</span>
-						</li>
-						<div class="timeDivision">本周一</div>
-						<li class="recentOpusViewList">
-							<a href="#" class="recentOpusViewTitle">Lolita</a>
-							<span class="recentOpusViewDetail">
-								by <a href="#" class="recentOpusViewAuthor">Nabokov</a>
-								<span class="recentOpusViewTime">2014-2-14 15:32</span>
-							</span>
-						</li>
-						<li class="recentOpusViewList">
-							<a href="#" class="recentOpusViewTitle">Lolita</a>
-							<span class="recentOpusViewDetail">
-								by <a href="#" class="recentOpusViewAuthor">Nabokov</a>
-								<span class="recentOpusViewTime">2014-2-14 15:32</span>
-							</span>
-						</li>
-						<li class="recentOpusViewList">
-							<a href="#" class="recentOpusViewTitle">Lolita</a>
-							<span class="recentOpusViewDetail">
-								by <a href="#" class="recentOpusViewAuthor">Nabokov</a>
-								<span class="recentOpusViewTime">2014-2-14 15:32</span>
-							</span>
-						</li>
-						<div class="timeDivision">上周</div>
-						<li class="recentOpusViewList">
-							<a href="#" class="recentOpusViewTitle">Lolita</a>
-							<span class="recentOpusViewDetail">
-								by <a href="#" class="recentOpusViewAuthor">Nabokov</a>
-								<span class="recentOpusViewTime">2014-2-14 15:32</span>
-							</span>
-						</li>
-						<li class="recentOpusViewList">
-							<a href="#" class="recentOpusViewTitle">Lolita</a>
-							<span class="recentOpusViewDetail">
-								by <a href="#" class="recentOpusViewAuthor">Nabokov</a>
-								<span class="recentOpusViewTime">2014-2-14 15:32</span>
-							</span>
-						</li>
+						{% end %}
 					</div>
 					<div class="forMore"><a href="#">查看更多最近浏览</a></div>
 				</div>
+				{% end %}
 			</div>
 			<div class="myGroup">
 				<div class="myExtendPartFirstline">小组</div>

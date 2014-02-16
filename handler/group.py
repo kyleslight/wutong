@@ -21,19 +21,19 @@ class GroupBaseHandler(BaseHandler):
         return self.groupmodel
 
     def get_group_info(self, gid):
-        group_info = self.model.get_group_info(gid)
+        group_info = self.mgroup.get_group_info(gid)
         return group_info
 
     def get_bulletins(self, gid):
-        bulletins = self.model.get_bulletins(gid, 6, 0)
+        bulletins = self.mgroup.get_bulletins(gid, 6, 0)
         return bulletins or []
 
     def get_member_info(self, gid, uid):
-        member_info = self.model.get_member_info(gid, uid)
+        member_info = self.mgroup.get_member_info(gid, uid)
         return member_info
 
     def get_group_members(self, gid):
-        members = self.model.get_group_members(gid, 30, 0)
+        members = self.mgroup.get_group_members(gid, 30, 0)
         return members
 
     def is_group_public(self, gid):
@@ -98,18 +98,18 @@ class BrowseHandler(GroupBaseHandler):
             size = self.default_size
 
         user = self.get_current_user()
-        mygroups = self.usermodel.get_user_groups(user['uid']) if user else []
+        mygroups = self.muser.get_user_groups(user['uid']) if user else []
 
         if tag:
             recent_group_topics = []
-            recent_topics = self.model.get_topics_by_tag(tag, page, size)
+            recent_topics = self.mgroup.get_topics_by_tag(tag, page, size)
         else:
             if user:
                 size /= 2
-                recent_group_topics = self.model.get_user_topics(user['uid'], 1, size)
+                recent_group_topics = self.mgroup.get_user_topics(user['uid'], 1, size)
             else:
                 recent_group_topics = []
-            recent_topics = self.model.get_topics(1, size)
+            recent_topics = self.mgroup.get_topics(1, size)
 
         self.render(
             'group-navigation.html',
@@ -137,7 +137,7 @@ class CreateHandler(GroupBaseHandler):
             self.write('invalid tags')
             return
 
-        group_id = self.model.do_create(self.user_id,
+        group_id = self.mgroup.do_create(self.user_id,
                                         name,
                                         intro=intro,
                                         is_public=is_public)
@@ -147,7 +147,7 @@ class CreateHandler(GroupBaseHandler):
 class JoinHandler(GroupBaseHandler):
     def join_group(self, gid, uid):
 
-        res = self.model.do_join_group(gid, uid)
+        res = self.mgroup.do_join_group(gid, uid)
         print('-' * 80, res)
         return res
 
@@ -209,7 +209,7 @@ class MessageBaseHandler(GroupBaseHandler):
         self.manager[self.id] -= trash
 
     def can_send_message(self):
-        member_info = self.model.get_member_info(self.gid, self.user_id)
+        member_info = self.mgroup.get_member_info(self.gid, self.user_id)
         if member_info:
             return True
         else:
@@ -227,7 +227,7 @@ class MessageBaseHandler(GroupBaseHandler):
 
     def save_message(self, message):
         if message.has_key("title"):
-            id = self.model.do_create_topic(
+            id = self.mgroup.do_create_topic(
                 self.gid,
                 self.user_id,
                 message["title"],
@@ -235,7 +235,7 @@ class MessageBaseHandler(GroupBaseHandler):
                 self.reply_id
             )
         else:
-            id = self.model.do_create_chat(
+            id = self.mgroup.do_create_chat(
                 self.gid,
                 self.user_id,
                 message["content"],
@@ -244,72 +244,73 @@ class MessageBaseHandler(GroupBaseHandler):
         return id
 
     def get_topic(self, tid):
-        topic = self.model.get_topic(tid)
+        topic = self.mgroup.get_topic(tid)
         return topic
 
     def get_topic_group(self, tid):
         topic = self.get_topic(tid)
-        group_info = self.model.get_group_info(topic["gid"])
+        group_info = self.mgroup.get_group_info(topic["gid"])
         return group_info
 
-    def get_topic_messages(self, tid):
-        messages = self.model.get_topic_messages(tid, 30, 0)
+    def get_topic_sessions(self, tid):
+        messages = self.mgroup.get_topic_sessions(tid, 30, 0)
         return messages or []
 
-    def get_group_messages(self, gid):
-        messages = self.model.get_group_messages(gid, 30, 0)
+    def get_group_sessions(self, gid):
+        messages = self.mgroup.get_group_sessions(gid, 30, 0)
         return messages or []
 
     def get_message(self, message_id):
-        message = self.model.get_message(message_id)
+        message = self.mgroup.get_message(message_id)
         return message
 
 
-class GroupIndexHandler(MessageBaseHandler):
-    def render_group(self, gid, messages, is_topic=False, **kwargs):
-        group_info = self.get_group_info(gid)
-        if not group_info:
-            self.render_404_page()
-            return
+class GroupHandler(BaseHandler):
+    def get(self, group_id):
+        page = self.get_argument('page', 1)
+        size = self.get_argument('size', 20)
+        visiable = self.mgroup.is_group_visiable(group_id, self.user_id)
 
-        bulletins = self.get_bulletins(gid)
-        members = self.get_group_members(gid)
-        self.render(
-            "group.html",
-            bulletins=bulletins,
-            messages=messages,
-            members=members,
-            group_info=group_info,
-            is_topic=is_topic,
-            **kwargs
-        )
-
-    def get(self, gid):
-        messages = self.get_group_messages(gid)
-        self.render_group(gid, messages)
-
-
-class TopicIndexHandler(GroupIndexHandler):
-    def get_messages(self, id):
-        messages = self.get_topic_messages(id)
-
-    def get_ancestor_topics(self, topic):
-        topics = [topic]
-        while topic["reply_id"]:
-            father_tid = topic["reply_id"]
-            topic = self.get_topic(father_tid)
-            topics.append(topic)
-        return topics
-
-    def get(self, tid):
-        topic = self.get_topic(tid)
-        if topic:
-            gid = topic["gid"]
-            messages = self.get_topic_messages(tid)
-            ancestor_topics = self.get_ancestor_topics(topic).__reversed__()
-            self.render_group(gid, messages, is_topic=True, ancestor_topics=ancestor_topics)
+        if self.has_argument('message'):
+            if not visiable:
+                self.write_errmsg('no access permission')
+                return
+            messages = self.mgroup.get_group_sessions(group_id, page, size)
+            self.write_json(messages)
         else:
-            self.render_404_page()
+            group = self.mgroup.get_group_homepage(group_id)
+            if group:
+                if visiable:
+                    group['messages'] = self.mgroup.get_group_sessions(group_id)
+                else:
+                    group['messages'] = []
+                self.render('group.html', group=group)
+            else:
+                self.render_404_page()
+
+
+class TopicHandler(BaseHandler):
+    def get(self, topic_id):
+        page = self.get_argument('page', 1)
+        size = self.get_argument('size', 20)
+        visiable = self.mgroup.is_topic_visiable(topic_id, self.user_id)
+
+        if self.has_argument('message'):
+            if not visiable:
+                self.write_errmsg('no access permission')
+                return
+            messages = self.mgroup.get_topic_sessions(topic_id, page, size)
+            self.write_json(messages)
+        else:
+            topic = self.mgroup.get_topic_homepage(topic_id)
+            if topic:
+                if visiable:
+                    topic['messages'] = self.mgroup.get_topic_sessions(topic_id)
+                else:
+                    topic['messages'] = []
+                self.render('topic.html', topic=topic)
+            else:
+                self.render_404_page()
 
 
 class MessageHandler(MessageBaseHandler):

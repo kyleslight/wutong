@@ -86,6 +86,8 @@ drop table if exists user_honor cascade;
 create table user_honor (
     id serial primary key,
     uid int,
+    name text,
+    -- 1: title, 2: honor
     type sort,
     time timestamp default now()
 );
@@ -99,6 +101,17 @@ create table user_message (
     content json,
     type sort,
     is_viewed bool default false,
+    time timestamp default now()
+);
+
+
+drop table if exists user_collection cascade;
+create table user_collection (
+    id serial primary key,
+    uid int,
+    relevant_id int,
+    -- 1: article,  2: group topic
+    type sort,
     time timestamp default now()
 );
 
@@ -202,16 +215,18 @@ create table article_honor (
 );
 
 
+drop table if exists article_coeditor cascade;
+create table article_coeditor (
+    id serial primary key,
+    nickname text
+);
+
+
 drop table if exists base_article_user cascade;
 create table base_article_user (
     aid int,
     uid int
 );
-
-drop table if exists article_coeditor cascade;
-create table article_coeditor (
-    id serial primary key
-) inherits (base_article_user);
 
 drop table if exists article_view cascade;
 create table article_view (
@@ -225,12 +240,6 @@ drop table if exists article_score cascade;
 create table article_score (
     id serial primary key,
     score smallint,
-    time timestamp default now()
-) inherits (base_article_user);
-
-drop table if exists article_collection cascade;
-create table article_collection (
-    id serial primary key,
     time timestamp default now()
 ) inherits (base_article_user);
 
@@ -254,6 +263,7 @@ create table base_article_comment (
 drop table if exists article_bottom_comment cascade;
 create table article_bottom_comment (
     id serial primary key,
+    reply_id int,
     rank int
 ) inherits (base_article_comment);
 
@@ -337,15 +347,6 @@ create table group_message (
     on_top bool
 ) inherits (base_session);
 
-
-drop table if exists group_topic_collection cascade;
-create table group_topic_collection (
-    id serial primary key,
-    uid int,
-    tid int,
-    time timestamp default now()
-);
-
 --------------------------------------------------------------------------------
 -- view
 --------------------------------------------------------------------------------
@@ -392,24 +393,23 @@ select a.aid,
  where a.uid = u.uid
    and a.aid = at.aid;
 
-drop view if exists article_goalinfo cascade;
-create view article_goalinfo
+drop view if exists article_collection cascade;
+create view article_collection
+  as
+select *,
+       relevant_id as "aid"
+  from user_collection
+ where type = '1';
+
+drop view if exists article_interact_info cascade;
+create view article_interact_info
   as
 select a.aid,
-       count(v.id) as "view_num",
-       avg(s.score) as "avg_score",
-       count(c.id) as "collection_num",
-       count(f.id) as "forwarded_num"
-  from article a,
-       article_view v,
-       article_score s,
-       article_collection c,
-       article_forwarded f
- where a.aid = v.aid
-   and a.aid = s.aid
-   and a.aid = c.aid
-   and a.aid = f.aid
- group by a.aid;
+       COALESCE((select count(id) from article_view where a.aid = aid), 0) as "view_num",
+       COALESCE((select avg(score) from article_score where a.aid = aid), 0) as "avg_score",
+       COALESCE((select count(id) from article_collection where a.aid = aid), 0) as "collected_num",
+       COALESCE((select count(id) from article_forwarded where a.aid = aid), 0) as "forwarded_num"
+  from article a;
 
 -- 所有后缀为`_show`的view都含有渲染所需要的全部数据
 -- 也可能会包含有不应该被客户端知晓的数据, 因此不应该被直接传给客户端
@@ -511,6 +511,14 @@ select m.*,
   from group_message m,
        user_base u
  where m.uid = u.uid;
+
+drop view if exists group_topic_collection cascade;
+create view group_topic_collection
+  as
+select *,
+       relevant_id as "tid"
+  from user_collection
+ where type = '2';
 
 drop view if exists user_collected_article_show cascade;
 create view user_collected_article_show

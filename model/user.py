@@ -7,7 +7,8 @@ class UserModel(object):
         self.db = db
 
     def get_uid(self, nickname_or_email):
-        return self.db.callfirstfield('get_uid', nickname_or_email)
+        uid = self.db.callfirstfield('get_uid', nickname_or_email)
+        return uid
 
     def is_nickname_exist(self, nickname):
         uid = self.get_uid(nickname)
@@ -18,49 +19,85 @@ class UserModel(object):
         return uid is not None
 
     def do_register(self, nickname, password, email):
-        return self.db.callfirstfield('do_user_register', nickname, password, email)
+        value = self.db.callfirstfield('do_user_register', nickname, password, email)
+        if value > 0:
+            return value
+        elif value == -1:
+            raise Exception('nickname exist')
+        elif value == -2:
+            raise Exception('email exist')
 
     def do_activate_account(self, uid):
         uid = self.db.callfirstfield('do_user_activate', uid)
-        return uid > 0
+        if uid > 0:
+            return uid
+        else:
+            raise Exception('activate failed')
 
     def do_login(self, nickname_or_email, password):
         """
         return `user` if success else None
         """
-        return self.db.calljson('do_user_login', nickname_or_email, password)
+        user = self.db.calljson('do_user_login', nickname_or_email, password)
+        if not user:
+            raise Exception('user not exist or password error')
+        return user
 
     def get_user(self, uid):
         return self.db.calljson('get_user', uid)
 
     def update_user_info(self, uid, **kwargs):
-        return self.db.update('myuser', kwargs, where='uid=%s', wherevalues=[uid])
+        if not self.db.update('myuser', kwargs, where='uid=%s', wherevalues=[uid]):
+            raise Exception('update user failed')
 
     def get_user_homepage(self, nickname):
         return self.db.calljson('get_user_homepage', nickname)
 
     def create_memo(self, uid, title, content):
         memo = self.db.calljson('create_user_memo', uid, title, content)
-        if memo:
-            memo.pop('uid')
+        if not memo:
+            raise Exception('create memo failed')
         return memo
 
     def get_memo(self, uid, memo_id):
         memo = self.db.calljson('get_user_memo', uid, memo_id)
-        if memo:
-            memo.pop('uid')
+        if not memo:
+            raise Exception('memo not exist')
         return memo
 
     def get_memos(self, uid, page, size):
         limit = size
         offset = (page - 1) * size
-        return self.db.calljson('get_user_memos', uid, limit, offset)
+        memos = self.db.calljson('get_user_memos', uid, limit, offset)
+        if not memos:
+            raise Exception('memos not exist')
+        return memos
 
     def update_memo(self, uid, memo_id, title, content):
-        return self.db.calljson('update_user_memo', uid, memo_id, title, content)
+        memo = self.db.calljson('update_user_memo', uid, memo_id, title, content)
+        if not memo:
+            raise Exception('update memo failed')
+        return memo
 
     def delete_memo(self, uid, memo_id):
-        return self.db.delete('user_memo', where='uid=%s and id=%s', wherevalues=[uid, memo_id])
+        res = self.db.delete('user_memo', where='uid=%s and id=%s', wherevalues=[uid, memo_id])
+        if not res:
+            raise Exception('delete memo failed')
+
+    def create_collection(self, uid, collection_type, relevant_id):
+        res = self.db.call('create_user_collection', uid, collection_type, relevant_id)
+        if not res:
+            raise Exception('create collection failed')
+
+    def get_collections(self, uid, collection_type, page, size):
+        limit = size
+        offset = (page - 1) * limit
+        return self.db.calljson('get_user_collections', uid, collection_type, limit, offset)
+
+    def get_messages(self, uid, msg_type, page, size):
+        limit = size
+        offset = (page - 1) * limit
+        return self.db.calljson('get_user_msgs', uid, msg_type, limit, offset)
 
     def get_unread_msg_count(self, uid):
         map_table = {
@@ -73,15 +110,6 @@ class UserModel(object):
             key = map_table[item['type']]
             tmp[key] = item['sum']
         return tmp
-
-    # def get_collections(self, uid, page, size):
-    #     limit = size
-    #     offset = (page - 1) * size
-    #     return self.db.calljson('get_user_memos', uid, limit, offset)
-
-    # def create_collection(self, uid, aid):
-    #     select = 'SELECT create_article_collection(%s, %s)'
-    #     return self.db.getfirstfield(select, uid, aid)
 
     # def get_user_groups(self, uid, limit=5, offset=0):
     #     select = 'SELECT get_user_groups(%s, %s, %s)'

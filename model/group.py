@@ -6,23 +6,35 @@ class GroupModel(object):
     def __init__(self, db):
         self.db = db
 
+    def is_group_visiable(self, group_id, user_id):
+        return True
+
+    def is_topic_visiable(self, topic_id, user_id):
+        return True
+
+    def get_group_homepage(self, group_id):
+        return self.calljson('get_group_homepage', group_id)
+
+    def get_topic_homepage(self, topic_id):
+        return self.calljson('get_topic_homepage', topic_id)
+
+    def get_group_sessions(self, group_id, page, size):
+        limit = size
+        offset = (page - 1) * size
+        messages = self.db.calljson('get_group_sessions', group_id, limit, offset)
+        return messages or []
+
+    def get_topic_sessions(self, topic_id, page, size):
+        limit = size
+        offset = (page - 1) * size
+        messages = self.db.calljson('get_topic_sessions', topic_id, limit, offset)
+        return messages or []
+
     def get_group_info(self, gid):
         return self.db.calljson('get_group_info', gid)
 
     def get_message(self, message_id):
         return self.db.calljson('get_group_message', message_id)
-
-    def get_group_messages(self, gid, page, size):
-        limit = size
-        offset = (page - 1) * size
-        messages = self.db.getjson('get_group_messages', gid, limit, offset)
-        return messages or []
-
-    def get_topic_messages(self, tid, page, size):
-        limit = size
-        offset = (page - 1) * size
-        messages = self.db.calljson('get_topic_messages', tid, limit, offset)
-        return messages or []
 
     def get_chat(self, chat_id):
         return self.db.calljson('get_group_chat', chat_id)

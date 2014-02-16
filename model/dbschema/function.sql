@@ -50,9 +50,10 @@ $$ language plpgsql;
 create or replace function
 do_user_activate(_uid int) returns int
 as $$
-  select uid
-    from myuser
-   where uid = _uid;
+  update myuser
+     set is_activated = true
+   where uid = _uid
+  returning uid;
 $$ language sql;
 
 create or replace function
@@ -80,6 +81,66 @@ as $$
       ) j;
 $$ language sql;
 
+create or replace function
+create_user_collection(_uid int, _type sort, _relevant_id int) returns void
+as $$
+  insert into user_collection
+      (uid, type, relevant_id)
+  values
+      (_uid, _type, _relevant_id);
+$$ language sql;
+
+create or replace function
+get_user_collections(_uid int, _type sort, _limit int, _offset int) returns json
+as $$
+declare
+  _idname text;
+  _tabname text;
+  _tmp json;
+begin
+  if _type = '1' then
+    _tabname := 'article_base';
+    _idname := 'aid';
+  elseif _type = '2' then
+    _tabname := 'group_topic';
+    _idname := 'tid';
+  end if;
+
+  execute '
+  select array_to_json(array_agg(aj))
+    from
+      (
+         select *
+           from ' || _tabname::regclass || '
+          where ' || quote_ident(_idname) || ' in (select relevant_id
+                         from user_collection
+                        where uid = ' || _uid || '
+                          and type = ' || quote_literal(_type) || '
+                        order by id
+                        limit ' || _limit || '
+                       offset ' || _offset || ')
+      ) aj'
+    into _tmp;
+  return _tmp;
+end;
+$$ language plpgsql;
+
+create or replace function
+get_user_msgs(_uid int, _type sort, _limit int, _offset int) returns json
+as $$
+  select array_to_json(array_agg(aj))
+    from
+      (
+         select *
+           from user_message
+          where uid = _uid
+            and type = _type
+          order by id
+          limit _limit
+         offset _offset
+      ) aj;
+$$ language sql;
+
 -- 用户的未读消息的统计信息
 create or replace function
 get_user_unread_msg_count(_uid int) returns json
@@ -97,15 +158,102 @@ as $$
 $$ language sql;
 
 create or replace function
+get_user_article_list(_uid int, _limit int, _offset int) returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+        select i.*,
+               a.create_time,
+               a.title
+          from article_interact_info i,
+               article a
+         where a.uid = _uid
+           and i.aid = a.aid
+         order by a.aid desc
+         limit _limit
+        offset _offset
+      ) aj;
+$$ language sql;
+
+create or replace function
+get_user_stars(_uid int, _limit int, _offset int) returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+        select u.*
+          from user_relationship r,
+               user_base u
+         where r.uid = u.uid
+           and r.uid = _uid
+           and r.relate_level = '2'
+         order by r.id desc
+         limit _limit
+        offset _offset
+      ) aj;
+$$ language sql;
+
+create or replace function
+get_user_followers(_uid int, _limit int, _offset int) returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+        select u.*
+          from user_relationship r,
+               user_base u
+         where r.uid = u.uid
+           and r.another_uid = _uid
+           and r.relate_level = '2'
+         order by r.id desc
+         limit _limit
+        offset _offset
+      ) aj;
+$$ language sql;
+
+create or replace function
+get_user_viewed_articles(_uid int, _limit int, _offset int) returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+        select a.*,
+               v.time as "view_time"
+          from article_base a,
+               article_view v
+         where v.aid = a.aid
+           and v.uid = _uid
+         order by v.id desc
+         limit _limit
+        offset _offset
+      ) aj;
+$$ language sql;
+
+create or replace function
 get_user_homepage(_nickname text) returns json
 as $$
 declare
+  _uid int;
   _tmp json;
 begin
+  select uid
+    from myuser
+   where nickname = _nickname
+    into _uid;
+
   select row_to_json(j.*)
     from
       (
-         select *
+         select *,
+                0 as "score",
+                (select name from user_honor where uid = _uid) as "user_titles",
+                (select count(id) from user_relationship where relate_level = '2' and uid = _uid) as "star_num",
+                (select count(id) from user_relationship where relate_level = '2' and another_uid = _uid) as "follower_num",
+                (select get_user_stars(_uid, 8, 0)) as "stars",
+                (select get_user_followers(_uid, 8, 0)) as "followers",
+                (select get_user_article_list(_uid, 10, 0)) as "articles",
+                (select get_user_viewed_articles(_uid, 10, 0)) as "viewed_articles"
            from user_show
           where nickname = _nickname
       ) j
@@ -183,35 +331,321 @@ begin
 end;
 $$ language plpgsql;
 
--- create or replace function
--- get_article_collections(_uid int, _limit int, _offset int) returns json
--- as $$
---   select array_to_json(array_agg(aj))
---     from
---       (
---          select *
---            from article_collection
---           where uid = _uid
---           limit _limit
---          offset _offset
---           order by id desc
---       ) aj;
--- $$ language sql;
 
--- create or replace function
--- get_article_tags(_aid int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj))
---       from
---         (
---             select *
---               from article_tag
---              where aid = _aid
---         ) aj;
--- $$ language sql;
+create or replace function
+create_article(
+    _uid int,
+    _title text,
+    _mainbody text,
+    _intro text,
+    _suit_for text,
+    _refers text[],
+    _series text,
+    _resources text[],
+    _public_level sort) returns int
+as $$
+  insert into article
+      (uid, title, mainbody, intro, suit_for, refers, series, resources, public_level)
+  values
+      (_uid, _title, _mainbody, _intro, _suit_for, _refers, _series, _resources, _public_level)
+  returning aid;
+$$ language sql;
+
+create or replace function
+update_article_tags(_aid int, _tags text[]) returns void
+as $$
+declare
+  _tag text;
+begin
+  PERFORM id
+     from article_tag
+    where aid = _aid;
+  if FOUND then
+    delete from article_tag where aid = _aid;
+  end if;
+  foreach _tag in array _tags
+  loop
+    insert into article_tag (aid, content) values (_aid, _tag);
+  end loop;
+end;
+$$ language plpgsql;
+
+create or replace function
+update_article_coeditors(_aid int, _nicknames text[]) returns void
+as $$
+declare
+  _nickname text;
+begin
+  perform id
+     from article_coeditor
+    where aid = _aid;
+  if FOUND then
+    delete from article_coeditor where aid = _aid;
+  end if;
+  foreach _nickname in array _nicknames
+  loop
+    insert into article_coeditor (aid, nickname) values (_aid, _nickname);
+  end loop;
+end;
+$$ language plpgsql;
+
+create or replace function
+get_article(_aid int) returns json
+as $$
+  select row_to_json(j.*)
+    from
+      (
+         select *
+           from article_show
+          where aid = _aid
+      ) j;
+$$ language sql;
+
+create or replace function
+get_articles(_limit int, _offset int, _tag text) returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+          select *
+            from article_base
+           where not is_deleted
+             and public_level > '2'
+             and (_tag is null or _tag = any(tags))
+           order by modify_time desc
+           limit _limit
+          offset _offset
+      ) aj;
+$$ language sql;
+
+create or replace function
+get_bottom_comments(_aid int, _limit int, _offset int) returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+          select *
+            from article_bottom_comment_show
+           where aid = _aid
+           order by rank desc
+           limit _limit
+          offset _offset
+      ) aj;
+$$ language sql;
+
+create or replace function
+get_side_comments(_aid int) returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+          select *
+            from article_side_comment_show
+           where aid = _aid
+      ) aj;
+$$ language sql;
+
+create or replace function
+get_bottom_comment(_id int) returns json
+as $$
+  select row_to_json(j.*)
+    from
+      (
+          select *
+            from article_bottom_comment_show
+           where id = _id
+      ) j;
+$$ language sql;
+
+create or replace function
+get_side_comment(_id int) returns json
+as $$
+  select row_to_json(j.*)
+    from
+      (
+          select *
+            from article_side_comment_show
+           where id = _id
+      ) j;
+$$ language sql;
+
+create or replace function
+create_bottom_comment(
+    _aid int,
+    _uid int,
+    _content text,
+    _reply_id int) returns json
+as $$
+declare
+  _tmp int;
+begin
+  select max(rank) + 1
+    from article_bottom_comment
+   where aid = _aid
+    into _tmp;
+  if _tmp is null then
+      _tmp := 1;
+  end if;
+
+  insert into article_bottom_comment
+      (aid, uid, reply_id, content, rank)
+  values
+      (_aid, _uid, _reply_id, _content, _tmp)
+  returning id into _tmp;
+  return get_bottom_comment(_tmp);
+end;
+$$ language plpgsql;
+
+create or replace function
+create_side_comment(
+    _aid int,
+    _uid int,
+    _content text,
+    _paragraph_id text) returns json
+as $$
+declare
+  _tmp int;
+begin
+  insert into article_side_comment
+      (aid, uid, content, paragraph_id)
+  values
+      (_aid, _uid, _content, _paragraph_id)
+  returning id into _tmp;
+  return get_side_comment(_tmp);
+end;
+$$ language plpgsql;
+
+create or replace function
+create_article_view(_aid int, _uid int, _ip inet) returns void
+as $$
+declare
+    _tmp int;
+begin
+  perform id
+     from article_view
+    where aid = _aid
+      and (uid = _uid or ip = _ip);
+  if FOUND then
+    if _uid > 0 then
+      update article_view
+         set ip = _ip,
+             time = now()
+       where aid = _aid
+         and uid = _uid;
+    end if;
+  else
+    insert into article_view
+        (aid, uid, ip)
+    values
+        (_aid, _uid, _ip);
+  end if;
+end;
+$$ language plpgsql;
+
+create or replace function
+get_article_interaction(_aid int) returns json
+as $$
+  select row_to_json(j.*)
+    from
+      (
+          select *
+            from article_interact_info
+           where aid = _aid
+      ) j;
+$$ language sql;
+
+create or replace function
+get_myinteraction_info(_aid int, _uid int) returns json
+as $$
+declare
+    _score int;
+    _is_viewed bool;
+    _is_collected bool;
+    _is_forwarded bool;
+    _tmp json;
+begin
+  select score
+    from article_score
+   where aid = _aid
+     and uid = _uid
+    into _score;
+
+  perform id
+     from article_view
+    where aid = _aid
+      and uid = _uid;
+  if FOUND then
+    _is_viewed := true;
+  else
+    _is_viewed := false;
+  end if;
+
+  perform id
+     from article_collection
+    where aid = _aid
+      and uid = _uid;
+  if FOUND then
+    _is_collected := true;
+  else
+    _is_collected := false;
+  end if;
+
+  perform id
+     from article_forwarded
+    where aid = _aid
+      and uid = _uid;
+  if FOUND then
+    _is_forwarded := true;
+  else
+    _is_forwarded := false;
+  end if;
+
+  select row_to_json(j.*)
+    from
+      (
+         select _score as "score",
+                _is_viewed as "is_viewed",
+                _is_collected as "is_collected",
+                _is_forwarded as "is_forwarded"
+      ) j
+    into _tmp;
+  return _tmp;
+end;
+$$ language plpgsql;
+
+create or replace function
+update_myinteraction_info(_aid int, _uid int, _value text, _tabname text) returns int
+as $$
+declare
+    _tmp int;
+begin
+  execute 'delete from '
+      || _tabname::regclass
+      || ' where aid = ' || _aid
+      || '   and uid = ' || _uid;
+  get diagnostics _tmp = ROW_COUNT;
+  if _tabname = 'article_score' then
+    insert into article_score
+        (aid, uid, score)
+    values
+        (_aid, _uid, _value);
+  elseif _tmp = 0 then
+    execute format('insert into %I (aid, uid) values (%s, %s)', _tabname, _aid, _uid);
+  end if;
+  return _tmp;
+end;
+$$ language plpgsql;
 
 
+create or replace function
+get_group_homepage(_gid int) returns json
+as $$
+declare
+    _tmp json;
+begin
+  return _tmp;
+end;
+$$ language plpgsql;
 -- create or replace function
 -- get_group_sessions(_gid int)
 --   returns json
@@ -240,88 +674,6 @@ $$ language plpgsql;
 --                 ) s
 --              order by s.reply_time
 --         ) aj;
--- $$ language sql;
-
-
-
-
--- create or replace function
--- get_article(_aid int)
---   returns json
--- as $$
---     select a.*,
---            at.tags
---       from article a,
---            article_tag_base at
---      where a.aid = _aid
---        and at.aid = _aid;
--- $$ language sql;
--- switch_star
-
--- create or replace function
--- get_uid(_account varchar)
---   returns int
--- as $$
---     select uid
---       from myuser
---      where _account = any(array[email, nickname]);
--- $$ language sql;
-
-
--- create or replace function
--- get_user_permission(_uid int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select is_activated,
---                    is_forbid,
---                    is_deleted,
---                    is_admin
---               from myuser
---              where uid = _uid
---         ) j;
--- $$ language sql;
-
-
--- create or replace function
--- get_user_info(_uid int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select *
---               from user_info_v
---              where uid = _uid
---         ) j;
--- $$ language sql;
-
-
--- create or replace function
--- do_activate_user(_hashuid varchar)
---   returns int
--- as $$
---     update myuser
---        set is_activated = true
---      where not is_activated
---        and _hashuid = md5(cast(uid as varchar))
---     returning uid;
--- $$ language sql;
-
-
--- create or replace function
--- do_login_user(_account varchar, _password varchar)
---   returns int
--- as $$
---     select uid
---       from myuser
---      where is_activated
---        and not is_forbid
---        and not is_deleted
---        and _account = any(array[email, nickname, phone])
---        and password = crypt(_password, password);
 -- $$ language sql;
 
 
@@ -825,26 +1177,6 @@ $$ language plpgsql;
 -- $$ language sql;
 
 
--- create or replace function
--- create_article(
---     _uid int,
---     _title varchar,
---     _mainbody varchar,
---     _description varchar default null,
---     _suit_for varchar default null,
---     _reference varchar default null,
---     _series varchar default null,
---     _resource varchar default null,
---     _is_public int default 2) --'推送'
---   returns int
--- as $$
---     insert into article
---         (uid, title, mainbody, description, suit_for, reference, series, resource, is_public)
---     values
---         (_uid, _title, _mainbody, _description, _suit_for, _reference, _series, _resource, _is_public)
---     returning aid;
--- $$ language sql;
-
 
 -- create or replace function
 -- create_article_view(_aid int, _uid int, _ip varchar)
@@ -925,24 +1257,6 @@ $$ language plpgsql;
 
 
 -- create or replace function
--- create_article_tags(_aid int, _tags varchar[])
---   returns void
--- as $$
--- declare
---     _tag varchar;
--- begin
---     foreach _tag in array _tags
---     loop
---         insert into article_tag
---             (aid, name)
---         values
---             (_aid, _tag);
---     end loop;
--- end;
--- $$ language plpgsql;
-
-
--- create or replace function
 -- get_article_info(_aid int)
 --   returns json
 -- as $$
@@ -960,56 +1274,6 @@ $$ language plpgsql;
 -- $$ language sql;
 
 
--- create or replace function
--- get_articles(_limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj.*))
---       from
---         (
---             select a.aid,
---                    a.title,
---                    a.author,
---                    a.avatar,
---                    a.submit_time,
---                    a.description,
---                    (select get_article_tags(a.aid)) as "tags"
---               from article_info_v a
---              where a.is_public = 2
---                and not a.is_deleted
---              order by a.aid desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_articles_by_tag(_tag varchar, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj.*))
---       from
---         (
---             select a.aid,
---                    a.title,
---                    a.author,
---                    a.avatar,
---                    a.submit_time,
---                    a.description,
---                    (select get_article_tags(a.aid)) as "tags"
---               from article_info_v a,
---                    article_tag at
---              where a.is_public = 2
---                and not a.is_deleted
---                and a.aid = at.aid
---                and at.name = _tag
---              order by a.aid desc
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
 
 -- create or replace function
 -- get_comment(_id int)
@@ -1023,95 +1287,6 @@ $$ language plpgsql;
 --              where id = _id
 --         ) j;
 -- $$ language sql;
-
-
--- create or replace function
--- get_side_comments(_aid int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj.*))
---       from
---         (
---             select *
---               from article_comment_v
---              where aid = _aid
---                and is_side
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- get_bottom_comments(_aid int, _limit int, _offset int)
---   returns json
--- as $$
---     select array_to_json(array_agg(aj.*))
---       from
---         (
---             select *
---               from article_comment_v
---              where aid = _aid
---                and is_side = false
---              order by id
---              limit _limit
---             offset _offset
---         ) aj;
--- $$ language sql;
-
-
--- create or replace function
--- create_side_comment(
---     _aid int,
---     _uid int,
---     _content varchar,
---     _paragraph_id varchar)
---   returns int
--- as $$
--- declare
---     _tmp int;
--- begin
---     select max(floor) + 1
---       from article_comment
---      where aid = _aid
---        and is_side
---       into _tmp;
---     if _tmp is null then
---         _tmp := 1;
---     end if;
-
---     insert into article_comment
---         (aid, uid, content, paragraph_id, is_side, floor)
---     values
---         (_aid, _uid, _content, _paragraph_id, true, _tmp)
---     returning id into _tmp;
---     return _tmp;
--- end;
--- $$ language plpgsql;
-
-
--- create or replace function
--- create_bottom_comment(_aid int, _uid int, _content varchar)
---   returns int
--- as $$
--- declare
---     _tmp int;
--- begin
---     select max(floor) + 1
---       from article_comment
---      where aid = _aid
---        and is_side = false
---       into _tmp;
---     if _tmp is null then
---         _tmp := 1;
---     end if;
-
---     insert into article_comment
---         (aid, uid, content, floor)
---     values
---         (_aid, _uid, _content, _tmp)
---     returning id into _tmp;
---     return _tmp;
--- end;
--- $$ language plpgsql;
 
 
 -- create or replace function

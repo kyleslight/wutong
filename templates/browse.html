@@ -82,10 +82,37 @@
             </div>
             <div class="opus">
 
-            {% for aitem in article_list %}
-                {% module MyModule('article_list.html', article_list=aitem) %}
+            {% for article in articles %}
+                <li class="opusShow article">
+                    <a href="/user/{{ article['author'] }}">
+                        <img src="{{ avatarurl(article["author_avatar"]) }}" class="opusAluthorImage">
+                    </a>
+                    <div class="opusBasicInfo">
+                        <a href="/a/{{ article['aid'] }}" class="opusTitle" accesskey='No_article_{{ article["aid"] }}'>
+                            {{ article["title"] }}
+                        </a>
+                        <br/>
+                        <a href="/user/{{ article['author'] }}" class="opusAuthor">
+                            {{ article["author"] }}
+                        </a>
+                        {% if article["intro"] %}
+                        <div class="opusBrief">
+                            {{ article["intro"] }}
+                        </div>
+                        {% end %}
+                        <div class="opusAttached">
+                            {% if article["tags"] %}
+                            <span class="opusTag">
+                            {% for tag in article["tags"] %}
+                                <a href="/tag/{{ tag }}">{{ tag }}</a>
+                            {% end %}
+                            </span>
+                            {% end %}
+                            <span class="opusTime">{{ prettytime(article["modify_time"]) }}</span>
+                        </div>
+                    </div>
+                </li>
             {% end %}
-            
             </div>
         </div>
     </div>
