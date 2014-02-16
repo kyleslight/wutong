@@ -105,9 +105,16 @@ blockquote p{
 	display: block;
 }
 #logo{
-	width: 30px;
-	height: 30px;
-	border:0;
+	font-family: "文泉驿微米黑";
+	font-size: 2em;
+	color: #CCC;
+	transition: 0.5s;
+	-moz-transition:0.5s;
+	-webkit-transition:0.5s;
+	-o-transition:0.5s;
+}
+#logo:hover{
+	color:white;
 }
 
 /*Navigation*/
@@ -176,7 +183,7 @@ blockquote p{
 }
 
 #navLogo{
-	margin-top: 20px;
+	margin-top: 17px;
 	margin-left: 20px;
 	float: left;
 }
@@ -252,9 +259,9 @@ a.searchSuggestionsList{
 	-webkit-transition: 0.2s;
 	-o-transition: 0.2s;
 }
-a.searchSuggestionsList:hover{
+.activeSug{
 	background: #680;
-	color: white;
+	color: white !important;
 	box-shadow:2px 2px 3px #aaaaaa;
 }
 #searchSubmitButton{
