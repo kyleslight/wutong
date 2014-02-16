@@ -5,131 +5,124 @@
 class ArticleModel(object):
     def __init__(self, db):
         self.db = db
+        self.article_map_table = {
+            'draft': '1',
+            'private': '2',
+            'public': '3',
+            'publish': '4',
+        }
 
-    def get_article_info(self, aid):
-        select = 'SELECT get_article_info(%s)'
-        article_info = self.db.getjson(select, aid)
-        return article_info
+    def do_create(self, user_id, title, mainbody, public_level, **kwargs):
+        public_level = self.article_map_table.get(public_level)
+        if not public_level:
+            raise Exception('error public level')
+        article_id = self.db.callfirstfield(
+            'create_article',
+            user_id, title, mainbody,
+            kwargs.get('intro'),
+            kwargs.get('suit_for'),
+            kwargs.get('refers'),
+            kwargs.get('series'),
+            kwargs.get('resources'),
+            public_level
+        )
+        if not article_id > 0:
+            raise Exception('create article failed')
+        tags = kwargs.get('tags')
+        coeditors = kwargs.get('coeditors')
+        self.db.call('update_article_tags', article_id, tags)
+        self.db.call('update_article_coeditors', article_id, coeditors)
+        return article_id
 
-    def get_articles(self, page, size):
+    def do_update(self, article_id, user_id, title, mainbody, **kwargs):
+        public_level = kwargs.get('public_level')
+        public_level = self.article_map_table[public_level]
+        article_id = self.db.update(
+            'article',
+            user_id, title, mainbody,
+            kwargs.get('intro'),
+            kwargs.get('suit_for'),
+            kwargs.get('refers'),
+            kwargs.get('series'),
+            kwargs.get('resources'),
+            public_level
+        )
+        if not article_id > 0:
+            raise Exception('create article failed')
+        tags = kwargs.get('tags')
+        coeditors = kwargs.get('coeditors')
+        self.db.call('update_article_tags', article_id, tags)
+        self.db.call('update_article_coeditors', article_id, coeditors)
+        return article_id
+
+    def get_article(self, article_id):
+        article = self.db.calljson('get_article', article_id)
+        return article
+
+    def get_articles(self, page, size, tag=None):
         limit = size
         offset = (page - 1) * size
-        articles = self.db.calljson('get_articles', limit, offset)
+        articles = self.db.calljson('get_articles', limit, offset, tag)
         return articles or []
 
-    def get_articles_by_tag(self, tag, page, size):
+    def get_bottom_comments(self, article_id, page, size, **kwargs):
         limit = size
         offset = (page - 1) * size
-        articles = self.db.calljson('get_articles_by_tag', tag, limit, offset)
-        return articles or []
+        comments = self.db.calljson('get_bottom_comments', article_id, limit, offset)
+        return comments or []
 
-    def get_comment(self, comment_id):
-        select = 'SELECT get_comment(%s)'
-        comment = self.db.getjson(select, comment_id)
+    def get_side_comments(self, article_id, **kwargs):
+        comments = self.db.calljson('get_side_comments', aritcle_id)
+        return comments or []
+
+    def create_bottom_comment(self, article_id, user_id, content, **kwargs):
+        comment = self.db.calljson('create_bottom_comment',
+                                   article_id, user_id, content,
+                                   kwargs.get('reply_id'))
+        if not comment:
+            raise Exception('create bottom comment failed')
         return comment
 
-    def get_side_comments(self, aid):
-        select = 'SELECT get_side_comments(%s)'
-        comments = self.db.getjson(select, aid)
-        return comments
+    def create_side_comment(self, article_id, user_id, content, paragraph_id, **kwargs):
+        comment = self.db.calljson('create_side_comment',
+                                   article_id, user_id, content,
+                                   paragraph_id)
+        if not comment:
+            raise Exception('create side comment failed')
+        return comment
 
-    def get_bottom_comments(self, aid, limit=30, offset=0):
-        select = 'SELECT get_bottom_comments(%s, %s, %s)'
-        comments = self.db.getjson(select, aid, limit, offset)
-        return comments
+    def delete_bottom_comment(self, user_id, comment_id):
+        res = self.delete('article_bottom_comment', where='uid=%s and id=%s', wherevalues=[user_id, comment_id])
+        if not res:
+            raise Exception('delete bottom comment failed')
 
-    def do_create(self,
-                  uid,
-                  title, mainbody,
-                  tags=[],
-                  description=None,
-                  suit_for=None,
-                  reference=None,
-                  series=None,
-                  resource=None,
-                  is_public=2,
-                  partner=None,
-                  **kwargs):
-        select = 'SELECT create_article(%s, %s, %s, %s, %s, %s, %s, %s, %s)'
-        aid = self.db.getfirstfield(select,
-                                    uid,
-                                    title,
-                                    mainbody,
-                                    description,
-                                    suit_for,
-                                    reference,
-                                    series,
-                                    resource,
-                                    is_public)
-        self.create_article_tags(aid, tags)
-        # self.add_article_partner(aid, partner)
-        return aid
+    def delete_side_comment(self, user_id, comment_id):
+        res = self.delete('article_side_comment', where='uid=%s and id=%s', wherevalues=[user_id, comment_id])
+        if not res:
+            raise Exception('delete side comment failed')
 
-    def create_side_comment(self, aid, uid, content, paragraph_id):
-        select = 'SELECT create_side_comment(%s, %s, %s, %s)'
-        comment_id = self.db.getfirstfield(select,
-                                           aid,
-                                           uid,
-                                           content,
-                                           paragraph_id)
-        return comment_id
+    def create_article_view(self, article_id, user_id, ip):
+        return self.db.call('create_article_view', article_id, user_id, ip)
 
-    def create_bottom_comment(self, aid, uid, content):
-        select = 'SELECT create_bottom_comment(%s, %s, %s)'
-        comment_id = self.db.getfirstfield(select,
-                                           aid,
-                                           uid,
-                                           content)
-        return comment_id
+    def get_article_interaction(self, article_id):
+        info = self.db.calljson('get_article_interaction', article_id)
+        for key in info:
+            if not info[key]:
+                info[key] = 0
+        return info
 
-    def create_article_tags(self, aid, tags):
-        insert = 'SELECT create_article_tags(%s, %s)'
-        return self.db.execute(insert, aid, (tags, ))
+    def get_myinteraction_info(self, article_id, user_id):
+        info = self.db.calljson('get_myinteraction_info', article_id, user_id)
+        if not info:
+            raise Exception('no interaction')
 
-    def remove_article_tags(self, aid):
-        delete = 'delete from article_tag where aid = %s'
-        return self.db.execute(delete, aid)
+    def update_myinteraction_info(self, article_id, user_id, action, value=None):
+        map_table = {
+            'score': 'article_score',
+            'collect': 'article_collection',
+            'forward': 'article_forwarded',
+        }
 
-    def get_article_tags(self, aid):
-        select = 'SELECT get_article_tags(%s)'
-        return self.db.getjson(select, aid)
-
-    def get_article_score(self, aid, uid):
-        select = 'select score from article_score where aid = %s and uid = %s'
-        return self.db.getfirstfield(select, aid, uid)
-
-    def is_article_collected(self, aid, uid):
-        select = 'select id from article_collection where aid = %s and uid = %s'
-        result = self.db.getfirstfield(select, aid, uid)
-        return True if result else False
-
-    def create_article_view(self, aid, uid=None, ip=None):
-        select = 'SELECT create_article_view(%s, %s, %s)'
-        return self.db.execute(select, aid, uid, ip)
-
-    def update_article_score(self, aid, uid, score):
-        where = 'aid = %s and uid = %s'
-        wherevalues = (aid, uid)
-        return self.db.update(
-            'article_score',
-            {
-                'score': score
-            },
-            where=where,
-            wherevalues=wherevalues
-        )
-
-    def create_article_score(self, aid, uid, score):
-        return self.db.callfirstfield('create_article_score', aid, uid, score)
-
-    def create_article_collection(self, aid, uid):
-        return self.db.callfirstfield('create_article_collection', aid, uid)
-
-    def delete_article_collection(self, aid, uid):
-        where = 'aid = %s and uid = %s'
-        wherevalues = (aid, uid)
-        return self.db.delete(
-            'article_collection',
-            where=where,
-            wherevalues=wherevalues
-        )
+        table_name = map_table[action]
+        if not self.db.call('update_myinteraction_info', article_id, user_id, value, table_name):
+            raise Exception('update interaction failed')

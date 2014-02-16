@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Last Modified time: 2014-02-07 12:59:31
+# @Last Modified time: 2014-02-14 15:06:58
 
 import os
 import re
@@ -9,9 +9,9 @@ import time
 import string
 import random
 try:
-    import Image
-except ImportError:
     from PIL import Image
+except ImportError:
+    import Image
 from hashlib import sha1
 from datetime import datetime
 from Crypto.Cipher import AES
@@ -19,9 +19,27 @@ from Crypto import Random
 from tornado.web import create_signed_value, decode_signed_value
 
 
+illegal_chars = set("""`~!@#$%^&*()+<>?:;'"[]{},./\\| \t\n\r""")
 def has_illegal_char(s):
-    chars = set("""`~!@#$%^&*()_+<>?:;'"[]{},./\\| \t\n\r""")
-    if set(s).intersection(chars):
+    if set(s).intersection(illegal_chars):
+        return True
+    return False
+
+def is_bool(s):
+    return s.lower() in ('0', '1', 't', 'f', 'true', 'false')
+
+def get_bool(s):
+    s = s.lower()
+    if s in ('1', 't', 'true'):
+        return True
+    elif s in ('0', 'f', 'false'):
+        return False
+    return None
+
+def is_english_or_chinese(s):
+    if all(u'\u4e00' <= c <= u'\u9fff' for c in s):
+        return True
+    elif all(c.isspace() or c.isalpha() for c in s):
         return True
     return False
 
@@ -40,6 +58,12 @@ def is_phone(phone):
 def is_time(time):
     return True if str2time(time) else False
 
+def get_abstract_str(s, length=10, suffix=u'...'):
+    title = s[:10]
+    if len(s) > 10:
+        title += suffix
+    return title
+
 def str2time(s):
     """
     convert `str` to `struct_time`
@@ -54,7 +78,7 @@ def str2time(s):
             pass
     return t
 
-def split(txt, seps=u' ;；'):
+def split(txt, seps=u';；'):
     default_sep = seps[0]
     for sep in seps[1:]:
         txt = txt.replace(sep, default_sep)
@@ -140,6 +164,8 @@ def genavatar(avatar_fp, avatar_dir, avatar_name):
     return os.path.basename(avatar_normal)
 
 def avatarurl(url, size='normal'):
+    if url is None:
+        url = 'unknow_normal.png'
     if url.startswith('http://') or url.startswith('https://'):
         return url
     else:

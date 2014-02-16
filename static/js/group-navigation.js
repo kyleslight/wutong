@@ -9,7 +9,7 @@ $(document).ready(function(){
 	});
 	$("#createGroupBack").click(function(){
 		$(".createGroup").fadeOut();
-		$(".groupDynamic").fadeIn();		
+		$(".groupDynamic").fadeIn();
 	});
 	$("#createGroupSend").click(function(){
 		var url = location.pathname.slice(0,-9) + '/g/create';
@@ -17,7 +17,7 @@ $(document).ready(function(){
 			'name':$("#createGroupName").val(),
 			'intro':$("#createGroupIntro").val(),
 			'tags':$("#creareGroupTag").val(),
-			'is_public':isCreateGroupPublic(),
+			'public_level': getPublicLevel(),
 		},function(data){
 			showError("小组"+$("#createGroupName").val()+"已成功申请<br>5秒后将自动跳转到新创建的小组<br>若跳转失败，请点击以下链接<br><a href='/g/"+data+"'>"+$("#createGroupName").val()+"</a>",20000);
 			setTimeout(function(){
@@ -27,11 +27,11 @@ $(document).ready(function(){
 	});
 });
 
-function isCreateGroupPublic(){
+function getPublicLevel(){
 	if ($("#createPublicGroup").prop('checked')) {
-		return true;
+		return 'public';
 	};
-	return false;
+	return 'private';
 }
 
 function showFirstPara(){

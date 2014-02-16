@@ -5,36 +5,44 @@ class GroupModel(object):
 
     def __init__(self, db):
         self.db = db
+        self.group_map_table = {
+            'private': '1',
+            'public': '2',
+        }
 
-    def get_group_info(self, gid):
-        return self.db.calljson('get_group_info', gid)
+    # TODO
+    def is_group_visiable(self, group_id, user_id):
+        return True
 
-    def get_message(self, message_id):
-        return self.db.calljson('get_group_message', message_id)
+    # TODO
+    def is_topic_visiable(self, topic_id, user_id):
+        return True
 
-    def get_group_messages(self, gid, page, size):
+    # TODO
+    def get_group_homepage(self, group_id):
+        return self.db.calljson('get_group_homepage', group_id)
+
+    # TODO
+    def get_topic_homepage(self, topic_id):
+        return self.db.calljson('get_topic_homepage', topic_id)
+
+    def get_group_sessions(self, group_id, page, size):
         limit = size
         offset = (page - 1) * size
-        messages = self.db.getjson('get_group_messages', gid, limit, offset)
-        return messages or []
+        sessions = self.db.calljson('get_group_sessions', group_id, limit, offset)
+        return sessions or []
 
-    def get_topic_messages(self, tid, page, size):
+    def get_topic_sessions(self, topic_id, page, size):
         limit = size
         offset = (page - 1) * size
-        messages = self.db.calljson('get_topic_messages', tid, limit, offset)
-        return messages or []
+        sessions = self.db.calljson('get_topic_sessions', topic_id, limit, offset)
+        return sessions or []
 
-    def get_chat(self, chat_id):
-        return self.db.calljson('get_group_chat', chat_id)
-
-    def get_chats(self, gid, page, size):
+    def get_mygroup_topics(self, user_id, page, size):
         limit = size
         offset = (page - 1) * size
-        group_chats = self.db.calljson('get_group_chats', gid, limit, offset)
-        return group_chats or []
-
-    def get_topic(self, topic_id):
-        return self.db.calljson('get_topic', topic_id)
+        topics = self.db.calljson('get_mygroup_topics', user_id, limit, offset)
+        return topics or []
 
     def get_topics(self, page, size):
         limit = size
@@ -42,6 +50,35 @@ class GroupModel(object):
         topics = self.db.calljson('get_topics', limit, offset)
         return topics or []
 
+    def get_user_groups(self, user_id, page, size):
+        limit = size
+        offset = (page - 1) * size
+        topics = self.db.calljson('get_user_groups', user_id, limit, offset)
+        return topics or []
+
+    def do_create(self, user_id, name, intro, public_level, **kwargs):
+        public_level = self.group_map_table.get(public_level)
+        if not public_level:
+            raise Exception('error public level')
+        group_id = self.db.callfirstfield('create_group', user_id, name, intro, public_level)
+        if not group_id > 0:
+            raise Exception('create group failed')
+        tags = kwargs.get('tags')
+        self.db.call('update_group_tags', group_id, tags)
+        return group_id
+
+    def join_group(self, group_id, user_id):
+        errno = self.db.callfirstfield('join_group', group_id, user_id)
+        if errno == 0:
+            return
+        elif errno == 1:
+            raise Exception('already post')
+        elif errno == 2:
+            raise Exception('already joined')
+        else:
+            raise Exception('unknow error')
+
+    # TODO
     def get_topics_by_tag(self, tag, page, size):
         limit = size
         offset = (page - 1) * size
@@ -86,12 +123,6 @@ class GroupModel(object):
         offset = (page - 1) * size
         bulletins = self.db.calljson('get_group_bulletins', gid, limit, offset)
         return bulletins or []
-
-    def join_group(self, gid, uid):
-        return self.db.call('join_group', gid, uid)
-
-    def create_group(self, uid, name, intro=None, motto=None, avatar=None, banner=None, is_public=True):
-        return self.db.callfirstfield('create_group', uid, name, intro, motto, avatar, banner, is_public)
 
     def create_topic(self, gid, uid, title, content, reply_id=None):
         return self.db.callfirstfield('create_topic', gid, uid, title, content, reply_id)

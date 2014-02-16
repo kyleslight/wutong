@@ -80,7 +80,7 @@ $(document).ready(function() {
             };
             $(".active").animate({
                 left:-960
-            },500,function(){ 
+            },500,function(){
                 $(".groupItem").css({height:$(".active").innerHeight()});
                 $(".active").hide().removeClass("active");
                 $(".groupItem").animate({
@@ -423,31 +423,33 @@ String.prototype.httpHtml = function() {
 }
 
 function turnToPlainText(e){
-    var sel, range; 
+    var sel, range;
     e.preventDefault();
     var data=e.clipboardData.getData('Text');
     var chatBox=document.getElementById('chatData');
-    sel = window.getSelection(); 
+    sel = window.getSelection();
     var range=window.getSelection().getRangeAt(0);
     range.deleteContents();
     var el = document.createElement('p');
-    el.innerHTML = data;  
-    var frag = document.createDocumentFragment(), node, lastNode; 
-    while ((node = el.firstChild)) { 
-        lastNode = frag.appendChild(node); 
-    } 
-    range.insertNode(frag); 
-    if (lastNode) { 
-        range = range.cloneRange(); 
-        range.setStartAfter(lastNode); 
-        range.collapse(true); 
-        sel.removeAllRanges(); 
-        sel.addRange(range); 
-    } 
+    el.innerHTML = data;
+    var frag = document.createDocumentFragment(), node, lastNode;
+    while ((node = el.firstChild)) {
+        lastNode = frag.appendChild(node);
+    }
+    range.insertNode(frag);
+    if (lastNode) {
+        range = range.cloneRange();
+        range.setStartAfter(lastNode);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
 }
 
 // ----------------------------------------------------------------------------
 // 自适应连接
+var url = location.pathname + "/session";
+
 function connect_message_server() {
     if (WebSocket) {
         console.log('use websocket way to get/send message');
@@ -459,7 +461,6 @@ function connect_message_server() {
 }
 
 function connect_message_server_use_ajax(first_message) {
-    var url = location.pathname + "/message";
     msg_socket = {
         reconnect_time: 1,
         sendJSON: function(obj) {
@@ -512,7 +513,7 @@ function connect_message_server_use_ajax(first_message) {
 }
 
 function connect_message_server_use_websocket() {
-    var url = "ws://" + location.host + location.pathname + "/message/websocket";
+    var url = "ws://" + location.host + url + "/websocket";
     WebSocket.reconnect_time = 1;
     msg_socket = new WebSocket(url);
     msg_socket.onopen = socket_onopen;

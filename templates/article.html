@@ -1,0 +1,171 @@
+{% extends "base_opus.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ static_url("css/opus.css") }}" type="text/css" />
+{% end %}
+{% block extra_div%}
+<div class="read">
+    <div class="readMain">
+        <div class="scoreBoard">
+            <div class="scoreBoardFirstLine">对本作品进行评分</div>
+            <div class="scoreBoardBefore">
+                <span class="scoreBarWrap">
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                    <a class="scoreBar"></a>
+                </span>
+                <span class="scoreShow">
+                    <span id="score">未评价</span>
+                    <span id="scoreDescription"></span>
+                </span>
+                <div class="scoreBoardFunction">
+                    <a href="#" id="sendScore" class="formButton">提交</a><a href="#" id="scoreBoardBeforeBack">返回</a>
+                </div>
+            </div>
+            <div class="scoreBoardAfter">
+            </div>
+        </div>
+        <div class="opusFunction">
+            <a href="#" id="expandSideComment">侧评</a>
+            {% if article['logined'] %}
+                {% if article['editable'] %}
+                    <a href="/a/{{ article['aid'] }}/update" id="modifyOpus">修改</a>
+                {% else %}
+                    <a href="#" id="scoreOpus">评分</a>
+                    <a href="#" id="collectOpus">收藏</a>
+                {% end %}
+            {% end %}
+        </div>
+        <div class="sideCommentEditBox">
+            <textarea id="sideCommentEditData" placeholder="编辑侧评"></textarea>
+            <div class="sideCommentEditOption">
+                <a href="#" id="sideCommentEditBack">返回</a>
+                <a href="#" id="sideCommentEditSend">发送</a>
+            </div>
+        </div>
+        <div class="opusBasicInfo">
+            <div class="firstLine">
+                <div class="opusTime">{{ prettytime(article["modify_time"]) }}</div>
+                <span class="opusAuthor">by <a href="#">{{ article["author"] }}</a></span>
+                <div class="opusData">
+                    <div class = 'opusViewed'> 浏览：{{ article['view_num'] }}</div>
+                    <div class='opusGrade'>评分：{{ article['avg_score'] }}</div>
+                    <div class = 'opusCollected'> 收藏：{{ article['collected_num'] }}</div>
+                    <div class='opusForwarded'>转发：{{ article['forwarded_num'] }}</div>
+                </div>
+            </div>
+            <div class="authorBasicInfo">
+                <p class="">作者信息</p>
+                <img src="{{ avatarurl(article["author_avatar"]) }}" class="opusAluthorImage">
+                <a href="#" class="opusAuthor">{{ article["author"] }}</a>
+                <p class="authorMotto"></p>
+            </div>
+            <div class="opusTitle">
+                <div class="opusMainTitle">{{ article["title"] }}</div>
+            </div>
+            {% if article["intro"] %}
+                <div class="opusDescription">
+                    {{ article["intro"] }}
+                </div>
+            {% end %}
+            {% if article["suit_for"] %}
+                <div class="opusAppositeness">适合：{{ article["suit_for"] }}</div>
+            {% end %}
+        </div>
+
+        <div class="opusMain">
+            {% raw article["mainbody"] %}
+        </div>
+
+        <div class="opusSuffixes">
+            {% if article["refers"] %}
+                <div class="opusReference">
+                    <div>参考来源：</div>
+                    {% for refer in article["refers"] %}
+                        <div class="opusReferenceCon">
+                            {{ refer }}
+                        </div>
+                    {% end %}
+                </div>
+            {% end %}
+            {% if article["series"] %}
+                <div class="opusSeries">所属文辑：
+                    <a href="#">article["series"]</a>
+                </div>
+            {% end %}
+            <div class="opusTag">标签：
+            {% for tag in article['tags'] %}
+                <a href="/tag/{{ tag }}">{{ tag }}</a>
+            {% end %}
+            </div>
+            <div class="opusComment">
+                <div class="opusCommentIntro"><a href="#">展开底部评论</a>
+                </div>
+                <div class="buttomComment">
+                    <div class="buttomCommentCon">
+                        <script type="text/template" id="bottom-comment-template">
+                            <li class="opusCommentList" style="display: list-item;">
+                                <a class="userImage" href="/user/{{!nickname}}">
+                                    <img src="{{!avatar}}">
+                                </a>
+                                <div class="opusCommentMain">
+                                    <div class="opusCommentListFirstLine">
+                                        <div class="userName">
+                                            <a href="/user/{{!nickname}}">{{!nickname}}</a>
+                                        </div>
+                                        <span class="opusCommentPosition">#{{!floor}}</span>
+                                        <div class="timeShow">
+                                            {{!create_time}}
+                                        </div>
+                                    </div>
+                                    <div class="opusCommentContent">
+                                        {{!content}}
+                                    </div>
+                                </div>
+                            </li>
+                        </script>
+                    </div>
+                    <div class="BCTurnPage"></div>
+                    <form method="post">
+                        <textarea id="opusCommentData" class="input" type="text" name="opusCommentData"></textarea>
+                        <a id="buttomCommentSend" class="formButton" href="#">发送</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="opusSideCommentWrap">
+            <div class="opusSideComment">
+                <script type="text/template" id="side-comment-template">
+                    <li class="opusSideCommentList opusSideCommentList{{!paragraph_id}}" >
+                        <a href="/user/{{!nickname}}" class="opusSideCommentListUserName">{{!nickname}}</a>
+                        <div class="opusSideCommentContent">
+                            {{!content}}
+                        </div>
+                    </li>
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+{% end %}
+{% block extra_js %}
+<script type="text/javascript" src="{{ static_url("js/opus.js") }}"></script>
+<script type="text/javascript">
+    var BCeditor = new UE.ui.Editor({
+        toolbars: [
+            ["bold", "italic", "fontsize", "forecolor", "inserttable", "link", "blockquote", "insertcode"]
+        ],
+        initialFrameWidth: 976,
+        initialFrameHeight: 300,
+        autoHeightEnabled: true
+    });
+    BCeditor.render('opusCommentData');
+</script>
+{% end %}
