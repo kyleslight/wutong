@@ -14,7 +14,10 @@ class BrowseHandler(BaseHandler):
             page = int(self.get_argument('page', 1))
             size = int(self.get_argument('size', 20))
             articles = self.marticle.get_articles(page, size, tag=tag)
-            self.render('browse.html', articles=articles)
+            if self.get_argument('datatype') == 'json':
+                self.write_json(articles)
+            else:
+                self.render('browse.html', articles=articles)
         except Exception as e:
             self.write_error(403)
 
@@ -84,6 +87,9 @@ class EditBaseHandler(BaseHandler):
 
         tags = self.args.get('tags')
         tags = util.split(tags)
+        # TODO
+        if self.settings['debug']:
+            top_tags = {'debug': tags}
         # have any top tag ?
         tmp = set()
         [tmp.update(t) for t in top_tags.values()]
@@ -117,7 +123,17 @@ class EditBaseHandler(BaseHandler):
 
 class UpdateHandler(EditBaseHandler):
     def get(self, article_id):
-        self.render('edit.html')
+        try:
+            if self.get_argument('datatype') == 'json':
+                if self.marticle.is_article_author(article_id, user_id):
+                    article = self.marticle.get_article(article_id)
+                    self.write_json(article)
+                else:
+                    raise Exception('no access permission')
+            else:
+                self.render('edit.html')
+        except Exception as e:
+            self.write_error(403)
 
     @authenticated
     def post(self, article_id):
@@ -162,7 +178,7 @@ class CommentHandler(BaseHandler):
             comment_type = self.get_argument('type')
             page = int(self.get_argument('page', 1))
             size = int(self.get_argument('size', 20))
-            comments = call_by_type('get_%s_comments', page=1, size=20)
+            comments = self.call_by_type('get_%s_comments', page=1, size=20)
             self.write_json(comments)
         except Exception as e:
             self.write_errmsg(e)
@@ -221,7 +237,7 @@ class InteractHandler(BaseHandler):
             self.write_errmsg(e)
 
     def post(self, article_id):
-        # try:
+        try:
             self.article_id = article_id
             score = self.get_arg('score')
             collect = self.get_arg('collect')
@@ -239,5 +255,5 @@ class InteractHandler(BaseHandler):
                 value = util.get_bool(forward)
                 action = 'forward'
             self.marticle.update_myinteraction_info(article_id, self.user_id, action, value)
-        # except Exception as e:
+        except Exception as e:
             self.write_errmsg(e)

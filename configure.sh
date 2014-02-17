@@ -51,6 +51,9 @@ function run {
     if ! ps aux | grep memcached | grep -v "grep memcached";then
         memcached &
     fi
+    if ! ps aux | grep redis-server | grep -v "grep redis-server";then
+        redis-server &
+    fi
     python main.py $@
 }
 
@@ -79,7 +82,7 @@ case "$1" in
     * )
         # check python module
         pycode="
-modules = ['tornado', 'requests', 'Image']
+modules = ['psycopg2', 'tornado', 'requests', 'Image', 'tornadoredis']
 sig = 0
 for module in modules:
     try:
@@ -94,6 +97,10 @@ exit(sig)
             exit 1
         fi
 
+        if ! is_cmd_exists "redis-server"
+        then
+            exit 1
+        fi
         if ! is_cmd_exists "psql"
         then
             exit 1

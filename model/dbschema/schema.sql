@@ -118,6 +118,7 @@ create table user_collection (
 
 drop table if exists base_session cascade;
 create table base_session (
+    anchor_id serial,
     uid int,
     content text,
     reply_time timestamp default now(),
@@ -336,7 +337,7 @@ create table group_topic (
     title text,
     father_id int,
     ancestor_id int,
-    on_top bool
+    on_top bool default false
 ) inherits (base_session);
 
 drop table if exists group_message cascade;
@@ -344,7 +345,7 @@ create table group_message (
     id serial primary key,
     gid int,
     tid int,
-    on_top bool
+    on_top bool default false
 ) inherits (base_session);
 
 --------------------------------------------------------------------------------

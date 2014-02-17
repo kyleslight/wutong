@@ -35,13 +35,13 @@ urls = [
     (r"/g/create", group.CreateHandler),
     (r"/g/(\d+)", group.GroupHandler),
     # (r"/g/(\d+)/info", group.GroupinfoHandler),
-    # (r"/g/(\d+)/message/websocket", group.GroupMessageSocketHandler),
-    # (r"/g/(\d+)/message", group.GroupMessageHandler),
+    (r"/g/(\d+)/session/websocket", group.GroupSessionWebsocketHandler),
+    (r"/g/(\d+)/session", group.GroupSessionAjaxHandler),
     # (r"/g/(\d+)/join", group.JoinHandler),
     # (r"/g/(\d+)/permission", group.PermissionHandler),
     # (r"/t/(\d+)", group.TopicIndexHandler),
-    # (r"/t/(\d+)/message/websocket", group.TopicMessageSocketHandler),
-    # (r"/t/(\d+)/message", group.TopicMessageHandler),
+    (r"/t/(\d+)/session/websocket", group.TopicSessionWebsocketHandler),
+    (r"/t/(\d+)/session", group.TopicSessionAjaxHandler),
 ]
 
 

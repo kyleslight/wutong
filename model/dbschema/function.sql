@@ -411,6 +411,23 @@ end;
 $$ language plpgsql;
 
 create or replace function
+is_article_author(_aid int, _uid int) returns bool
+as $$
+begin
+  perform *
+     from article
+    where aid = _aid
+      and uid = _uid;
+
+  if FOUND then
+    return true;
+  else
+    return false;
+  end if;
+end;
+$$ language plpgsql;
+
+create or replace function
 get_article(_aid int) returns json
 as $$
   select row_to_json(j.*)
@@ -688,7 +705,7 @@ end;
 $$ language plpgsql;
 create or replace function
 
-get_group_sessions(_gid int, _limit int, _offset int)
+get_group_sessions(_gid int, _anchor_id int, _limit int)
   returns json
 as $$
     select array_to_json(array_agg(aj))
@@ -703,6 +720,7 @@ as $$
                           select *
                             from group_topic
                            where gid = _gid
+                             and anchor_id > _anchor_id
                        ) j
                     union
                    select row_to_json(j.*)::text, j.reply_time
@@ -711,11 +729,11 @@ as $$
                           select *
                             from group_message
                            where gid = _gid
+                             and anchor_id > _anchor_id
                        ) j
                 ) s
              order by s.reply_time desc
              limit _limit
-            offset _offset
         ) aj;
 $$ language sql;
 
@@ -886,6 +904,38 @@ begin
 end;
 $$ language plpgsql;
 
+create or replace function
+create_group_message(_gid int, _uid int, _content text, _tid int) returns json
+as $$
+declare
+  _tmp record;
+begin
+    insert into group_message
+        (gid, uid, content, tid)
+    values
+        (_gid, _uid, _content, _tid)
+    returning * into _tmp;
+    return (select row_to_json(_tmp.*));
+end;
+$$ language plpgsql;
+
+create or replace function
+create_group_topic(_gid int, _uid int, _title text, _content text, _father_id int) returns json
+as $$
+declare
+  _tmp record;
+begin
+    insert into group_topic
+        (gid, uid, title, content, father_id, ancestor_id)
+    values
+        (_gid, _uid, _title, _content, _father_id, (select father_id
+                                                      from group_topic
+                                                     where gid = _gid
+                                                       and tid = _father_id))
+    returning * into _tmp;
+    return (select row_to_json(_tmp.*));
+end;
+$$ language plpgsql;
 -- create or replace function
 -- get_search_opus(_aid int)
 --   returns json

@@ -15,7 +15,7 @@ class GroupModel(object):
         return True
 
     # TODO
-    def is_topic_visiable(self, topic_id, user_id):
+    def is_group_member(self, group_id, user_id):
         return True
 
     # TODO
@@ -26,16 +26,12 @@ class GroupModel(object):
     def get_topic_homepage(self, topic_id):
         return self.db.calljson('get_topic_homepage', topic_id)
 
-    def get_group_sessions(self, group_id, page, size):
-        limit = size
-        offset = (page - 1) * size
-        sessions = self.db.calljson('get_group_sessions', group_id, limit, offset)
+    def get_group_sessions(self, group_id, anchor_id, size):
+        sessions = self.db.calljson('get_group_sessions', group_id, anchor_id, size)
         return sessions or []
 
-    def get_topic_sessions(self, topic_id, page, size):
-        limit = size
-        offset = (page - 1) * size
-        sessions = self.db.calljson('get_topic_sessions', topic_id, limit, offset)
+    def get_topic_sessions(self, topic_id, anchor_id, size):
+        sessions = self.db.calljson('get_topic_sessions', topic_id, anchor_id, size)
         return sessions or []
 
     def get_mygroup_topics(self, user_id, page, size):
@@ -77,6 +73,27 @@ class GroupModel(object):
             raise Exception('already joined')
         else:
             raise Exception('unknow error')
+
+    def create_group_message(self, group_id, user_id, content, topic_id=None):
+        msg = self.db.calljson('create_group_message',
+                               group_id,
+                               user_id,
+                               content,
+                               topic_id)
+        if not msg:
+            raise Exception('create group message error')
+        return msg
+
+    def create_group_topic(self, group_id, user_id, title, content, topic_id=None):
+        msg = self.db.calljson('create_group_topic',
+                               group_id,
+                               user_id,
+                               title,
+                               content,
+                               topic_id)
+        if not msg:
+            raise Exception('create group topic error')
+        return msg
 
     # TODO
     def get_topics_by_tag(self, tag, page, size):

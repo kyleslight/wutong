@@ -5,6 +5,8 @@ import os
 from tornado.web import RequestHandler
 from tornado.websocket import WebSocketHandler
 from tornado.escape import json_encode
+from tornado import gen
+import tornadoredis as redis
 from lib.session import Session
 from model import user, group, article
 import lib.util
@@ -130,11 +132,14 @@ class BaseHandler(RequestHandler):
     def post(self):
         self.write_error(403)
 
+    def message2json(self, msg, errno=0):
+        return '{"msg": "%s", "errno": "%s"}' % (msg, errno)
+
     def write_result(self, msg='', errno=0):
         """
         :errno 错误码, 0=正常, 0<出错, 0>出错但未设置错误码
         """
-        self.write('{"msg": "%s", "errno": "%s"}' % (msg, errno))
+        self.write(self.message2json(msg, errno))
 
     def write_errmsg(self, msg='', errno=-1):
         self.write_result(str(msg), errno)
@@ -147,3 +152,69 @@ class BaseHandler(RequestHandler):
             self.write_errmsg(errmsg)
             return
         self.write(json_encode(data))
+
+
+class SessionBaseHandler(BaseHandler):
+    send_client = redis.Client()
+    send_client.connect()
+
+    @property
+    def channel(self):
+        return self._channel
+
+    @channel.setter
+    def channel(self, value):
+        self._channel = value
+
+    def format_message(self, message):
+        """
+        do user has send permission ?
+        is message invalid ?
+        return saveable message
+        """
+        raise NotImplementedError
+
+    def save_message(self, message):
+        """
+        save message to database
+        """
+        raise NotImplementedError
+
+    def send_message(self, message):
+        try:
+            message = self.format_message(message)
+            message = self.save_message(message)
+            self.send_client.publish(self.channel, message)
+        except Exception as e:
+            self.write_errmsg(e)
+
+    @gen.engine
+    def listen(self):
+        self.client = redis.Client()
+        self.client.connect()
+        yield gen.Task(self.client.subscribe, self.channel)
+        self.client.listen(self._on_message)
+
+    def _on_message(self, message):
+        try:
+            if message.kind == 'message':
+                self.write(json_encode(message.body))
+            elif message.kind == 'disconnect':
+                # Do not try to reconnect, just raise a error
+                raise Exception('Redis server error')
+        except Exception as e:
+            self.write_errmsg(e)
+
+    def on_close(self):
+        """
+        Don't call this function in `RequestHandler`
+        """
+        if self.client.subscribed:
+            self.client.unsubscribe(self.channel)
+            self.client.disconnect()
+
+    def write(self, message):
+        if hasattr(self, 'write_message'):
+            return self.write_message(message)
+        else:
+            return super(SessionHandler, self).write(message)
