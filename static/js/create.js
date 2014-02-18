@@ -5,7 +5,6 @@ var elapseTime = 5000;
 var opusShowTime=1000;
 
 $(document).ready(function(){
-
     initCreate();
 
     $("#IsPreviewBeforePublic").change(function(){
@@ -166,13 +165,26 @@ $(document).ready(function(){
         $("#opusType").val($(".activeOpusType").text());
         $("#opusTag").val(transTags);
         $("#opusSuit").val($("#outterSuit").val());
-        $("#opusCooperation").val($("#outterCooperation").val());
+        var partner = $("#outterCooperation").val();
+        $("#opusCooperation").val(partner);
         var referenceCon=preReference($("#reference").val());
         $("#reference").val(referenceCon);
         $("#opusPublic").val(this.getAttribute('id') === "opusPublicSubmitButton");
 
         var theForm=document.getElementById("textdata");
-        theForm.submit();
+        if (isModify()) {
+            var url = location.pathname;
+            var data = $("#textdata").serializeObject();
+            $.post(url, data, function(data) {
+                if (getError(data)) {
+                    perror();
+                } else {
+                    window.location = url.replace('/update', '');
+                }
+            });
+        } else {
+            theForm.submit();
+        }
     });
 
     $(".inputTip a").click(function(){
@@ -243,12 +255,47 @@ $(document).ready(function(){
 
 });
 
+function isModify() {
+    return location.pathname.search('/a/\\d+/update') == 0;
+}
+
 function initCreate(){
     $.get("/u/info",function(data){
         if (!data) {
             showError("创作作品前请先登录",2000);
         };
     });
+
+    if (isModify()) {
+        var url = location.pathname + '?datatype=json';
+        $.getJSON(url, function(data) {
+            console.log(data);
+            $("#title").val(data.title);
+            $("#foreword").val(data.intro);
+            $("#textArea").val(data.mainbody);
+            $("#reference").val(data.refers.join(';'));
+
+            // 获得所有一级tag
+            var options = $("#articleFirstClass option");
+            var values = [];
+            for (var i = 0; i < options.length; i++)
+                values.push(options[i].value);
+            var tags = data.tags;
+            var first_tag = values.intersect(tags)[0];
+            $("#articleFirstClass").val(first_tag);
+            $("#otherTags").val(tags.remove(first_tag).join(';'));
+            $("#outterSuit").val(data.suit_for);
+            $("#outterCooperation").val(data.coeditors.join(';'));
+            var ppval = true;
+            var pnpval = false;
+            if (data.public_level === '3') {
+                ppval = false;
+                pnpval = true;
+            }
+            $("#puclicPush").attr('checked', ppval);
+            $("#puclicNotPush").attr('checked', pnpval);
+        });
+    };
 }
 
 function isPublic(bottonId){
@@ -299,11 +346,3 @@ function preReference(reference){
     reference=reference.toString().replace(/(\r)*\n/g,"<br />").replace(/\s/g," ");
     return reference;
 }
-
-String.prototype.httpHtml = function() {
-    var reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-|:)+)/g;
-    return this.replace(reg, '<a href="$1$2" target="_blank">$1$2</a>');
-}
-
-
-

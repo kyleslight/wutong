@@ -219,6 +219,7 @@ create table article_honor (
 drop table if exists article_coeditor cascade;
 create table article_coeditor (
     id serial primary key,
+    aid int,
     nickname text
 );
 
@@ -374,6 +375,14 @@ create view article_tag_base
 select aid,
        array_agg(content) as "tags"
   from article_tag
+ group by aid;
+
+drop view if exists article_coeditor_base cascade;
+create view article_coeditor_base
+  as
+select aid,
+       array_agg(nickname) as "coeditors"
+  from article_coeditor
  group by aid;
 
 drop view if exists article_base cascade;

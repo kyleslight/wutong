@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Last Modified time: 2014-02-14 15:06:58
+# @Last Modified time: 2014-02-18 16:23:05
 
 import os
 import re
@@ -12,6 +12,7 @@ try:
     from PIL import Image
 except ImportError:
     import Image
+from HTMLParser import HTMLParser
 from hashlib import sha1
 from datetime import datetime
 from Crypto.Cipher import AES
@@ -59,8 +60,8 @@ def is_time(time):
     return True if str2time(time) else False
 
 def get_abstract_str(s, length=10, suffix=u'...'):
-    title = s[:10]
-    if len(s) > 10:
+    title = s[:length]
+    if len(s) > length:
         title += suffix
     return title
 
@@ -83,6 +84,22 @@ def split(txt, seps=u';；'):
     for sep in seps[1:]:
         txt = txt.replace(sep, default_sep)
     return [i.strip() for i in txt.split(default_sep)]
+
+def html2text(html):
+    class MLStripper(HTMLParser):
+        def __init__(self):
+            self.reset()
+            self.fed = []
+        def handle_data(self, d):
+            self.fed.append(d)
+        def handle_entityref(self, name):
+            self.fed.append('&%s;' % name)
+        def get_data(self):
+            return ''.join(self.fed)
+
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
 
 def random_string(size, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))

@@ -11,7 +11,7 @@
                 <a class="userName" href="/user/{{ user['nickname'] }}">{{ user['nickname'] }}</a>
                 <div class="myGroup">
                     <div class="myGroupTitle">我的小组</div>
-                    {% if user['groups'] %}
+                    {% if user.get('groups') %}
                     {% for group in user['groups'] %}
                     <a class="myGroupListWrap" href="/g/{{ group['gid'] }}">
                         <li class="myGroupList">{{ group['name'] }}</li>
@@ -20,7 +20,7 @@
                     {% else %}
                     <a href="#"><li class="noGroup">我还没有加入任何小组</li></a>
                     {% end %}
-                    {% if len(user['groups']) == 20 %}
+                    {% if user.get('groups') and len(user['groups']) == 20 %}
                     <a href="#" id="myGroupMore">更多小组</a>
                     {% end %}
                     <a href="#" id="createGroup"> + 创建小组</a>
@@ -29,7 +29,7 @@
                 <div class="groupTagArea">
                     <div class="groupTagTitle">推荐Tag</div>
                     <h class="groupTagClass">兴趣»</h>
-                    <a href="/search?type=group&tag=旅行" class="groupTag">旅行</a>
+                    <a href="?tag=旅行" class="groupTag">旅行</a>
                     <a href="?tag=摄影" class="groupTag">摄影</a>
                     <a href="?tag=影视" class="groupTag">影视</a>
                     <a href="?tag=音乐" class="groupTag">音乐</a>
@@ -64,7 +64,7 @@
             </div>
             <div class="groupMainWrap">
                 <div class="groupDynamic">
-                    {% if user['topics'] %}
+                    {% if user.get('topics') %}
                     <h class="groupDynamicHeader">我的小组动态»</h>
                     {% for topic in user['topics'] %}
                     <li class="groupDynamicList">

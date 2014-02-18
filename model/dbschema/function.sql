@@ -82,13 +82,28 @@ as $$
 $$ language sql;
 
 create or replace function
-create_user_collection(_uid int, _type sort, _relevant_id int) returns void
+update_user_collection(_uid int, _type sort, _relevant_id int) returns void
 as $$
-  insert into user_collection
-      (uid, type, relevant_id)
-  values
-      (_uid, _type, _relevant_id);
-$$ language sql;
+begin
+  perform id
+     from user_collection
+    where uid = _uid
+      and relevant_id = _relevant_id
+      and type = _type;
+
+  if FOUND then
+    delete from user_collection
+          where uid = _uid
+            and relevant_id = _relevant_id
+            and type = _type;
+  else
+    insert into user_collection
+        (uid, type, relevant_id)
+    values
+        (_uid, _type, _relevant_id);
+  end if;
+end;
+$$ language plpgsql;
 
 create or replace function
 get_user_collections(_uid int, _type sort, _limit int, _offset int) returns json
@@ -433,9 +448,12 @@ as $$
   select row_to_json(j.*)
     from
       (
-         select *
-           from article_show
-          where aid = _aid
+         select a.*,
+                c.coeditors
+           from article_show a,
+                article_coeditor_base c
+          where a.aid = _aid
+            and a.aid = c.aid
       ) j;
 $$ language sql;
 
@@ -652,28 +670,33 @@ end;
 $$ language plpgsql;
 
 create or replace function
-update_myinteraction_info(_aid int, _uid int, _value text, _tabname text) returns int
+update_article_myscore(_aid int, _uid int, _score int) returns int
 as $$
 declare
     _tmp int;
 begin
-  execute 'delete from '
-      || _tabname::regclass
-      || ' where aid = ' || _aid
-      || '   and uid = ' || _uid;
-  get diagnostics _tmp = ROW_COUNT;
-  if _tabname = 'article_score' then
+  select id into _tmp
+    from article_score
+   where aid = _aid
+     and uid = _uid;
+
+  if _tmp is not null then
+    update article_score
+       set score = _score
+     where aid = _aid
+       and uid = _uid
+    returning id into _tmp;
+  else
     insert into article_score
         (aid, uid, score)
     values
-        (_aid, _uid, _value);
-  elseif _tmp = 0 then
-    execute format('insert into %I (aid, uid) values (%s, %s)', _tabname, _aid, _uid);
+        (_aid, _uid, _score)
+    returning id into _tmp;
   end if;
+
   return _tmp;
 end;
 $$ language plpgsql;
-
 
 create or replace function
 is_group_member(_gid int, _uid int) returns bool

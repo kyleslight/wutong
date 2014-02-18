@@ -847,7 +847,7 @@ function showError(errorStatement, duration){
 }
 
 function showHint(searchKeyWord){
-    
+
     if (eveCode==40||eveCode==38) {
         return;
     };
@@ -1094,4 +1094,56 @@ function turnPage(i,turnEle){
     };
     initPage(op);
     return false;
+}
+
+
+String.prototype.httpHtml = function() {
+    var reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-|:)+)/g;
+    return this.replace(reg, '<a href="$1$2" target="_blank">$1$2</a>');
+}
+
+Array.prototype.remove = function(value){
+    for(b in this){
+        if(this[b] == value){
+            this.splice(b,1);
+            break;
+        }
+    }
+    return this;
+}
+
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+
+Array.prototype.intersect = function(b) {
+    var a = this;
+    var ai=0, bi=0;
+    var result = new Array();
+
+    while( ai < a.length && bi < b.length )
+    {
+        if      (a[ai] < b[bi] ){ ai++; }
+        else if (a[ai] > b[bi] ){ bi++; }
+        else /* they're equal */
+        {
+            result.push(a[ai]);
+            ai++;
+            bi++;
+        }
+    }
+    return result;
 }

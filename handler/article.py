@@ -44,6 +44,10 @@ class EditBaseHandler(BaseHandler):
         self.set_arg('refers', self.get_refers())
         self.set_arg('resources', self.get_resources())
         self.set_arg('coeditors', self.get_coeditors())
+        if not self.args['intro']:
+            abstract_text = util.html2text(self.args['mainbody'])
+            abstract_text = util.get_abstract_str(abstract_text, 100)
+            self.set_arg('intro', abstract_text)
         if self.has_argument('draft'):
             self.args['public_level'] = 'draft'
         else:
@@ -100,15 +104,24 @@ class EditBaseHandler(BaseHandler):
 
     def get_refers(self):
         refers = self.args.get('refers')
-        return [refers]
+        if refers is None:
+            refers = ''
+        refers = util.split(refers)
+        return refers
 
     def get_resources(self):
         resources = self.args.get('resources')
-        return [resources]
+        if resources is None:
+            resources = ''
+        resources = util.split(resources)
+        return resources
 
     def get_coeditors(self):
         coeditors = self.args.get('coeditors')
-        return [coeditors]
+        if coeditors is None:
+            coeditors = ''
+        coeditors = util.split(coeditors)
+        return coeditors
 
     def get_public_level(self):
         is_public = util.get_bool(self.args.get('is_public'))
@@ -125,7 +138,7 @@ class UpdateHandler(EditBaseHandler):
     def get(self, article_id):
         try:
             if self.get_argument('datatype') == 'json':
-                if self.marticle.is_article_author(article_id, user_id):
+                if self.marticle.is_article_author(article_id, self.user_id):
                     article = self.marticle.get_article(article_id)
                     self.write_json(article)
                 else:
@@ -159,16 +172,20 @@ class CreateHandler(EditBaseHandler):
 
 class ArticleHandler(BaseHandler):
     def get(self, article_id):
-        article = self.marticle.get_article(article_id)
-        if not article:
-            self.render_404_page()
-            return
-        article['editable'] = self.user_id == article['aid']
-        article['logined'] = True if self.user_id else False
-        self.marticle.create_article_view(article_id, self.user_id, self.ip)
-        info = self.marticle.get_article_interaction(article_id)
-        article.update(info)
-        self.render('article.html', article=article)
+        try:
+            article = self.marticle.get_article(article_id)
+            editable = self.user_id == article.get('uid')
+            if not article or (article['public_level'] < '3' and not editable):
+                self.render_404_page()
+                return
+            article['editable'] = editable
+            article['logined'] = True if self.user_id else False
+            self.marticle.create_article_view(article_id, self.user_id, self.ip)
+            info = self.marticle.get_article_interaction(article_id)
+            article.update(info)
+            self.render('article.html', article=article)
+        except Exception as e:
+            self.write_errmsg(e)
 
 
 class CommentHandler(BaseHandler):
@@ -183,38 +200,56 @@ class CommentHandler(BaseHandler):
         except Exception as e:
             self.write_errmsg(e)
 
+    @authenticated
     def post(self, article_id):
         try:
             self.article_id = article_id
-            if self.has_argument('create'):
-                self.do_create()
-            elif self.has_argument('delete'):
+            if self.has_argument('delete'):
                 self.do_delete()
+            else:
+                self.do_create()
         except Exception as e:
             self.write_errmsg(e)
 
     def do_create(self):
         content = self.get_argument('content')
         reply_id = self.get_argument('reply_id')
-        paragraph_id = self.get_argument('paragraph_id')
+        comment_type = self.get_argument('type')
+
+        if not reply_id:
+            reply_id = None
         self.check_content(content)
-        comment = self.call_by_type('create_%s_comment',
-                                    self.user_id,
-                                    self.article_id,
-                                    content,
-                                    reply_id=reply_id,
-                                    paragraph_id=paragraph_id)
+        if comment_type == 'bottom':
+            comment = self.marticle.create_bottom_comment(
+                self.user_id,
+                self.article_id,
+                content,
+                reply_id=reply_id,
+            )
+        elif comment_type == 'side':
+            paragraph_id = self.get_argument('paragraph_id')
+            comment = self.marticle.create_side_comment(
+                self.user_id,
+                self.article_id,
+                content,
+                reply_id=reply_id,
+                paragraph_id=paragraph_id
+            )
+        else:
+            raise Exception('invalid comment type')
         self.write_json(comment)
 
     def do_delete(self):
+        q>'do_delete'
         comment_id = self.get_argument('id')
-        self.call_by_type('delete_%s_comment', self.user_id, comment_id)
-
-    def call_by_type(self, funcformat='', *arg, **kwargs):
         comment_type = self.get_argument('type')
-        self.check_comment_type(comment_type)
-        func = getattr(self.marticle, funcformat % comment_type)
-        return func(self.article_id, *arg, **kwargs)
+
+        if comment_type == 'bottom':
+            self.delete_bottom_comment(self.user_id, comment_id)
+        elif comment_type == 'side':
+            self.delete_side_comment(self.user_id, comment_id)
+        else:
+            raise Exception('invalid comment type')
 
     def check_comment_type(self, value):
         if value not in ('bottom', 'side'):
@@ -230,30 +265,20 @@ class InteractHandler(BaseHandler):
     @authenticated
     def get(self, article_id):
         try:
-            self.article_id = article_id
-            info = self.marticle.get_myinteraction_info(self.article_id, self.user_id)
+            info = self.marticle.get_myinteraction_info(article_id, self.user_id)
             self.write_json(info)
         except Exception as e:
             self.write_errmsg(e)
 
     def post(self, article_id):
         try:
-            self.article_id = article_id
-            score = self.get_arg('score')
-            collect = self.get_arg('collect')
-            forward = self.get_arg('forward')
-            self.check_arg('score', lambda x: 1 <= int(x) <= 10)
-            self.check_arg('collect', util.is_bool)
-            self.check_arg('forward', util.is_bool)
-            if score:
-                value = int(score)
-                action = 'score'
-            elif collect:
-                value = util.get_bool(collect)
-                action = 'collect'
-            elif forward:
-                value = util.get_bool(forward)
-                action = 'forward'
-            self.marticle.update_myinteraction_info(article_id, self.user_id, action, value)
+            if self.has_argument('score'):
+                score = int(self.get_arg('score'))
+                self.check_arg('score', lambda x: 1 <= int(x) <= 10)
+                self.marticle.update_article_myscore(article_id, self.user_id, score)
+            elif self.has_argument('collect'):
+                self.muser.update_collection(self.user_id, '1', article_id)
+            elif self.has_argument('forward'):
+                self.marticle.create_article_myforward(article_id, self.user_id)
         except Exception as e:
             self.write_errmsg(e)

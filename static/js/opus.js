@@ -8,6 +8,8 @@ var is_image_view=false;
 var editableOpusChild=$(".opusMain").children("div,p,table,blockquote");
 var sideCommentState=false;
 var opusScore=0;
+// 评分, 收藏
+var interactInfo = null;
 
 $(document).ready(function(){
 
@@ -78,7 +80,7 @@ $(document).ready(function(){
             $(".buttomComment").show();
             var heightOfReadMain=($(".floatReadMain").height()+40)+"px";
             $(".opusSideCommentWrap").css({"height":heightOfReadMain});
-            var url = location.pathname + '/comment/bottom';
+            var url = location.pathname + '/comment?bottom';
             $(".opusCommentList").remove();
             $.getJSON(url, function(data) {
                 $(".buttomCommentCon").prepend(data);
@@ -187,28 +189,26 @@ $(document).ready(function(){
 
     // collect opus
     $("#collectOpus").click(function(){
-        var collectionUrl=location.pathname+"/collection";
+        var collectionUrl=location.pathname+"/interact?collect";
         $.post(collectionUrl, function(data){
-            console.log(data);
-            showError("收藏成功",2000);
+            if (getError(data)) {
+                perror();
+                return;
+            }
+            var msg;
+            if (interactInfo.is_collected) {
+                msg = "取消收藏成功";
+            } else {
+                msg = "收藏成功";
+            }
+            showError(msg, 2000);
             $("#collectOpus").fadeOut();
             return false;
         });
         return false;
     });
 
-    $("#scoreOpus").click(function(){
-        var url = location.pathname + '/score'
-        $.get(url, function(data) {
-            if (data!="None") {
-                showError("已对该作品进行评分，再次评分将覆盖原有记录",2000);
-            };
-            $(".scoreBoard").slideDown();
-        });
-        return false;
-    });
-    $(".scoreBar").hover(function(){
-        var indexOfHoverBar=$(".scoreBar").index($(this))+1;
+    function paintScoreBar(indexOfHoverBar) {
         $(".scoreBar").css({"background":"white"});
         for(var i=0;i<indexOfHoverBar;i++){
             var opacityOfBarBefore=i*0.08+0.2;
@@ -229,7 +229,23 @@ $(document).ready(function(){
             case 10:$("#scoreDescription").text('/非常好，登峰造及');break;
             default:break;
         };
+    }
+
+    $("#scoreOpus").click(function(){
+        $(".scoreBoard").slideDown();
+        opusScore = parseInt(interactInfo.score);
+        if (opusScore) {
+            paintScoreBar(opusScore);
+            $("#score").text(opusScore);
+        }
+        return false;
     });
+
+    $(".scoreBar").hover(function(){
+        var indexOfHoverBar=$(".scoreBar").index($(this))+1;
+        paintScoreBar(indexOfHoverBar);
+    });
+
     $(".scoreBar").click(function(){
         opusScore=$(".scoreBar").index($(this))+1;
         $("#score").text(opusScore);
@@ -246,13 +262,15 @@ $(document).ready(function(){
             showError("请先进行评分再提交",2000);
             return false;
         };
-        var scoreUrl=location.pathname+"/score";
+        var scoreUrl=location.pathname+"/interact";
+        var score = parseInt($("#score").text());
         $.post(scoreUrl,{
-            'score':parseInt($("#score").text())
+            'score': score
         },function(data){
-            if (data=="None") {
+            if (data) {
                 $("#scoreBoardBeforeBack").click();
             } else {
+                interactInfo.score = score;
                 showError("评分成功",2000);
                 $("#scoreBoardBeforeBack").click();
                 return false;
@@ -284,13 +302,15 @@ $(document).ready(function(){
             return false;
         };
         var content=$("#opusCommentData").val();
-        var url = location.pathname + '/comment/bottom';
-        $.post(url,
-        {
+
+        var url = location.pathname + '/comment?create';
+        // 被@的人所在的bottom_comment的id
+        var reply_id = null;
+        $.post(url, {
             'content': content,
-            'page_id': 0, // TODO: replace this
-        },
-        function(data, status) {
+            'reply_id': reply_id,
+            'type': 'bottom',
+        }, function(data, status) {
             if (status=="failed") {
                 showError("发送失败",2000);
                 return false;
@@ -332,8 +352,22 @@ function init(){
     };
 
     // load sidecomment in sideCommentNode
-    var url = location.pathname + '/comment/side';
-    $.getJSON(url, function(data) {
+    var comment_url = location.pathname + '/comment';
+    $.getJSON(comment_url + '?side', function(data) {
+        $.getJSON(comment_url + '?bottom', function(data) {
+            if (getError(data)) {
+                // perror();
+                console.log(data);
+                return;
+            }
+            // TODO
+        });
+        if (getError(data)) {
+            // perror();
+            console.log(data);
+            return;
+        }
+
         for(var i=0;i<totalNumOfPara;i++){
             for (var j=0; j<data.length; j++) {
                 var comment = data[j];
@@ -376,6 +410,16 @@ function init(){
     };
     var reference=$(".opusReferenceCon").text();
     $(".opusReferenceCon").empty().append(reference);
+
+    // 获取 评分, 收藏 等信息
+    var url = location.pathname + '/interact';
+    $.getJSON(url, function(data) {
+        if (getError(data)) {
+            perror();
+            return;
+        };
+        interactInfo = data;
+    });
 }
 
 function topPartHeight(){

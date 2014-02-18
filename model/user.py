@@ -84,10 +84,10 @@ class UserModel(object):
         if not res:
             raise Exception('delete memo failed')
 
-    def create_collection(self, uid, collection_type, relevant_id):
-        res = self.db.call('create_user_collection', uid, collection_type, relevant_id)
+    def update_collection(self, uid, collection_type, relevant_id):
+        res = self.db.call('update_user_collection', uid, collection_type, relevant_id)
         if not res:
-            raise Exception('create collection failed')
+            raise Exception('update collection failed')
 
     def get_collections(self, uid, collection_type, page, size):
         limit = size
@@ -115,8 +115,3 @@ class UserModel(object):
         limit = size
         offset = (page - 1) * limit
         return self.db.calljson('get_mygroups', uid, limit, offset)
-
-
-    # def get_user_groups(self, uid, limit=5, offset=0):
-    #     select = 'SELECT get_user_groups(%s, %s, %s)'
-    #     return self.db.getjson(select, uid, limit, offset)

@@ -12,6 +12,15 @@ from model import user, group, article
 import lib.util
 
 
+def authenticated(method):
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        if not self.current_user:
+            raise Exception('not login')
+        return method(self, *args, **kwargs)
+    return wrapper
+
+
 class BaseHandler(RequestHandler):
     def __init__(self, *args, **kwargs):
         super(BaseHandler, self).__init__(*args, **kwargs)
@@ -93,7 +102,7 @@ class BaseHandler(RequestHandler):
         return value
 
     def set_arg(self, name, value):
-        if not self.has_arg(name):
+        if self.has_arg(name) is None:
             return None
         self.args[name] = value
         return value

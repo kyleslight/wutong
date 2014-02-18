@@ -54,10 +54,10 @@
                 <div class="opusTime">{{ prettytime(article["modify_time"]) }}</div>
                 <span class="opusAuthor">by <a href="#">{{ article["author"] }}</a></span>
                 <div class="opusData">
-                    <div class = 'opusViewed'> 浏览：{{ article['view_num'] }}</div>
-                    <div class='opusGrade'>评分：{{ article['avg_score'] }}</div>
-                    <div class = 'opusCollected'> 收藏：{{ article['collected_num'] }}</div>
-                    <div class='opusForwarded'>转发：{{ article['forwarded_num'] }}</div>
+                    浏览：<div class = 'opusViewed'>{{ article['view_num'] }}</div>
+                    评分：<div class='opusGrade'>{{ article['avg_score'] }}</div>
+                    收藏：<div class = 'opusCollected'>{{ article['collected_num'] }}</div>
+                    转发：<div class='opusForwarded'>{{ article['forwarded_num'] }}</div>
                 </div>
             </div>
             <div class="authorBasicInfo">
