@@ -288,7 +288,7 @@ create table mygroup (
     motto text,
     -- 图片
     banner url,
-    public_level sort default '3',
+    public_level sort default '2',
     create_time timestamp default now()
 );
 
@@ -379,7 +379,8 @@ select aid,
 drop view if exists article_base cascade;
 create view article_base
   as
-select a.aid,
+select a.uid,
+       a.aid,
        a.title,
        a.intro,
        a.modify_time,
@@ -473,7 +474,7 @@ select g.*,
        u.avatar as "creater_avatar",
        gm.nickname as "leader",
        gm.avatar as "leader_avatar",
-       (select count(id) from group_member_show where gid = g.gid) as "number"
+       (select count(id) from group_member_show where gid = g.gid) as "member_number"
   from mygroup g,
        user_base u,
        group_member_show gm
@@ -488,7 +489,7 @@ select t.*,
        u.nickname as "creater",
        u.avatar as "creater_avatar",
        (select count(id) from group_message where tid = t.tid) +
-       (select count(tid) from group_topic where father_id = t.tid) as "number"
+       (select count(tid) from group_topic where father_id = t.tid) as "reply_number"
   from group_topic t,
        user_base u
  where t.uid = u.uid;

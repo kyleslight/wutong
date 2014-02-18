@@ -18,7 +18,7 @@ class BrowseHandler(BaseHandler):
                 size = 10
             else:
                 size = 20
-            topics = self.mgroup.get_topics(1, size)
+            topics = self.mgroup.get_browse_topics(1, size)
 
             self.render(
                 'group-navigation.html',
@@ -29,7 +29,7 @@ class BrowseHandler(BaseHandler):
             self.write_errmsg(e)
 
 
-class BrowseTopicHandler(BaseHandler):
+class BrowseMoreTopicHandler(BaseHandler):
     def get(self):
         try:
             topic_type = self.get_argument('type')
@@ -81,21 +81,72 @@ class GroupHandler(BaseHandler):
             self.render_404_page()
 
 
+class GroupMemberHandler(BaseHandler):
+    def get(self, group_id):
+        try:
+            if not self.mgroup.is_group_visiable(group_id, self.user_id):
+                raise Exception('no access permission')
+            page = int(self.get_argument('page', 1))
+            size = int(self.get_argument('size', 20))
+            members = self.mgroup.get_group_members(group_id, page, size)
+            self.write_json(members)
+        except Exception as e:
+            self.write_errmsg(e)
+
+
+class GroupOpusHandler(BaseHandler):
+    def get(self, group_id):
+        try:
+            if not self.mgroup.is_group_visiable(group_id, self.user_id):
+                raise Exception('no access permission')
+            page = int(self.get_argument('page', 1))
+            size = int(self.get_argument('size', 20))
+            opuses = self.mgroup.get_group_opuses(group_id, page, size)
+            self.write_json(opuses)
+        except Exception as e:
+            self.write_errmsg(e)
+
+
 class GroupSessionHistoryHandler(BaseHandler):
     def get(self, group_id):
-        if not self.mgroup.is_group_visiable(group_id, self.user_id):
-            self.write_errmsg('no access permission')
-            return
-        anchor_id = int(self.get_argument('anchor_id'))
-        size = int(self.get_argument('size', 20))
-        ss = self.mgroup.get_group_sessions(group_id, anchor_id, size)
-        self.write_json(ss)
+        try:
+            if not self.mgroup.is_group_visiable(group_id, self.user_id):
+                raise Exception('no access permission')
+            anchor_id = int(self.get_argument('anchor_id'))
+            size = int(self.get_argument('size', 20))
+            ss = self.mgroup.get_group_sessions(group_id, anchor_id, size)
+            self.write_json(ss)
+        except Exception as e:
+            self.write_errmsg(e)
 
 
-# TODO
 class TopicHandler(BaseHandler):
     def get(self, topic_id):
-        pass
+        # try:
+            topic = self.mgroup.get_topic_homepage(topic_id)
+            q>topic['father']
+            if not self.mgroup.is_group_visiable(topic['gid'], self.user_id):
+                raise Exception('no access permission')
+            if topic:
+                self.render('topic.html', topic=topic)
+            else:
+                self.render_404_page()
+        # except Exception as e:
+            # self.write_errmsg(e)
+
+
+class TopicSessionHistoryHandler(BaseHandler):
+    def get(self, topic_id):
+        try:
+            topic = self.mgroup.get_topic(topic_id)
+            if not self.mgroup.is_group_visiable(topic['gid'], self.user_id):
+                raise Exception('no access permission')
+            anchor_id = int(self.get_argument('anchor_id'))
+            size = int(self.get_argument('size', 20))
+            ss = self.mgroup.get_topic_sessions(group_id, anchor_id, size)
+            self.write_json(ss)
+        except Exception as e:
+            self.write_errmsg(e)
 
 
 class GroupSessionBaseHandler(SessionBaseHandler):
@@ -140,18 +191,12 @@ class GroupSessionBaseHandler(SessionBaseHandler):
 
 
 class GroupSessionAjaxHandler(SessionBaseHandler):
-    def get_father_topic_id(self):
-        return None
-
-    def format_message(self, message):
-        format_message(self, message)
-
-    def save_message(self, message):
-        save_message(self, message)
-
     def get(self, group_id):
         self.channel = 'g' + str(group_id)
         self.group_id = group_id
+        if not self.mgroup.is_group_visiable(self.group_id, self.user_id):
+            self.write_errmsg('no access permission')
+            return
         self.listen()
 
     def post(self, group_id):
@@ -162,7 +207,24 @@ class GroupSessionAjaxHandler(SessionBaseHandler):
 
 
 class TopicSessionAjaxHandler(SessionBaseHandler):
-    pass
+    def get_reply_topic_id(self):
+        return self.topic['id']
+
+    def get(self, topic_id):
+        self.channel = 't' + str(topic_id)
+        self.topic = self.mgroup.get_topic(topic_id)
+        self.group_id = self.topic['gid']
+        if not self.mgroup.is_group_visiable(self.group_id, self.user_id):
+            self.write_errmsg('no access permission')
+            return
+        self.listen()
+
+    def post(self, topic_id):
+        self.channel = 't' + str(topic_id)
+        self.topic = self.mgroup.get_topic(topic_id)
+        self.group_id = self.topic['gid']
+        message = self.get_argument('message')
+        self.send_message(message)
 
 
 class GroupSessionWebsocketHandler(GroupSessionBaseHandler, WebSocketHandler):
@@ -178,7 +240,6 @@ class GroupSessionWebsocketHandler(GroupSessionBaseHandler, WebSocketHandler):
         self.send_message(message)
 
 
-# TODO
 class TopicSessionWebsocketHandler(GroupSessionBaseHandler, WebSocketHandler):
     def get_reply_topic_id(self):
         return self.topic['id']

@@ -1,4 +1,7 @@
-{% extends "base_group.html" %}
+{% extends "base_edit.html" %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ static_url("css/group.css") }}" type="text/css" />
+{% end %}
 {% block extra_div %}
     <div class="groupPrompt">
         <p class="groupPromptPublic">这是一个公开的小组，你可以点击 <a id="publicJoin" class="joinButton" href="#"> 我喜欢 </a>加入它!</p>
@@ -14,19 +17,14 @@
         <div class="groupWarp">
             <!-- basic group infomation -->
             <div class="groupInfo">
-
                 <div class="groupInfoCon">
-
                     <div class="groupTitle">
-                    <img class="groupImage" src="{{ static_url("css/image/forumTest.jpg") }}" />
-                    <a id="groupTitleName" href="group.html">Kyleslight的同好会</a><span id='titleCut'> | </span><div id='groupMotto'>西十二自习室欢迎你</div>
+                        <img class="groupImage" src="{{ static_url("css/image/forumTest.jpg") }}" />
+                        <a id="groupTitleName" href="group.html">Kyleslight的同好会</a><span id='titleCut'> | </span><div id='groupMotto'>西十二自习室欢迎你</div>
                     </div>
                 </div>
             </div>
             <div class="groupOptions">
-                <a href="#">
-                    <div class='groupOptionItem'>公告</div>
-                </a>
                 <a href="#">
                     <div class='groupOptionItem'>名片</div>
                 </a>
@@ -35,9 +33,6 @@
                 </a>
                 <a href="#">
                     <div class='groupOptionItem'>作品</div>
-                </a>
-                <a href="#">
-                    <div class='groupOptionItem'>话题</div>
                 </a>
                 <a href="#">
                     <div class='groupOptionItem'>设置</div>
@@ -507,19 +502,27 @@
                     <div id="latestTopicOption"><a href="#" id="latestTopicUnfold">展开前6条</a>  <a href="#" id="latestTopicBack" class="optionBack">返回</a>
                     </div>
                 </div>
-
             </div>
             <span class='topicLocation'>
-            {% for topic in ancestor_topics %}
-                >><a href="/t/{{ topic["tid"] }}">{{ topic["title"] }}</a>
-            {% end %}
+                <a href="/g/{{ topic['gid'] }}">返回小组 >></a>
+                {% if topic['ancestor'] %}
+                <a href="/t/{{ topic['ancestor']['tid'] }}">{{ topic['ancestor']['title'] }} >></a>
+                {% end %}
+                {% if topic['father'] %}
+                <a href="/t/{{ topic['father']['tid'] }}">{{ topic['father']['title'] }} >></a>
+                {% end %}
+                <a href="/t/{{ topic['tid'] }}">{{ topic['title'] }}</a>
             </span>
             <li class="topicInner">
-                <a class="userImage" href='#'><img src={{ topic["avatar"] }}/></a>
+                <a class="userImage" href="{{ topic['creater'] }}">
+                    <img src="{{ topic['creater_avatar'] }}"/>
+                </a>
                 <div class='talkMain'>
-                    <div class="userName"><a href='#'>{{ topic["penname"] }}</a></div>
+                    <div class="userName">
+                        <a href="/user/{{ topic['creater'] }}">{{ topic['creater'] }}</a>
+                    </div>
                     <div class='timeShow'>
-                        {{ topic["submit_time"] }}
+                        {{ prettytime(topic['reply_time']) }}
                     </div>
                     <div class='talkContent'>
                         {% raw topic["content"] %}
@@ -551,9 +554,7 @@
                         </form>
                         <div id="communicationConWrap">
                             <div class="communication" id="communication">
-                                {% for msg in messages %}
-                                    {% module MyModule("message.html", message=msg) %}
-                                {% end %}
+                            <!-- TODO -->
                             </div>
                         </div>
                     </div>

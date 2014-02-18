@@ -21,28 +21,10 @@ def login(handler, user_id=None, user=None):
     user['msg_count'] = cnt
     return user
 
-# TODO
+
 class IndexHandler(BaseHandler):
     def get(self):
-        # TODO
-        self.render('base.html')
-        return
-        stay_urls = [
-            r'/user/(.+)',
-            r'/a/browse',
-            r'/a/create',
-            r'/g/browse',
-            r'/g/(\d+)',
-            r'/t/(\d+)',
-            r'/a/(\d+)',
-        ]
-        url = self.get_cookie('last_view')
-        if url:
-            for pattern in stay_urls:
-                if re.search(pattern, url):
-                    self.redirect(url)
-                    return
-        self.redirect('/a/browse')
+        self.render('home.html')
 
 
 class HomeHandler(BaseHandler):

@@ -140,49 +140,29 @@
                 </div>
                 <!-- works -->
                 <div class="works groupOptionShow" id="groupOptionShow3">
-                    <div id="worksOption">
-                        <div class="worksMainOption"><a id="articalOption" href="#">文章</a><a id="frangmentOption" href="#">小品</a>
-                        </div>
-                        <a id="worksFliter" href="#">筛选器</a>
-                    </div>
                     <div id="worksArticals">
                     <!-- {}  -->
                         <li class="worksArticalShow">
                             <div class="artical">
                                 <div class="articalBasicInfo">
-                                    <img src="None" class="articAluthorImage">
-                                    <a href="#" class="articalTitle">Ubuntu下使用MentoHUST代替锐捷认证上网</a>
-                                    <a href="#" class="articalAuthor">Longerhead</a>
+                                    <img src="{{!author_avatar}}" class="articAluthorImage">
+                                    <a href="/a/{{!aid}}" class="articalTitle">{{!title}}</a>
+                                    <a href="/user/{{!author}}" class="articalAuthor">{{!author}}</a>
                                 </div>
-                                <div class="articalTag">Tags：
-                                    <a href="#">泛科技</a>
-                                    <a href="#">Linux</a>
-                                    <a href="#">MentoHust</a>
-                                    <a href="#">Ubuntu</a>
-                                    <a href="#">锐捷安装失败</a>
-                                    <a href="#">认证客户端</a>
-                                    <a href="#">校园网</a>
+                                <div class="articalTag">
+                                    <a href="/search?type=article&tag={{!tag}}">{{!tag}}</a>
                                 </div>
-                                <div class="articaltime">2-12 18:27</div>
+                                <div class="articaltime">{{!modify_time}}</div>
                             </div>
                         </li>
                     <!-- {}  -->
                     </div>
-                    <div class="articalDirectionOption"><a href="#">上一页</a><a href="#">下一页</a><a href="#" class="optionBack">返回</a>
+                    <div class="articalDirectionOption">
+                        <a href="#">上一页</a>
+                        <a href="#">下一页</a>
+                        <a href="#" class="optionBack">返回</a>
                     </div>
                 </div>
-                <!-- <div class="latestTopic" id="groupOptionShow4">
-                    <li class="latestTopicList">
-                        <img class="latestTopicMemImg" src="{{ static_url("css/image/forumTest.jpg") }}">
-                        <span class="latestTopicTitle">梧桐项目部署</span>
-                        <div class="latestTopicBasic">
-                            <span class="latestTopicAuthor">Kyleslight</span>
-                            <span class="latestTopicTime">2-2 13:24</span>
-                        </div>
-                    </li>
-                    <div id="latestTopicOption"><a href="#" id="latestTopicUnfold">展开前6条</a>  <a href="#" id="latestTopicBack" class="optionBack">返回</a>
-                    </div>
-                </div> -->
                 <div class="groupSetting groupOptionShow" id="groupOptionShow5">
                     <h2>小组个人设置</h2>
                     <!-- 接受来自该小组成员的内容推送 -->
@@ -205,14 +185,10 @@
                     <span class="tip">管理小组成员：</span><br>
                     <p class="intorWords">单击选择成员</p>
                     <div class="groupMemberListWrap">
-                        <li href="#" class="groupMemberList" id="groupMem1"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_1</span></li>
-                        <li href="#" class="groupMemberList" id="groupMem2"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_2</span></li>
-                        <li href="#" class="groupMemberList" id="groupMem3"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_3</span></li>
-                        <li href="#" class="groupMemberList" id="groupMem4"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_4</span></li>
-                        <li href="#" class="groupMemberList" id="groupMem5"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_5</span></li>
-                        <li href="#" class="groupMemberList" id="groupMem6"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_6</span></li>
-                        <li href="#" class="groupMemberList" id="groupMem7"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_7</span></li>
-                        <li href="#" class="groupMemberList" id="groupMem8"><img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg"><span class="groupMemberName">Group_Member_8</span></li>
+                        <li href="#" class="groupMemberList" id="groupMem1">
+                            <img src="{{ static_url("avatar/wutong_normal.png") }}" class="groupMemberImg">
+                            <span class="groupMemberName">Group_Member_1</span>
+                        </li>
                     </div>
                     <div class="groupOption">
                         <h2>操作</h2>

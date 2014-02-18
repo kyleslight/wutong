@@ -676,6 +676,32 @@ $$ language plpgsql;
 
 
 create or replace function
+is_group_member(_gid int, _uid int) returns bool
+as $$
+  select position_level > '1'
+    from group_member
+   where gid = _gid
+     and uid = _uid;
+$$ language sql;
+
+create or replace function
+is_group_visiable(_gid int, _uid int) returns bool
+as $$
+declare
+  _tmp bool;
+begin
+  select public_level > '1' into _tmp
+    from mygroup
+   where gid = _gid;
+
+  if not _tmp then
+    select is_group_member(_gid, _uid) into _tmp;
+  end if;
+  return _tmp;
+end;
+$$ language plpgsql;
+
+create or replace function
 get_group_homepage(_gid int) returns json
 as $$
 declare
@@ -699,12 +725,53 @@ as $$
 declare
     _tmp json;
 begin
-  -- TODO
+  select row_to_json(j.*) into _tmp
+    from
+      (
+         select *
+           from group_topic_show
+          where tid = _tid
+      ) j;
   return _tmp;
 end;
 $$ language plpgsql;
-create or replace function
 
+create or replace function
+get_group_members(_gid int, _limit int, _offset int)
+  returns json
+as $$
+    select array_to_json(array_agg(aj))
+      from
+        (
+           select *
+             from group_member_show
+            where gid = _gid
+            order by join_time desc
+            limit _limit
+           offset _offset
+        ) aj;
+$$ language sql;
+
+create or replace function
+get_group_opuses(_gid int, _limit int, _offset int)
+  returns json
+as $$
+    select array_to_json(array_agg(aj))
+      from
+        (
+           select *
+             from group_member gm,
+                  article_base a
+            where gm.gid = _gid
+              and gm.uid = a.uid
+              and a.public_level > '2'
+            order by a.modify_time desc
+            limit _limit
+           offset _offset
+        ) aj;
+$$ language sql;
+
+create or replace function
 get_group_sessions(_gid int, _anchor_id int, _limit int)
   returns json
 as $$
@@ -738,7 +805,7 @@ as $$
 $$ language sql;
 
 create or replace function
-get_topic_sessions(_tid int, _limit int, _offset int)
+get_topic_sessions(_tid int, _anchor_id int, _limit int)
   returns json
 as $$
     select array_to_json(array_agg(aj))
@@ -753,6 +820,7 @@ as $$
                           select *
                             from group_topic
                            where father_id = _tid
+                             and anchor_id > _anchor_id
                        ) j
                     union
                    select row_to_json(j.*)::text, j.reply_time
@@ -761,11 +829,11 @@ as $$
                           select *
                             from group_message
                            where tid = _tid
+                             and anchor_id > _anchor_id
                        ) j
                 ) s
              order by s.reply_time desc
              limit _limit
-            offset _offset
         ) aj;
 $$ language sql;
 
@@ -798,19 +866,51 @@ as $$
   select array_to_json(array_agg(aj.*))
     from
       (
-         select *
-           from group_topic_base
-          where gid in
-             (
+         select t.*,
+                g.name as "group_name"
+           from group_topic_base t,
+                mygroup g
+          where t.gid = g.gid
+            and t.gid in (
                 select gid
                   from group_member
                  where uid = _uid
-                   and position_level > '1'
-             )
-          order by reply_time desc
+                   and position_level > '1')
+          order by t.reply_time desc
           limit _limit
          offset _offset
       ) aj;
+$$ language sql;
+
+create or replace function
+get_browse_topics(_limit int, _offset int)
+  returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+         select t.*,
+                g.name as "group_name"
+           from group_topic_base t,
+                mygroup g
+          where t.gid = g.gid
+          order by t.reply_time desc
+          limit _limit
+         offset _offset
+      ) aj;
+$$ language sql;
+
+create or replace function
+get_topic(_tid int)
+  returns json
+as $$
+  select row_to_json(j.*)
+    from
+      (
+         select *
+           from group_topic_base
+          where tid = _tid
+      ) j;
 $$ language sql;
 
 create or replace function
