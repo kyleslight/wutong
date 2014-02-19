@@ -645,8 +645,8 @@ function checkUsername(username){
 }
 
 function checkPassword(password,repassword){
-    if (password.length < 6) {
-        showError("密码长度不能小于6位",2000);
+    if (password.length < 2) {
+        showError("密码长度不能小于2位",2000);
     } else if (password.length > 30) {
         showError("密码长度不能超过30",2000);
     } else if (password!=repassword) {
