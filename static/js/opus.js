@@ -80,13 +80,6 @@ $(document).ready(function(){
             $(".buttomComment").show();
             var heightOfReadMain=($(".floatReadMain").height()+40)+"px";
             $(".opusSideCommentWrap").css({"height":heightOfReadMain});
-            var url = location.pathname + '/comment?bottom';
-            $(".opusCommentList").remove();
-            $.getJSON(url, function(data) {
-                $(".buttomCommentCon").prepend(data);
-                $(".buttomCommentCon").children().last().addClass("noBorderButtom");
-                // initPage(pageNum,BCNum,thisPageNum);
-            });
         }else{
             $(this).text("展开底部评论");
             $(".buttomComment").hide();
@@ -191,8 +184,9 @@ $(document).ready(function(){
     $("#collectOpus").click(function(){
         var collectionUrl=location.pathname+"/interact?collect";
         $.post(collectionUrl, function(data){
-            if (getError(data)) {
-                perror();
+            var err = getError(data);
+            if (err) {
+                perror(err);
                 return;
             }
             var msg;
@@ -286,8 +280,6 @@ $(document).ready(function(){
         return false;
     });
 
-    // send buttom comment
-    // TODO: It's 'bottom' not 'buttom'
     $("#buttomCommentSend").click(function(){
         if (!checkLogin) {
             showError("要发送底评请先登录",2000);
@@ -304,24 +296,23 @@ $(document).ready(function(){
         var content=$("#opusCommentData").val();
 
         var url = location.pathname + '/comment?create';
-        // 被@的人所在的bottom_comment的id
+        // TODO: 被回复的comment_id
         var reply_id = null;
         $.post(url, {
             'content': content,
             'reply_id': reply_id,
             'type': 'bottom',
-        }, function(data, status) {
-            if (status=="failed") {
-                showError("发送失败",2000);
-                return false;
-            };
-            var buttomCommentShowBox = data;
-            if ($(".opusCommentList").size()==0) {
-                $(".buttomComment").prepend(buttomCommentShowBox);
-            }else{
+        }, function(data) {
+            var err = getError(data);
+            if (err) {
+                console.log(err);
+                return;
+            }
+            data = JSON.parse(data);
+            if ($(".opusCommentList").size() != 0) {
                 $(".opusCommentList").last().removeClass("noBorderButtom");
-                $(".opusCommentList").last().after(buttomCommentShowBox);
-            };
+            }
+            renderTemplateAfter('#bottom-comment-template', data)
             $(".buttomCommentCon").children().last().addClass("noBorderButtom");
             BCeditor.setContent("");
         });
@@ -337,6 +328,66 @@ $(document).ready(function(){
 
 function init(){
     var totalNumOfPara=editableOpusChild.size();
+    // 延迟加载
+    // 获取 评分, 收藏 等信息
+    $.getJSON(location.pathname + '/interact', function(data) {
+        $.getJSON(location.pathname + '/comment?side', function(data) {
+            $.getJSON(location.pathname + '/comment?bottom', function(data) {
+                var err = getError(data);
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+
+                for (var i = 0; i < data.length; i++)
+                    renderTemplateAfter('#bottom-comment-template', data[i])
+                $(".buttomCommentCon").children().last().addClass("noBorderButtom");
+            });
+
+            var err = getError(data);
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            for(var i=0;i<totalNumOfPara;i++){
+                for (var j=0; j<data.length; j++) {
+                    // TODO
+                    // var comment = data[j];
+                    var comment = data[j].content;
+                    // var paragraph_id = comment.split('\n')[0].match(/\d+/g)[0];
+                    var paragraph_id = data[j].paragraph_id;
+                    if (paragraph_id != i)
+                        continue;
+                    $("#sideCommentNode"+i).prepend(comment);
+                }
+            };
+
+            // if sideCommentNode has no comment,add a appNull,if not,add a Nav
+            for(var i=0;i<totalNumOfPara;i++){
+                var preNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" onclick="toLeftPara('+i+')">'
+                            +'第'+i+'段评论('+'<span class="numOfParaComent">'+$("#sideCommentNode"+i).children().size()+'</span>'+')'
+                            +'</li>';
+                var preNull='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav nullOpusSideCommentNav" >'
+                            +'这个段落目前还没有评论，你可以通过“编辑评论”开始创建'
+                            +'</li>';
+
+                var thisSideCommentNode=$("#sideCommentNode"+i);
+                if (thisSideCommentNode.children().size()!=0) {
+                    thisSideCommentNode.prepend(preNav);
+                }else{
+                    thisSideCommentNode.prepend(preNull);
+                };
+            };
+        });
+
+        if (getError(data)) {
+            perror();
+            return;
+        };
+        interactInfo = data;
+    });
+
     // initial sideCommentNode
     for (var i=0;i<totalNumOfPara;i++){
         var sideCommentNode='<div class="sideCommentNode" id="sideCommentNode'+i+'">';
@@ -350,51 +401,6 @@ function init(){
         +'<a href="#" class="sideCommentEdit" title="编辑侧评"><img /></a>';
         editableOpusChild.eq(i).prepend(viewCommentButton);
     };
-
-    // load sidecomment in sideCommentNode
-    var comment_url = location.pathname + '/comment';
-    $.getJSON(comment_url + '?side', function(data) {
-        $.getJSON(comment_url + '?bottom', function(data) {
-            if (getError(data)) {
-                // perror();
-                console.log(data);
-                return;
-            }
-            // TODO
-        });
-        if (getError(data)) {
-            // perror();
-            console.log(data);
-            return;
-        }
-
-        for(var i=0;i<totalNumOfPara;i++){
-            for (var j=0; j<data.length; j++) {
-                var comment = data[j];
-                var paragraph_id = comment.split('\n')[0].match(/\d+/g)[0];
-                if (paragraph_id != i)
-                    continue;
-                $("#sideCommentNode"+i).prepend(comment);
-            }
-        };
-
-        // if sideCommentNode has no comment,add a appNull,if not,add a Nav
-        for(var i=0;i<totalNumOfPara;i++){
-            var preNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" onclick="toLeftPara('+i+')">'
-                        +'第'+i+'段评论('+'<span class="numOfParaComent">'+$("#sideCommentNode"+i).children().size()+'</span>'+')'
-                        +'</li>';
-            var preNull='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav nullOpusSideCommentNav" >'
-                        +'这个段落目前还没有评论，你可以通过“编辑评论”开始创建'
-                        +'</li>';
-
-            var thisSideCommentNode=$("#sideCommentNode"+i);
-            if (thisSideCommentNode.children().size()!=0) {
-                thisSideCommentNode.prepend(preNav);
-            }else{
-                thisSideCommentNode.prepend(preNull);
-            };
-        };
-    });
     // other set
     $(".opusCommentList").last().addClass("noBorderButtom");
     // console.log($(".opusMain").children().eq(0).attr("class"));
@@ -411,15 +417,6 @@ function init(){
     var reference=$(".opusReferenceCon").text();
     $(".opusReferenceCon").empty().append(reference);
 
-    // 获取 评分, 收藏 等信息
-    var url = location.pathname + '/interact';
-    $.getJSON(url, function(data) {
-        if (getError(data)) {
-            perror();
-            return;
-        };
-        interactInfo = data;
-    });
 }
 
 function topPartHeight(){
@@ -505,21 +502,29 @@ function sendSideComment(){
     content=content.httpHtml();
     content=content.toString().replace(/(\r)*\n/g,"<br />").replace(/\s/g," ");
 
-    var url = location.pathname + '/comment/side';
-    $.post(url,
-    {
+    var url = location.pathname + '/comment';
+    $.post(url, {
         'content': content,
         'paragraph_id': editingParaNum, // TODO: replace this
-    },
-    function(data) {
-        if (data=="failed") {
+        'type': 'side'
+    }, function(data) {
+        var err = getError(data);
+        if (err) {
             showError("发送失败",2000);
             return false;
         };
-        data=data.replace(/&lt;br \/&gt;/g,"<br>").replace(/&lt;\/a&gt;/g,"</a>").replace(/&gt;/g,">").replace(/&lt;a/g,"<a").replace(/&quot;/g,"'");
-        var addListNav=$("#sideCommentNode"+editingParaNum).children(".opusSideCommentNav");
+        data = JSON.parse(data);
+        data.content = data.content.replace(/&lt;br \/&gt;/g,"<br>")
+                                   .replace(/&lt;\/a&gt;/g,"</a>")
+                                   .replace(/&gt;/g,">")
+                                   .replace(/&lt;a/g,"<a")
+                                   .replace(/&quot;/g,"'");
+        // TODO
+        var html = renderTemplateAfter('#side-comment-template', data);
+        console.log(html);
+        var addListNav=$("#sideCommentNode"+data.paragraph_id).children(".opusSideCommentNav");
         addListNav.after(data);
-        $(".opusSideCommentList"+editingParaNum).eq(1).css({"background":"pink","width":"268px"});
+        $(".opusSideCommentList"+data.paragraph_id).eq(1).css({"background":"pink","width":"268px"});
         if (addListNav.hasClass("nullOpusSideCommentNav")) {
             var preNav='<li class="opusSideCommentList opusSideCommentList'+editingParaNum+' opusSideCommentNav" style="width:253px" onclick="toLeftPara('+editingParaNum+')">'
                     +'第'+editingParaNum+'段评论('+'<span class="numOfParaComent">'+($("#sideCommentNode"+editingParaNum).children().size()-1)+'</span>'+')'

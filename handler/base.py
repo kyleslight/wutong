@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import functools
 from tornado.web import RequestHandler
 from tornado.websocket import WebSocketHandler
 from tornado.escape import json_encode
@@ -19,6 +20,24 @@ def authenticated(method):
             raise Exception('not login')
         return method(self, *args, **kwargs)
     return wrapper
+
+def catch_exception(method):
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        try:
+            return method(self, *args, **kwargs)
+        except Exception as e:
+            self.write_errmsg(e)
+    return wrapper
+
+
+def login(self, user_id=None, user=None):
+    user = user or self.get_current_user(user_id)
+    self.session['uid'] = user['uid']
+    cnt = self.muser.get_unread_msg_count(user['uid'])
+    user = self.get_pure_user()
+    user['msg_count'] = cnt
+    return user
 
 
 class BaseHandler(RequestHandler):

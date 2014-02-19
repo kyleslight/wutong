@@ -110,16 +110,16 @@
                 <div class="buttomComment">
                     <div class="buttomCommentCon">
                         <script type="text/template" id="bottom-comment-template">
-                            <li class="opusCommentList" style="display: list-item;">
-                                <a class="userImage" href="/user/{{!nickname}}">
-                                    <img src="{{!avatar}}">
+                            <li id="No_bottom_comment_{{!id}}" class="opusCommentList" style="display: list-item;">
+                                <a class="userImage" href="/user/{{!creater}}">
+                                    <img src="{{!creater_avatar}}">
                                 </a>
                                 <div class="opusCommentMain">
                                     <div class="opusCommentListFirstLine">
                                         <div class="userName">
-                                            <a href="/user/{{!nickname}}">{{!nickname}}</a>
+                                            <a href="/user/{{!creater}}">{{!creater}}</a>
                                         </div>
-                                        <span class="opusCommentPosition">#{{!floor}}</span>
+                                        <span class="opusCommentPosition">#{{!rank}}</span>
                                         <div class="timeShow">
                                             {{!create_time}}
                                         </div>
@@ -143,8 +143,8 @@
         <div class="opusSideCommentWrap">
             <div class="opusSideComment">
                 <script type="text/template" id="side-comment-template">
-                    <li class="opusSideCommentList opusSideCommentList{{!paragraph_id}}" >
-                        <a href="/user/{{!nickname}}" class="opusSideCommentListUserName">{{!nickname}}</a>
+                    <li id="No_side_comment_{{!id}}" class="opusSideCommentList opusSideCommentList{{!paragraph_id}}  opusSideCommentNav" style="width:253px" onclick="toLeftPara({{!paragraph_id}})">
+                        <a href="/user/{{!creater}}" class="opusSideCommentListUserName">{{!creater}}</a>
                         <div class="opusSideCommentContent">
                             {{!content}}
                         </div>

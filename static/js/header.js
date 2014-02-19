@@ -933,6 +933,7 @@ function renderTemplateAfter(temp, obj, target) {
     } else {
         $(temp).after($(innerHTML));
     }
+    return innerHTML;
 }
 
 function renderTemplateAppend(temp, obj, target) {
@@ -942,6 +943,7 @@ function renderTemplateAppend(temp, obj, target) {
     } else {
         $(temp).append($(innerHTML));
     }
+    return innerHTML;
 }
 
 function showBigImage(url){

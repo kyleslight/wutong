@@ -81,31 +81,33 @@ class ArticleModel(object):
         return comments or []
 
     def get_side_comments(self, article_id, **kwargs):
-        comments = self.db.calljson('get_side_comments', aritcle_id)
+        comments = self.db.calljson('get_side_comments', article_id)
         return comments or []
 
     def create_bottom_comment(self, article_id, user_id, content, **kwargs):
-        comment = self.db.calljson('create_bottom_comment',
-                                   article_id, user_id, content,
-                                   kwargs.get('reply_id'))
-        if not comment:
+        comment_id = self.db.callfirstfield('create_bottom_comment',
+                                            article_id, user_id, content,
+                                            kwargs.get('reply_id'))
+        if not comment_id:
             raise Exception('create bottom comment failed')
+        comment = self.db.calljson('get_bottom_comment', comment_id)
         return comment
 
     def create_side_comment(self, article_id, user_id, content, paragraph_id, **kwargs):
-        comment = self.db.calljson('create_side_comment',
-                                   article_id, user_id, content,
-                                   paragraph_id)
-        if not comment:
+        comment_id = self.db.callfirstfield('create_side_comment',
+                                            article_id, user_id, content,
+                                            paragraph_id)
+        if not comment_id:
             raise Exception('create side comment failed')
+        comment = self.db.calljson('get_side_comment', comment_id)
         return comment
 
-    def delete_bottom_comment(self, user_id, comment_id):
+    def delete_bottom_comment(self, comment_id, user_id):
         res = self.delete('article_bottom_comment', where='uid=%s and id=%s', wherevalues=[user_id, comment_id])
         if not res:
             raise Exception('delete bottom comment failed')
 
-    def delete_side_comment(self, user_id, comment_id):
+    def delete_side_comment(self, comment_id, user_id):
         res = self.delete('article_side_comment', where='uid=%s and id=%s', wherevalues=[user_id, comment_id])
         if not res:
             raise Exception('delete side comment failed')

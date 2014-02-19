@@ -530,46 +530,30 @@ create_bottom_comment(
     _aid int,
     _uid int,
     _content text,
-    _reply_id int) returns json
+    _reply_id int) returns int
 as $$
-declare
-  _tmp int;
-begin
-  select max(rank) + 1
-    from article_bottom_comment
-   where aid = _aid
-    into _tmp;
-  if _tmp is null then
-      _tmp := 1;
-  end if;
-
   insert into article_bottom_comment
       (aid, uid, reply_id, content, rank)
   values
-      (_aid, _uid, _reply_id, _content, _tmp)
-  returning id into _tmp;
-  return get_bottom_comment(_tmp);
-end;
-$$ language plpgsql;
+      (_aid, _uid, _reply_id, _content, (select COALESCE(max(rank), 0) + 1
+                                           from article_bottom_comment
+                                          where aid = _aid))
+  returning id;
+$$ language sql;
 
 create or replace function
 create_side_comment(
     _aid int,
     _uid int,
     _content text,
-    _paragraph_id text) returns json
+    _paragraph_id text) returns int
 as $$
-declare
-  _tmp int;
-begin
   insert into article_side_comment
       (aid, uid, content, paragraph_id)
   values
       (_aid, _uid, _content, _paragraph_id)
-  returning id into _tmp;
-  return get_side_comment(_tmp);
-end;
-$$ language plpgsql;
+  returning id;
+$$ language sql;
 
 create or replace function
 create_article_view(_aid int, _uid int, _ip inet) returns void

@@ -1,49 +1,45 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from tornado.web import asynchronous, authenticated
+from tornado.web import asynchronous
 from tornado.websocket import WebSocketHandler
 from tornado.escape import json_decode, json_encode
-from base import BaseHandler, SessionBaseHandler
+from base import BaseHandler, SessionBaseHandler, authenticated, catch_exception
 from lib import util
 
 
 class BrowseHandler(BaseHandler):
+    @catch_exception
     def get(self):
-        try:
-            user = self.current_user
-            if user:
-                user['groups'] = self.mgroup.get_user_groups(user['uid'], 1, 20)
-                user['topics'] = self.mgroup.get_mygroup_topics(user['uid'], 1, 10)
-                size = 10
-            else:
-                size = 20
-            topics = self.mgroup.get_browse_topics(1, size)
+        user = self.current_user
+        if user:
+            user['groups'] = self.mgroup.get_user_groups(user['uid'], 1, 20)
+            user['topics'] = self.mgroup.get_mygroup_topics(user['uid'], 1, 10)
+            size = 10
+        else:
+            size = 20
+        topics = self.mgroup.get_browse_topics(1, size)
 
-            self.render(
-                'group-navigation.html',
-                user=user,
-                topics=topics
-            )
-        except Exception as e:
-            self.write_errmsg(e)
+        self.render(
+            'group-navigation.html',
+            user=user,
+            topics=topics
+        )
 
 
 class BrowseMoreTopicHandler(BaseHandler):
+    @catch_exception
     def get(self):
-        try:
-            topic_type = self.get_argument('type')
-            page = int(self.get_argument('page'))
-            size = int(self.get_argument('size', 10))
-            if topic_type == 'mygroup':
-                topics = self.mgroup.get_mygroup_topics(self.user_id, page, size)
-            elif topic_type == 'all':
-                topics = self.mgroup.get_topics(page, size)
-            else:
-                raise Exception('invalid type')
-            self.write_json(topics)
-        except Exception as e:
-            self.write_errmsg(e)
+        topic_type = self.get_argument('type')
+        page = int(self.get_argument('page'))
+        size = int(self.get_argument('size', 10))
+        if topic_type == 'mygroup':
+            topics = self.mgroup.get_mygroup_topics(self.user_id, page, size)
+        elif topic_type == 'all':
+            topics = self.mgroup.get_topics(page, size)
+        else:
+            raise Exception('invalid type')
+        self.write_json(topics)
 
 
 class CreateHandler(BaseHandler):
@@ -52,24 +48,20 @@ class CreateHandler(BaseHandler):
         tags = util.split(tags)
         return tags
 
+    @catch_exception
     @authenticated
     def post(self):
-        try:
-            self.get_args('name', 'intro', 'public_level', 'tags')
-            self.set_arg('tags', self.get_tags())
-            group_id = self.mgroup.do_create(self.user_id, **self.args)
-            self.redirect('/g/' + str(group_id))
-        except Exception as e:
-            self.write_errmsg(e)
+        self.get_args('name', 'intro', 'public_level', 'tags')
+        self.set_arg('tags', self.get_tags())
+        group_id = self.mgroup.do_create(self.user_id, **self.args)
+        self.redirect('/g/' + str(group_id))
 
 
 class JoinHandler(BaseHandler):
+    @catch_exception
     @authenticated
     def post(self, group_id):
-        try:
-            self.join_group(group_id, self.user_id)
-        except Exception as e:
-            self.write_errmsg(e)
+        self.join_group(group_id, self.user_id)
 
 
 class GroupHandler(BaseHandler):
@@ -82,71 +74,60 @@ class GroupHandler(BaseHandler):
 
 
 class GroupMemberHandler(BaseHandler):
+    @catch_exception
     def get(self, group_id):
-        try:
-            if not self.mgroup.is_group_visiable(group_id, self.user_id):
-                raise Exception('no access permission')
-            page = int(self.get_argument('page', 1))
-            size = int(self.get_argument('size', 20))
-            members = self.mgroup.get_group_members(group_id, page, size)
-            self.write_json(members)
-        except Exception as e:
-            self.write_errmsg(e)
+        if not self.mgroup.is_group_visiable(group_id, self.user_id):
+            raise Exception('no access permission')
+        page = int(self.get_argument('page', 1))
+        size = int(self.get_argument('size', 20))
+        members = self.mgroup.get_group_members(group_id, page, size)
+        self.write_json(members)
 
 
 class GroupOpusHandler(BaseHandler):
+    @catch_exception
     def get(self, group_id):
-        try:
-            if not self.mgroup.is_group_visiable(group_id, self.user_id):
-                raise Exception('no access permission')
-            page = int(self.get_argument('page', 1))
-            size = int(self.get_argument('size', 20))
-            opuses = self.mgroup.get_group_opuses(group_id, page, size)
-            self.write_json(opuses)
-        except Exception as e:
-            self.write_errmsg(e)
+        if not self.mgroup.is_group_visiable(group_id, self.user_id):
+            raise Exception('no access permission')
+        page = int(self.get_argument('page', 1))
+        size = int(self.get_argument('size', 20))
+        opuses = self.mgroup.get_group_opuses(group_id, page, size)
+        self.write_json(opuses)
 
 
 class GroupSessionHistoryHandler(BaseHandler):
+    @catch_exception
     def get(self, group_id):
-        try:
-            if not self.mgroup.is_group_visiable(group_id, self.user_id):
-                raise Exception('no access permission')
-            anchor_id = int(self.get_argument('anchor_id'))
-            size = int(self.get_argument('size', 20))
-            ss = self.mgroup.get_group_sessions(group_id, anchor_id, size)
-            self.write_json(ss)
-        except Exception as e:
-            self.write_errmsg(e)
+        if not self.mgroup.is_group_visiable(group_id, self.user_id):
+            raise Exception('no access permission')
+        anchor_id = int(self.get_argument('anchor_id'))
+        size = int(self.get_argument('size', 20))
+        ss = self.mgroup.get_group_sessions(group_id, anchor_id, size)
+        self.write_json(ss)
 
 
 class TopicHandler(BaseHandler):
+    @catch_exception
     def get(self, topic_id):
-        # try:
-            topic = self.mgroup.get_topic_homepage(topic_id)
-            q>topic['father']
-            if not self.mgroup.is_group_visiable(topic['gid'], self.user_id):
-                raise Exception('no access permission')
-            if topic:
-                self.render('topic.html', topic=topic)
-            else:
-                self.render_404_page()
-        # except Exception as e:
-            # self.write_errmsg(e)
+        topic = self.mgroup.get_topic_homepage(topic_id)
+        if not self.mgroup.is_group_visiable(topic['gid'], self.user_id):
+            raise Exception('no access permission')
+        if topic:
+            self.render('topic.html', topic=topic)
+        else:
+            self.render_404_page()
 
 
 class TopicSessionHistoryHandler(BaseHandler):
+    @catch_exception
     def get(self, topic_id):
-        try:
-            topic = self.mgroup.get_topic(topic_id)
-            if not self.mgroup.is_group_visiable(topic['gid'], self.user_id):
-                raise Exception('no access permission')
-            anchor_id = int(self.get_argument('anchor_id'))
-            size = int(self.get_argument('size', 20))
-            ss = self.mgroup.get_topic_sessions(group_id, anchor_id, size)
-            self.write_json(ss)
-        except Exception as e:
-            self.write_errmsg(e)
+        topic = self.mgroup.get_topic(topic_id)
+        if not self.mgroup.is_group_visiable(topic['gid'], self.user_id):
+            raise Exception('no access permission')
+        anchor_id = int(self.get_argument('anchor_id'))
+        size = int(self.get_argument('size', 20))
+        ss = self.mgroup.get_topic_sessions(group_id, anchor_id, size)
+        self.write_json(ss)
 
 
 class GroupSessionBaseHandler(SessionBaseHandler):
