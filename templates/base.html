@@ -140,56 +140,21 @@
                     <a id="opusPushButton" class="myMessagePartButton" href="#">推送<span id="opusPushNum"></span></a>
                 </div>
                 <div class="myMessageContent">
-                    <div class="reply myMessagePartContent">
-                        <div class="myReplyEle">
-                            <li class="myMessagePartList">
-                                <a href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">Kyleslight的同好会>>一个测试用的话题A>>一个测试用的话题B</div>
-                                    <div class="myMessageUserName">Kyleslight</div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">既然是测试用的话题的话就不要那么认真了嘛</div>
-                                </a>
-                                <div class="myMessagePartExpand">
-                                    既然是测试用的话题的话就不要那么认真了嘛<br/>对吧
-                                </div>
-                            </li>
-                        </div>
-                        <div class="myReplyTurnBox"></div>
-                    </div>
                     <div class="opusPush myMessagePartContent">
                         <div class="myPushEle">
                             <li class="myMessagePartList">
-                                <a href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageTitle">Unity 3D的互动应用</div>
-                                    <div class="myMessageUserName">Kyleslight</div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">As part of the Unity 4.3 announcement on August 28th 2013 Unity Technologies announced native 2D support...</div>
+                                <a href="{{!url}}" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="/user/{{!creater}}" />
+                                    <div class="myMessageTitle">{{!title}}</div>
+                                    <div class="myMessageUserName">{{!creater}}</div>
+                                    <div class="myMessageTime">{{!create_time}}</div>
+                                    {{!if brief}}
+                                    <div class="myMessagBrief">{{!brief}}</div>
+                                    {{!/if}}
                                 </a>
-                                <div class="myMessagePartExpand">
-                                    As part of the Unity 4.3
-                                </div>
                             </li>
                         </div>
                         <div class="myPushTurnBox"></div>
-                    </div>
-                    <div class="PMPush myMessagePartContent">
-                        <div class="PMPushEle">
-                            <li class="myMessagePartList">
-                                <a href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">这是一个测试用的私信</div>
-                                    <div class="myMessageUserName">Kyleslight</div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">这是一个测试用的私信啊</div>
-                                </a>
-                                <div class="myMessagePartExpand">
-                                    这是一个测试用的私信啊<br/>对吧
-                                </div>
-                            </li>
-                        </div>
-                        <div class="PMPushTurnBox"></div>
                     </div>
                 </div>
                 <a href="#" id="myMessageBack">返回</a>
@@ -204,7 +169,7 @@
                     <!-- <a id="myCollectionFliter" class="myCollectionFliterButton" href="#">筛选器</a> -->
                 </div>
                 <div class="myOpusCollection myCollectionCon">
-                    <script type="text/template" id="collection-template">
+                    <script type="text/template" id="article_collection-template">
                         <li id="myCollectionList" class="myCollectionList">
                             <a href='/user/{{!author}}'>
                                 <img class='myCollectionAuthorImage' src='{{!author_avatar}}' />
@@ -336,7 +301,6 @@
     <script type="text/javascript" src="{{ static_url("js/jquery.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/header.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/ui.js") }}"></script>
-    <!-- TODO -->
     <script type="text/javascript" src="{{ static_url("js/imageUpload.js") }}"></script>
     {% end %}
     {% block editor_js %}

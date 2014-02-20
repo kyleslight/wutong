@@ -161,7 +161,10 @@ class BaseHandler(RequestHandler):
         self.write_error(403)
 
     def message2json(self, msg, errno=0):
-        return '{"msg": "%s", "errno": "%s"}' % (msg, errno)
+        return json_encode({
+            "msg": msg,
+            "errno": errno
+        })
 
     def write_result(self, msg='', errno=0):
         """

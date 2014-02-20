@@ -221,20 +221,6 @@ $(document).ready(function() {
         return false;
     });
 
-    $("#collectTopic").click(function(){
-        var url = '/u/collection';
-        var topic_id = location.pathname.match('/t/(\\d+)')[1];
-        $.post(url, {
-            'type': '2',
-            'id': topic_id
-        }, function(data){
-            var err = getError(data);
-            if (err) {
-                console.log(err);
-                return;
-            }
-        })
-    });
 
     removeMessage = function () {
         var thedata = $("#communication").children().size();
@@ -260,6 +246,48 @@ $(document).ready(function() {
     checkGroupPremission();
 
     showParaFirst();
+
+    // 收藏或取消收藏 话题
+    try {
+        var topic_id = location.pathname.match("/t/(\\d+)")[1];
+    } catch (err) {
+        // do nothing
+    }
+    $("#collectTopic").click(function(){
+        var url = '/u/collection';
+        $.post(url, {
+            'type': '2',
+            'id': topic_id
+        }, function(data) {
+            var err = getError(data);
+            if (err) {
+                console.log(err);
+                return;
+            }
+            var remind = $("#collectTopic").html();
+            showError(remind + '成功', 1000);
+            if (remind == "取消收藏")
+                $("#collectTopic").html("收藏该话题");
+            else
+                $("#collectTopic").html("取消收藏");
+        });
+    });
+
+    // 话题已被收藏?
+    if (topic_id) {
+        $.getJSON("/u/collection?check&type=2&relevant_id=" + topic_id, function(data) {
+            var err = getError(data);
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (data.msg) {
+                $("#collectTopic").html("取消收藏");
+            } else {
+                $("#collectTopic").html("收藏该话题");
+            }
+        });
+    }
 
     // 当整个页面加载完毕时加载
     $(window).load(function() {

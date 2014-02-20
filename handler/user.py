@@ -284,6 +284,11 @@ class CollectionHandler(BaseHandler):
     @authenticated
     def get(self):
         collection_type = self.get_argument('type')
+        if self.has_argument('check'):
+            relevant_id = int(self.get_argument('relevant_id'))
+            is_collected = self.muser.has_collected(self.user_id, collection_type, relevant_id)
+            self.write_result(is_collected)
+            return
         page = int(self.get_argument('page', 1))
         size = int(self.get_argument('size', 5))
         collections = self.muser.get_collections(self.user_id, collection_type, page, size)
@@ -295,19 +300,10 @@ class CollectionHandler(BaseHandler):
         collection_type = self.get_argument('type')
         relevant_id = self.get_argument('id')
         # TODO: is article or topic visiable ?
-        self.muser.create_collection(self.user_id, collection_type, relevant_id)
+        self.muser.update_collection(self.user_id, collection_type, relevant_id)
 
 
 class MessageHandler(BaseHandler):
-    # TODO
-    """
-    -- wutong 在 test_group 小组提到了你
-    -- wutong 评论了你的文章 test_article
-    -- wutong 任命你为 test_group 的 leader
-    -- wutong 申请加入你的 test_group 小组
-    -- 恭喜你获得了 article_master 成就
-    -- 恭喜你获得了 king_of_stupid 头衔
-    """
     @catch_exception
     @authenticated
     def get(self):

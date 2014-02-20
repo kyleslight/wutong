@@ -180,28 +180,6 @@ $(document).ready(function(){
         return false;
     });
 
-    // collect opus
-    $("#collectOpus").click(function(){
-        var collectionUrl=location.pathname+"/interact?collect";
-        $.post(collectionUrl, function(data){
-            var err = getError(data);
-            if (err) {
-                perror(err);
-                return;
-            }
-            var msg;
-            if (interactInfo.is_collected) {
-                msg = "取消收藏成功";
-            } else {
-                msg = "收藏成功";
-            }
-            showError(msg, 2000);
-            $("#collectOpus").fadeOut();
-            return false;
-        });
-        return false;
-    });
-
     function paintScoreBar(indexOfHoverBar) {
         $(".scoreBar").css({"background":"white"});
         for(var i=0;i<indexOfHoverBar;i++){
@@ -319,6 +297,50 @@ $(document).ready(function(){
         return false;
     });
 
+    // 收藏或取消收藏 文章
+    try {
+        var article_id = location.pathname.match("/a/(\\d+)")[1];
+    } catch (err) {
+        // do nothing
+    }
+    $("#collectOpus").click(function(){
+        var url = '/u/collection';
+        $.post(url, {
+            'type': '1',
+            'id': article_id
+        }, function(data) {
+            var err = getError(data);
+            if (err) {
+                perror(err);
+                return;
+            }
+            var remind = $("#collectOpus").html();
+            showError(remind + '成功', 1000);
+            if (remind == "取消收藏")
+                $("#collectOpus").html("收藏");
+            else
+                $("#collectOpus").html("取消收藏");
+            return false;
+        });
+        return false;
+    });
+
+    // 话题已被收藏?
+    if (article_id) {
+        $.getJSON("/u/collection?check&type=1&relevant_id=" + article_id, function(data) {
+            var err = getError(data);
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log(data.msg);
+            if (data.msg) {
+                $("#collectOpus").html("取消收藏");
+            } else {
+                $("#collectOpus").html("收藏");
+            }
+        });
+    }
     // init ueditor
     BCeditor.ready(function(){
         initUeditor(2);
