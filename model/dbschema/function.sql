@@ -113,27 +113,31 @@ declare
   _tabname text;
   _tmp json;
 begin
-  if _type = '1' then
-    _tabname := 'article_base';
-    _idname := 'aid';
-  elseif _type = '2' then
-    _tabname := 'group_topic';
-    _idname := 'tid';
-  end if;
+  case _type
+    when '1' then
+      _tabname := 'article_base';
+      _idname := 'aid';
+    when '2' then
+      _tabname := 'group_topic';
+      _idname := 'tid';
+    else
+      return null;
+  end case;
 
   execute '
   select array_to_json(array_agg(aj))
     from
       (
-         select *
-           from ' || _tabname::regclass || '
-          where ' || quote_ident(_idname) || ' in (select relevant_id
-                         from user_collection
-                        where uid = ' || _uid || '
-                          and type = ' || quote_literal(_type) || '
-                        order by id
-                        limit ' || _limit || '
-                       offset ' || _offset || ')
+         select item.*,
+                uc.create_time
+           from ' || _tabname::regclass || ' as "item",
+                user_collection uc
+          where uc.relevant_id = item.' || quote_ident(_idname) || '
+            and uc.uid = ' || _uid || '
+            and uc.type = ' || quote_literal(_type) || '
+           order by uc.id desc
+           limit ' || _limit || '
+          offset ' || _offset || '
       ) aj'
     into _tmp;
   return _tmp;
@@ -621,8 +625,9 @@ begin
   end if;
 
   perform id
-     from article_collection
-    where aid = _aid
+     from user_collection
+    where type = '1'
+      and relevant_id = _aid
       and uid = _uid;
   if FOUND then
     _is_collected := true;
@@ -712,12 +717,27 @@ create or replace function
 get_group_homepage(_gid int) returns json
 as $$
 declare
-    _tmp json;
+  _rank int;
+  _tmp json;
 begin
   select row_to_json(j.*) into _tmp
     from
       (
-         select *
+         select *,
+                COALESCE((
+                  select avg(score)
+                    from article_score
+                   where aid in
+                      (
+                         select aid
+                           from article
+                          where uid in
+                             (
+                                select uid
+                                  from group_member
+                                 where gid = _gid
+                             )
+                      )), 0) as "avg_article_score"
            from group_show
           where gid = _gid
       ) j;
@@ -760,13 +780,13 @@ as $$
 $$ language sql;
 
 create or replace function
-get_group_opuses(_gid int, _limit int, _offset int)
+get_group_articles(_gid int, _limit int, _offset int)
   returns json
 as $$
     select array_to_json(array_agg(aj))
       from
         (
-           select *
+           select a.*
              from group_member gm,
                   article_base a
             where gm.gid = _gid
@@ -782,66 +802,50 @@ create or replace function
 get_group_sessions(_gid int, _anchor_id int, _limit int)
   returns json
 as $$
-    select array_to_json(array_agg(aj))
-      from
-        (
-            select *
-              from
-                (
-                   select row_to_json(j.*)::text, j.reply_time
-                     from
-                       (
-                          select *
-                            from group_topic
-                           where gid = _gid
-                             and anchor_id > _anchor_id
-                       ) j
-                    union
-                   select row_to_json(j.*)::text, j.reply_time
-                     from
-                       (
-                          select *
-                            from group_message
-                           where gid = _gid
-                             and anchor_id > _anchor_id
-                       ) j
-                ) s
-             order by s.reply_time desc
-             limit _limit
-        ) aj;
+  select array_to_json(array_agg(aj.session))
+    from
+      (
+         select session
+           from
+             (
+                select row_to_json(j.*)::text as "session", reply_time
+                  from group_topic_base j
+                 where gid = _gid
+                   and anchor_id > _anchor_id
+                 union
+                select row_to_json(j.*)::text as "session", reply_time
+                  from group_message_show j
+                 where gid = _gid
+                   and anchor_id > _anchor_id
+             ) s
+          order by s.reply_time desc
+          limit _limit
+      ) aj;
 $$ language sql;
 
 create or replace function
 get_topic_sessions(_tid int, _anchor_id int, _limit int)
   returns json
 as $$
-    select array_to_json(array_agg(aj))
-      from
-        (
-            select *
-              from
-                (
-                   select row_to_json(j.*)::text, j.reply_time
-                     from
-                       (
-                          select *
-                            from group_topic
-                           where father_id = _tid
-                             and anchor_id > _anchor_id
-                       ) j
-                    union
-                   select row_to_json(j.*)::text, j.reply_time
-                     from
-                       (
-                          select *
-                            from group_message
-                           where tid = _tid
-                             and anchor_id > _anchor_id
-                       ) j
-                ) s
-             order by s.reply_time desc
-             limit _limit
-        ) aj;
+  select array_to_json(array_agg(aj.session))
+    from
+      (
+         select session
+           from
+             (
+                select row_to_json(j.*)::text as "session", reply_time
+                  from group_topic_base j
+                 where father_id = _tid
+                   and anchor_id > _anchor_id
+                 union
+                select row_to_json(j.*)::text as "session", reply_time
+                  from group_message_show j
+                 where tid = _tid
+                   and anchor_id > _anchor_id
+             ) s
+          order by s.reply_time desc
+          limit _limit
+      ) aj;
 $$ language sql;
 
 create or replace function
@@ -1015,14 +1019,22 @@ create or replace function
 create_group_message(_gid int, _uid int, _content text, _tid int) returns json
 as $$
 declare
-  _tmp record;
+  _tmp int;
 begin
     insert into group_message
         (gid, uid, content, tid)
     values
         (_gid, _uid, _content, _tid)
-    returning * into _tmp;
-    return (select row_to_json(_tmp.*));
+    returning id into _tmp;
+    if _tid is not null then
+      update group_topic
+         set reply_time = now()
+       where tid = _tid;
+    end if;
+
+    return (select row_to_json(j.*)
+              from group_message_show j
+             where id = _tmp);
 end;
 $$ language plpgsql;
 
@@ -1030,7 +1042,7 @@ create or replace function
 create_group_topic(_gid int, _uid int, _title text, _content text, _father_id int) returns json
 as $$
 declare
-  _tmp record;
+  _tmp int;
 begin
     insert into group_topic
         (gid, uid, title, content, father_id, ancestor_id)
@@ -1039,8 +1051,16 @@ begin
                                                       from group_topic
                                                      where gid = _gid
                                                        and tid = _father_id))
-    returning * into _tmp;
-    return (select row_to_json(_tmp.*));
+    returning tid into _tmp;
+    if _tid is not null then
+      update group_topic
+         set reply_time = now()
+       where tid = _father_id;
+    end if;
+
+    return (select row_to_json(j.*)
+              from group_topic_base j
+             where tid = _tmp);
 end;
 $$ language plpgsql;
 -- create or replace function

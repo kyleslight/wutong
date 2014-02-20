@@ -201,13 +201,13 @@
                 <div class="myCollectionClass">
                     <a id="myOpusCollectionButton" class="myCollectionClassButton" href="#">作品</a>
                     <a id="myTopicCollectionButton" class="myCollectionClassButton" href="#">话题</a>
-                    <a id="myCollectionFliter" class="myCollectionFliterButton" href="#">筛选器</a>
+                    <!-- <a id="myCollectionFliter" class="myCollectionFliterButton" href="#">筛选器</a> -->
                 </div>
                 <div class="myOpusCollection myCollectionCon">
                     <script type="text/template" id="collection-template">
                         <li id="myCollectionList" class="myCollectionList">
                             <a href='/user/{{!author}}'>
-                                <img class='myCollectionAuthorImage' src='{{!avatar}}' />
+                                <img class='myCollectionAuthorImage' src='{{!author_avatar}}' />
                             </a>
                             <div class='myCollectionRow'>
                                 <a href='/a/{{!aid}}' class='myCollectionTitle'>{{!title}}</a>
@@ -216,7 +216,7 @@
                             <div class='myCollectionRow'>
                                 <div class='myCollectionTag'>
                                     {{!tags}}
-                                    <a href='/tag/{{!name}}'>{{!name}}</a>
+                                    <a href='/search?type=article&tag={{!.}}'>{{!.}}</a>
                                     {{!/tags}}
                                 </div>
                                 <span class='myCollectionTime'>收藏时间: {{!create_time}}</span>

@@ -46,6 +46,9 @@ class CreateHandler(BaseHandler):
     def get_tags(self):
         tags = self.args.get('tags')
         tags = util.split(tags)
+        for tag in tags:
+            if not tag.strip():
+                tags.remove(tag)
         return tags
 
     @catch_exception
@@ -84,15 +87,15 @@ class GroupMemberHandler(BaseHandler):
         self.write_json(members)
 
 
-class GroupOpusHandler(BaseHandler):
+class GroupArticleHandler(BaseHandler):
     @catch_exception
     def get(self, group_id):
         if not self.mgroup.is_group_visiable(group_id, self.user_id):
             raise Exception('no access permission')
         page = int(self.get_argument('page', 1))
         size = int(self.get_argument('size', 20))
-        opuses = self.mgroup.get_group_opuses(group_id, page, size)
-        self.write_json(opuses)
+        articles = self.mgroup.get_group_articles(group_id, page, size)
+        self.write_json(articles)
 
 
 class GroupSessionHistoryHandler(BaseHandler):
@@ -100,7 +103,7 @@ class GroupSessionHistoryHandler(BaseHandler):
     def get(self, group_id):
         if not self.mgroup.is_group_visiable(group_id, self.user_id):
             raise Exception('no access permission')
-        anchor_id = int(self.get_argument('anchor_id'))
+        anchor_id = int(self.get_argument('anchor_id', 0))
         size = int(self.get_argument('size', 20))
         ss = self.mgroup.get_group_sessions(group_id, anchor_id, size)
         self.write_json(ss)
@@ -113,7 +116,8 @@ class TopicHandler(BaseHandler):
         if not self.mgroup.is_group_visiable(topic['gid'], self.user_id):
             raise Exception('no access permission')
         if topic:
-            self.render('topic.html', topic=topic)
+            group = self.mgroup.get_group_homepage(topic['gid'])
+            self.render('topic.html', group=group, topic=topic)
         else:
             self.render_404_page()
 
@@ -122,11 +126,12 @@ class TopicSessionHistoryHandler(BaseHandler):
     @catch_exception
     def get(self, topic_id):
         topic = self.mgroup.get_topic(topic_id)
-        if not self.mgroup.is_group_visiable(topic['gid'], self.user_id):
+        group_id = topic['gid']
+        if not self.mgroup.is_group_visiable(group_id, self.user_id):
             raise Exception('no access permission')
-        anchor_id = int(self.get_argument('anchor_id'))
+        anchor_id = int(self.get_argument('anchor_id', 0))
         size = int(self.get_argument('size', 20))
-        ss = self.mgroup.get_topic_sessions(group_id, anchor_id, size)
+        ss = self.mgroup.get_topic_sessions(topic_id, anchor_id, size)
         self.write_json(ss)
 
 
@@ -170,16 +175,20 @@ class GroupSessionBaseHandler(SessionBaseHandler):
             )
         return message
 
+    def on_message(self, message):
+        self.send_message(message)
 
-class GroupSessionAjaxHandler(SessionBaseHandler):
+
+class GroupSessionAjaxHandler(GroupSessionBaseHandler):
+    @catch_exception
     def get(self, group_id):
         self.channel = 'g' + str(group_id)
         self.group_id = group_id
         if not self.mgroup.is_group_visiable(self.group_id, self.user_id):
-            self.write_errmsg('no access permission')
-            return
+            raise Exception('no access permission')
         self.listen()
 
+    @catch_exception
     def post(self, group_id):
         self.channel = 'g' + str(group_id)
         self.group_id = group_id
@@ -189,17 +198,18 @@ class GroupSessionAjaxHandler(SessionBaseHandler):
 
 class TopicSessionAjaxHandler(SessionBaseHandler):
     def get_reply_topic_id(self):
-        return self.topic['id']
+        return self.topic['tid']
 
+    @catch_exception
     def get(self, topic_id):
         self.channel = 't' + str(topic_id)
         self.topic = self.mgroup.get_topic(topic_id)
         self.group_id = self.topic['gid']
         if not self.mgroup.is_group_visiable(self.group_id, self.user_id):
-            self.write_errmsg('no access permission')
-            return
+            raise Exception('no access permission')
         self.listen()
 
+    @catch_exception
     def post(self, topic_id):
         self.channel = 't' + str(topic_id)
         self.topic = self.mgroup.get_topic(topic_id)
@@ -209,30 +219,24 @@ class TopicSessionAjaxHandler(SessionBaseHandler):
 
 
 class GroupSessionWebsocketHandler(GroupSessionBaseHandler, WebSocketHandler):
+    @catch_exception
     def open(self, group_id):
         self.channel = 'g' + str(group_id)
         self.group_id = group_id
         if not self.mgroup.is_group_visiable(self.group_id, self.user_id):
-            self.write_errmsg('no access permission')
-            return
+            raise Exception('no access permission')
         self.listen()
-
-    def on_message(self, message):
-        self.send_message(message)
 
 
 class TopicSessionWebsocketHandler(GroupSessionBaseHandler, WebSocketHandler):
     def get_reply_topic_id(self):
-        return self.topic['id']
+        return self.topic['tid']
 
+    @catch_exception
     def open(self, topic_id):
         self.channel = 't' + str(topic_id)
         self.topic = self.mgroup.get_topic(topic_id)
         self.group_id = self.topic['gid']
         if not self.mgroup.is_group_visiable(self.group_id, self.user_id):
-            self.write_errmsg('no access permission')
-            return
+            raise Exception('no access permission')
         self.listen()
-
-    def on_message(self, message):
-        self.send_message(message)

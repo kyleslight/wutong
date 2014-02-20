@@ -234,14 +234,23 @@ $(document).ready(function() {
         isRegisterBox = false;
         return false;
     });
-    // my collection
+
+    // 我的收藏
     var numOfCollectionList = 1;
     var heightOfMycollection = 123 + numOfCollectionList * 55;
-    $("#myCollection").click(function() {
+    function getCollections(type) {
         var url = '/u/collection';
-        $.getJSON(url, function(data) {
+        $.getJSON(url, {'type': type}, function(data) {
+            var err = getError(data);
+            if (err) {
+                console.log(err);
+                return;
+            }
             $(".myCollectionList").remove();
-            renderTemplateAfter('#collection-template', data);
+            for (var i = 0; i < data.length; i++) {
+                console.log(data[i]);
+                renderTemplateAfter('#collection-template', data[i]);
+            }
         });
         $(".myCollectionWarp").animate({
             height: heightOfMycollection
@@ -249,7 +258,24 @@ $(document).ready(function() {
             $(".myCollection").fadeIn(500);
         });
         return false;
+    };
+
+    // 我的收藏
+    $("#myCollection").click(function() {
+        getCollections('1');
     });
+
+    $(".myCollectionClassButton").click(function(){
+        var indexOfCollBut=$(".myCollectionClassButton").index($(this));
+        getCollections(indexOfCollBut + 1);
+        if ($(".myCollectionCon").eq(indexOfCollBut).css("display")!="none") {
+            return false;
+        };
+        $(".myCollectionCon").hide();
+        $(".myCollectionCon").eq(indexOfCollBut).show();
+        return false;
+    });
+
     $("#myCollectionBack").click(function() {
         $(".myCollection").fadeOut(500, function() {
             $(".myCollectionWarp").animate({
@@ -258,17 +284,8 @@ $(document).ready(function() {
         });
         return false;
     });
-    $(".myCollectionClassButton").click(function(){
-        var indexOfCollBut=$(".myCollectionClassButton").index($(this));
-        console.log(indexOfCollBut);
-        if ($(".myCollectionCon").eq(indexOfCollBut).css("display")!="none") {
-            return false;
-        };
-        $(".myCollectionCon").hide();
-        $(".myCollectionCon").eq(indexOfCollBut).show();
-        return false;
-    });
-    // my note
+
+    // 我的便笺
     $("#myNote").click(function() {
         $(".myNoteWrap").animate({
             height: 415
@@ -331,9 +348,9 @@ $(document).ready(function() {
                 showError("便笺创建失败",2000);
                 return;
             }
-            var newNote = data;
-            activeNoteID = newNote.id
-            $(".myNoteListWrap").prepend(renderTemplateString('#memo-template',newNote));
+            var newNote = JSON.parse(data);
+            activeNoteID = newNote.id;
+            renderTemplatePrepend("#memo-template", newNote, ".myNoteListWrap");
             $(".myCurrentNoteTitle").val(newNote.title);
             $(".myCurrentNoteContent").val(newNote.content);
             $(".myCurrentNoteTime").text(newNote.create_time.slice(0,10));
@@ -353,16 +370,18 @@ $(document).ready(function() {
             "id":activeNoteID,
             "title":$(".myCurrentNoteTitle").val(),
             "content":$(".myCurrentNoteContent").val()
-        },function(){
+        },function(data){
             var err = getError(data);
             if (err) {
                 showError("保存便笺失败");
                 return;
             }
-            showError("成功保存便笺");
+            var newNote = JSON.parse(data);
+            $(".myCurrentNoteTitle").val(newNote.title);
+            $(".myCurrentNoteContent").val(newNote.content);
+            $(".myCurrentNoteTime").text(newNote.create_time.slice(0,10));
             $("#No_memo_"+activeNoteID).text($(".myCurrentNoteTitle").val());
             activeNoteID=parseInt($(".myNoteList").eq(0).attr("id").slice(8));
-
         });
     });
     // delete note
@@ -926,24 +945,30 @@ function renderTemplateString(temp, obj) {
     return innerHTML;
 }
 
-function renderTemplateAfter(temp, obj, target) {
+function renderTemplateTo(temp, obj, target, func) {
     var innerHTML = renderTemplateString(temp, obj);
     if (target) {
-        $(target).after($(innerHTML));
+        $(target)[func]($(innerHTML));
     } else {
-        $(temp).after($(innerHTML));
+        $(temp)[func]($(innerHTML));
     }
     return innerHTML;
 }
 
+function renderTemplateAfter(temp, obj, target) {
+    return renderTemplateTo(temp, obj, target, "after");
+}
+
 function renderTemplateAppend(temp, obj, target) {
-    var innerHTML = renderTemplateString(temp, obj);
-    if (target) {
-        $(target).append($(innerHTML));
-    } else {
-        $(temp).append($(innerHTML));
-    }
-    return innerHTML;
+    return renderTemplateTo(temp, obj, target, "append");
+}
+
+function renderTemplatePrepend(temp, obj, target) {
+    return renderTemplateTo(temp, obj, target, "prepend");
+}
+
+function renderTemplateBefore(temp, obj, target) {
+    return renderTemplateTo(temp, obj, target, "before");
 }
 
 function showBigImage(url){

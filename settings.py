@@ -35,12 +35,15 @@ urls = [
     (r"/g/browse/topic", group.BrowseMoreTopicHandler),
     (r"/g/(\d+)/join", group.JoinHandler),
     (r"/g/(\d+)/member", group.GroupMemberHandler),
+    (r"/g/(\d+)/article", group.GroupArticleHandler),
     (r"/g/(\d+)", group.GroupHandler),
+    (r"/g/(\d+)/session/history", group.GroupSessionHistoryHandler),
     (r"/g/(\d+)/session/websocket", group.GroupSessionWebsocketHandler),
-    (r"/g/(\d+)/session", group.GroupSessionAjaxHandler),
+    (r"/g/(\d+)/session/ajax", group.GroupSessionAjaxHandler),
     (r"/t/(\d+)", group.TopicHandler),
+    (r"/t/(\d+)/session/history", group.TopicSessionHistoryHandler),
     (r"/t/(\d+)/session/websocket", group.TopicSessionWebsocketHandler),
-    (r"/t/(\d+)/session", group.TopicSessionAjaxHandler),
+    (r"/t/(\d+)/session/ajax", group.TopicSessionAjaxHandler),
 ]
 
 

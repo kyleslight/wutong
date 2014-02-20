@@ -19,7 +19,9 @@
             <div class="groupInfo">
                 <div class="groupInfoCon">
                     <div class="groupTitle">
+                        {% if group["avatar"] %}
                         <img class="groupImage" src="{{ avatarurl(group["avatar"]) }}" />
+                        {% end %}
                         <a id="groupTitleName" href="/g/{{ group["gid"] }}">{{ group["name"] }}</a>
                         {% if group['motto'] %}
                         <span id='titleCut'> | </span>
@@ -44,61 +46,62 @@
             </div>
             <div class="groupItem">
                 <div class="infoCard groupOptionShow" id="groupOptionShow1">
-                    <script type="text/template" id="group-template">
-                        <div id="groupName">{{!name}}
-                            <p id="IDVaule"></p>
+                    <div id="groupName">
+                        {{ group['name'] }}
+                        <p id="IDVaule"></p>
+                    </div>
+                    {% if group['banner'] %}
+                        <div class="groupBannerBox">
+                            <img id="groupBanner" src="{{ group['banner'] }}" />
                         </div>
-                        {{!if banner}}
-                            <div class="groupBannerBox">
-                                <img id="groupBanner" src="{{!banner}}" />
+                    {% end %}
+                    <div id="groupDetail">
+                        {% if group['intro'] %}
+                            <div id="groupIntro" class="groupDetailItem">
+                                <span class="introWord">简介：</span>
+                                {{ group['intro'] }}
                             </div>
-                        {{!/if}}
-                        <div id="groupDetail">
-                            {{!if intro}}
-                                <div id="groupIntro" class="groupDetailItem">
-                                    <span class="introWord">简介：</span>{{!intro}}
-                                </div>
-                            {{!/if}}
+                        {% end %}
 
-                            <div id="groupFounder" class="groupDetailItem">
-                                <span class="introWord">创建：</span>
-                                <p id="Founder">{{!founder}}</p>创立于
-                                <p id="foundTime">{{!foundtime}}</p>
-                            </div>
-
-                            <div id="groupAdmin" class="groupDetailItem">
-                                <span class="introWord">组长：</span>
-                                <p id="administrator">{{!leader}}</p>
-                            </div>
-
-                            <div id="groupMemberNum" class="groupDetailItem">
-                                <span class="introWord">成员数：</span>
-                                <p id="memberNum">{{!member_number}}</p>
-                            </div>
-
-                            <div id="groupGPA" class="groupDetailItem">
-                                <span class="introWord">平均文章得分：</span>
-                                <p id="GPA">{{!avg_article_score}}</p>
-                            </div>
-
-                            <div id="groupRank" class="groupDetailItem">
-                                <span class="introWord">小组排名：</span>
-                                <p id="RANK">{{!rank}}</p>
-                            </div>
-
-                            {{!if motto}}
-                            <div id="groupInfoMotto" class="groupDetailItem">
-                                <span class="introWord">签名：</span>
-                                <p id="Motto">{{!motto}}</p>
-                            </div>
-                            {{!/if}}
+                        <div id="groupFounder" class="groupDetailItem">
+                            <span class="introWord">创建：</span>
+                            <p id="Founder">{{ group['creater'] }}</p>创立于
+                            <p id="foundTime">{{ prettytime(group['create_time']) }}</p>
                         </div>
-                        {{!if intro}}
-                        <div id="groupMoreDetail">
-                            {{!intro}}
+
+                        <div id="groupAdmin" class="groupDetailItem">
+                            <span class="introWord">组长：</span>
+                            <p id="administrator">{{ group['leader'] }}</p>
                         </div>
-                        {{!/if}}
-                    </script>
+
+                        <div id="groupMemberNum" class="groupDetailItem">
+                            <span class="introWord">成员数：</span>
+                            <p id="memberNum">{{ group['member_number'] }}</p>
+                        </div>
+
+                        <div id="groupGPA" class="groupDetailItem">
+                            <span class="introWord">平均文章得分：</span>
+                            <p id="GPA">{{ group['avg_article_score'] }}</p>
+                        </div>
+
+<!--
+                        <div id="groupRank" class="groupDetailItem">
+                            <span class="introWord">小组排名：</span>
+                            <p id="RANK">{{!rank}}</p>
+                        </div>
+-->
+                        {% if group['motto'] %}
+                        <div id="groupInfoMotto" class="groupDetailItem">
+                            <span class="introWord">签名：</span>
+                            <p id="Motto">{{ group['motto'] }}</p>
+                        </div>
+                        {% end %}
+                    </div>
+                    {% if group['intro'] %}
+                    <div id="groupMoreDetail">
+                        {{ group['intro'] }}
+                    </div>
+                    {% end %}
                     <a href="#" class="optionBack">返回</a>
                 </div>
                 <!-- member -->
@@ -111,7 +114,11 @@
                                     {{!nickname}}
                                     <span class="memberHonour">{{!position}}</span>
                                 </div>
-                                <div class="memberIntro">{{!intro}}</div>
+                                <div class="memberIntro">
+                                {{!if intro}}
+                                    {{!intro}}
+                                {{!/if}}
+                                </div>
                                 <div class="memberInfo">
                                     <span class="memberSex">
                                     {{!if sex}}
@@ -128,7 +135,9 @@
                                     {{!/if}}
                                     </span>
                                     <span class="memberCity">
-                                    {{!address}}
+                                    {{!if address}}
+                                        {{!address}}
+                                    {{!/if}}
                                     </span>
                                 </div>
                             </div>
@@ -141,21 +150,23 @@
                 <!-- works -->
                 <div class="works groupOptionShow" id="groupOptionShow3">
                     <div id="worksArticals">
-                    <!-- {}  -->
-                        <li class="worksArticalShow">
-                            <div class="artical">
-                                <div class="articalBasicInfo">
-                                    <img src="{{!author_avatar}}" class="articAluthorImage">
-                                    <a href="/a/{{!aid}}" class="articalTitle">{{!title}}</a>
-                                    <a href="/user/{{!author}}" class="articalAuthor">{{!author}}</a>
+                        <script type="text/template" id="article-template">
+                            <li class="worksArticalShow">
+                                <div class="artical">
+                                    <div class="articalBasicInfo">
+                                        <img src="{{!author_avatar}}" class="articAluthorImage">
+                                        <a href="/a/{{!aid}}" class="articalTitle">{{!title}}</a>
+                                        <a href="/user/{{!author}}" class="articalAuthor">{{!author}}</a>
+                                    </div>
+                                    <div class="articalTag">
+                                        {{!tags}}
+                                        <a href="/search?type=article&tag={{!.}}">{{!.}}</a>
+                                        {{!/tags}}
+                                    </div>
+                                    <div class="articaltime">{{!modify_time}}</div>
                                 </div>
-                                <div class="articalTag">
-                                    <a href="/search?type=article&tag={{!tag}}">{{!tag}}</a>
-                                </div>
-                                <div class="articaltime">{{!modify_time}}</div>
-                            </div>
-                        </li>
-                    <!-- {}  -->
+                            </li>
+                        </script>
                     </div>
                     <div class="articalDirectionOption">
                         <a href="#">上一页</a>
@@ -210,27 +221,7 @@
                 </div>
 
             </div>
-            {% if None %}
-            <span class='topicLocation'>
-            {% for topic in ancestor_topics %}
-                >><a href="/t/{{ topic["tid"] }}">{{ topic["title"] }}</a>
-            {% end %}
-            </span>
-            <li class="topicInner">
-                <a class="userImage" href='#'><img src="{{ avatarurl(topic["avatar"]) }}" /></a>
-                <div class='talkMain'>
-                    <span class="userName"><a href='#'>{{ topic["penname"] }}</a></span>
-                    <span class='timeShow'>
-                        {{ prettytime(topic["submit_time"]) }}
-                    </span>
-                    <!-- 如果为该话题作者 -->
-                    <!-- <a href="#">删除</a> -->
-                    <a href="#" id="collectTopic">收藏该话题</a>
-                    <div class='talkContent'>
-                        {% raw topic["content"] %}
-                    </div>
-                </div>
-            </li>
+            {% block extra_topic_part %}
             {% end %}
             <div id="communicationWrapOuter">
                 <div id="messageTemp">
@@ -260,16 +251,16 @@
                         <div id="communicationConWrap">
                             <div class="communication" id="communication">
                                 <script type="text/template" id="topic-template">
-                                    <li id="topic_{{!id}}" class="topicOutter">
-                                        <a class="userImage" href='#'>
-                                            <img src='{{!avatar}}' />
+                                    <li id="{{!anthor_id}}_topic_{{!tid}}" class="topicOutter">
+                                        <a class="userImage" href="/user/{{!creater}}">
+                                            <img src='{{!creater_avatar}}' />
                                         </a>
                                         <div class='talkMain'>
                                             <div class="talkAction">
-                                                <a class='userName' href='/u/{{!nickname}}'>{{!nickname}}</a>
+                                                <a class='userName' href='/user/{{!creater}}'>{{!creater}}</a>
                                                  发起了话题
                                                 <span class='talkTitle'>
-                                                    <a href="/t/{{id}}" >{{!title}}</a>
+                                                    <a href="/t/{{!tid}}" >{{!title}}</a>
                                                 </span>
                                             </div>
                                             <div class='timeShow'>
@@ -282,16 +273,17 @@
                                     </li>
                                 </script>
                                 <script type="text/template" id="chat-template">
-                                    <li id="chat_{{!id}}" class="chat">
-                                        <a class="userImage" href='#'>
-                                            <img src="{{!avatar}}" />
+                                    <li id="{{!anthor_id}}_chat_{{!id}}" class="chat">
+                                        <a class="userImage" href='/user/{{!creater}}'>
+                                            <img src="{{!creater_avatar}}" />
                                         </a>
                                         <div class='talkMain'>
                                             <div class="chatFirstLine">
-                                                <span class='userName'><a href='#'>{{!nickname}}</a>
+                                                <span class='userName'>
+                                                    <a href='/user/{{!creater}}'>{{!creater}}</a>
                                                 </span>
                                                 <span class='timeShow'>
-                                                    {{!reply_time}}
+                                                    {{!create_time}}
                                                 </span>
                                             </div>
                                             <div class='talkContent'>
