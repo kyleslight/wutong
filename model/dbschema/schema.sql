@@ -118,6 +118,7 @@ create table user_collection (
 
 drop table if exists base_session cascade;
 create table base_session (
+    anchor_id serial,
     uid int,
     content text,
     reply_time timestamp default now(),
@@ -218,6 +219,7 @@ create table article_honor (
 drop table if exists article_coeditor cascade;
 create table article_coeditor (
     id serial primary key,
+    aid int,
     nickname text
 );
 
@@ -287,7 +289,7 @@ create table mygroup (
     motto text,
     -- 图片
     banner url,
-    public_level sort default '3',
+    public_level sort default '2',
     create_time timestamp default now()
 );
 
@@ -336,7 +338,7 @@ create table group_topic (
     title text,
     father_id int,
     ancestor_id int,
-    on_top bool
+    on_top bool default false
 ) inherits (base_session);
 
 drop table if exists group_message cascade;
@@ -344,7 +346,7 @@ create table group_message (
     id serial primary key,
     gid int,
     tid int,
-    on_top bool
+    on_top bool default false
 ) inherits (base_session);
 
 --------------------------------------------------------------------------------
@@ -375,10 +377,19 @@ select aid,
   from article_tag
  group by aid;
 
+drop view if exists article_coeditor_base cascade;
+create view article_coeditor_base
+  as
+select aid,
+       array_agg(nickname) as "coeditors"
+  from article_coeditor
+ group by aid;
+
 drop view if exists article_base cascade;
 create view article_base
   as
-select a.aid,
+select a.uid,
+       a.aid,
        a.title,
        a.intro,
        a.modify_time,
@@ -472,7 +483,7 @@ select g.*,
        u.avatar as "creater_avatar",
        gm.nickname as "leader",
        gm.avatar as "leader_avatar",
-       (select count(id) from group_member_show where gid = g.gid) as "number"
+       (select count(id) from group_member_show where gid = g.gid) as "member_number"
   from mygroup g,
        user_base u,
        group_member_show gm
@@ -487,7 +498,7 @@ select t.*,
        u.nickname as "creater",
        u.avatar as "creater_avatar",
        (select count(id) from group_message where tid = t.tid) +
-       (select count(tid) from group_topic where father_id = t.tid) as "number"
+       (select count(tid) from group_topic where father_id = t.tid) as "reply_number"
   from group_topic t,
        user_base u
  where t.uid = u.uid;

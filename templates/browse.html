@@ -6,6 +6,7 @@
     <!-- main view -->
 	<div class="mainViewWarp">
         <div class="mainView">
+<!--
             <div class="opusType">
                 <span href="#" class="speOpusTypeItem" >梧桐树下</span>
                 <a href="#" class="opusTypeItem activeOpusTypeItem">文章</a>
@@ -15,12 +16,13 @@
                 <a href="#" class="opusTypeItem">项目</a>
                 <span href="#" class="speOpusTypeItem" >你我共在</span>
             </div>
+-->
             <div class="opusFliter">
                 <a href="#" id="byTime"></a>
             </div>
             <div class="opusClass">
                 <div class="opusClassDivision activeClassDivision" id="articleClass">
-                    <a href="#" class="opusClassItem activeOpusClassItem">综合</a>
+                    <a href="/a/browse" class="opusClassItem activeOpusClassItem">所有</a>
                     <a href="?tag=学科" class="opusClassItem">学科</a>
                     <a href="?tag=技术" class="opusClassItem">技术</a>
                     <a href="?tag=教程" class="opusClassItem">教程</a>
@@ -104,7 +106,7 @@
                             {% if article["tags"] %}
                             <span class="opusTag">
                             {% for tag in article["tags"] %}
-                                <a href="/tag/{{ tag }}">{{ tag }}</a>
+                                <a href="/search?type=article&tag={{ tag }}">{{ tag }}</a>
                             {% end %}
                             </span>
                             {% end %}

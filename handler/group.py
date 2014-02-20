@@ -1,49 +1,45 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from tornado.web import asynchronous, authenticated
+from tornado.web import asynchronous
 from tornado.websocket import WebSocketHandler
 from tornado.escape import json_decode, json_encode
-from base import BaseHandler
+from base import BaseHandler, SessionBaseHandler, authenticated, catch_exception
 from lib import util
 
 
 class BrowseHandler(BaseHandler):
+    @catch_exception
     def get(self):
-        try:
-            user = self.current_user
-            if user:
-                user['groups'] = self.mgroup.get_user_groups(user['uid'], 1, 20)
-                user['topics'] = self.mgroup.get_mygroup_topics(user['uid'], 1, 10)
-                size = 10
-            else:
-                size = 20
-            topics = self.mgroup.get_topics(1, size)
+        user = self.current_user
+        if user:
+            user['groups'] = self.mgroup.get_user_groups(user['uid'], 1, 20)
+            user['topics'] = self.mgroup.get_mygroup_topics(user['uid'], 1, 10)
+            size = 10
+        else:
+            size = 20
+        topics = self.mgroup.get_browse_topics(1, size)
 
-            self.render(
-                'group-navigation.html',
-                user=user,
-                topics=topics
-            )
-        except Exception as e:
-            self.write_errmsg(e)
+        self.render(
+            'group-navigation.html',
+            user=user,
+            topics=topics
+        )
 
 
-class BrowseTopicHandler(BaseHandler):
+class BrowseMoreTopicHandler(BaseHandler):
+    @catch_exception
     def get(self):
-        try:
-            topic_type = self.get_argument('type')
-            page = int(self.get_argument('page'))
-            size = int(self.get_argument('size', 10))
-            if topic_type == 'mygroup':
-                topics = self.mgroup.get_mygroup_topics(self.user_id, page, size)
-            elif topic_type == 'all':
-                topics = self.mgroup.get_topics(page, size)
-            else:
-                raise Exception('invalid type')
-            self.write_json(topics)
-        except Exception as e:
-            self.write_errmsg(e)
+        topic_type = self.get_argument('type')
+        page = int(self.get_argument('page'))
+        size = int(self.get_argument('size', 10))
+        if topic_type == 'mygroup':
+            topics = self.mgroup.get_mygroup_topics(self.user_id, page, size)
+        elif topic_type == 'all':
+            topics = self.mgroup.get_topics(page, size)
+        else:
+            raise Exception('invalid type')
+        self.write_json(topics)
 
 
 class CreateHandler(BaseHandler):
@@ -52,24 +48,20 @@ class CreateHandler(BaseHandler):
         tags = util.split(tags)
         return tags
 
+    @catch_exception
     @authenticated
     def post(self):
-        try:
-            self.get_args('name', 'intro', 'public_level', 'tags')
-            self.set_arg('tags', self.get_tags())
-            group_id = self.mgroup.do_create(self.user_id, **self.args)
-            self.redirect('/g/' + str(group_id))
-        except Exception as e:
-            self.write_errmsg(e)
+        self.get_args('name', 'intro', 'public_level', 'tags')
+        self.set_arg('tags', self.get_tags())
+        group_id = self.mgroup.do_create(self.user_id, **self.args)
+        self.redirect('/g/' + str(group_id))
 
 
 class JoinHandler(BaseHandler):
+    @catch_exception
     @authenticated
     def post(self, group_id):
-        try:
-            self.join_group(group_id, self.user_id)
-        except Exception as e:
-            self.write_errmsg(e)
+        self.join_group(group_id, self.user_id)
 
 
 class GroupHandler(BaseHandler):
@@ -81,161 +73,166 @@ class GroupHandler(BaseHandler):
             self.render_404_page()
 
 
-class GroupSessionHistoryHandler(BaseHandler):
+class GroupMemberHandler(BaseHandler):
+    @catch_exception
     def get(self, group_id):
         if not self.mgroup.is_group_visiable(group_id, self.user_id):
-            self.write_errmsg('no access permission')
-            return
-        page = int(self.get_argument('page'))
-        size = int(self.get_argument('20'))
-        ss = self.mgroup.get_group_sessions(group_id, page, size)
+            raise Exception('no access permission')
+        page = int(self.get_argument('page', 1))
+        size = int(self.get_argument('size', 20))
+        members = self.mgroup.get_group_members(group_id, page, size)
+        self.write_json(members)
+
+
+class GroupOpusHandler(BaseHandler):
+    @catch_exception
+    def get(self, group_id):
+        if not self.mgroup.is_group_visiable(group_id, self.user_id):
+            raise Exception('no access permission')
+        page = int(self.get_argument('page', 1))
+        size = int(self.get_argument('size', 20))
+        opuses = self.mgroup.get_group_opuses(group_id, page, size)
+        self.write_json(opuses)
+
+
+class GroupSessionHistoryHandler(BaseHandler):
+    @catch_exception
+    def get(self, group_id):
+        if not self.mgroup.is_group_visiable(group_id, self.user_id):
+            raise Exception('no access permission')
+        anchor_id = int(self.get_argument('anchor_id'))
+        size = int(self.get_argument('size', 20))
+        ss = self.mgroup.get_group_sessions(group_id, anchor_id, size)
         self.write_json(ss)
 
 
-# TODO
 class TopicHandler(BaseHandler):
+    @catch_exception
     def get(self, topic_id):
-        pass
-
-
-# TODO
-class MessageBaseHandler(BaseHandler):
-    _group_manager = dict()
-    _topic_manager = dict()
-
-    @property
-    def user_id(self):
-        return self.session.load().get("uid")
-
-    def init_content(self, id, **kwargs):
-        """Call this function immediately after connected with client"""
-        self.id = id
-        name = self.__class__.__name__.lower()
-        if 'group' in name:
-            self.manager = self._group_manager
-            self.gid = self.id
-            self.reply_id = None
-        elif 'topic' in name:
-            self.manager = self._topic_manager
-            self.tid = self.id
-            self.reply_id = self.tid
-            self.gid = self.get_topic(self.tid)["gid"]
-
-    def add(self, handler):
-        if not self.manager.has_key(self.id):
-            self.manager[self.id] = set()
-        self.manager[self.id].add(handler)
-
-    def remove(self, handler):
-        self.manager.get(self.id).discard(handler)
-
-    def send_message(self, message):
-        trash = set()
-        for handler in self.manager[self.id]:
-            handler = handler.write_message(message)
-            trash.add(handler)
-        self.manager[self.id] -= trash
-
-    def can_send_message(self):
-        member_info = self.mgroup.get_member_info(self.gid, self.user_id)
-        if member_info:
-            return True
+        topic = self.mgroup.get_topic_homepage(topic_id)
+        if not self.mgroup.is_group_visiable(topic['gid'], self.user_id):
+            raise Exception('no access permission')
+        if topic:
+            self.render('topic.html', topic=topic)
         else:
-            return False
+            self.render_404_page()
 
-    def on_message(self, message):
-        if not self.can_send_message():
-            self.error('not login')
-            return
-        msg = json_decode(message)
-        mid = self.save_message(msg)
-        msg = self.get_message(mid)
-        msg = self.render_module_string("message.html", message=msg)
-        self.send_message(msg)
+
+class TopicSessionHistoryHandler(BaseHandler):
+    @catch_exception
+    def get(self, topic_id):
+        topic = self.mgroup.get_topic(topic_id)
+        if not self.mgroup.is_group_visiable(topic['gid'], self.user_id):
+            raise Exception('no access permission')
+        anchor_id = int(self.get_argument('anchor_id'))
+        size = int(self.get_argument('size', 20))
+        ss = self.mgroup.get_topic_sessions(group_id, anchor_id, size)
+        self.write_json(ss)
+
+
+class GroupSessionBaseHandler(SessionBaseHandler):
+    def get_reply_topic_id(self):
+        """
+        """
+        return None
+
+    def format_message(self, message):
+        if not self.mgroup.is_group_member(self.group_id, self.user_id):
+            raise Exception('not group member')
+        message = json_decode(message)
+        if message['type'] == 'message':
+            if not message.has_key('content'):
+                raise Exception('no content')
+        elif message['type'] == 'topic':
+            if not message.has_key('title'):
+                raise Exception('no title')
+            if not message.has_key('content'):
+                raise Exception('no content')
+        else:
+            raise Exception('invalid message type')
+        return message
 
     def save_message(self, message):
-        if message.has_key("title"):
-            id = self.mgroup.do_create_topic(
-                self.gid,
+        if message['type'] == 'message':
+            message = self.mgroup.create_group_message(
+                self.group_id,
                 self.user_id,
-                message["title"],
-                message["content"],
-                self.reply_id
+                message['content'],
+                self.get_reply_topic_id()
             )
-        else:
-            id = self.mgroup.do_create_chat(
-                self.gid,
+        elif message['type'] == 'topic':
+            message = self.mgroup.create_group_topic(
+                self.group_id,
                 self.user_id,
-                message["content"],
-                self.reply_id
+                message['title'],
+                message['content'],
+                self.get_reply_topic_id()
             )
-        return id
-
-    def get_topic(self, tid):
-        topic = self.mgroup.get_topic(tid)
-        return topic
-
-    def get_topic_group(self, tid):
-        topic = self.get_topic(tid)
-        group_info = self.mgroup.get_group_info(topic["gid"])
-        return group_info
-
-    def get_topic_sessions(self, tid):
-        messages = self.mgroup.get_topic_sessions(tid, 30, 0)
-        return messages or []
-
-    def get_group_sessions(self, gid):
-        messages = self.mgroup.get_group_sessions(gid, 30, 0)
-        return messages or []
-
-    def get_message(self, message_id):
-        message = self.mgroup.get_message(message_id)
         return message
 
 
-class MessageHandler(MessageBaseHandler):
-    @asynchronous
-    def get(self, id):
-        self.init_content(id)
-        self.add(self)
-
-    def post(self, id):
-        self.init_content(id)
-        data = self.request.body
-        self.on_message(data)
-
-    # return handler which should be delete
-    def write_message(self, message):
-        if self.request.connection.stream.closed():
+class GroupSessionAjaxHandler(SessionBaseHandler):
+    def get(self, group_id):
+        self.channel = 'g' + str(group_id)
+        self.group_id = group_id
+        if not self.mgroup.is_group_visiable(self.group_id, self.user_id):
+            self.write_errmsg('no access permission')
             return
-        self.write(message)
-        self.finish()
-        return self
+        self.listen()
+
+    def post(self, group_id):
+        self.channel = 'g' + str(group_id)
+        self.group_id = group_id
+        message = self.get_argument('message')
+        self.send_message(message)
 
 
-class GroupMessageHandler(MessageHandler):
-    pass
+class TopicSessionAjaxHandler(SessionBaseHandler):
+    def get_reply_topic_id(self):
+        return self.topic['id']
+
+    def get(self, topic_id):
+        self.channel = 't' + str(topic_id)
+        self.topic = self.mgroup.get_topic(topic_id)
+        self.group_id = self.topic['gid']
+        if not self.mgroup.is_group_visiable(self.group_id, self.user_id):
+            self.write_errmsg('no access permission')
+            return
+        self.listen()
+
+    def post(self, topic_id):
+        self.channel = 't' + str(topic_id)
+        self.topic = self.mgroup.get_topic(topic_id)
+        self.group_id = self.topic['gid']
+        message = self.get_argument('message')
+        self.send_message(message)
 
 
-class TopicMessageHandler(MessageHandler):
-    pass
+class GroupSessionWebsocketHandler(GroupSessionBaseHandler, WebSocketHandler):
+    def open(self, group_id):
+        self.channel = 'g' + str(group_id)
+        self.group_id = group_id
+        if not self.mgroup.is_group_visiable(self.group_id, self.user_id):
+            self.write_errmsg('no access permission')
+            return
+        self.listen()
+
+    def on_message(self, message):
+        self.send_message(message)
 
 
-class MessageSocketHandler(MessageBaseHandler, WebSocketHandler):
-    def error(self, message):
-        self.write_message(message)
+class TopicSessionWebsocketHandler(GroupSessionBaseHandler, WebSocketHandler):
+    def get_reply_topic_id(self):
+        return self.topic['id']
 
-    def open(self, id):
-        self.init_content(id)
-        self.add(self)
+    def open(self, topic_id):
+        self.channel = 't' + str(topic_id)
+        self.topic = self.mgroup.get_topic(topic_id)
+        self.group_id = self.topic['gid']
+        if not self.mgroup.is_group_visiable(self.group_id, self.user_id):
+            self.write_errmsg('no access permission')
+            return
+        self.listen()
 
-    def on_close(self):
-        self.remove(self)
-
-
-class GroupMessageSocketHandler(MessageSocketHandler):
-    pass
-
-
-class TopicMessageSocketHandler(MessageSocketHandler):
-    pass
+    def on_message(self, message):
+        self.send_message(message)

@@ -82,13 +82,28 @@ as $$
 $$ language sql;
 
 create or replace function
-create_user_collection(_uid int, _type sort, _relevant_id int) returns void
+update_user_collection(_uid int, _type sort, _relevant_id int) returns void
 as $$
-  insert into user_collection
-      (uid, type, relevant_id)
-  values
-      (_uid, _type, _relevant_id);
-$$ language sql;
+begin
+  perform id
+     from user_collection
+    where uid = _uid
+      and relevant_id = _relevant_id
+      and type = _type;
+
+  if FOUND then
+    delete from user_collection
+          where uid = _uid
+            and relevant_id = _relevant_id
+            and type = _type;
+  else
+    insert into user_collection
+        (uid, type, relevant_id)
+    values
+        (_uid, _type, _relevant_id);
+  end if;
+end;
+$$ language plpgsql;
 
 create or replace function
 get_user_collections(_uid int, _type sort, _limit int, _offset int) returns json
@@ -411,14 +426,34 @@ end;
 $$ language plpgsql;
 
 create or replace function
+is_article_author(_aid int, _uid int) returns bool
+as $$
+begin
+  perform *
+     from article
+    where aid = _aid
+      and uid = _uid;
+
+  if FOUND then
+    return true;
+  else
+    return false;
+  end if;
+end;
+$$ language plpgsql;
+
+create or replace function
 get_article(_aid int) returns json
 as $$
   select row_to_json(j.*)
     from
       (
-         select *
-           from article_show
-          where aid = _aid
+         select a.*,
+                c.coeditors
+           from article_show a,
+                article_coeditor_base c
+          where a.aid = _aid
+            and a.aid = c.aid
       ) j;
 $$ language sql;
 
@@ -495,46 +530,30 @@ create_bottom_comment(
     _aid int,
     _uid int,
     _content text,
-    _reply_id int) returns json
+    _reply_id int) returns int
 as $$
-declare
-  _tmp int;
-begin
-  select max(rank) + 1
-    from article_bottom_comment
-   where aid = _aid
-    into _tmp;
-  if _tmp is null then
-      _tmp := 1;
-  end if;
-
   insert into article_bottom_comment
       (aid, uid, reply_id, content, rank)
   values
-      (_aid, _uid, _reply_id, _content, _tmp)
-  returning id into _tmp;
-  return get_bottom_comment(_tmp);
-end;
-$$ language plpgsql;
+      (_aid, _uid, _reply_id, _content, (select COALESCE(max(rank), 0) + 1
+                                           from article_bottom_comment
+                                          where aid = _aid))
+  returning id;
+$$ language sql;
 
 create or replace function
 create_side_comment(
     _aid int,
     _uid int,
     _content text,
-    _paragraph_id text) returns json
+    _paragraph_id text) returns int
 as $$
-declare
-  _tmp int;
-begin
   insert into article_side_comment
       (aid, uid, content, paragraph_id)
   values
       (_aid, _uid, _content, _paragraph_id)
-  returning id into _tmp;
-  return get_side_comment(_tmp);
-end;
-$$ language plpgsql;
+  returning id;
+$$ language sql;
 
 create or replace function
 create_article_view(_aid int, _uid int, _ip inet) returns void
@@ -635,28 +654,59 @@ end;
 $$ language plpgsql;
 
 create or replace function
-update_myinteraction_info(_aid int, _uid int, _value text, _tabname text) returns int
+update_article_myscore(_aid int, _uid int, _score int) returns int
 as $$
 declare
     _tmp int;
 begin
-  execute 'delete from '
-      || _tabname::regclass
-      || ' where aid = ' || _aid
-      || '   and uid = ' || _uid;
-  get diagnostics _tmp = ROW_COUNT;
-  if _tabname = 'article_score' then
+  select id into _tmp
+    from article_score
+   where aid = _aid
+     and uid = _uid;
+
+  if _tmp is not null then
+    update article_score
+       set score = _score
+     where aid = _aid
+       and uid = _uid
+    returning id into _tmp;
+  else
     insert into article_score
         (aid, uid, score)
     values
-        (_aid, _uid, _value);
-  elseif _tmp = 0 then
-    execute format('insert into %I (aid, uid) values (%s, %s)', _tabname, _aid, _uid);
+        (_aid, _uid, _score)
+    returning id into _tmp;
   end if;
+
   return _tmp;
 end;
 $$ language plpgsql;
 
+create or replace function
+is_group_member(_gid int, _uid int) returns bool
+as $$
+  select position_level > '1'
+    from group_member
+   where gid = _gid
+     and uid = _uid;
+$$ language sql;
+
+create or replace function
+is_group_visiable(_gid int, _uid int) returns bool
+as $$
+declare
+  _tmp bool;
+begin
+  select public_level > '1' into _tmp
+    from mygroup
+   where gid = _gid;
+
+  if not _tmp then
+    select is_group_member(_gid, _uid) into _tmp;
+  end if;
+  return _tmp;
+end;
+$$ language plpgsql;
 
 create or replace function
 get_group_homepage(_gid int) returns json
@@ -682,13 +732,54 @@ as $$
 declare
     _tmp json;
 begin
-  -- TODO
+  select row_to_json(j.*) into _tmp
+    from
+      (
+         select *
+           from group_topic_show
+          where tid = _tid
+      ) j;
   return _tmp;
 end;
 $$ language plpgsql;
-create or replace function
 
-get_group_sessions(_gid int, _limit int, _offset int)
+create or replace function
+get_group_members(_gid int, _limit int, _offset int)
+  returns json
+as $$
+    select array_to_json(array_agg(aj))
+      from
+        (
+           select *
+             from group_member_show
+            where gid = _gid
+            order by join_time desc
+            limit _limit
+           offset _offset
+        ) aj;
+$$ language sql;
+
+create or replace function
+get_group_opuses(_gid int, _limit int, _offset int)
+  returns json
+as $$
+    select array_to_json(array_agg(aj))
+      from
+        (
+           select *
+             from group_member gm,
+                  article_base a
+            where gm.gid = _gid
+              and gm.uid = a.uid
+              and a.public_level > '2'
+            order by a.modify_time desc
+            limit _limit
+           offset _offset
+        ) aj;
+$$ language sql;
+
+create or replace function
+get_group_sessions(_gid int, _anchor_id int, _limit int)
   returns json
 as $$
     select array_to_json(array_agg(aj))
@@ -703,6 +794,7 @@ as $$
                           select *
                             from group_topic
                            where gid = _gid
+                             and anchor_id > _anchor_id
                        ) j
                     union
                    select row_to_json(j.*)::text, j.reply_time
@@ -711,16 +803,16 @@ as $$
                           select *
                             from group_message
                            where gid = _gid
+                             and anchor_id > _anchor_id
                        ) j
                 ) s
              order by s.reply_time desc
              limit _limit
-            offset _offset
         ) aj;
 $$ language sql;
 
 create or replace function
-get_topic_sessions(_tid int, _limit int, _offset int)
+get_topic_sessions(_tid int, _anchor_id int, _limit int)
   returns json
 as $$
     select array_to_json(array_agg(aj))
@@ -735,6 +827,7 @@ as $$
                           select *
                             from group_topic
                            where father_id = _tid
+                             and anchor_id > _anchor_id
                        ) j
                     union
                    select row_to_json(j.*)::text, j.reply_time
@@ -743,11 +836,11 @@ as $$
                           select *
                             from group_message
                            where tid = _tid
+                             and anchor_id > _anchor_id
                        ) j
                 ) s
              order by s.reply_time desc
              limit _limit
-            offset _offset
         ) aj;
 $$ language sql;
 
@@ -780,19 +873,51 @@ as $$
   select array_to_json(array_agg(aj.*))
     from
       (
-         select *
-           from group_topic_base
-          where gid in
-             (
+         select t.*,
+                g.name as "group_name"
+           from group_topic_base t,
+                mygroup g
+          where t.gid = g.gid
+            and t.gid in (
                 select gid
                   from group_member
                  where uid = _uid
-                   and position_level > '1'
-             )
-          order by reply_time desc
+                   and position_level > '1')
+          order by t.reply_time desc
           limit _limit
          offset _offset
       ) aj;
+$$ language sql;
+
+create or replace function
+get_browse_topics(_limit int, _offset int)
+  returns json
+as $$
+  select array_to_json(array_agg(aj.*))
+    from
+      (
+         select t.*,
+                g.name as "group_name"
+           from group_topic_base t,
+                mygroup g
+          where t.gid = g.gid
+          order by t.reply_time desc
+          limit _limit
+         offset _offset
+      ) aj;
+$$ language sql;
+
+create or replace function
+get_topic(_tid int)
+  returns json
+as $$
+  select row_to_json(j.*)
+    from
+      (
+         select *
+           from group_topic_base
+          where tid = _tid
+      ) j;
 $$ language sql;
 
 create or replace function
@@ -886,6 +1011,38 @@ begin
 end;
 $$ language plpgsql;
 
+create or replace function
+create_group_message(_gid int, _uid int, _content text, _tid int) returns json
+as $$
+declare
+  _tmp record;
+begin
+    insert into group_message
+        (gid, uid, content, tid)
+    values
+        (_gid, _uid, _content, _tid)
+    returning * into _tmp;
+    return (select row_to_json(_tmp.*));
+end;
+$$ language plpgsql;
+
+create or replace function
+create_group_topic(_gid int, _uid int, _title text, _content text, _father_id int) returns json
+as $$
+declare
+  _tmp record;
+begin
+    insert into group_topic
+        (gid, uid, title, content, father_id, ancestor_id)
+    values
+        (_gid, _uid, _title, _content, _father_id, (select father_id
+                                                      from group_topic
+                                                     where gid = _gid
+                                                       and tid = _father_id))
+    returning * into _tmp;
+    return (select row_to_json(_tmp.*));
+end;
+$$ language plpgsql;
 -- create or replace function
 -- get_search_opus(_aid int)
 --   returns json

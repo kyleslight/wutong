@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 class GroupModel(object):
-
     def __init__(self, db):
         self.db = db
         self.group_map_table = {
@@ -10,32 +9,36 @@ class GroupModel(object):
             'public': '2',
         }
 
-    # TODO
     def is_group_visiable(self, group_id, user_id):
-        return True
+        return self.db.callfirstfield('is_group_visiable', group_id, user_id)
 
-    # TODO
-    def is_topic_visiable(self, topic_id, user_id):
-        return True
+    def is_group_member(self, group_id, user_id):
+        return self.db.callfirstfield('is_group_member', group_id, user_id)
 
-    # TODO
     def get_group_homepage(self, group_id):
         return self.db.calljson('get_group_homepage', group_id)
 
-    # TODO
     def get_topic_homepage(self, topic_id):
         return self.db.calljson('get_topic_homepage', topic_id)
 
-    def get_group_sessions(self, group_id, page, size):
+    def get_group_members(self, group_id, page, size):
         limit = size
         offset = (page - 1) * size
-        sessions = self.db.calljson('get_group_sessions', group_id, limit, offset)
+        members = self.db.calljson('get_group_members', group_id, limit, offset)
+        return members or []
+
+    def get_group_opuses(self, group_id, page, size):
+        limit = size
+        offset = (page - 1) * size
+        members = self.db.calljson('get_group_opuses', group_id, limit, offset)
+        return members or []
+
+    def get_group_sessions(self, group_id, anchor_id, size):
+        sessions = self.db.calljson('get_group_sessions', group_id, anchor_id, size)
         return sessions or []
 
-    def get_topic_sessions(self, topic_id, page, size):
-        limit = size
-        offset = (page - 1) * size
-        sessions = self.db.calljson('get_topic_sessions', topic_id, limit, offset)
+    def get_topic_sessions(self, topic_id, anchor_id, size):
+        sessions = self.db.calljson('get_topic_sessions', topic_id, anchor_id, size)
         return sessions or []
 
     def get_mygroup_topics(self, user_id, page, size):
@@ -43,6 +46,15 @@ class GroupModel(object):
         offset = (page - 1) * size
         topics = self.db.calljson('get_mygroup_topics', user_id, limit, offset)
         return topics or []
+
+    def get_browse_topics(self, page, size):
+        limit = size
+        offset = (page - 1) * size
+        topics = self.db.calljson('get_browse_topics', limit, offset)
+        return topics or []
+
+    def get_topic(self, topic_id):
+        return self.db.calljson('get_topic', topic_id)
 
     def get_topics(self, page, size):
         limit = size
@@ -78,57 +90,23 @@ class GroupModel(object):
         else:
             raise Exception('unknow error')
 
-    # TODO
-    def get_topics_by_tag(self, tag, page, size):
-        limit = size
-        offset = (page - 1) * size
-        topics = self.db.calljson('get_topics_by_tag', tag, limit, offset)
-        return topics or []
+    def create_group_message(self, group_id, user_id, content, topic_id=None):
+        msg = self.db.calljson('create_group_message',
+                               group_id,
+                               user_id,
+                               content,
+                               topic_id)
+        if not msg:
+            raise Exception('create group message error')
+        return msg
 
-    def get_user_topics(self, uid, page, size):
-        limit = size
-        offset = (page - 1) * size
-        topics = self.db.calljson('get_user_topics', limit, offset)
-        return topics or []
-
-    def get_group_topics(self, gid, page, size):
-        limit = size
-        offset = (page - 1) * size
-        topics = self.db.calljson('get_group_topics', gid, limit, offset)
-        return topics or []
-
-    def get_topic_topics(self, topic_id, page, size):
-        limit = size
-        offset = (page - 1) * size
-        topics = self.db.calljson('get_topic_topics', topic_id, limit, offset)
-        return topics or []
-
-    def get_topic_chats(self, topic_id, page, size):
-        limit = size
-        offset = (page - 1) * size
-        chats = self.db.calljson('get_topic_chats', topic_id, limit, offset)
-        return chats or []
-
-    def get_member_info(self, gid, uid):
-        return self.db.calljson('get_group_member_info', gid, uid)
-
-    def get_group_members(self, gid, page, size):
-        limit = size
-        offset = (page - 1) * size
-        members = self.db.calljson('get_group_members', gid, limit, offset)
-        return members or []
-
-    def get_bulletins(self, gid, page, size):
-        limit = size
-        offset = (page - 1) * size
-        bulletins = self.db.calljson('get_group_bulletins', gid, limit, offset)
-        return bulletins or []
-
-    def create_topic(self, gid, uid, title, content, reply_id=None):
-        return self.db.callfirstfield('create_topic', gid, uid, title, content, reply_id)
-
-    def create_chat(self, gid, uid, content, reply_id=None):
-        return self.db.callfirstfield('create_group_chat', gid, uid, content, reply_id)
-
-    def create_bulletin(self, gid, uid, title, content):
-        return self.db.callfirstfield('create_group_bulletin', gid, uid, title, content)
+    def create_group_topic(self, group_id, user_id, title, content, topic_id=None):
+        msg = self.db.calljson('create_group_topic',
+                               group_id,
+                               user_id,
+                               title,
+                               content,
+                               topic_id)
+        if not msg:
+            raise Exception('create group topic error')
+        return msg

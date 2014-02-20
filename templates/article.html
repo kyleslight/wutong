@@ -54,10 +54,10 @@
                 <div class="opusTime">{{ prettytime(article["modify_time"]) }}</div>
                 <span class="opusAuthor">by <a href="#">{{ article["author"] }}</a></span>
                 <div class="opusData">
-                    <div class = 'opusViewed'> 浏览：{{ article['view_num'] }}</div>
-                    <div class='opusGrade'>评分：{{ article['avg_score'] }}</div>
-                    <div class = 'opusCollected'> 收藏：{{ article['collected_num'] }}</div>
-                    <div class='opusForwarded'>转发：{{ article['forwarded_num'] }}</div>
+                    浏览：<div class = 'opusViewed'>{{ article['view_num'] }}</div>
+                    评分：<div class='opusGrade'>{{ article['avg_score'] }}</div>
+                    收藏：<div class = 'opusCollected'>{{ article['collected_num'] }}</div>
+                    转发：<div class='opusForwarded'>{{ article['forwarded_num'] }}</div>
                 </div>
             </div>
             <div class="authorBasicInfo">
@@ -110,16 +110,16 @@
                 <div class="buttomComment">
                     <div class="buttomCommentCon">
                         <script type="text/template" id="bottom-comment-template">
-                            <li class="opusCommentList" style="display: list-item;">
-                                <a class="userImage" href="/user/{{!nickname}}">
-                                    <img src="{{!avatar}}">
+                            <li id="No_bottom_comment_{{!id}}" class="opusCommentList" style="display: list-item;">
+                                <a class="userImage" href="/user/{{!creater}}">
+                                    <img src="{{!creater_avatar}}">
                                 </a>
                                 <div class="opusCommentMain">
                                     <div class="opusCommentListFirstLine">
                                         <div class="userName">
-                                            <a href="/user/{{!nickname}}">{{!nickname}}</a>
+                                            <a href="/user/{{!creater}}">{{!creater}}</a>
                                         </div>
-                                        <span class="opusCommentPosition">#{{!floor}}</span>
+                                        <span class="opusCommentPosition">#{{!rank}}</span>
                                         <div class="timeShow">
                                             {{!create_time}}
                                         </div>
@@ -139,18 +139,17 @@
                 </div>
             </div>
         </div>
-
-        <div class="opusSideCommentWrap">
-            <div class="opusSideComment">
-                <script type="text/template" id="side-comment-template">
-                    <li class="opusSideCommentList opusSideCommentList{{!paragraph_id}}" >
-                        <a href="/user/{{!nickname}}" class="opusSideCommentListUserName">{{!nickname}}</a>
-                        <div class="opusSideCommentContent">
-                            {{!content}}
-                        </div>
-                    </li>
-                </script>
-            </div>
+    </div>
+    <div class="opusSideCommentWrap">
+        <div class="opusSideComment">
+            <script type="text/template" id="side-comment-template">
+                <li id="No_side_comment_{{!id}}" class="opusSideCommentList opusSideCommentList{{!paragraph_id}}" onclick="toLeftPara({{!paragraph_id}})">
+                    <a href="/user/{{!creater}}" class="opusSideCommentListUserName">{{!creater}}</a>
+                    <div class="opusSideCommentContent">
+                        {{!content}}
+                    </div>
+                </li>
+            </script>
         </div>
     </div>
 </div>

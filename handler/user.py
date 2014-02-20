@@ -5,44 +5,17 @@ import os
 import re
 import random
 from sys import getsizeof
-from tornado.web import authenticated, asynchronous, gen_log
+from tornado.web import asynchronous, gen_log
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado import gen
 from lib import sendmail
 from lib import util
-from base import BaseHandler
+from base import BaseHandler, authenticated, catch_exception, login
 
 
-def login(handler, user_id=None, user=None):
-    user = user or handler.get_current_user(user_id)
-    handler.session['uid'] = user['uid']
-    cnt = handler.muser.get_unread_msg_count(user['uid'])
-    user = handler.get_pure_user()
-    user['msg_count'] = cnt
-    return user
-
-# TODO
 class IndexHandler(BaseHandler):
     def get(self):
-        # TODO
-        self.render('base.html')
-        return
-        stay_urls = [
-            r'/user/(.+)',
-            r'/a/browse',
-            r'/a/create',
-            r'/g/browse',
-            r'/g/(\d+)',
-            r'/t/(\d+)',
-            r'/a/(\d+)',
-        ]
-        url = self.get_cookie('last_view')
-        if url:
-            for pattern in stay_urls:
-                if re.search(pattern, url):
-                    self.redirect(url)
-                    return
-        self.redirect('/a/browse')
+        self.render('home.html')
 
 
 class HomeHandler(BaseHandler):
@@ -65,6 +38,7 @@ class LoginHandler(BaseHandler):
     def get(self):
         self.write_errmsg('need login')
 
+    @catch_exception
     def post(self):
         nickname_or_email = self.get_argument("username")
         password = self.get_argument("password")
@@ -72,12 +46,9 @@ class LoginHandler(BaseHandler):
         if not util.is_email(nickname_or_email) and util.has_illegal_char(nickname_or_email):
             self.write_errmsg('illegal nickname')
             return
-        try:
-            user = self.muser.do_login(nickname_or_email, password)
-            user = login(self, user=user)
-            self.write_json(user)
-        except Exception as e:
-            self.write_errmsg(e)
+        user = self.muser.do_login(nickname_or_email, password)
+        user = login(self, user=user)
+        self.write_json(user)
 
 
 class LogoutHandler(BaseHandler):
@@ -86,23 +57,21 @@ class LogoutHandler(BaseHandler):
 
 
 class RegisterHandler(BaseHandler):
+    @catch_exception
     def post(self):
         nickname = self.get_arg('nickname')
         password = self.get_arg('password')
         email = self.get_arg('email')
 
-        try:
-            self.check_arg('nickname', util.has_illegal_char, result=False)
-            self.check_arg('email', util.is_email)
-            user_id = self.muser.do_register(nickname, password, email)
-            avatar = self.set_random_avatar(nickname)
-            self.muser.update_user_info(user_id, avatar=avatar)
-            self.send_mail(email, user_id)
-            # 前端负责登录
-            # user = login(self, user_id=user_id)
-            # self.write_json(user)
-        except Exception as e:
-            self.write_errmsg(e)
+        self.check_arg('nickname', util.has_illegal_char, result=False)
+        self.check_arg('email', util.is_email)
+        user_id = self.muser.do_register(nickname, password, email)
+        avatar = self.set_random_avatar(nickname)
+        self.muser.update_user_info(user_id, avatar=avatar)
+        self.send_mail(email, user_id)
+        # 前端负责登录
+        # user = login(self, user_id=user_id)
+        # self.write_json(user)
 
     def set_random_avatar(self, nickname):
         avatar_dir = self.settings['avatar_path']
@@ -134,22 +103,20 @@ class RegisterHandler(BaseHandler):
 
 
 class AccountHandler(BaseHandler):
+    @catch_exception
     def get(self):
         """
         若成功返回相关信息或1, 失败返回错误信息或0
         """
-        try:
-            if self.has_argument('activate_account'):
-                self.activate_account()
-            elif self.has_argument('check_username'):
-                self.check_username()
-            elif self.has_argument('check_email'):
-                self.check_email()
-            url = self.get_argument('next')
-            if url:
-                self.redirect(url)
-        except Exception as e:
-            self.write_errmsg(e)
+        if self.has_argument('activate_account'):
+            self.activate_account()
+        elif self.has_argument('check_username'):
+            self.check_username()
+        elif self.has_argument('check_email'):
+            self.check_email()
+        url = self.get_argument('next')
+        if url:
+            self.redirect(url)
 
     def activate_account(self):
         value = self.get_argument('v')
@@ -179,6 +146,7 @@ class UserinfoHandler(BaseHandler):
         user = login(self, user=self.current_user)
         self.write_json(user)
 
+    @catch_exception
     @authenticated
     def post(self):
         """
@@ -187,26 +155,22 @@ class UserinfoHandler(BaseHandler):
         self.get_args('nickname', 'email', 'realname',
                       'phone', 'birthday', 'sex',
                       'address', 'intro', 'motto')
-        try:
-            self.check_arg('nickname', util.has_illegal_char, result=False)
-            self.check_arg('email', util.is_email)
-            self.check_arg('realname', util.is_english_or_chinese)
-            self.check_arg('phone', util.is_phone)
-            self.check_arg('birthday', util.is_time)
-            self.check_arg('sex', util.is_bool)
-            self.check_arg('address', self.is_address)
-            self.check_arg('nickname', self.muser.is_nickname_exist,
-                           result=False,
-                           errmsg='nickname exist')
-            self.check_arg('email', self.muser.is_email_exist,
-                           result=False,
-                           errmsg='email exist')
-            sex = self.get_arg('sex')
-            self.set_arg('sex', util.get_bool(sex))
-            self.do_update()
-        except Exception as e:
-            self.write_errmsg(str(e))
-            return
+        self.check_arg('nickname', util.has_illegal_char, result=False)
+        self.check_arg('email', util.is_email)
+        self.check_arg('realname', util.is_english_or_chinese)
+        self.check_arg('phone', util.is_phone)
+        self.check_arg('birthday', util.is_time)
+        self.check_arg('sex', util.is_bool)
+        self.check_arg('address', self.is_address)
+        self.check_arg('nickname', self.muser.is_nickname_exist,
+                       result=False,
+                       errmsg='nickname exist')
+        self.check_arg('email', self.muser.is_email_exist,
+                       result=False,
+                       errmsg='email exist')
+        sex = self.get_arg('sex')
+        self.set_arg('sex', util.get_bool(sex))
+        self.do_update()
 
     def is_address(self, value):
         # TODO
@@ -264,32 +228,28 @@ class AvatarHandler(BaseHandler):
 
 
 class MemoHandler(BaseHandler):
+    @catch_exception
     @authenticated
     def get(self):
         memo_id = self.get_argument('id')
-        try:
-            if memo_id:
-                memo = self.muser.get_memo(self.user_id, memo_id)
-                self.write(memo)
-            else:
-                page = int(self.get_argument('page', 1))
-                size = int(self.get_argument('size', 100))
-                memos = self.muser.get_memos(self.user_id, page, size)
-                self.write_json(memos)
-        except Exception as e:
-            self.write_errmsg(e)
+        if memo_id:
+            memo = self.muser.get_memo(self.user_id, memo_id)
+            self.write(memo)
+        else:
+            page = int(self.get_argument('page', 1))
+            size = int(self.get_argument('size', 100))
+            memos = self.muser.get_memos(self.user_id, page, size)
+            self.write_json(memos)
 
+    @catch_exception
     @authenticated
     def post(self):
-        try:
-            if self.has_argument('create'):
-                self.do_create()
-            elif self.has_argument('update'):
-                self.do_update()
-            elif self.has_argument('delete'):
-                self.do_delete()
-        except Exception as e:
-            self.write_errmsg(e)
+        if self.has_argument('create'):
+            self.do_create()
+        elif self.has_argument('update'):
+            self.do_update()
+        elif self.has_argument('delete'):
+            self.do_delete()
 
     def get_title_and_content(self):
         title = self.get_argument('title')
@@ -320,25 +280,21 @@ class MemoHandler(BaseHandler):
 
 
 class CollectionHandler(BaseHandler):
+    @catch_exception
     @authenticated
     def get(self):
-        try:
-            collection_type = self.get_argument('type')
-            page = int(self.get_argument('page', 1))
-            size = int(self.get_argument('size', 5))
-            collections = self.muser.get_collections(self.user_id, collection_type, page, size)
-            self.write_json(collections)
-        except Exception as e:
-            self.write_errmsg(e)
+        collection_type = self.get_argument('type')
+        page = int(self.get_argument('page', 1))
+        size = int(self.get_argument('size', 5))
+        collections = self.muser.get_collections(self.user_id, collection_type, page, size)
+        self.write_json(collections)
 
+    @catch_exception
     @authenticated
     def post(self):
-        try:
-            collection_type = self.get_argument('type')
-            relevant_id = self.get_argument('id')
-            self.muser.create_collection(self.user_id, collection_type, relevant_id)
-        except Exception as e:
-            self.write_errmsg(e)
+        collection_type = self.get_argument('type')
+        relevant_id = self.get_argument('id')
+        self.muser.create_collection(self.user_id, collection_type, relevant_id)
 
 
 class MessageHandler(BaseHandler):
@@ -351,16 +307,14 @@ class MessageHandler(BaseHandler):
     -- 恭喜你获得了 article_master 成就
     -- 恭喜你获得了 king_of_stupid 头衔
     """
+    @catch_exception
     @authenticated
     def get(self):
-        try:
-            msg_type = self.get_argument('type')
-            page = int(self.get_argument('page', 1))
-            size = int(self.get_argument('size', 5))
-            msgs = self.muser.get_messages(self.user_id, msg_type, page, size)
-            self.write_json(msgs)
-        except Exception as e:
-            self.write_errmsg(e)
+        msg_type = self.get_argument('type')
+        page = int(self.get_argument('page', 1))
+        size = int(self.get_argument('size', 5))
+        msgs = self.muser.get_messages(self.user_id, msg_type, page, size)
+        self.write_json(msgs)
 
     @authenticated
     def post(self):

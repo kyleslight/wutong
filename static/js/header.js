@@ -223,8 +223,10 @@ $(document).ready(function() {
     $("#myCollection").click(function() {
         var url = '/u/collection';
         $.getJSON(url, function(data) {
+            console.log(data);
+            return;
             $(".myCollectionList").remove();
-            renderTemplateAfter('#collection-template', data);
+            renderTemplateAfter('#collection-template', newColl);
         });
         $(".myCollectionWarp").animate({
             height:$(".myCollection").innerHeight()
@@ -315,7 +317,7 @@ $(document).ready(function() {
                 showError("便笺创建失败",2000);
                 return;
             }
-            var newNote = data;
+            var newNote = JSON.parse(data);
             activeNoteID = newNote.id
             $(".myNoteListWrap").prepend(renderTemplateString('#memo-template',newNote));
             $(".myCurrentNoteTitle").val(newNote.title);
@@ -847,7 +849,7 @@ function showError(errorStatement, duration){
 }
 
 function showHint(searchKeyWord){
-    
+
     if (eveCode==40||eveCode==38) {
         return;
     };
@@ -930,6 +932,7 @@ function renderTemplateAfter(temp, obj, target) {
     } else {
         $(temp).after($(innerHTML));
     }
+    return innerHTML;
 }
 
 function renderTemplateAppend(temp, obj, target) {
@@ -939,6 +942,17 @@ function renderTemplateAppend(temp, obj, target) {
     } else {
         $(temp).append($(innerHTML));
     }
+    return innerHTML;
+}
+
+function renderTemplatePrepend(temp, obj, target) {
+    var innerHTML = renderTemplateString(temp, obj);
+    if (target) {
+        $(target).prepend($(innerHTML));
+    } else {
+        $(temp).prepend($(innerHTML));
+    }
+    return innerHTML;
 }
 
 function showBigImage(url){
@@ -958,43 +972,25 @@ function showBigImage(url){
     $(".bigImage").fadeIn();
 }
 
-var testLoadTime=0;
 function scrollLoading(loadEle){
-    if (testLoadTime>3) {
-        return false;
-    };
-    if (testLoadTime==3) {
-        loadingHide(loadEle);
-        $(loadEle).append("<div class='testLoadContent'>再怎么找也没有啦╮(￣▽￣)╭</div>");
-        testLoadTime+=1;
-        return false;
-    };
     var top=$(window).scrollTop();
     var buttom=top+$(window).height();
     var opusTop=$(loadEle).scrollTop();
     var opusButtom=opusTop+$(loadEle).height();
     if(buttom>opusButtom&&($(loadEle).has(".loadingBox").length==0)){
         loadingShow(loadEle);
-        setTimeout(function(){
-            $(loadEle).append($(loadEle).children().clone());
-            testLoad(loadEle);
-        },2000);
+        // $
     };
     return false;
 }
 
 function loadingShow(loadEle){
-    var loadingBox=$(".loadingBoxWrap").html();
-    $(loadEle).append(loadingBox);
+    // var loadingBox=$(".loadingBoxWrap").html();
+    // $(loadEle).append(loadingBox);
 }
 
 function loadingHide(loadEle){
     $(loadEle).children(".loadingBox").remove();
-}
-
-function testLoad(loadEle){
-    loadingHide(loadEle);
-    testLoadTime+=1;
 }
 
 function initPage(p){
@@ -1094,5 +1090,53 @@ function turnPage(i,turnEle){
 }
 
 
+String.prototype.httpHtml = function() {
+    var reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-|:)+)/g;
+    return this.replace(reg, '<a href="$1$2" target="_blank">$1$2</a>');
+}
 
+Array.prototype.remove = function(value){
+    for(b in this){
+        if(this[b] == value){
+            this.splice(b,1);
+            break;
+        }
+    }
+    return this;
+}
 
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+
+Array.prototype.intersect = function(b) {
+    var a = this;
+    var ai=0, bi=0;
+    var result = new Array();
+
+    while( ai < a.length && bi < b.length )
+    {
+        if      (a[ai] < b[bi] ){ ai++; }
+        else if (a[ai] > b[bi] ){ bi++; }
+        else /* they're equal */
+        {
+            result.push(a[ai]);
+            ai++;
+            bi++;
+        }
+    }
+    return result;
+}

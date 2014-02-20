@@ -311,6 +311,7 @@ function submitChatData() {
     $("#chatData").html("");
     // send message to server, TODO: please refactor
     message = {
+        type: "message",
         "content": chatCon,
     };
     msg_socket.sendJSON(message);
@@ -335,7 +336,8 @@ function submitExpandChatData() {
 
     // send message to server, TODO: please refactor
     message = {
-        "content": expandChatCon,
+        type: "message",
+        content: expandChatCon,
     };
     msg_socket.sendJSON(message);
 
@@ -361,7 +363,7 @@ function submitTopicData() {
     };
 
     message = {
-        option: "send_topic",
+        type: "topic",
         title: topicTitle,
         content: topicCon,
     };
@@ -374,6 +376,7 @@ function submitTopicData() {
 }
 
 function checkGroupPremission(){
+    return;
     if (!checkLogin) {
         showError("请先登录",2000);
         return false;
@@ -448,7 +451,7 @@ function turnToPlainText(e){
 
 // ----------------------------------------------------------------------------
 // 自适应连接
-var url = location.pathname + "/session";
+var connect_path = location.pathname + "/session";
 
 function connect_message_server() {
     if (WebSocket) {
@@ -513,7 +516,7 @@ function connect_message_server_use_ajax(first_message) {
 }
 
 function connect_message_server_use_websocket() {
-    var url = "ws://" + location.host + url + "/websocket";
+    var url = "ws://" + location.host + connect_path + "/websocket";
     WebSocket.reconnect_time = 1;
     msg_socket = new WebSocket(url);
     msg_socket.onopen = socket_onopen;
@@ -541,6 +544,7 @@ function socket_onclose() {
 }
 
 function socket_onmessage(e) {
+    console.log(e);
     var data = e.data;
     if (!data) {
         console.log('websocket onmessage error: ', data);

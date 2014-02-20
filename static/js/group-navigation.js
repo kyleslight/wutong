@@ -19,6 +19,11 @@ $(document).ready(function(){
 			'tags':$("#creareGroupTag").val(),
 			'public_level': getPublicLevel(),
 		},function(data){
+			var err = getError(data);
+			if (err) {return;}
+			return;
+			// TODO
+			var gid = data.gid;
 			showError("小组"+$("#createGroupName").val()+"已成功申请<br>5秒后将自动跳转到新创建的小组<br>若跳转失败，请点击以下链接<br><a href='/g/"+data+"'>"+$("#createGroupName").val()+"</a>",20000);
 			setTimeout(function(){
 				self.location='/g/'+data;

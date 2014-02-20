@@ -3,6 +3,7 @@ var isregisterbox=false;
 var _showwel_flag = true;
 var elapseTime = 5000;
 var indexOfOpusType=-1;
+
 $(document).ready(function(){
     $("#artsubmitButton").click(function(){
         // with(this){
@@ -14,6 +15,7 @@ $(document).ready(function(){
         var theForm=document.getElementById("textdata");
         theForm.submit();
     })
+
     $(".inputTip a").click(function(){
         var indexofa=$(".inputTip a").index($(this))+1;
         if ($("#formlisttip"+indexofa).css("display")=="none") {
@@ -26,9 +28,6 @@ $(document).ready(function(){
         }
         return false;
     })
-    $(window).scroll(function(){
-        scrollLoading(".opus");
-    });
 
     $(".opusTypeItem").click(function(){
         if ($(".opusTypeItem").index($(this))==indexOfOpusType) {
@@ -46,6 +45,9 @@ $(document).ready(function(){
         $(this).addClass("activeOpusClassItem");
     })
 
+    $(window).scroll(function(){
+        scrollLoading(".opus"); 
+    });
 });
 
 
