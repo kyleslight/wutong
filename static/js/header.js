@@ -175,16 +175,17 @@ $(document).ready(function() {
     // logout
     $("#logout").click(function() {
         // logout function
-        $.post("/logout");
-        $(".navrighton").fadeOut(function() {
-            $(".navrightoff").fadeIn();
-            if (location.pathname.slice(0,9)=="/a/create") {
-                showError("创作作品前请先登录",2000);
-            };
+        $.post("/logout", function(data) {
+            window.location = location.pathname;
         });
-        logOutEffect();
-        checkIsLogin();
-        window.location = location.pathname;
+        // $(".navrighton").fadeOut(function() {
+        //     $(".navrightoff").fadeIn();
+        //     if (location.pathname.slice(0,9)=="/a/create") {
+        //         showError("创作作品前请先登录",2000);
+        //     };
+        // });
+        // logOutEffect();
+        // checkIsLogin();
     });
 
     // loginBox and registerBox

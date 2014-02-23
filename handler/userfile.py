@@ -33,7 +33,7 @@ def genavatar(bindata, filepath, **kwargs):
     avatar_200x200 = avatar.resize((200, 200), Image.ANTIALIAS)
     avatar_200x200.save(filepath, "PNG")
     fp.close()
-    return util.add_suffix(filepath, 'png')
+    return filepath
 
 
 class FileBaseHandler(BaseHandler):
@@ -180,7 +180,8 @@ class UserAvatarHandler(PictureHandler):
     max_file_size = 500000
 
     def save_data_as_file(self, data, target=None):
-        filepath = os.path.join(self.settings['avatar_path'], self.current_user['nickname'])
+        filename = util.add_suffix(self.current_user['nickname'], 'png')
+        filepath = os.path.join(self.settings['avatar_path'], filename)
         filepath = genavatar(data, filepath, x1=0, x2=0)
         md5str = md5(data).hexdigest()
         with open(filepath, 'w') as fp:

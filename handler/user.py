@@ -11,7 +11,7 @@ from tornado import gen
 from lib import sendmail
 from lib import util
 from base import BaseHandler, authenticated, catch_exception, login
-from userfile import genavatar
+import userfile
 
 
 class IndexHandler(BaseHandler):
@@ -76,12 +76,14 @@ class RegisterHandler(BaseHandler):
 
     def set_random_avatar(self, nickname):
         avatar_dir = self.settings['avatar_path']
+        random_dir = os.path.join(avatar_dir, 'random')
         filepath = os.path.join(
-            os.path.join(avatar_dir, 'random'),
-            random.choice(os.listdir(random_path))
+            random_dir,
+            random.choice(os.listdir(random_dir))
         )
         bindata = open(filepath, 'r').read()
-        savepath = os.path.join(avatar_dir, nickname)
+        filename = util.add_suffix(nickname, 'png')
+        savepath = os.path.join(avatar_dir, filename)
         avatar = userfile.genavatar(bindata, savepath)
         return util.get_path_url(avatar)
 
