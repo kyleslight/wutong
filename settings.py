@@ -5,7 +5,7 @@ import os
 import uuid
 from tornado.options import define, options
 from tornado.web import UIModule, TemplateModule, RequestHandler
-from handler import base, group, user, article, upload, search
+from handler import base, group, user, article, userfile, search
 import lib.util
 from lib.session import Session
 from lib import util
@@ -17,9 +17,12 @@ urls = [
     (r"/logout", user.LogoutHandler),
     (r"/register", user.RegisterHandler),
     (r"/account", user.AccountHandler),
-    (r"/upload", upload.FileHandler),
+    (r"/file/upload", userfile.UploadHandler),
+    (r"/file/download", userfile.DownloadHandler),
+    (r"/picture", userfile.PictureHandler),
     (r"/search", search.SearchHandler),
     (r"/user/(.+)", user.HomeHandler),
+    (r"/u/avatar", userfile.UserAvatarHandler),
     (r"/u/info", user.UserinfoHandler),
     (r"/u/memo", user.MemoHandler),
     (r"/u/message", user.MessageHandler),
@@ -100,8 +103,6 @@ settings = dict(
         "encodestr": lambda handler, x: util.encodestr(x),
         "str2datetime": lambda handler, x: util.str2datetime(x),
         "prettytime": lambda handler, x: util.prettytime(x),
-        "avatarurl": lambda handler, x, *arg: util.avatarurl(x, *arg),
-        "getuser": lambda handler: handler.get_current_user(),
     },
     dsn="dbname=%s user=%s password=%s host=%s port=%s" % (
         options.dbname,
@@ -111,6 +112,7 @@ settings = dict(
         str(options.dbport),
     )
 )
+settings['upload_path'] = os.path.join(settings['static_path'], "uploads")
 settings['avatar_path'] = os.path.join(settings['static_path'], "avatar")
 
 

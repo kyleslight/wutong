@@ -11,6 +11,7 @@ from tornado import gen
 from lib import sendmail
 from lib import util
 from base import BaseHandler, authenticated, catch_exception, login
+from userfile import genavatar
 
 
 class IndexHandler(BaseHandler):
@@ -75,16 +76,14 @@ class RegisterHandler(BaseHandler):
 
     def set_random_avatar(self, nickname):
         avatar_dir = self.settings['avatar_path']
-        random_path = os.path.join(avatar_dir, 'random')
-        avatar_path = os.path.join(random_path,
-                                   random.choice(os.listdir(random_path)))
-        with open(avatar_path, 'r') as avatar_fp:
-            avatar = util.genavatar(avatar_fp, avatar_dir, nickname)
-        if not avatar:
-            errmsg = 'set random avatar'
-            gen_log.error(errmsg)
-            raise Exception(errmsg)
-        return avatar
+        filepath = os.path.join(
+            os.path.join(avatar_dir, 'random'),
+            random.choice(os.listdir(random_path))
+        )
+        bindata = open(filepath, 'r').read()
+        savepath = os.path.join(avatar_dir, nickname)
+        avatar = userfile.genavatar(bindata, savepath)
+        return util.get_path_url(avatar)
 
     def send_mail(self, email, user_id):
         if self.settings['debug']:
@@ -179,52 +178,6 @@ class UserinfoHandler(BaseHandler):
     def do_update(self):
         user = self.current_user
         self.muser.update_user_info(user['uid'], **self.args)
-
-
-# TODO
-class AvatarHandler(BaseHandler):
-    def init_content(self):
-        # max avatar file is 10Mb
-        self.max_file_size = 1000000
-        pass
-
-    @gen.coroutine
-    def set_avatar_from_url(self, url):
-        client = AsyncHTTPClient()
-        r = yield gen.Task(client.fetch, url)
-        result = self.set_avatar(r.body)
-        self.write(result)
-        self.finish()
-
-    def set_avatar_from_request(self, request):
-        if "avatar" in request.files:
-            avatar_data = request.files['avatar'][0]['body'],
-            result = self.set_avatar(avatar_data)
-            self.write(result)
-        else:
-            self.write('failed')
-        self.finish()
-
-    def set_avatar(self, avatar_data, avatar_path=None):
-        try:
-            filesize = getsizeof(avatar_data)
-            if filesize > self.max_file_size:
-                return 'exceed'
-            with StringIO.StringIO(avatar_data) as avatar_fp:
-                avatar_dir = avatar_path or self.settings['avatar_path']
-                avatar_name = util.genavatar(avatar_fp,
-                                             avatar_dir,
-                                             self.penname)
-                return avatar_name
-        except:
-            pass
-        return 'failed'
-
-    @asynchronous
-    @authenticated
-    def post(self):
-        self.init_content()
-        self.set_avatar_from_request(self.request)
 
 
 class MemoHandler(BaseHandler):

@@ -20,7 +20,7 @@
                 <div class="groupInfoCon">
                     <div class="groupTitle">
                         {% if group["avatar"] %}
-                        <img class="groupImage" src="{{ avatarurl(group["avatar"]) }}" />
+                        <img class="groupImage" src="{{ group["avatar"] }}" />
                         {% end %}
                         <a id="groupTitleName" href="/g/{{ group["gid"] }}">{{ group["name"] }}</a>
                         {% if group['motto'] %}

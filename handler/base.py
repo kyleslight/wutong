@@ -1,11 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 import os
+import sys
+import uuid
 import functools
-from tornado.web import RequestHandler, asynchronous
+from tornado.ioloop import IOLoop
+from tornado.web import RequestHandler, asynchronous, HTTPError
 from tornado.websocket import WebSocketHandler
 from tornado.escape import json_encode, json_decode
+from tornado import stack_context
 from tornado import gen
 import tornadoredis as redis
 from lib.session import Session
@@ -22,14 +28,39 @@ def authenticated(method):
     return wrapper
 
 def catch_exception(method):
+    """
+    You should wrap function before `@asynchronous`, like this:
+
+        @asynchronous
+        @catch_exception
+
+    Remember: this decorator can't deal with HTTP exception, so if you use a
+    decorator like `@coroutine`, you must `try...except` in code like this:
+
+        @gen.coroutine
+        def post(self):
+            try:
+                raise Exception('I am foo')
+            except:
+                doSomethingHere()
+
+    Don't try to overload `get_error_html`, `send_error` or `write_error`
+    """
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
         try:
             return method(self, *args, **kwargs)
         except Exception as e:
             self.write_errmsg(e)
+            if not self._finished:
+                self.finish()
     return wrapper
 
+def non_ioblock(method):
+    @functools.wraps(method)
+    def wrapper(*args, **kwargs):
+        return IOLoop.instance().add_callback(method, *args, **kwargs)
+    return wrapper
 
 def login(self, user_id=None, user=None):
     user = user or self.get_current_user(user_id)
@@ -48,9 +79,24 @@ class BaseHandler(RequestHandler):
         if not isinstance(self, WebSocketHandler):
             # record last view url
             self.set_cookie('last_view', self.request.uri)
+            # 一天后过期, 防盗链
+            self.set_cookie('uuid', self.uuid, expires_days=1)
 
     def on_finish(self):
         self.session.save()
+
+    def non_block_call(self, func, *args, **kwargs):
+        return IOLoop.instance().add_callback(func, *args, **kwargs)
+
+    @property
+    def uuid(self):
+        """
+        unique user identification
+        """
+        return uuid.uuid3(uuid.NAMESPACE_DNS, self.ip).hex
+
+    def is_human(self):
+        return self.uuid == self.get_cookie('uuid')
 
     def get_current_user(self, user_id=None):
         """
@@ -218,8 +264,7 @@ class SessionBaseHandler(BaseHandler):
         message = self.save_message(message)
         self.send_client.publish(self.channel, json_encode(message))
 
-    @asynchronous
-    @gen.engine
+    @gen.coroutine
     def listen(self):
         self.client = redis.Client()
         self.client.connect()

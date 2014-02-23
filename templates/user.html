@@ -41,7 +41,7 @@
  		</div>
 	 	<div class="userInfo">
 	 		<div class="userBasicInfo">
- 				<img class="userImage" src="{{ avatarurl(user["avatar"]) }}"/>
+ 				<img class="userImage" src="{{ user["avatar"] }}"/>
  				<div class="userName">{{ user['nickname'] }}</div>
  				<div class="editableArea">
 	 				<div class="userMotto">
@@ -119,7 +119,7 @@
 						{% for u in user['stars'] %}
 							<li>
 								<a href="/user/{{ u['nickname'] }}">
-									<img src="{{ avatarurl(u["avatar"]) }}"><br/>
+									<img src="{{ u["avatar"] }}"><br/>
 									<div class="followName">{{ u['nickname'] }}</div>
 								</a>
 							</li>
@@ -139,7 +139,7 @@
 						{% for u in user['followers'] %}
 							<li>
 								<a href="/user/{{ u['nickname'] }}">
-									<img src="{{ avatarurl(u["avatar"]) }}"><br/>
+									<img src="{{ u["avatar"] }}"><br/>
 									<div class="followName">{{ u['nickname'] }}</div>
 								</a>
 							</li>

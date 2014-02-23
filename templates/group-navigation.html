@@ -7,7 +7,7 @@
         <div class="groupNav">
             <div class="userGroupInfo">
                 {% if user %}
-                <a class="userImg" href="/user/{{ user['nickname'] }}"><img src="{{ avatarurl(user['avatar']) }}" /></a>
+                <a class="userImg" href="/user/{{ user['nickname'] }}"><img src="{{ user['avatar'] }}" /></a>
                 <a class="userName" href="/user/{{ user['nickname'] }}">{{ user['nickname'] }}</a>
                 <div class="myGroup">
                     <div class="myGroupTitle">我的小组</div>
@@ -68,7 +68,7 @@
                     <h class="groupDynamicHeader">我的小组动态»</h>
                     {% for topic in user['topics'] %}
                     <li class="groupDynamicList">
-                        <a href="/user/{{ topic['creater'] }}" class="groupDynamicAuthorImg"><img src="{{ avatarurl(topic['creater_avatar']) }}"></a>
+                        <a href="/user/{{ topic['creater'] }}" class="groupDynamicAuthorImg"><img src="{{ topic['creater_avatar'] }}"></a>
                         <div class="groupDynamicContent">
                             <a href="/t/{{ topic['tid'] }}" class="groupDynamicTitle">{{ topic['title'] }}</a>
                             <div class="groupDynamicInfo">
@@ -91,7 +91,7 @@
                     <h class="groupDynamicHeader">全站小组动态»</h>
                     {% for topic in topics %}
                     <li class="groupDynamicList">
-                        <a href="/user/{{ topic['creater'] }}" class="groupDynamicAuthorImg"><img src="{{ avatarurl(topic['creater_avatar']) }}"></a>
+                        <a href="/user/{{ topic['creater'] }}" class="groupDynamicAuthorImg"><img src="{{ topic['creater_avatar'] }}"></a>
                         <div class="groupDynamicContent">
                             <a href="/t/{{ topic['tid'] }}" class="groupDynamicTitle">{{ topic['title'] }}</a>
                             <div class="groupDynamicInfo">
