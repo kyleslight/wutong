@@ -27,11 +27,11 @@ class GroupModel(object):
         members = self.db.calljson('get_group_members', group_id, limit, offset)
         return members or []
 
-    def get_group_opuses(self, group_id, page, size):
+    def get_group_articles(self, group_id, page, size):
         limit = size
         offset = (page - 1) * size
-        members = self.db.calljson('get_group_opuses', group_id, limit, offset)
-        return members or []
+        articles = self.db.calljson('get_group_articles', group_id, limit, offset)
+        return articles or []
 
     def get_group_sessions(self, group_id, anchor_id, size):
         sessions = self.db.calljson('get_group_sessions', group_id, anchor_id, size)

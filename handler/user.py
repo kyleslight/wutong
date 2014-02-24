@@ -234,7 +234,7 @@ class MemoHandler(BaseHandler):
         memo_id = self.get_argument('id')
         if memo_id:
             memo = self.muser.get_memo(self.user_id, memo_id)
-            self.write(memo)
+            self.write_json(memo)
         else:
             page = int(self.get_argument('page', 1))
             size = int(self.get_argument('size', 100))
@@ -294,6 +294,7 @@ class CollectionHandler(BaseHandler):
     def post(self):
         collection_type = self.get_argument('type')
         relevant_id = self.get_argument('id')
+        # TODO: is article or topic visiable ?
         self.muser.create_collection(self.user_id, collection_type, relevant_id)
 
 

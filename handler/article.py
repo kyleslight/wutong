@@ -95,9 +95,12 @@ class EditBaseHandler(BaseHandler):
         # have any top tag ?
         tmp = set()
         [tmp.update(t) for t in top_tags.values()]
+        # 删除空白标签
         for tag in tags:
-            if tag in tmp:
-                return tags
+            if not tag.strip():
+                tags.remove(tag)
+        if tmp.intersection(tags):
+            return tags
         raise Exception('no top tag')
 
     def get_refers(self):

@@ -136,10 +136,152 @@
         <div class="myMessageWarp">
             <div class="myMessage">
                 <div class="myMessagePart">
+                    <a id="systemInfoButton" class="myMessagePartButton" href="#">系统通知<span id="systemInfoNum"></span></a>
                     <a id="replyButton" class="myMessagePartButton" href="#">回复<span id="replyNum"></span></a>
                     <a id="opusPushButton" class="myMessagePartButton" href="#">推送<span id="opusPushNum"></span></a>
                 </div>
                 <div class="myMessageContent">
+                    <!-- 系统通知 -->
+                    <div class="systemInfo myMessagePartContent activeMessagePart">
+                        <div class="mySystemInfoEle">
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">加入梧桐</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief">欢迎来到梧桐这个有爱的大家庭～，希望您能在这里不断分享与提升自我。在使用梧桐前请务必阅读我们的文档 <a href="#">梧桐指南</a></div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">站内公告</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief">梧桐已推出了 <a href="#">梧桐阅读(ver3.141)</a> Android客户端，您可以点击 <a href="#">这里</a> 获取更多信息 </div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" /><!--假定的系统自动回复帐号的头像-->
+                                    <div class="myMessageAddress">创建小组</div>
+                                    <div class="myMessageUserName">Wutong</div><!--假定的系统自动回复帐号-->
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief">您已创建小组 <a href="/g/1">思存工作室养老院</a> ，系统默认指定您为该小组第一任组长。关于小组事务如需了解更多请点击<a href="#"> 这里 </a></div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">加入小组</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief">您已加入小组 <a href="/g/1">PANTERA</a> ，点击 <a href="#">这里</a> 了解更多关于梧桐小组的信息</div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">组长任命</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief">您已被 <a href="/g/1">思存工作室养老院</a> 小组组长提议担任该小组新一任组长，<a href="#"> 同意 </a> | <a href="#"> 拒绝 </a></div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">小组管理员任命</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief">您已被 <a href="/g/1">思存工作室养老院</a> 小组组长提议担任该小组管理员，<a href="#"> 同意 </a> | <a href="#"> 拒绝 </a></div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">退出小组</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief">您已被 <a href="/g/1">Eagles</a> 小组管理员移除该小组</div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">退出小组</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief">您已退出 <a href="/g/1">Rammstein</a> 小组</div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">会话邀请</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief"><a href="/user/flyMonster">flyMonster</a> 已接受了您的会话邀请，现在您可以点击<a href="#"> 这里 </a>与Ta开始聊天</div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">会话邀请</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief"><a href="/user/flyMonster">flyMonster</a> 已拒绝了您的会话邀请</div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">会话邀请</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief"><a href="/user/flyDog">flyDog</a> 向您发起了会话邀请， <a href="#"> 同意</a> | <a href="#">拒绝</a> </div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">关注</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief"><a href="/user/flyDog">flyCat</a> 关注了您，您的推送作品将会第一时间推送至Ta</div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">关注</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief">您关注了 <a href="/user/flyDog">flyFox</a>，现在您可以第一时间在 消息-推送 中得到Ta的推送作品</div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">作品删除</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief">很遗憾，由于您的作品 <a href="#">像少年啦，飞驰</a> 涉嫌版权问题，梧桐已移除该作品，您也受到一次警告。在使用梧桐的过程中请务必遵守<a href="#">梧桐指南</a></div>
+                                </div>
+                            </li>
+                            <li class="myMessagePartList">
+                                <div href="#" class="myMessagePartInline">
+                                    <img class='myMessageUserImage' src="" />
+                                    <div class="myMessageAddress">头衔授予</div>
+                                    <div class="myMessageUserName">Wutong</div>
+                                    <div class="myMessageTime">10-23 20:56</div>
+                                    <div class="myMessagBrief">由于您在作品 <a href="#">麦田里的守望者</a> 中的精彩表现，梧桐授予您 <a href="#">梧桐特殊贡献者 </a>的头衔，并将该作品摘录在 <a href="#">梧桐年鉴</a> 中，在此我们向您表示祝贺</div>
+                                </div>
+                            </li>
+                        </div>
+                        <div class="mySystemInfoTurnBox"></div>
+                    </div>
                     <div class="reply myMessagePartContent">
                         <div class="myReplyEle">
                             <li class="myMessagePartList">
@@ -201,13 +343,13 @@
                 <div class="myCollectionClass">
                     <a id="myOpusCollectionButton" class="myCollectionClassButton" href="#">作品</a>
                     <a id="myTopicCollectionButton" class="myCollectionClassButton" href="#">话题</a>
-                    <a id="myCollectionFliter" class="myCollectionFliterButton" href="#">筛选器</a>
+                    <!-- <a id="myCollectionFliter" class="myCollectionFliterButton" href="#">筛选器</a> -->
                 </div>
                 <div class="myOpusCollection myCollectionCon">
                     <script type="text/template" id="collection-template">
                         <li id="myCollectionList" class="myCollectionList">
                             <a href='/user/{{!author}}'>
-                                <img class='myCollectionAuthorImage' src='{{!avatar}}' />
+                                <img class='myCollectionAuthorImage' src='{{!author_avatar}}' />
                             </a>
                             <div class='myCollectionRow'>
                                 <a href='/a/{{!aid}}' class='myCollectionTitle'>{{!title}}</a>
@@ -216,7 +358,7 @@
                             <div class='myCollectionRow'>
                                 <div class='myCollectionTag'>
                                     {{!tags}}
-                                    <a href='/tag/{{!name}}'>{{!name}}</a>
+                                    <a href='/search?type=article&tag={{!.}}'>{{!.}}</a>
                                     {{!/tags}}
                                 </div>
                             </div>

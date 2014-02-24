@@ -24,7 +24,7 @@ $(document).ready(function() {
     renderMaleAndFemale();
 
     $(window).scroll(function(){
-        scrollLoading(".communication");
+        // scrollLoading(".communication");
     });
 
     var groupMottoPrimaryWidth = $("#groupMotto").width();
@@ -222,9 +222,17 @@ $(document).ready(function() {
     });
 
     $("#collectTopic").click(function(){
-        var collectionUrl=location.pathname+"/collection";
-        $.post(collectionUrl, function(data){
-            console.log(data);
+        var url = '/u/collection';
+        var topic_id = location.pathname.match('/t/(\\d+)')[1];
+        $.post(url, {
+            'type': '2',
+            'id': topic_id
+        }, function(data){
+            var err = getError(data);
+            if (err) {
+                console.log(err);
+                return;
+            }
         })
     });
 
@@ -252,8 +260,82 @@ $(document).ready(function() {
     checkGroupPremission();
 
     showParaFirst();
-    connect_message_server();
+
+    // 当整个页面加载完毕时加载
+    // $(window).load(function() {
+        connect_message_server();
+
+        var history_url = location.pathname + '/session/history';
+        var prefix;
+        // is group page ?
+        if (location.pathname.search('/g/\\d+') == 0)
+            prefix = location.pathname;
+        else
+            prefix = $(".topicLocation a")[0].href;
+
+        $.get(history_url, function(data) {
+            var err = getError(data);
+            if (err) {
+                console.log(err);
+                return;
+            }     
+            data = JSON.parse(data);
+            console.log(data);
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].title)
+                    renderTemplateAppend("#topic-template", data[i], "#communication");
+                else
+                    renderTemplateAppend("#chat-template", data[i], "#communication");
+            }
+        });
+
+        // 加载成员信息
+        $.getJSON(prefix + '/member', function(data) {
+            var err = getError(data);
+            if (err) {
+                console.log(err);
+                return;
+            }
+            for (var i = 0; i < data.length; i++) {
+                switch(data[i].position_level) {
+                case '2':
+                    data[i].position = '成员';
+                    break;
+                case '3':
+                    data[i].position = '副组长';
+                    break;
+                case '4':
+                    data[i].position = '组长';
+                    break;
+                }
+                var birthday = data[i].birthday;
+                data[i].age = birthday ? getAge(birthday) : null;
+                renderTemplateAfter('#member-template', data[i]);
+            }
+        });
+
+        // 加载作品信息
+        $.getJSON(prefix + '/article', function(data) {
+            var err = getError(data);
+            if (err) {
+                console.log(err);
+                return;
+            }
+            for (var i = 0; i < data.length; i++) {
+                renderTemplateAfter('#article-template', data[i]);
+            }
+        });
+    // });
 });
+
+function getAge(strBirthday) {
+    var bDay = new Date(strBirthday),
+        nDay = new Date(),
+        nbDay = new Date(nDay.getFullYear(),bDay.getMonth(),bDay.getDate()),
+        age = nDay.getFullYear() - bDay.getFullYear();
+    if (bDay.getTime()>nDay.getTime()) {return '日期有错'}
+    return nbDay.getTime()<=nDay.getTime()?age:--age;
+}
 
 function unsyncGroupBulletin() {
     // get group bulletin
@@ -455,35 +537,35 @@ var connect_path = location.pathname + "/session";
 
 function connect_message_server() {
     if (WebSocket) {
-        console.log('use websocket way to get/send message');
+        console.log('使用websocket进行数据交换');
         connect_message_server_use_websocket();
     } else {
-        console.log('use ajax way to get/send message');
+        console.log('使用ajax进行数据交换');
         connect_message_server_use_ajax();
     }
 }
 
-function connect_message_server_use_ajax(first_message) {
+function connect_message_server_use_ajax() {
+    var url = connect_path + "/ajax";
     msg_socket = {
+        type: 'ajax',
         reconnect_time: 1,
-        sendJSON: function(obj) {
+        send: function(jsonstr) {
             $.ajax({
                 url: url,
                 type: 'POST',
-                data: JSON.stringify(obj),
-                contentType: "application/json",
+                data: {'message': jsonstr},
                 success: function(data) {
-                    if (data == 'not login') {
-                        if (!checkLogin) {
+                    var err = getError(data);
+                    if (err) {
+                        if (!checkLogin)
                             showError("请先登录",2000);
-                            return;
-                        };
-                        showError("若想参与该小组讨论请加入该小组",2500);
-                        return;
+                        if (err.msg == '')
+                            showError("若想参与该小组讨论请加入该小组",2500);
                     }
                 },
                 error: function() {
-                    console.log('sendJSON error');
+                    console.log('ajax unknow error');
                 }
             });
         },
@@ -492,7 +574,16 @@ function connect_message_server_use_ajax(first_message) {
                 url: url,
                 type: 'GET',
                 success: function(data) {
-                    $("#communication").prepend(data);
+                    var err = getError(data);
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    data = JSON.parse(data);
+                    if (data.title)
+                        renderTemplatePrepend("#topic-template", data, "#communication");
+                    else
+                        renderTemplatePrepend("#chat-template", data, "#communication");
                     showParaFirst();
                     removeMessage();
                     msg_socket.reconnect_time = 1;
@@ -500,25 +591,24 @@ function connect_message_server_use_ajax(first_message) {
                 },
                 error: function() {
                     msg_socket.connect_state = 'closed';
+                    console.log('连接失败, ' + msg_socket.reconnect_time + '秒后重新连接');
                     setTimeout(msg_socket.onmessage, msg_socket.reconnect_time * 1000);
-                    if (msg_socket.reconnect_time < 30) {
+                    if (msg_socket.reconnect_time < 30)
                         msg_socket.reconnect_time *= 2;
-                    }
                 }
             });
         },
     };
 
+    msg_socket.sendJSON = socket_sendJSON;
     msg_socket.onmessage();
-    if (first_message) {
-        msg_socket.sendJSON(first_message);
-    }
 }
 
 function connect_message_server_use_websocket() {
     var url = "ws://" + location.host + connect_path + "/websocket";
     WebSocket.reconnect_time = 1;
     msg_socket = new WebSocket(url);
+    msg_socket.type = 'websocket';
     msg_socket.onopen = socket_onopen;
     msg_socket.onclose = socket_onclose;
     msg_socket.onmessage = socket_onmessage;
@@ -543,35 +633,32 @@ function socket_onclose() {
     }
 }
 
-function socket_onmessage(e) {
-    console.log(e);
-    var data = e.data;
-    if (!data) {
-        console.log('websocket onmessage error: ', data);
-        return;
-    } else if (data == 'not login') {
-        if (!checkLogin) {
-            showError("请先登录",1000);
-            return false;
-        };
-        showError("若想参与该小组讨论请加入该小组",3000);
+function socket_onmessage(data) {
+    var err = getError(data);
+    if (err) {
+        if (!checkLogin)
+            showError("请先登录",2000);
+        if (err.msg == '')
+            showError("若想参与该小组讨论请加入该小组",2500);
         return false;
-    } else {
-        console.log(data);
-        data=data.replace(/<script/g,"&lt;script").replace(/<\/script>/g,"&lt;/script&gt;");
-        $("#communication").prepend(data);
-        showParaFirst();
-        removeMessage();
     }
+    data = JSON.parse(data.data);
+    console.log(data);
+    // TODO: maybe don't need
+    // data=data.replace(/<script/g,"&lt;script").replace(/<\/script>/g,"&lt;/script&gt;");
+    if (data.title)
+        renderTemplatePrepend("#topic-template", data, "#communication");
+    else
+        renderTemplatePrepend("#chat-template", data, "#communication");
+    showParaFirst();
+    removeMessage();
 }
 
 function socket_sendJSON(obj) {
-    if (msg_socket.readyState == msg_socket.OPEN) {
-        var data = JSON.stringify(obj);
-        msg_socket.send(data);
-    } else {
-        connect_message_server_use_ajax(obj);
-    }
+    var data = JSON.stringify(obj);
+    if (msg_socket.type == 'websocket' && msg_socket.readyState != msg_socket.OPEN)
+        connect_message_server_use_ajax();
+    msg_socket.send(data);
 }
 
 // ----------------------------------------------------------------------------

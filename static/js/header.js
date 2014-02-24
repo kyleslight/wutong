@@ -91,20 +91,6 @@ $(document).ready(function() {
         $(".userExpand").hide();
         $("#usernameHover").css({"color":"white"});
     });
-    $("#message").mouseover(function() {
-        $("#msgNum").css({
-            "background": "pink",
-            "color": "darkred",
-            "box-shadow": "#FFF"
-        });
-    });
-    $("#message").mouseleave(function() {
-        $("#msgNum").css({
-            "background": "pink",
-            "color": "#680",
-            "box-shadow": "#AAA"
-        });
-    });
 
     // login&register
     $("#loginSubmitButton").click(function() {
@@ -236,17 +222,15 @@ $(document).ready(function() {
         });
         return false;
     });
-    $("#myCollectionBack").click(function() {
-        $(".myCollection").fadeOut(500, function() {
-            $(".myCollectionWarp").animate({
-                height: 0
-            });
-        });
-        return false;
+
+    // 我的收藏
+    $("#myCollection").click(function() {
+        getCollections('1');
     });
+
     $(".myCollectionClassButton").click(function(){
         var indexOfCollBut=$(".myCollectionClassButton").index($(this));
-        console.log(indexOfCollBut);
+        getCollections(indexOfCollBut + 1);
         if ($(".myCollectionCon").eq(indexOfCollBut).css("display")!="none") {
             return false;
         };
@@ -256,6 +240,7 @@ $(document).ready(function() {
     });
 
     // my note
+
     $("#myNote").click(function() {
         $(".myNoteWrap").animate({
             height: 415
@@ -318,8 +303,8 @@ $(document).ready(function() {
                 return;
             }
             var newNote = JSON.parse(data);
-            activeNoteID = newNote.id
-            $(".myNoteListWrap").prepend(renderTemplateString('#memo-template',newNote));
+            activeNoteID = newNote.id;
+            renderTemplatePrepend("#memo-template", newNote, ".myNoteListWrap");
             $(".myCurrentNoteTitle").val(newNote.title);
             $(".myCurrentNoteContent").val(newNote.content);
             $(".myCurrentNoteTime").text(newNote.create_time.slice(0,10));
@@ -339,16 +324,18 @@ $(document).ready(function() {
             "id":activeNoteID,
             "title":$(".myCurrentNoteTitle").val(),
             "content":$(".myCurrentNoteContent").val()
-        },function(){
+        },function(data){
             var err = getError(data);
             if (err) {
                 showError("保存便笺失败");
                 return;
             }
-            showError("成功保存便笺");
+            var newNote = JSON.parse(data);
+            $(".myCurrentNoteTitle").val(newNote.title);
+            $(".myCurrentNoteContent").val(newNote.content);
+            $(".myCurrentNoteTime").text(newNote.create_time.slice(0,10));
             $("#No_memo_"+activeNoteID).text($(".myCurrentNoteTitle").val());
             activeNoteID=parseInt($(".myNoteList").eq(0).attr("id").slice(8));
-
         });
     });
     // delete note
@@ -925,24 +912,30 @@ function renderTemplateString(temp, obj) {
     return innerHTML;
 }
 
-function renderTemplateAfter(temp, obj, target) {
+function renderTemplateTo(temp, obj, target, func) {
     var innerHTML = renderTemplateString(temp, obj);
     if (target) {
-        $(target).after($(innerHTML));
+        $(target)[func]($(innerHTML));
     } else {
-        $(temp).after($(innerHTML));
+        $(temp)[func]($(innerHTML));
     }
     return innerHTML;
 }
 
+function renderTemplateAfter(temp, obj, target) {
+    return renderTemplateTo(temp, obj, target, "after");
+}
+
 function renderTemplateAppend(temp, obj, target) {
-    var innerHTML = renderTemplateString(temp, obj);
-    if (target) {
-        $(target).append($(innerHTML));
-    } else {
-        $(temp).append($(innerHTML));
-    }
-    return innerHTML;
+    return renderTemplateTo(temp, obj, target, "append");
+}
+
+function renderTemplatePrepend(temp, obj, target) {
+    return renderTemplateTo(temp, obj, target, "prepend");
+}
+
+function renderTemplateBefore(temp, obj, target) {
+    return renderTemplateTo(temp, obj, target, "before");
 }
 
 function renderTemplatePrepend(temp, obj, target) {

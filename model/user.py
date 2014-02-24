@@ -90,6 +90,9 @@ class UserModel(object):
             raise Exception('update collection failed')
 
     def get_collections(self, uid, collection_type, page, size):
+        """
+        `collection_type` must in ('1', '2')
+        """
         limit = size
         offset = (page - 1) * limit
         return self.db.calljson('get_user_collections', uid, collection_type, limit, offset)

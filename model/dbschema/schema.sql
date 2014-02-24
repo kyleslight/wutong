@@ -112,7 +112,7 @@ create table user_collection (
     relevant_id int,
     -- 1: article,  2: group topic
     type sort,
-    time timestamp default now()
+    create_time timestamp default now()
 );
 
 
@@ -418,7 +418,7 @@ create view article_interact_info
 select a.aid,
        COALESCE((select count(id) from article_view where a.aid = aid), 0) as "view_num",
        COALESCE((select avg(score) from article_score where a.aid = aid), 0) as "avg_score",
-       COALESCE((select count(id) from article_collection where a.aid = aid), 0) as "collected_num",
+       COALESCE((select count(id) from user_collection where a.aid = relevant_id and type = '1'), 0) as "collected_num",
        COALESCE((select count(id) from article_forwarded where a.aid = aid), 0) as "forwarded_num"
   from article a;
 
@@ -470,9 +470,13 @@ create view group_member_show
   as
 select gm.*,
        u.nickname,
-       u.avatar
+       u.avatar,
+       u.intro,
+       u.sex,
+       u.birthday,
+       u.address
   from group_member gm,
-       user_base u
+       myuser u
  where gm.uid = u.uid;
 
 drop view if exists group_show cascade;

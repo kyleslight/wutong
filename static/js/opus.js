@@ -357,19 +357,9 @@ function init(){
                 var sideCommentNode='<div class="sideCommentNode" id="sideCommentNode'+i+'">';
                 $(".opusSideComment").append(sideCommentNode);
             };
+            // initial sideComment
             for(var i=0;i<data.length;i++){
-                for (var j=0; j<data.length; j++) {
-                    // var comment = data[j];
-                    var comment = data[j].content;
-                    // var paragraph_id = comment.split('\n')[0].match(/\d+/g)[0];
-                    var paragraph_id = data[j].paragraph_id;
-                    console.log(paragraph_id,j);
-                    if (paragraph_id != i)
-                        continue;
-                    console.log(paragraph_id,j,"got");
-                    // $("#sideCommentNode"+i).prepend(comment);
-                    renderTemplateAppend("#side-comment-template",data[j],"#sideCommentNode"+j);
-                }
+                renderTemplateAppend("#side-comment-template",data[i],"#sideCommentNode"+data[i].paragraph_id);
             };
             // if sideCommentNode has no comment,add a appNull,if not,add a Nav
             for(var i=0;i<totalNumOfPara;i++){
