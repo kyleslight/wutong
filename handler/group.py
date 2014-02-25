@@ -11,6 +11,12 @@ from lib import util
 class BrowseHandler(BaseHandler):
     @catch_exception
     def get(self):
+        tag = self.get_argument('tag')
+        if tag:
+            # groups = self.mgroup.get_public_groups()
+            self.write_json(groups)
+            return
+
         user = self.current_user
         if user:
             user['groups'] = self.mgroup.get_user_groups(user['uid'], 1, 20)

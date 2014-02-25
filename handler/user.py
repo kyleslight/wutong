@@ -11,6 +11,7 @@ from tornado import gen
 from lib import sendmail
 from lib import util
 from base import BaseHandler, authenticated, catch_exception, login
+import userfile
 
 
 class IndexHandler(BaseHandler):
@@ -75,16 +76,16 @@ class RegisterHandler(BaseHandler):
 
     def set_random_avatar(self, nickname):
         avatar_dir = self.settings['avatar_path']
-        random_path = os.path.join(avatar_dir, 'random')
-        avatar_path = os.path.join(random_path,
-                                   random.choice(os.listdir(random_path)))
-        with open(avatar_path, 'r') as avatar_fp:
-            avatar = util.genavatar(avatar_fp, avatar_dir, nickname)
-        if not avatar:
-            errmsg = 'set random avatar'
-            gen_log.error(errmsg)
-            raise Exception(errmsg)
-        return avatar
+        random_dir = os.path.join(avatar_dir, 'random')
+        filepath = os.path.join(
+            random_dir,
+            random.choice(os.listdir(random_dir))
+        )
+        bindata = open(filepath, 'r').read()
+        filename = util.add_suffix(nickname, 'png')
+        savepath = os.path.join(avatar_dir, filename)
+        avatar = userfile.genavatar(bindata, savepath)
+        return util.get_path_url(avatar)
 
     def send_mail(self, email, user_id):
         if self.settings['debug']:
@@ -181,52 +182,6 @@ class UserinfoHandler(BaseHandler):
         self.muser.update_user_info(user['uid'], **self.args)
 
 
-# TODO
-class AvatarHandler(BaseHandler):
-    def init_content(self):
-        # max avatar file is 10Mb
-        self.max_file_size = 1000000
-        pass
-
-    @gen.coroutine
-    def set_avatar_from_url(self, url):
-        client = AsyncHTTPClient()
-        r = yield gen.Task(client.fetch, url)
-        result = self.set_avatar(r.body)
-        self.write(result)
-        self.finish()
-
-    def set_avatar_from_request(self, request):
-        if "avatar" in request.files:
-            avatar_data = request.files['avatar'][0]['body'],
-            result = self.set_avatar(avatar_data)
-            self.write(result)
-        else:
-            self.write('failed')
-        self.finish()
-
-    def set_avatar(self, avatar_data, avatar_path=None):
-        try:
-            filesize = getsizeof(avatar_data)
-            if filesize > self.max_file_size:
-                return 'exceed'
-            with StringIO.StringIO(avatar_data) as avatar_fp:
-                avatar_dir = avatar_path or self.settings['avatar_path']
-                avatar_name = util.genavatar(avatar_fp,
-                                             avatar_dir,
-                                             self.penname)
-                return avatar_name
-        except:
-            pass
-        return 'failed'
-
-    @asynchronous
-    @authenticated
-    def post(self):
-        self.init_content()
-        self.set_avatar_from_request(self.request)
-
-
 class MemoHandler(BaseHandler):
     @catch_exception
     @authenticated
@@ -284,6 +239,11 @@ class CollectionHandler(BaseHandler):
     @authenticated
     def get(self):
         collection_type = self.get_argument('type')
+        if self.has_argument('check'):
+            relevant_id = int(self.get_argument('relevant_id'))
+            is_collected = self.muser.has_collected(self.user_id, collection_type, relevant_id)
+            self.write_result(is_collected)
+            return
         page = int(self.get_argument('page', 1))
         size = int(self.get_argument('size', 5))
         collections = self.muser.get_collections(self.user_id, collection_type, page, size)
@@ -295,19 +255,10 @@ class CollectionHandler(BaseHandler):
         collection_type = self.get_argument('type')
         relevant_id = self.get_argument('id')
         # TODO: is article or topic visiable ?
-        self.muser.create_collection(self.user_id, collection_type, relevant_id)
+        self.muser.update_collection(self.user_id, collection_type, relevant_id)
 
 
 class MessageHandler(BaseHandler):
-    # TODO
-    """
-    -- wutong 在 test_group 小组提到了你
-    -- wutong 评论了你的文章 test_article
-    -- wutong 任命你为 test_group 的 leader
-    -- wutong 申请加入你的 test_group 小组
-    -- 恭喜你获得了 article_master 成就
-    -- 恭喜你获得了 king_of_stupid 头衔
-    """
     @catch_exception
     @authenticated
     def get(self):

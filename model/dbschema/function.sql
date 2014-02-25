@@ -106,6 +106,24 @@ end;
 $$ language plpgsql;
 
 create or replace function
+has_user_collected(_uid int, _type sort, _relevant_id int) returns bool
+as $$
+begin
+  perform *
+     from user_collection
+    where uid = _uid
+      and relevant_id = _relevant_id
+      and type = _type;
+
+  if FOUND then
+    return true;
+  else
+    return false;
+  end if;
+end;
+$$ language plpgsql;
+
+create or replace function
 get_user_collections(_uid int, _type sort, _limit int, _offset int) returns json
 as $$
 declare

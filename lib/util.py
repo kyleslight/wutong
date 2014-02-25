@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Last Modified time: 2014-02-18 16:23:05
+# @Last Modified time: 2014-02-23 20:54:58
 
 import os
 import re
@@ -8,10 +8,6 @@ import uuid
 import time
 import string
 import random
-try:
-    from PIL import Image
-except ImportError:
-    import Image
 from HTMLParser import HTMLParser
 from hashlib import sha1
 from datetime import datetime
@@ -58,6 +54,12 @@ def is_phone(phone):
 
 def is_time(time):
     return True if str2time(time) else False
+
+def is_http_url(url):
+    return url.startswith('http://') or url.startswith('https://')
+
+def is_picture(filename):
+    return get_suffix(filename).lower() in ('png', 'gif', 'jpg', 'jpeg')
 
 def get_abstract_str(s, length=10, suffix=u'...'):
     title = s[:length]
@@ -155,35 +157,14 @@ def prettytime(dt):
     else:
          return dt.strftime("%Y-%m-%d %H:%M")
 
-def filesuffix(filename):
+def get_path_url(path):
+    path = os.path.abspath(path)
+    wutong_dir = os.path.abspath(os.path.curdir)
+    url = path.partition(wutong_dir)[-1]
+    return url
+
+def get_suffix(filename):
     return filename.rsplit('.', 1)[-1]
 
-def addsuffix(basename, suffix):
+def add_suffix(basename, suffix):
     return basename + '.' + suffix
-
-def genavatar(avatar_fp, avatar_dir, avatar_name):
-    avatar = Image.open(avatar_fp)
-    # crop avatar if it's not square
-    avatar_w, avatar_h = avatar.size
-    avatar_border = avatar_w if avatar_w < avatar_h else avatar_h
-    avatar_crop_region = (0, 0, avatar_border, avatar_border)
-    avatar = avatar.crop(avatar_crop_region)
-
-    avatar_100x100 = avatar.resize((100, 100), Image.ANTIALIAS)
-    avatar_50x50 = avatar.resize((50, 50), Image.ANTIALIAS)
-    avatar_32x32 = avatar.resize((32, 32), Image.ANTIALIAS)
-
-    avatar_name = os.path.join(avatar_dir, avatar_name)
-    avatar_normal = "%s_normal.png" % avatar_name
-    avatar_100x100.save(avatar_normal, "PNG")
-    avatar_50x50.save("%s_thumb.png" % avatar_name, "PNG")
-    avatar_32x32.save("%s_mini.png" % avatar_name, "PNG")
-    return os.path.basename(avatar_normal)
-
-def avatarurl(url, size='normal'):
-    if url is None:
-        url = 'unknow_normal.png'
-    if url.startswith('http://') or url.startswith('https://'):
-        return url
-    else:
-        return os.path.join('/static/avatar', url)

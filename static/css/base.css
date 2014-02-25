@@ -513,7 +513,7 @@ a.searchSuggestionsList{
 	-webkit-transition:2s;
 	-o-transition:2s;
 }
-.formButton:hover{	
+.formButton:hover{
 	color: white;
 	background: #c1d739;
 }
@@ -668,7 +668,7 @@ a.searchSuggestionsList{
 	border-top: 1px dashed #680;
 }
 .myNoteList{
-	white-space:nowrap; 
+	white-space:nowrap;
 	overflow: hidden;
 	display: block;
 	list-style-type: decimal;
@@ -959,7 +959,7 @@ a.HLThisPage{
 .errorPromptBox{
 	position: fixed;
 	text-align: center;
-	background: rgba(0,0,0,0.8); 
+	background: rgba(0,0,0,0.8);
 	color: white;
 	width: 600px;
 	left: 50%;
@@ -1045,4 +1045,37 @@ div#first_load p{
 	color:black;
 	width: 100%;
 	text-align: center;
+}
+
+img.200x200 {
+	width: 200px;
+	height: 200px;
+}
+img.150x150 {
+	width: 150px;
+	height: 150px;
+}
+img.100x100 {
+	width: 100px;
+	height: 100px;
+}
+img.80x80 {
+	width: 80px;
+	height: 80px;
+}
+img.50x50 {
+	width: 50px;
+	height: 50px;
+}
+img.30x30 {
+	width: 30px;
+	height: 30px;
+}
+img.25x25 {
+	width: 25px;
+	height: 25px;
+}
+img.20x20 {
+	width: 20px;
+	height: 20px;
 }

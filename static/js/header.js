@@ -152,9 +152,6 @@ $(document).ready(function() {
                 showError("创作作品前请先登录",2000);
             };
         });
-        logOutEffect();
-        checkIsLogin();
-        window.location = location.pathname;
     });
 
     // loginBox&registerBox show

@@ -87,7 +87,7 @@
             {% for article in articles %}
                 <li class="opusShow article">
                     <a href="/user/{{ article['author'] }}">
-                        <img src="{{ avatarurl(article["author_avatar"]) }}" class="opusAluthorImage">
+                        <img src="{{ article["author_avatar"] }}" class="opusAluthorImage">
                     </a>
                     <div class="opusBasicInfo">
                         <a href="/a/{{ article['aid'] }}" class="opusTitle" accesskey='No_article_{{ article["aid"] }}'>

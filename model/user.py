@@ -89,6 +89,9 @@ class UserModel(object):
         if not res:
             raise Exception('update collection failed')
 
+    def has_collected(self, uid, collection_type, relevant_id):
+        return self.db.callfirstfield('has_user_collected', uid, collection_type, relevant_id)
+
     def get_collections(self, uid, collection_type, page, size):
         """
         `collection_type` must in ('1', '2')

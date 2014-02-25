@@ -539,7 +539,7 @@ drop view if exists user_collected_article_show cascade;
 create view user_collected_article_show
   as
 select a.*,
-       c.time as "collect_time"
+       c.create_time as "collect_time"
   from article_collection c,
        article_base a,
        myuser u
@@ -550,7 +550,7 @@ drop view if exists user_collected_topic_show cascade;
 create view user_collected_topic_show
   as
 select t.*,
-       c.time as "collect_time"
+       c.create_time as "collect_time"
   from group_topic_collection c,
        group_topic_base t,
        myuser u
