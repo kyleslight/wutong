@@ -24,6 +24,7 @@
     </head>
     <body class="preload">
     <div class="mask"></div>
+    <form action="/u/avatar" class="dropzone imageUploader"></form>
     <div class="bigImage"><div class="bigImageContainer"><img src="#"></div></div>
     <div class="preBigImage"><img id="preBigImageCon" src="#"></div>
     <div class="errorPromptBox">aaa</div>
@@ -549,6 +550,7 @@
     {% block js %}
     <script type="text/javascript" src="{{ static_url("js/markup.min.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/jquery.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/dropzone.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/header.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/ui.js") }}"></script>
     <script type="text/javascript" src="{{ static_url("js/imageUpload.js") }}"></script>

@@ -435,11 +435,11 @@ require.register("dropzone/lib/dropzone.js", function(exports, require, module){
       autoProcessQueue: true,
       addRemoveLinks: false,
       previewsContainer: null,
-      dictDefaultMessage: "Drop files here to upload",
-      dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
+      dictDefaultMessage: "拖放文件此处或点击上传",
+      dictFallbackMessage: "您的浏览器不支持拖放文件",
       dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
-      dictFileTooBig: "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
-      dictInvalidFileType: "You can't upload files of this type.",
+      dictFileTooBig: "文件过大 ({{filesize}}MiB). 上传大小上限： {{maxFilesize}}MiB.",
+      dictInvalidFileType: "您不能上传此种格式的文件",
       dictResponseError: "Server responded with {{statusCode}} code.",
       dictCancelUpload: "Cancel upload",
       dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
@@ -589,6 +589,8 @@ require.register("dropzone/lib/dropzone.js", function(exports, require, module){
         var thumbnailElement, _i, _len, _ref, _results;
         file.previewElement.classList.remove("dz-file-preview");
         file.previewElement.classList.add("dz-image-preview");
+        file.previewElement.classList.remove("dz-image-preview");
+        file.previewElement.classList.remove("dz-file-preview");
         _ref = file.previewElement.querySelectorAll("[data-dz-thumbnail]");
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -596,6 +598,7 @@ require.register("dropzone/lib/dropzone.js", function(exports, require, module){
           thumbnailElement.alt = file.name;
           _results.push(thumbnailElement.src = dataUrl);
         }
+        console.log(file.previewElement);
         return _results;
       },
       error: function(file, message) {
@@ -614,6 +617,7 @@ require.register("dropzone/lib/dropzone.js", function(exports, require, module){
       },
       errormultiple: noop,
       processing: function(file) {
+        return;
         file.previewElement.classList.add("dz-processing");
         if (file._removeLink) {
           return file._removeLink.textContent = this.options.dictCancelUpload;
@@ -1451,6 +1455,16 @@ require.register("dropzone/lib/dropzone.js", function(exports, require, module){
           return;
         }
         response = xhr.responseText;
+        var imageUploaderObj = JSON.parse(response);
+        $("#uploadImageBack").click();
+        $(".dz-preview").remove();
+        var err = getError(imageUploaderObj);
+        if (err) {
+            showError("文件上传失败",2000);
+            return;
+        }
+        console.log(imageUploaderObj.url);
+        insertImageAll(imageUploaderObj.url);
         if (xhr.getResponseHeader("content-type") && ~xhr.getResponseHeader("content-type").indexOf("application/json")) {
           try {
             response = JSON.parse(response);

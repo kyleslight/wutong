@@ -420,7 +420,7 @@ $(document).ready(function() {
 
     // image upload back
     $("#uploadImageBack").click(function(){
-        $("section#main,#uploadImageBack,#info_zone,.mask").hide();
+        $(".imageUploader,#uploadImageBack,.mask").hide();
         return false;
     })
 
@@ -766,7 +766,7 @@ function selectNote(noteID){
 // 5:for more...
 
 function insertImage(state){
-    $("section#main,#info_zone,#uploadImageBack,#first_load,.mask").show();
+    $(".imageUploader,#uploadImageBack,.mask").show();
     hide(upload_popup);
     url_list.value = '';
     file_list.value = '';
