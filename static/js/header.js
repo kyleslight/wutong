@@ -962,21 +962,30 @@ function showBigImage(url){
     $(".bigImage").fadeIn();
 }
 
+var realPage = 1;
 function scrollLoading(loadEle){
     var top=$(window).scrollTop();
     var buttom=top+$(window).height();
     var opusTop=$(loadEle).scrollTop();
     var opusButtom=opusTop+$(loadEle).height();
-    if(buttom>opusButtom&&($(loadEle).has(".loadingBox").length==0)){
-        loadingShow(loadEle);
-        // $
+    console.log(opusButtom,buttom);
+    if(buttom>opusButtom&&($(loadEle).has(".loadingBox").length==0)&&(realPage<=3)){
+        realPage +=1;
+        var loadingBox=$(".loadingBoxWrap").html();
+        $(loadEle).append(loadingBox);
+        setTimeout(function(){
+            loadingShow(loadEle);
+        },2000);
     };
     return false;
 }
 
 function loadingShow(loadEle){
-    // var loadingBox=$(".loadingBoxWrap").html();
-    // $(loadEle).append(loadingBox);
+    $.get('/a/browse?page=' + realPage,function(data){
+        $(loadEle).children(".loadingBox").remove();
+        var a=$(data).find('.opus').children();
+        $(loadEle).append(a);
+    });
 }
 
 function loadingHide(loadEle){
