@@ -142,6 +142,7 @@ class AccountHandler(BaseHandler):
 
 
 class UserinfoHandler(BaseHandler):
+    @catch_exception
     @authenticated
     def get(self):
         user = login(self, user=self.current_user)

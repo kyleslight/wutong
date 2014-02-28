@@ -333,7 +333,6 @@ $(document).ready(function(){
                 console.log(err);
                 return;
             }
-            console.log(data.msg);
             if (data.msg) {
                 $("#collectOpus").html("取消收藏");
             } else {

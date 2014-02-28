@@ -48,6 +48,8 @@ def catch_exception(method):
     """
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
+        if self.settings['debug']:
+            return method(self, *args, **kwargs)
         try:
             return method(self, *args, **kwargs)
         except Exception as e:

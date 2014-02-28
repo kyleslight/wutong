@@ -6,66 +6,66 @@
     <div class="searchWrap">
         <div class="search">
             <div class="searchTypeFliter">
-                <a href="#" class="searchType activeSearchType">综合</a><a href="#" class="searchType">作品</a><a href="#" class="searchType">成员</a><a href="#" class="searchType">小组</a><a href="#" class="searchType">话题</a>
+                <a href="#" class="searchType activeSearchType">综合</a>
+                <a href="#" class="searchType">作品</a>
+                <a href="#" class="searchType">成员</a>
+                <a href="#" class="searchType">小组</a>
+                <a href="#" class="searchType">话题</a>
             </div>
             <div class="searchBox">
                 <form id="mainSearchData" action="/search" name="searchData" target="_blank">
-                    <input name="keyWord" type="text" class="input" id="mainSearchBox" autocomplete="off" accesskey="s" placeholder="寻找作品，成员，小组，话题" x-webkit-speech x-webkit-grammar="builtin:translate" value="{{ query }}" />
+                    <input name="q" type="text" class="input" id="mainSearchBox" autocomplete="off" accesskey="s" placeholder="寻找作品，成员，小组，话题" x-webkit-speech x-webkit-grammar="builtin:translate" value="{{ entry['query'] }}" />
                     <a href="#" type="submit" id="mainSearchSubmitButton" class="formButton">搜索</a>
                     <!-- <a href="#" id="searchAdvancedButton">高级选项</a> -->
                 </form>
             </div>
-<!--
             <div class="rank">
+<!--
                 排序方式：
                 <input type="radio" name="rank" value="相关度" checked="checked">相关度
                 <input type="radio" name="rank" value="推荐度">推荐度
                 <input type="radio" name="rank" value="时间">时间
+-->
             </div>
                 <div class="searchAdvancedFliter">
-                <div>精确匹配：<input type="checkbox" name="accurateMatch" value="名称">名称<input type="checkbox" name="accurateMatch" value="Tag">Tag</div>
-                <div>相关范围：<input type="checkbox" name="relativeRange" value="与成员相关">与成员相关<input type="checkbox" name="relativeRange" value="与小组相关">与小组相关</div>
-                <div>时间范围：
-                    <select id="timeRange" name="timeRange">
-                        <option value="不限">不限</option>
-                        <option value="最近一天">最近一天</option>
-                        <option value="最近一周">最近一周</option>
-                        <option value="最近一月">最近一月</option>
-                        <option value="最近一年">最近一年</option>
-                    </select>
-                </div>
-            </div>
+<!--
+                    <div>精确匹配：<input type="checkbox" name="accurateMatch" value="名称">名称<input type="checkbox" name="accurateMatch" value="Tag">Tag</div>
+                    <div>相关范围：<input type="checkbox" name="relativeRange" value="与成员相关">与成员相关<input type="checkbox" name="relativeRange" value="与小组相关">与小组相关</div>
+                    <div>时间范围：
+                        <select id="timeRange" name="timeRange">
+                            <option value="不限">不限</option>
+                            <option value="最近一天">最近一天</option>
+                            <option value="最近一周">最近一周</option>
+                            <option value="最近一月">最近一月</option>
+                            <option value="最近一年">最近一年</option>
+                        </select>
+                    </div>
 -->
+                </div>
             <div class="searchResultWrap">
-                <div class="searchResultFirstLine">本次搜索耗时
-                  <span>{{ time }}</span>s，共找到<span>{{ total_found }}</span>个结果
+                <div class="searchResultFirstLine">
+                  本次搜索耗时<span>{{ entry['time'] }}</span>s，共找到
+                  <span>{{ entry['total_found'] }}</span>个结果
                 </div>
                 <div class="result">
-                    {% for result in results %}
+                    {% for result in entry['results'] %}
                     {% if result %}
                     <li class="resultList">
                        <img src="{{ result["avatar"] }}" class="resultImage">
                        <div class="resultMain">
-                           {% if result['type'] == 'opus' %}
-                           <a href="/a/{{ result['id'] }}" class="resultTitle">{{ result["title"] }}</a>
-                           {% elif result['type'] == 'group' %}
-                           <a href="/g/{{ result['id'] }}" class="resultTitle">{{ result["title"] }}</a>
-                           {% elif result['type'] == 'user' %}
-                           <a href="/user/{{ result['title'] }}" class="resultTitle">{{ result["title"] }}</a>
-                           {% end %}
-                           <!-- <span class="resultType">{{ result["type"] }} </span> -->
+                           <a href="{{ result['url'] }}" class="resultTitle">{% raw result["title"] %}</a>
                            <br/>
                            {% if result['type'] != 'user' %}
-                           <a href="/user/{{ result["username"] }}" class="resultUser">{{ result["username"] }}</a>
+                           <a href="/user/{{ result["nickname"] }}" class="resultUser">{% raw result["nickname"] %}</a>
                            {% end %}
                            <div class="resultBrief">
-                           {{ result["intro"] }}
+                               {% raw result["intro"] %}
                            </div>
                            <div class="resultAttached">
                                {% if result['type'] != 'user' %}
                                <span class="resultTag">
                                    {% for tag in result['tags'] %}
-                                   <a href="/tag/{{ tag['name'] }}">{{ tag['name'] }}</a>
+                                   <a href="/search?type={{ result['type'] }}&tag={{ tag }}">{{ tag }}</a>
                                    {% end %}
                                </span>
                                {% end %}
@@ -75,9 +75,9 @@
                    </li>
                    {% end %}
                    {% end %}
-                   {% if not results %}
+                   {% if not entry['total_found'] %}
                    <script type="text/javascript">
-                       alert('not results');
+                       console.log('not results');
                    </script>>
                    {% end %}
                 </div>

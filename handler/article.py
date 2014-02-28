@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import datetime
 from tornado.web import authenticated
 from tornado.escape import json_encode, json_decode
 from base import BaseHandler, authenticated, catch_exception
@@ -42,6 +43,10 @@ class EditBaseHandler(BaseHandler):
         self.set_arg('refers', self.get_refers())
         self.set_arg('resources', self.get_resources())
         self.set_arg('coeditors', self.get_coeditors())
+        if not self.args['title']:
+            time = datetime.datetime.now()
+            title = str(datetime.datetime.strftime(time, "%Y-%m-%d %H:%M:%S"))
+            self.set_arg('title', title)
         if not self.args['intro']:
             abstract_text = util.html2text(self.args['mainbody'])
             abstract_text = util.get_abstract_str(abstract_text, 100)

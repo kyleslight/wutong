@@ -289,6 +289,7 @@ create table mygroup (
     motto text,
     -- 图片
     banner url,
+    -- 1=非公开, 2=公开
     public_level sort default '2',
     create_time timestamp default now()
 );
@@ -457,13 +458,24 @@ select c.*,
        user_base u
  where c.uid = u.uid;
 
+drop view if exists group_tag_base cascade;
+create view group_tag_base
+  as
+select gid,
+       array_agg(content) as "tags"
+  from group_tag
+ group by gid;
+
 drop view if exists group_base cascade;
 create view group_base
   as
 select g.gid,
        g.name,
-       g.avatar
-  from mygroup g;
+       g.avatar,
+       gt.tags
+  from mygroup g,
+       group_tag_base gt
+ where g.gid = gt.gid;
 
 drop view if exists group_member_show cascade;
 create view group_member_show
@@ -483,6 +495,7 @@ drop view if exists group_show cascade;
 create view group_show
   as
 select g.*,
+       gt.tags,
        u.nickname as "creater",
        u.avatar as "creater_avatar",
        gm.nickname as "leader",
@@ -490,9 +503,11 @@ select g.*,
        (select count(id) from group_member_show where gid = g.gid) as "member_number"
   from mygroup g,
        user_base u,
-       group_member_show gm
+       group_member_show gm,
+       group_tag_base gt
  where g.uid = u.uid
    and g.gid = gm.gid
+   and g.gid = gt.gid
    and gm.position_level = '4';
 
 drop view if exists group_topic_base cascade;
@@ -561,14 +576,31 @@ select t.*,
 drop view if exists article_search cascade;
 create view article_search
   as
-select *
-  from article_show;
+select aid,
+       title,
+       intro,
+       mainbody,
+       modify_time,
+       tags,
+       author,
+       author_avatar
+  from article_show
+ where public_level > '2'
+   and not is_deleted;
 
 drop view if exists group_search cascade;
 create view group_search
   as
-select *
-  from group_show;
+select gid,
+       name,
+       intro,
+       motto,
+       create_time,
+       tags,
+       creater,
+       avatar
+  from group_show
+ where public_level > '1';
 
 drop view if exists user_search cascade;
 create view user_search
