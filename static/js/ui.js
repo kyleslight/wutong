@@ -81,7 +81,7 @@ submit.onclick = function(e) {
 	}else if(method=='normal') {
 		if(new FileReader && new FormData) {
 			var files = file_list.files;
-			file_upload_handler(files);
+			file_upload_handler	(files);
 			file_review.innerHTML = '';
 			file_list.value = '';
 		}else {
@@ -385,10 +385,10 @@ function changeinfo() {
 				statusp.innerHTML = ui_msg.status.error;
 				switch(work.err) {
 					case 'fail_duplicate':
-						infop.innerHTML = ui_msg.err_detail.fail_duplicate;
+						showError(ui_msg.err_detail.fail_duplicate);
 						break;
 					case 'fail_load':
-						infop.innerHTML = ui_msg.err_detail.fail_load;
+						showError(ui_msg.err_detail.fail_load);
 				}
 				break;
 			case 'failed':
@@ -396,28 +396,28 @@ function changeinfo() {
 				statusp.innerHTML = ui_msg.status.failed;
 				switch(work.err) {
 					case 'no_file':
-						infop.innerHTML = ui_msg.err_detail.no_file;
+						showError(ui_msg.err_detail.no_file);
 						break;
 					case 'size_limit':
-						infop.innerHTML = ui_msg.err_detail.size_limit;
+						showError(ui_msg.err_detail.size_limit);
 						break;
 					case 'write_prohibited':
-						infop.innerHTML = ui_msg.err_detail.write_prohibited;
+						showError(ui_msg.err_detail.write_prohibited);
 						break;
 					case 'php_upload_size_limit':
-						infop.innerHTML = ui_msg.err_detail.php_upload_size_limit;
+						showError(ui_msg.err_detail.php_upload_size_limit);
 						break;
 					case 'part_upload':
-						infop.innerHTML = ui_msg.err_detail.part_upload;
+						showError(ui_msg.err_detail.part_upload);
 						break;
 					case 'no_tmp':
-						infop.innerHTML = ui_msg.err_detail.no_tmp;
+						showError(ui_msg.err_detail.no_tmp);
 						break;
 					case 'fail_retry':
-						infop.innerHTML = ui_msg.err_detail.fail_retry;
+						showError(ui_msg.err_detail.fail_retry);
 						break;
 					case 'wrong_type':
-						infop.innerHTML = ui_msg.err_detail.wrong_type;
+						showError(ui_msg.err_detail.wrong_type);
 						break;
 				}
 				break;

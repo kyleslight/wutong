@@ -204,7 +204,7 @@ div#pop_window {
 
 div#pop_window header {
 	height: 30px;
-	background-color: mediumseagreen;
+	background-color: #680;
 	padding: 20px;
 	color: white;
 	font-size: 25px;
@@ -216,7 +216,7 @@ div#pop_window div.zone {
 }
 
 div#method_change {
-	background-color: mediumseagreen;
+	background-color: #680;
 }
 div#method_change a {
 	display: inline-block;
@@ -290,7 +290,7 @@ textarea#url_list:hover {
 }
 textarea#url_list:focus {
 	background-color: #f8f8f8;
-	border: 2px solid cornflowerblue;
+	border: 2px solid #680;
 }
 
 
@@ -309,23 +309,23 @@ div#pop_window button {
 	font-size: 20px;
 }
 button#closepop {
-	background-color: palevioletred;
+	background-color: #460;
 }
 button#closepop:hover {
-	background-color: mediumvioletred;
+	background-color: #680;
 }
-button#closepop:active {
+/*button#closepop:active {
 	background-color: palevioletred;
-}
+}*/
 button#submit, button#file_select {
-	background-color: cornflowerblue;
+	background-color: #680;
 }
 button#submit:hover, button#file_select:hover {
-	background-color: royalblue;
+	background-color: #c1d739;
 }
-button#submit:active, button#file_select:active {
+/*button#submit:active, button#file_select:active {
 	background-color: cornflowerblue;
-}
+}*/
 
 /*aside#info_zone {
 	padding: 10px;

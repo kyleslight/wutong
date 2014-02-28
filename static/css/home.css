@@ -1,5 +1,5 @@
 body{
-	background: url('http://imgcdn.ph.126.net/lq7Lq0egfSM2yFVUL63ycg==/905505000178420928.jpg') repeat-y;
+	background: url('http://img3.picbed.org/uploads/2014/02/8ac22318836eebdf75e638dd7dfbcea3.jpg') repeat-y;
 	background-size: 100%;
 }
 .header{
@@ -14,7 +14,7 @@ body{
 	display: none;
 }
 #lrBoxWrap {
-	background: rgba(0,0,0,0.2);
+	background: rgba(0,0,0,0.5);
 }
 
 .mainView{
@@ -36,20 +36,23 @@ body{
 	text-overflow: ellipsis;
 	padding-top:12px;
 	display: inline-block;
-	background:rgba(102,136,0,1);
-	color: #CCC;
+	background:rgba(174,208,72,0.9);
+	color: #EEE;
 	width: 220px;
 	height: 41px;
 	text-align: center;
 	font-size: 1.5em;
 	margin:0 10px;
 	border-radius: 3px;
-	border: 1px solid rgba(255,255,255,0.4);
-	box-shadow: 0 0 5px rgba(255,255,255,0.2);
+	/*border: 1px solid rgba(255,255,255,0.4);*/
+	border:1px solid transparent;
 }
 .quickButton:hover{
-	background:rgba(174,208,72,0.9);
+	background:rgba(102,136,0,1);
 	color: white;
+	/*box-shadow: 0 0 10px rgba(255,255,255,0.7);*/
+	box-shadow: 0 0 10px rgba(174,208,72,0.9);
+	border:1px solid rgba(174,208,72,0.9);
 }
 .searchKeyWord{
 	color: darkred;
@@ -64,11 +67,11 @@ body{
 #searchData{
 	display: block;
 	float: none;
-	width: 600px;
+	width: 558px;
 	margin: 0 auto;
 }
 #keyWord{
-	width: 572px;
+	width: 530px;
 	border-radius: 2px;
 }
 #searchSubmitButton{
@@ -94,7 +97,7 @@ body{
 	margin-top: 51px;
 	margin-left: 10px;
 	background: white;
-	width: 577px;
+	width: 535px;
 	z-index: 100;
 	text-align: left;
 	border-left: 1px solid #CCC;
@@ -105,10 +108,10 @@ body{
 }
 
 .f1{
-	color: white;
+	color: #CE6;
 }
 .f1 a{
-	color: #CE6;
+	color: white;
 }
 .f1 a:hover{
 	color: #CE6;

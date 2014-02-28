@@ -43,7 +43,8 @@ $(document).ready(function(){
             return false;
         };
         if($("#foreword").val().length>200) {
-            showError("引言请保持在200字以内",2000)
+            showError("引言请保持在200字以内",2000);
+            return false;
         };
 
         var preTag=$("#otherTags").val().split(";");
@@ -94,7 +95,7 @@ $(document).ready(function(){
             cooperation:$("#cooperation").val(),
             is_pushed:$("#puclicPush").prop('checked'),
             type:$(".activeOpusType").text()
-        }
+        };
 
         var temTime=new Date();
         var temtText='<div class="opusBasicInfo">'
@@ -216,9 +217,9 @@ $(document).ready(function(){
             case "片段":
                 changeOpusItem(0,0,1,0,1,1);break;
             case "摄影":
-                changeOpusItem(1,1,0,1,2,0);break;
+                changeOpusItem(1,0,0,1,2,0);break;
             case "绘画":
-                changeOpusItem(1,1,0,1,3,0);break;
+                changeOpusItem(1,1,0,1,3,2);break;
             case "项目":
                 changeOpusItem(1,1,1,2,4,1);break;
         };
@@ -333,10 +334,15 @@ function changeOpusItem(title,foreword,mainText,resource,tags,subtleChange){
     $(".activeFirstClass").removeClass("activeFirstClass");
     $(".firstClass").eq(tags).addClass("activeFirstClass");
     // subtleChange
-    if (subtleChange==0){
+    if (subtleChange==2){
         $("#forewordForm").addClass("forewordFormNoBottomLine");
     }else{
         $("#forewordForm").removeClass("forewordFormNoBottomLine");
+    };
+    if (subtleChange==0) {
+        $("#titleForm").addClass("titleFormNoBottomLine");
+    }else{
+        $("#titleForm").removeClass("titleFormNoBottomLine");
     }
 }
 

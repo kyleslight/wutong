@@ -560,6 +560,9 @@ a.searchSuggestionsList{
 .myMessagePartContent{
 	display: none;
 }
+.activeMessagePart{
+	display: block;
+}
 .siteBulletin{
 	display: block;
 }
@@ -579,9 +582,9 @@ a.searchSuggestionsList{
 	-o-transition:0.2s;
 }
 .myMessagePartInline:hover{
-	color: white;
-	background:#680;
-	/*box-shadow: 0 0 10px #AAA;*/
+	/*color: white;
+	background:#680;*/
+	box-shadow: 0 0 1px #AAA;
 }
 .myMessageUserImage{
 	width: 50px;
@@ -605,7 +608,7 @@ a.searchSuggestionsList{
 	float: left;
 	margin-top: 10px;
 	width: 900px;
-	color: #CCC;
+	color: #999;
 	font-size: 0.8em;
 }
 .myMessagePartExpand{
@@ -910,6 +913,28 @@ a.HLThisPage{
 	background: rgba(0,0,0,0.7);
 	z-index: 1001;
 	display: none;
+}
+.imageUploader{
+	width: 600px;
+	position: fixed;
+	height: 170px;
+	left: 50%;
+	margin-left: -300px;
+	top: 30%;
+	z-index: 1002;
+	background: rgba(255,255,255,0.9);
+	box-shadow: 0 0 10px white;
+	color: #CCC;
+	text-align: center;
+	display: none;
+	cursor: pointer;
+	border-radius: 2px;
+	padding-top: 100px;
+}
+.dropzone{
+	color: #222;
+	font-size: 2em;
+	text-align: center;
 }
 .bigImage{
 	width: 100%;

@@ -371,25 +371,23 @@ function init(){
                 return;
             }
 
-            for(var i=0;i<totalNumOfPara;i++){
-                for (var j=0; j<data.length; j++) {
-                    // TODO
-                    // var comment = data[j];
-                    var comment = data[j].content;
-                    // var paragraph_id = comment.split('\n')[0].match(/\d+/g)[0];
-                    var paragraph_id = data[j].paragraph_id;
-                    if (paragraph_id != i)
-                        continue;
-                    $("#sideCommentNode"+i).prepend(comment);
-                }
-            };
+            console.log(data,data.length);
 
+            // initial sideCommentNode
+            for (var i=0;i<totalNumOfPara;i++){
+                var sideCommentNode='<div class="sideCommentNode" id="sideCommentNode'+i+'">';
+                $(".opusSideComment").append(sideCommentNode);
+            };
+            // initial sideComment
+            for(var i=0;i<data.length;i++){
+                renderTemplateAppend("#side-comment-template",data[i],"#sideCommentNode"+data[i].paragraph_id);
+            };
             // if sideCommentNode has no comment,add a appNull,if not,add a Nav
             for(var i=0;i<totalNumOfPara;i++){
-                var preNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" onclick="toLeftPara('+i+')">'
+                var preNav='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav" id="opusSideCommentNav'+i+'" onclick="toLeftPara('+i+')">'
                             +'第'+i+'段评论('+'<span class="numOfParaComent">'+$("#sideCommentNode"+i).children().size()+'</span>'+')'
                             +'</li>';
-                var preNull='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav nullOpusSideCommentNav" >'
+                var preNull='<li class="opusSideCommentList opusSideCommentList'+i+' opusSideCommentNav nullOpusSideCommentNav" id="opusSideCommentNav"'+i+'>'
                             +'这个段落目前还没有评论，你可以通过“编辑评论”开始创建'
                             +'</li>';
 
@@ -408,12 +406,6 @@ function init(){
         };
         interactInfo = data;
     });
-
-    // initial sideCommentNode
-    for (var i=0;i<totalNumOfPara;i++){
-        var sideCommentNode='<div class="sideCommentNode" id="sideCommentNode'+i+'">';
-        $(".opusSideComment").append(sideCommentNode);
-    };
 
     // initial para function bution
     for (var i =0; i<editableOpusChild.size(); i++) {
@@ -541,13 +533,12 @@ function sendSideComment(){
                                    .replace(/&lt;a/g,"<a")
                                    .replace(/&quot;/g,"'");
         // TODO
-        var html = renderTemplateAfter('#side-comment-template', data);
-        console.log(html);
+        var html = renderTemplateAfter('#side-comment-template', data,"#opusSideCommentNav"+data.paragraph_id);
         var addListNav=$("#sideCommentNode"+data.paragraph_id).children(".opusSideCommentNav");
         addListNav.after(data);
         $(".opusSideCommentList"+data.paragraph_id).eq(1).css({"background":"pink","width":"268px"});
         if (addListNav.hasClass("nullOpusSideCommentNav")) {
-            var preNav='<li class="opusSideCommentList opusSideCommentList'+editingParaNum+' opusSideCommentNav" style="width:253px" onclick="toLeftPara('+editingParaNum+')">'
+            var preNav='<li class="opusSideCommentList opusSideCommentList'+editingParaNum+' opusSideCommentNav" id="opusSideCommentNav"'+editingParaNum+' onclick="toLeftPara('+editingParaNum+')">'
                     +'第'+editingParaNum+'段评论('+'<span class="numOfParaComent">'+($("#sideCommentNode"+editingParaNum).children().size()-1)+'</span>'+')'
                     +'</li>';
             addListNav.after(preNav);

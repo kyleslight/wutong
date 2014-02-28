@@ -5,16 +5,6 @@ var elapseTime = 5000;
 var indexOfOpusType=-1;
 
 $(document).ready(function(){
-    $("#artsubmitButton").click(function(){
-        // with(this){
-            with(arttitle){
-                alert(value);
-                return false;
-            }
-        // }
-        var theForm=document.getElementById("textdata");
-        theForm.submit();
-    })
 
     $(".inputTip a").click(function(){
         var indexofa=$(".inputTip a").index($(this))+1;
@@ -46,7 +36,7 @@ $(document).ready(function(){
     })
 
     $(window).scroll(function(){
-        scrollLoading(".opus");
+        scrollLoading(".opus"); 
     });
 });
 

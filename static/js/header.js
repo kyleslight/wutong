@@ -26,12 +26,11 @@ unsycUser();
 
 highlightThisPage();
 
-testTremble();
-
 $(document).ready(function() {
     checkIsLogin();
 
     $(".preload").removeClass("preload");
+
     // return to top icon show
     $(window).scroll(function() {
         var top = $(window).scrollTop();
@@ -57,9 +56,10 @@ $(document).ready(function() {
 
     // search
     $("#searchSubmitButton").click(function(){
-        searchStart();
-        return false;
+        var searchData=document.getElementById("searchData");
+        searchData.submit();
     });
+    // select suggestion
     $(window).keyup(function(e){
         if (e.keyCode==38&&searchSugNum==-1) {
             return;
@@ -91,57 +91,45 @@ $(document).ready(function() {
         $(".userExpand").hide();
         $("#usernameHover").css({"color":"white"});
     });
-    $("#message").mouseover(function() {
-        $("#msgNum").css({
-            "background": "pink",
-            "color": "darkred",
-            "box-shadow": "#FFF"
-        });
-        // $("#msgNum").addClass("tremble");
-    });
-    $("#message").mouseleave(function() {
-        $("#msgNum").css({
-            "background": "pink",
-            "color": "#680",
-            "box-shadow": "#AAA"
-        });
-        // $("#msgNum").removeClass("tremble");
-    });
-    $("#setting").click(function(){
-        $(".mySettingWrap").animate({
-            height:374
-        },function(){
-            $(".mySetting").fadeIn(500);
-        });
-        return false;
-    });
-    $("#mySettingBack").click(function(){
-        $(".mySetting").fadeOut(500,function(){
-            $(".mySettingWrap").animate({
-                height:0
-            });
-        });
-    });
 
-
-    // login and register
+    // login&register
     $("#loginSubmitButton").click(function() {
         loginSubmit();
     });
-    // quick login
-    $("#loginPassword").focus(function() {
-        isLoginPasswordFocus = true;
-        $(window).keyup(function(e) {
-            var keyCode = e.keyCode;
-            if (keyCode == 13 && isLoginPasswordFocus) {
-                loginSubmit();
+    $("#registerSubmitButton").click(function() {
+        registerSubmit();
+    });
+    // quick login&register
+    $("#loginPassword").bind({
+        focus:function() {
+                isLoginPasswordFocus = true;
+                $(window).keyup(function(e) {
+                        var keyCode = e.keyCode;
+                        if (keyCode == 13 && isLoginPasswordFocus) {
+                            loginSubmit();
+                        }
+                        return false;
+                    });
+                },
+        blur:function() {
+                isLoginPasswordFocus = false;
             }
-            return false;
-        });
     });
-    $("#loginPassword").blur(function() {
-        isLoginPasswordFocus = false;
+    $("#registerRepassword").bind({
+        focus:function() {
+                    isRegisterRepasswordFocus = true;
+                    $(window).keyup(function(e) {
+                        var keyCode = e.keyCode;
+                        if (keyCode == 13 && isRegisterRepasswordFocus) {
+                            registerSubmit();
+                        }
+                        return false;
+                    });
+                },
+        blur:function() {isRegisterRepasswordFocus = false;}
     });
+
+    // change login&register
     $("#turnToRegisterBox,#turnToLoginBox").click(function(){
         if ($(this).attr("id")=="turnToRegisterBox") {
             $("#loginBox").hide();
@@ -155,40 +143,18 @@ $(document).ready(function() {
         return false;
     });
 
-    $("#registerSubmitButton").click(function() {
-        registerSubmit();
-    });
-    // quick register
-    $("#registerRepassword").focus(function() {
-        isRegisterRepasswordFocus = true;
-        $(window).keyup(function(e) {
-            var keyCode = e.keyCode;
-            if (keyCode == 13 && isRegisterRepasswordFocus) {
-                registerSubmit();
-            }
-            return false;
-        });
-    });
-    $("#registerRepassword").blur(function() {
-        isRegisterRepasswordFocus = false;
-    })
     // logout
     $("#logout").click(function() {
-        // logout function
-        $.post("/logout", function(data) {
-            window.location = location.pathname;
+        $.post("/logout");
+        $(".navrighton").fadeOut(function() {
+            $(".navrightoff").fadeIn();
+            if (location.pathname.slice(0,9)=="/a/create") {
+                showError("创作作品前请先登录",2000);
+            };
         });
-        // $(".navrighton").fadeOut(function() {
-        //     $(".navrightoff").fadeIn();
-        //     if (location.pathname.slice(0,9)=="/a/create") {
-        //         showError("创作作品前请先登录",2000);
-        //     };
-        // });
-        // logOutEffect();
-        // checkIsLogin();
     });
 
-    // loginBox and registerBox
+    // loginBox&registerBox show
     $("#login").click(function() {
         if (_showwel_flag == true) {
             _showwel_flag = false;
@@ -236,30 +202,23 @@ $(document).ready(function() {
         return false;
     });
 
-    // 我的收藏
-    var numOfCollectionList = 1;
-    var heightOfMycollection = 123 + numOfCollectionList * 55;
-    function getCollections(type) {
+    // my collection
+    $("#myCollection").click(function() {
         var url = '/u/collection';
-        $.getJSON(url, {'type': type}, function(data) {
-            var err = getError(data);
-            if (err) {
-                console.log(err);
-                return;
-            }
+        $.getJSON(url, function(data) {
+            console.log(data);
+            return;
             $(".myCollectionList").remove();
-            for (var i = 0; i < data.length; i++) {
-                console.log(data[i]);
-                renderTemplateAfter('#collection-template', data[i]);
-            }
+            renderTemplateAfter('#collection-template', newColl);
         });
         $(".myCollectionWarp").animate({
-            height: heightOfMycollection
+            height:$(".myCollection").innerHeight()
         }, function() {
             $(".myCollection").fadeIn(500);
+            $(".myCollectionWarp").css("height","auto");
         });
         return false;
-    };
+    });
 
     // 我的收藏
     $("#myCollection").click(function() {
@@ -277,26 +236,17 @@ $(document).ready(function() {
         return false;
     });
 
-    $("#myCollectionBack").click(function() {
-        $(".myCollection").fadeOut(500, function() {
-            $(".myCollectionWarp").animate({
-                height: 0
-            });
-        });
-        return false;
-    });
+    // my note
 
-    // 我的便笺
     $("#myNote").click(function() {
         $(".myNoteWrap").animate({
             height: 415
         }, function() {
             $(".myNote").fadeIn(500);
-            // update note
             $.getJSON("/u/memo",function(data){
                 var err = getError();
                 if (err) {
-                    // TODO
+                    showError("获取便笺失败");
                     return;
                 }
                 $(".myNoteListWrap").empty();
@@ -312,7 +262,7 @@ $(document).ready(function() {
                     activeNoteID=data[0].id;
                     $(".myCurrentNoteTitle").val(data[noteNum].title);
                     $(".myCurrentNoteContent").val(data[noteNum].content);
-                    // TODO: show pretty time
+                    // TODO: server sent the proper time
                     $(".myCurrentNoteTime").text(data[noteNum].create_time.slice(0,10));
                     $("#No_memo_"+activeNoteID).addClass("activeMyNoteList");
                 }
@@ -326,15 +276,15 @@ $(document).ready(function() {
             });
         });
     });
+    // preparation for adding note
     $("#addNote").click(function(){
-        $(".myCurrentNoteTitle").val("");
+        $(".myCurrentNoteTitle").val("").focus();
         $(".myCurrentNoteContent").val("");
         $(".myCurrentNoteTime").text("");
         $("#deleteCurrentNote,#saveCurrentNote").hide();
         $("#createNewNote").show();
         $(".myNoteList").removeClass("activeMyNoteList");
         $("#addNote").addClass("activeMyNoteList").text("创建中...");
-        document.getElementsByClassName("myCurrentNoteTitle")[0].focus();
     });
     // create note
     $("#createNewNote").click(function(){
@@ -362,7 +312,7 @@ $(document).ready(function() {
             $("#addNote").text("创建便笺");
         });
     });
-    // update note
+    // save note
     $("#saveCurrentNote").click(function(){
         if (activeNoteID==-1) {
             return false;
@@ -399,7 +349,6 @@ $(document).ready(function() {
                 return;
             }
             $("#No_memo_" + activeNoteID).removeClass("activeMyNoteList").remove();
-
             activeNoteID=parseInt($(".myNoteList").eq(1).attr("id").slice(8));
             $(".myNoteList").eq(1).addClass("activeMyNoteList");
 
@@ -452,9 +401,26 @@ $(document).ready(function() {
         });
     });
 
+    // my setting
+    $("#setting").click(function(){
+        $(".mySettingWrap").animate({
+            height:$(".mySetting").innerHeight()
+        },function(){
+            $(".mySetting").fadeIn(500);
+        });
+        return false;
+    });
+    $("#mySettingBack").click(function(){
+        $(".mySetting").fadeOut(500,function(){
+            $(".mySettingWrap").animate({
+                height:0
+            });
+        });
+    });
+
     // image upload back
     $("#uploadImageBack").click(function(){
-        $("section#main,#uploadImageBack,#info_zone,.mask").hide();
+        $(".imageUploader,#uploadImageBack,.mask").hide();
         return false;
     })
 
@@ -665,8 +631,8 @@ function checkUsername(username){
 }
 
 function checkPassword(password,repassword){
-    if (password.length < 6) {
-        showError("密码长度不能小于6位",2000);
+    if (password.length < 2) {
+        showError("密码长度不能小于2位",2000);
     } else if (password.length > 30) {
         showError("密码长度不能超过30",2000);
     } else if (password!=repassword) {
@@ -800,7 +766,7 @@ function selectNote(noteID){
 // 5:for more...
 
 function insertImage(state){
-    $("section#main,#info_zone,#uploadImageBack,#first_load,.mask").show();
+    $(".imageUploader,#uploadImageBack,.mask").show();
     hide(upload_popup);
     url_list.value = '';
     file_list.value = '';
@@ -926,9 +892,6 @@ function selectSearchSug(keyCode){
     return;
 }
 
-function searchStart(){
-
-}
 
 var chars = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 function generateMixed(n) {
@@ -972,6 +935,16 @@ function renderTemplateBefore(temp, obj, target) {
     return renderTemplateTo(temp, obj, target, "before");
 }
 
+function renderTemplatePrepend(temp, obj, target) {
+    var innerHTML = renderTemplateString(temp, obj);
+    if (target) {
+        $(target).prepend($(innerHTML));
+    } else {
+        $(temp).prepend($(innerHTML));
+    }
+    return innerHTML;
+}
+
 function showBigImage(url){
     $(".mask").show();
     $(".bigImage img,.preBigImage img").attr("src",url);
@@ -989,43 +962,34 @@ function showBigImage(url){
     $(".bigImage").fadeIn();
 }
 
-var testLoadTime=0;
+var realPage = 1;
 function scrollLoading(loadEle){
-    if (testLoadTime>3) {
-        return false;
-    };
-    if (testLoadTime==3) {
-        loadingHide(loadEle);
-        $(loadEle).append("<div class='testLoadContent'>再怎么找也没有啦╮(￣▽￣)╭</div>");
-        testLoadTime+=1;
-        return false;
-    };
     var top=$(window).scrollTop();
     var buttom=top+$(window).height();
     var opusTop=$(loadEle).scrollTop();
     var opusButtom=opusTop+$(loadEle).height();
-    if(buttom>opusButtom&&($(loadEle).has(".loadingBox").length==0)){
-        loadingShow(loadEle);
+    console.log(opusButtom,buttom);
+    if(buttom>opusButtom&&($(loadEle).has(".loadingBox").length==0)&&(realPage<=3)){
+        realPage +=1;
+        var loadingBox=$(".loadingBoxWrap").html();
+        $(loadEle).append(loadingBox);
         setTimeout(function(){
-            $(loadEle).append($(loadEle).children().clone());
-            testLoad(loadEle);
+            loadingShow(loadEle);
         },2000);
     };
     return false;
 }
 
 function loadingShow(loadEle){
-    var loadingBox=$(".loadingBoxWrap").html();
-    $(loadEle).append(loadingBox);
+    $.get('/a/browse?page=' + realPage,function(data){
+        $(loadEle).children(".loadingBox").remove();
+        var a=$(data).find('.opus').children();
+        $(loadEle).append(a);
+    });
 }
 
 function loadingHide(loadEle){
     $(loadEle).children(".loadingBox").remove();
-}
-
-function testLoad(loadEle){
-    loadingHide(loadEle);
-    testLoadTime+=1;
 }
 
 function initPage(p){

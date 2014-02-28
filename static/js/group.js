@@ -290,7 +290,7 @@ $(document).ready(function() {
     }
 
     // 当整个页面加载完毕时加载
-    $(window).load(function() {
+    // $(window).load(function() {
         connect_message_server();
 
         var history_url = location.pathname + '/session/history';
@@ -301,14 +301,15 @@ $(document).ready(function() {
         else
             prefix = $(".topicLocation a")[0].href;
 
-        $.getJSON(history_url, function(data) {
+        $.get(history_url, function(data) {
             var err = getError(data);
             if (err) {
                 console.log(err);
                 return;
-            }
+            }     
+            data = JSON.parse(data);
+            console.log(data);
             for (var i = 0; i < data.length; i++) {
-                data[i] = JSON.parse(data[i]);
                 if (data[i].title)
                     renderTemplateAppend("#topic-template", data[i], "#communication");
                 else
@@ -352,7 +353,7 @@ $(document).ready(function() {
                 renderTemplateAfter('#article-template', data[i]);
             }
         });
-    });
+    // });
 });
 
 function getAge(strBirthday) {
@@ -670,6 +671,7 @@ function socket_onmessage(data) {
         return false;
     }
     data = JSON.parse(data.data);
+    console.log(data);
     // TODO: maybe don't need
     // data=data.replace(/<script/g,"&lt;script").replace(/<\/script>/g,"&lt;/script&gt;");
     if (data.title)
