@@ -234,6 +234,7 @@ class CommentHandler(BaseHandler):
         else:
             raise Exception('invalid comment type')
         self.write_json(comment)
+        self.notify_user(self.article_id, comment, comment_type)
 
     def do_delete(self):
         comment_id = self.get_argument('id')
@@ -245,6 +246,24 @@ class CommentHandler(BaseHandler):
             self.delete_side_comment(comment_id, self.user_id)
         else:
             raise Exception('invalid comment type')
+
+    def notify_user(self, aid, comment, comment_type):
+        article = self.marticle.get_article_baseinfo(aid)
+        title = """<a href="/a/{aid}">{title}</a> --{type}""".format(
+            aid=aid,
+            title=article['title'],
+            type='底评' if comment_type == 'bottom' else '测评'
+        )
+        brief = """<a href="/a/{aid}">{comment}</a>""".format(
+            aid=aid,
+            comment=util.get_abstract_str(comment['content'])
+        )
+        initiator = self.current_user['nickname']
+        self.muser.create_message(article['uid'],
+                                  title,
+                                  brief,
+                                  type='2',
+                                  initiator=initiator)
 
     def check_comment_type(self, value):
         if value not in ('bottom', 'side'):

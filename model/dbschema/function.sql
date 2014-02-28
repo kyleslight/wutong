@@ -465,6 +465,17 @@ end;
 $$ language plpgsql;
 
 create or replace function
+get_article_baseinfo(_aid int) returns json
+as $$
+  select row_to_json(j.*)
+    from
+      (
+         select *
+           from article_base
+      ) j;
+$$ language sql;
+
+create or replace function
 get_article(_aid int) returns json
 as $$
   select row_to_json(j.*)
@@ -730,6 +741,21 @@ begin
   return _tmp;
 end;
 $$ language plpgsql;
+
+create or replace function
+get_group_baseinfo(_gid int) returns json
+as $$
+  select row_to_json(j.*)
+    from
+      (
+         select g.*,
+                gm.uid as "leader_id"
+           from group_base g,
+                group_member gm
+          where g.gid = gm.gid
+            and gm.position_level = '4'
+      ) j;
+$$ language sql;
 
 create or replace function
 get_group_homepage(_gid int) returns json
@@ -1019,7 +1045,6 @@ begin
       _tmp := '1';
     end if;
 
-    -- TODO: send message to group leader
     insert into group_member
         (gid, uid, position_level)
     values
@@ -1070,7 +1095,7 @@ begin
                                                      where gid = _gid
                                                        and tid = _father_id))
     returning tid into _tmp;
-    if _tid is not null then
+    if _tmp is not null then
       update group_topic
          set reply_time = now()
        where tid = _father_id;
@@ -1081,220 +1106,3 @@ begin
              where tid = _tmp);
 end;
 $$ language plpgsql;
--- create or replace function
--- get_search_opus(_aid int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select *,
---                    (select get_article_tags(id)) as "tags"
---               from search_article_v
---              where id = _aid
---         ) j;
--- $$ language sql;
-
-
--- create or replace function
--- get_search_group(_gid int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select *,
---                    (select get_group_tags(id)) as "tags"
---               from search_group_v
---              where id = _gid
---         ) j;
--- $$ language sql;
-
-
--- create or replace function
--- get_search_user(_uid int)
---   returns json
--- as $$
---     select row_to_json(j.*)
---       from
---         (
---             select *
---               from search_user_v
---              where id = _uid
---         ) j;
--- $$ language sql;
-
-
--- create or replace function article_before_t() returns trigger
--- as $$
--- begin
---     if (tg_op = 'DELETE') then
---         delete from article_history where aid = old.aid;
---         delete from article_honor where aid = old.aid;
---         delete from article_appositeness where aid = old.aid;
---         delete from article_tag where aid = old.aid;
---         delete from article_comment where aid = old.aid;
---         delete from article_view where aid = old.aid;
---         delete from article_user where aid = old.aid;
---         return old;
---     elsif (tg_op = 'UPDATE') then
---         insert into article_history (
---             aid, title, mainbody,
---             description, reference, series, resource)
---         select aid, title,
---                mainbody,
---                description, reference,
---                series, resource
---           from article
---          where aid = old.aid;
---         return new;
---     end if;
---     return null;
--- end;
--- $$ language plpgsql;
-
-
--- create or replace function article_after_t() returns trigger
--- as $$
--- begin
---     if (tg_op = 'INSERT') then
---         update article set last_modify_time = submit_time where aid = new.aid;
---         return new;
---     end if;
---     return null;
--- end;
--- $$ language plpgsql;
-
-
--- create or replace function topic_before_t() returns trigger
--- as $$
--- begin
---     if (tg_op = 'DELETE') then
---         delete from group_chat where reply_id = old.tid;
---         delete from topic where reply_id = old.tid;
---         return old;
---     end if;
---     return null;
--- end;
--- $$ language plpgsql;
-
-
--- create or replace function topic_after_t() returns trigger
--- as $$
--- begin
---     if (tg_op = 'INSERT') then
---         update topic
---            set last_reply_time = now(),
---                reply_times = reply_times + 1
---          where tid = new.tid;
---         return new;
---     end if;
---     return null;
--- end;
--- $$ language plpgsql;
-
-
--- create or replace function group_chat_after_t() returns trigger
--- as $$
--- begin
---     if (tg_op = 'INSERT') then
---         update topic
---            set last_reply_time = now(),
---                reply_times = reply_times + 1
---          where tid = new.reply_id;
---         return new;
---     end if;
---     return null;
--- end;
--- $$ language plpgsql;
-
-
--- create or replace function group_before_t() returns trigger
--- as $$
--- begin
---     if (tg_op = 'DELETE') then
---         delete from group_bulletin where gid = old.gid;
---         delete from group_chat where gid = old.gid;
---         delete from topic where gid = old.gid;
---         delete from group_user where gid = old.gid;
---         delete from group_tag where gid = old.gid;
---         return old;
---     end if;
---     return null;
--- end;
--- $$ language plpgsql;
-
-
--- create or replace function group_after_t() returns trigger
--- as $$
--- begin
---     if (tg_op = 'INSERT') then
---         insert into "group_user" (gid, uid, is_leader)
---         values (new.gid, new.uid, true);
---         return new;
---     end if;
---     return null;
--- end;
--- $$ language plpgsql;
-
-
--- create or replace function user_before_t() returns trigger
--- as $$
--- begin
---     if (tg_op = 'DELETE') then
---         delete from article_view where uid = old.uid;
---         delete from article_comment where uid = old.uid;
---         delete from article where uid = old.uid;
---         delete from user_title where uid = old.uid;
---         delete from group_bulletin where uid = old.uid;
---         delete from group_chat where uid = old.uid;
---         delete from topic where uid = old.uid;
---         delete from group_user where uid = old.uid;
---         delete from "group" where uid = old.uid;
---         return old;
---     elsif (tg_op = 'UPDATE') then
---         if (new.warnned_times >= 5) then
---             update myuser set is_forbid = true where uid = old.uid;
---         end if;
---         return new;
---     end if;
---     return null;
--- end;
--- $$ language plpgsql;
-
-
--- --------------------------------------------------------------------------------
--- -- 触发器
--- --------------------------------------------------------------------------------
-
--- drop trigger if exists article_before_t on article;
--- create trigger article_before_t before delete or update on article
---    for each row execute procedure article_before_t();
-
--- drop trigger if exists article_after_t on article;
--- create trigger article_after_t after insert on article
---    for each row execute procedure article_after_t();
-
--- drop trigger if exists topic_before_t on topic;
--- create trigger topic_before_t before delete on topic
---    for each row execute procedure topic_before_t();
-
--- drop trigger if exists topic_after_t on topic;
--- create trigger topic_after_t after insert on topic
---    for each row execute procedure topic_after_t();
-
--- drop trigger if exists group_chat_after_t on group_chat;
--- create trigger group_chat_after_t after insert on group_chat
---    for each row execute procedure group_chat_after_t();
-
--- drop trigger if exists group_before_t on "group";
--- create trigger group_before_t before delete on "group"
---    for each row execute procedure group_before_t();
-
--- drop trigger if exists group_after_t on "group";
--- create trigger group_after_t after insert on "group"
---    for each row execute procedure group_after_t();
-
--- drop trigger if exists user_before_t on myuser;
--- create trigger user_before_t before delete or update on myuser
---    for each row execute procedure user_before_t();

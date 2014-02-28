@@ -58,6 +58,14 @@ class LogoutHandler(BaseHandler):
 
 
 class RegisterHandler(BaseHandler):
+    def notify_user(self):
+        title = "加入梧桐"
+        brief = """欢迎来到梧桐这个有爱的大家庭～，
+                   希望您能在这里不断分享与提升自我。
+                   在使用梧桐前请务必阅读我们的文档
+                   <a href="/a/1">梧桐指南</a>"""
+        self.muser.create_message(self.user_id, title, brief, type='1')
+
     @catch_exception
     def post(self):
         nickname = self.get_arg('nickname')
@@ -69,6 +77,7 @@ class RegisterHandler(BaseHandler):
         user_id = self.muser.do_register(nickname, password, email)
         avatar = self.set_random_avatar(nickname)
         self.muser.update_user_info(user_id, avatar=avatar)
+        self.notify_user()
         self.send_mail(email, user_id)
         # 前端负责登录
         # user = login(self, user_id=user_id)

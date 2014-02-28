@@ -21,13 +21,15 @@ $(document).ready(function(){
 		},function(data){
 			var err = getError(data);
 			if (err) {return;}
-			return;
-			// TODO
-			var gid = data.gid;
-			showError("小组"+$("#createGroupName").val()+"已成功申请<br>5秒后将自动跳转到新创建的小组<br>若跳转失败，请点击以下链接<br><a href='/g/"+data+"'>"+$("#createGroupName").val()+"</a>",20000);
+			data = JSON.parse(data);
+			var gid = data.msg;
+			var msg = "小组" + $("#createGroupName").val()
+			   		+ "已成功申请<br>2秒后将自动跳转到新创建的小组<br>若跳转失败，请点击以下链接<br>"
+			   		+ "<a href='/g/" + gid + "'>" + $("#createGroupName").val() + "</a>";
+			showError(msg, 2000);
 			setTimeout(function(){
-				self.location='/g/'+data;
-			},5000);
+				window.location='/g/' + gid;
+			},2000);
 		});
 	});
 });

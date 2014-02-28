@@ -15,6 +15,9 @@ class GroupModel(object):
     def is_group_member(self, group_id, user_id):
         return self.db.callfirstfield('is_group_member', group_id, user_id)
 
+    def get_group_baseinfo(self, group_id):
+        return self.db.calljson('get_group_baseinfo', group_id)
+
     def get_group_homepage(self, group_id):
         return self.db.calljson('get_group_homepage', group_id)
 

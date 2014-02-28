@@ -99,6 +99,7 @@ create table user_message (
     uid int,
     -- 字典, 存储键值对
     content json,
+    -- '1'=系统通知, '2'=回复, '3'=推送, '4'=会话
     type sort,
     is_viewed bool default false,
     time timestamp default now()

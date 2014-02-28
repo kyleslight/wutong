@@ -202,15 +202,69 @@ $(document).ready(function() {
         return false;
     });
 
-    // my collection
-    $("#myCollection").click(function() {
-        var url = '/u/collection';
-        $.getJSON(url, function(data) {
+    function getNotifys(type) {
+        var url = '/u/message';
+        $.getJSON(url, {'type': type}, function(data) {
+            var err = getError(data);
+            if (err) {
+                console.log(data);
+                return;
+            }
+
             console.log(data);
-            return;
-            $(".myCollectionList").remove();
-            renderTemplateAfter('#collection-template', newColl);
+            $(".myMessagePartList").remove();
+            for (var i = 0; i < data.length; i++) {
+                var target;
+                switch(type) {
+                case '1':
+                    target = ".mySystemInfoEle";
+                    // TODO: 抓包查看data结构并处理data
+                    break;
+                case '2':
+                    target = ".myReplyEle";
+                    break;
+                case '3':
+                    target = ".myPushEle";
+                    break;
+                case '4':
+                    target = ".myPMEle";
+                    break;
+                }
+                renderTemplateAfter("#notify-template", data[i], target);
+            }
         });
+    }
+
+    $("#message").click(function() {
+        getNotifys(1);
+    });
+
+    $(".myMessagePartButton").click(function(){
+        var indexOfCollBut=$(".myMessagePartButton").index($(this));
+        getNotifys(indexOfCollBut + 1);
+    });
+
+    function getCollections(type) {
+        var url = '/u/collection';
+        $.getJSON(url, {'type': type}, function(data) {
+            var err = getError(data);
+            if (err) {
+                console.log(data);
+                return;
+            }
+
+            $(".myCollectionList").remove();
+            for (var i = 0; i < data.length; i++) {
+                var temp = (type == '1') ? '#article' : '#topic';
+                temp += '_collection-template';
+                renderTemplateAfter(temp, data[i]);
+            }
+        });
+    }
+
+    // 我的收藏
+    $("#myCollection").click(function() {
+        getCollections(1);
         $(".myCollectionWarp").animate({
             height:$(".myCollection").innerHeight()
         }, function() {
@@ -218,11 +272,6 @@ $(document).ready(function() {
             $(".myCollectionWarp").css("height","auto");
         });
         return false;
-    });
-
-    // 我的收藏
-    $("#myCollection").click(function() {
-        getCollections('1');
     });
 
     $(".myCollectionClassButton").click(function(){
@@ -237,7 +286,6 @@ $(document).ready(function() {
     });
 
     // my note
-
     $("#myNote").click(function() {
         $(".myNoteWrap").animate({
             height: 415
@@ -968,7 +1016,6 @@ function scrollLoading(loadEle){
     var buttom=top+$(window).height();
     var opusTop=$(loadEle).scrollTop();
     var opusButtom=opusTop+$(loadEle).height();
-    console.log(opusButtom,buttom);
     if(buttom>opusButtom&&($(loadEle).has(".loadingBox").length==0)&&(realPage<=3)){
         realPage +=1;
         var loadingBox=$(".loadingBoxWrap").html();

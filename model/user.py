@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from tornado.escape import json_encode, json_decode
 
 class UserModel(object):
     def __init__(self, db):
@@ -100,22 +101,29 @@ class UserModel(object):
         offset = (page - 1) * limit
         return self.db.calljson('get_user_collections', uid, collection_type, limit, offset)
 
+    def create_message(self, uid, title, brief, type, initiator=None):
+        # '1'=系统通知, '2'=回复, '3'=推送, '4'=会话
+        if initiator is None:
+            initiator = u'梧桐'
+        content = json_encode({
+            'initiator': initiator,
+            'title': title,
+            'brief': brief
+        })
+        values = {
+            'uid': uid,
+            'content': content,
+            'type': type
+        }
+        self.db.insert('user_message', values)
+
     def get_messages(self, uid, msg_type, page, size):
         limit = size
         offset = (page - 1) * limit
         return self.db.calljson('get_user_msgs', uid, msg_type, limit, offset)
 
     def get_unread_msg_count(self, uid):
-        map_table = {
-            '1': 'reply',
-            '2': 'push',
-        }
-        cnt = self.db.calljson('get_user_unread_msg_count', uid)
-        tmp = {}
-        for item in cnt:
-            key = map_table[item['type']]
-            tmp[key] = item['sum']
-        return tmp
+        return self.db.calljson('get_user_unread_msg_count', uid)
 
     def get_mygroups(self, uid, page, size):
         limit = size

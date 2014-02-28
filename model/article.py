@@ -64,6 +64,10 @@ class ArticleModel(object):
     def is_article_author(self, article_id, user_id):
         return self.db.callfirstfield('is_article_author', article_id, user_id)
 
+    def get_article_baseinfo(self, article_id):
+        article = self.db.calljson('get_article_baseinfo', article_id)
+        return article
+
     def get_article(self, article_id):
         article = self.db.calljson('get_article', article_id)
         return article

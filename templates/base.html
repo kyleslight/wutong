@@ -24,7 +24,7 @@
     </head>
     <body class="preload">
     <div class="mask"></div>
-    <form action="/u/avatar" class="dropzone imageUploader"></form>
+    <form action="/picture" class="dropzone imageUploader"></form>
     <div class="bigImage"><div class="bigImageContainer"><img src="#"></div></div>
     <div class="preBigImage"><img id="preBigImageCon" src="#"></div>
     <div class="errorPromptBox">aaa</div>
@@ -143,220 +143,32 @@
                     <a id="PMButton" class="myMessagePartButton" href="#">私人会话<span id="PMNum"></span></a>
                 </div>
                 <div class="myMessageContent">
-                    <!-- 系统通知 -->
-                    <!-- 具体情景类似以下，如果你觉得哪些項近期做不成的话就把他们删掉或注释掉 -->
-                    <!-- 假定的系统帐号在全站创建之时导入，本身用作管理员帐号（初期可能没有管理员），初期用作系统提示的占位帐号，性质...和10086类似 -->
-                    <!-- 触发事件在后续有交代 -->
+                    <script type="text/template" id="notify-template">
+                        <li class="myMessagePartList">
+                            <div href="#" class="myMessagePartInline">
+                                <img class='myMessageUserImage' src="/avatar/{{!nickname}}" />
+                                <div class="myMessageAddress">{{!title}}</div>
+                                <div class="myMessageUserName">
+                                    <a href="/user/{{!nickname}}">{{!nickname}}</a>
+                                </div>
+                                <div class="myMessageTime">{{!create_time}}</div>
+                                <div class="myMessagBrief">{{!brief}}</div>
+                            </div>
+                        </li>
+                    </script>
                     <div class="systemInfo myMessagePartContent activeMessagePart">
                         <div class="mySystemInfoEle">
-                            <li class="myMessagePartList">
-                                <!-- 加入梧桐的欢迎消息，在帐号创立时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" /><!--假定的系统自动回复帐号的头像-->
-                                    <div class="myMessageAddress">加入梧桐</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div><!--假定的系统自动回复帐号-->
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">欢迎来到梧桐这个有爱的大家庭～，希望您能在这里不断分享与提升自我。在使用梧桐前请务必阅读我们的文档 <a href="#">梧桐指南</a></div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 管理员提交全站公告之后触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">站内公告</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">梧桐已推出了 <a href="#">梧桐阅读(ver3.141)</a> Android客户端，您可以点击 <a href="#">这里</a> 获取更多信息 </div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 创建小组成功后触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">创建小组</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">您已创建小组 <a href="/g/1">思存工作室养老院</a> ，系统默认指定您为该小组第一任组长。关于小组事务如需了解更多请点击<a href="#"> 这里 </a></div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 加入小组之后触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">加入小组</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">您已加入小组 <a href="/g/1">PANTERA</a> ，点击 <a href="#">这里</a> 了解更多关于梧桐小组的信息</div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 当组长任命“我”时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">组长任命</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">您已被 <a href="/g/1">思存工作室养老院</a> 小组组长提议担任该小组新一任组长，<a href="#"> 同意 </a> | <a href="#"> 拒绝 </a></div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 当组长任命“我”时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">小组管理员任命</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">您已被 <a href="/g/1">思存工作室养老院</a> 小组组长提议担任该小组管理员，<a href="#"> 同意 </a> | <a href="#"> 拒绝 </a></div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 当“我”被组长移除时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">退出小组</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">您已被 <a href="/g/1">Eagles</a> 小组管理员移除该小组</div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- “我”主动退出小组时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">退出小组</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">您已退出 <a href="/g/1">Rammstein</a> 小组</div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 他人接受了“我”的会话邀请时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">会话邀请</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief"><a href="/user/flyMonster">flyMonster</a> 已接受了您的会话邀请，现在您可以点击<a href="#"> 这里 </a>与Ta开始聊天</div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 他人拒绝了“我”的会话邀请时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">会话邀请</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief"><a href="/user/flyMonster">flyMonster</a> 已拒绝了您的会话邀请</div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 他人向"我"发出会话邀请时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">会话邀请</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief"><a href="/user/flyDog">flyDog</a> 向您发起了会话邀请， <a href="#"> 同意</a> | <a href="#">拒绝</a> </div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 被他人关注时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">关注</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief"><a href="/user/flyDog">flyCat</a> 关注了您，您的推送作品将会第一时间推送至Ta</div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 关注了某人时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">关注</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">您关注了 <a href="/user/flyDog">flyFox</a>，现在您可以第一时间在 消息-推送 中得到Ta的推送作品</div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- ”我“的作品被管理员删除时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">作品删除</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">很遗憾，由于您的作品 <a href="#">像少年啦，飞驰</a> 涉嫌版权问题，梧桐已移除该作品，您也受到一次警告。在使用梧桐的过程中请务必遵守<a href="#">梧桐指南</a></div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- ”我“的作品被梧桐管理员判定为优秀作品时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">头衔授予</div>
-                                    <div class="myMessageUserName"><a href="#">Wutong</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief">由于您在作品 <a href="#">麦田里的守望者</a> 中的精彩表现，梧桐授予您 <a href="#">梧桐特殊贡献者 </a>的头衔，并将该作品摘录在 <a href="#">梧桐年鉴</a> 中，在此我们向您表示祝贺</div>
-                                </div>
-                            </li>
                         </div>
                         <div class="mySystemInfoTurnBox"></div>
                     </div>
                     <div class="reply myMessagePartContent">
-                    <!-- 回复，具体情景类似以下 -->
-                    <!-- 结构稍微改了一下，用户须点击[内容简介]，也就是myMessageBrief，才能到达对应的目的地，例如某个或话题，某篇文章 -->
-                    <!-- 多了一个@功能，主要用于在[底评]里回复，如果近期做不成的话就把它注释掉 -->
-                    <!-- 值得注意的是，出自同一个地方的回复，如果可以的话，我希望能够折成一条，就像手机qq里的消息一样，不过这个前端可以判断 -->
                         <div class="myReplyEle">
-                            <li class="myMessagePartList">
-                                <!-- 他人在”我“开启的话题中发送”chat“或者”topic“时触发，该提醒只在非私信小组中有效（判断是否为私信小组可以判断小组名是否包含”...与...的会话“） -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <!-- 话题的回复地址就像之前说的，展示小组名>>父话题名>>话题名 -->
-                                    <div class="myMessageAddress">Kyleslight的同好会>>...一个测试用的话题A>>一个测试用的话题B</div>
-                                    <div class="myMessageUserName"><a href="#">Kyleslight</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief"><a href="#">既然是测试用的话题的话就不要那么认真了嘛，当然...</a></div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 他人在”我“的作品侧评中评论时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress"><a href="#">麦田里的守望者</a> -- 侧评</div>
-                                    <div class="myMessageUserName"><a href="#">Kyleslight</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief"><a href="#">观察细致入微，太厉害了</a></div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 他人在”我“的作品底评中评论时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress"><a href="#">像少年啦，飞驰</a> -- 底评</div>
-                                    <div class="myMessageUserName"><a href="#">fly</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief"><a href="#">为什么我想到了初中的一个同学</a></div>
-                                </div>
-                            </li>
-                            <li class="myMessagePartList">
-                                <!-- 他人在底评中@”我“并提交底评时触发 -->
-                                <div href="#" class="myMessagePartInline">
-                                    <img class='myMessageUserImage' src="" />
-                                    <div class="myMessageAddress">在 <a href="#">关于莉莉周的一切</a> 里提到我</div>
-                                    <div class="myMessageUserName"><a href="#">flyCat</a></div>
-                                    <div class="myMessageTime">10-23 20:56</div>
-                                    <div class="myMessagBrief"><a href="#">@loggerhead 跟你说过是这篇啦...</a></div>
-                                </div>
-                            </li>
                         </div>
                         <div class="myReplyTurnBox"></div>
                     </div>
 
                     <div class="opusPush myMessagePartContent">
-                        <!-- 推送相对而言比较直接，你关注的人有了新作品，于是就有一条新的消息 -->
                         <div class="myPushEle">
-                            <!-- 模板 -->
                             <li class="myMessagePartList">
                                 <div class="myMessagePartInline">
                                     <img class='myMessageUserImage' src="/user/{{!creater}}" />
@@ -374,15 +186,13 @@
                                     <div class="myMessageTitle"><a href="/a/12">从 node.js 爬虫说起</a></div>
                                     <div class="myMessageUserName"><a href="#">flyCat</a></div>
                                     <div class="myMessageTime">2014-12-11</div>
-                                    <div class="myMessagBrief"><a href="/a/12">前一阵子在学校内网填报奖学金时意外发现一个漏洞可以查看任意学生的详细资料，包括父母、成绩、身高、体重、感情状态等……</a></div>
+                                    <div class="myMessagBrief"><a href="/a/12">成绩、身高、体重、感情状态等……</a></div>
                                 </div>
                             </li>
                         </div>
                         <div class="myPushTurnBox"></div>
                     </div>
                     <div class="PM myMessagePartContent">
-                        <!-- 比较直接，谁在私人会话组中发了消息就产生触发 -->
-                        <!-- 同样如果有可能,来自同一人的回复需要折在同一栏里 -->
                         <div class="myPMEle">
                             <li class="myMessagePartList">
                                 <div class="myMessagePartInline">
@@ -422,7 +232,7 @@
                 </div>
                 <div class="myOpusCollection myCollectionCon">
                     <script type="text/template" id="article_collection-template">
-                        <li id="myCollectionList" class="myCollectionList">
+                        <li class="myCollectionList">
                             <a href='/user/{{!author}}'>
                                 <img class='myCollectionAuthorImage' src='{{!author_avatar}}' />
                             </a>
@@ -441,8 +251,21 @@
                     </script>
                 </div>
                 <div class="myTopicCollection myCollectionCon">
+                    <script type="text/template" id="topic_collection-template">
+                        <li class="myCollectionList">
+                            <a href='/user/{{!creater}}'>
+                                <img class='myCollectionAuthorImage' src='{{!creater_avatar}}' />
+                            </a>
+                            <div class='myCollectionRow'>
+                                <a href='/t/{{!tid}}' class='myCollectionTitle'>{{!title}}</a>
+                                <a class='myCollectionAuthor' href='/user/{{!creater}}'>{{!creater}}</a>
+                            </div>
+                            <div class='myCollectionRow'>
+                            </div>
+                        </li>
+                    </script>
                 </div>
-                
+
                 <a href="#" id="myCollectionBack">返回</a>
             </div>
         </div>

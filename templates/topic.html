@@ -1,7 +1,7 @@
 {% extends "group.html" %}
 {% block extra_topic_part %}
     <span class='topicLocation'>
-        <a href="/g/{{ topic['gid'] }}">返回小组 >></a>
+        <a href="/g/{{ topic['gid'] }}">返回小组 --</a>
         {% if topic['ancestor'] %}
         <a href="/t/{{ topic['ancestor']['tid'] }}">{{ topic['ancestor']['title'] }} >></a>
         {% end %}
