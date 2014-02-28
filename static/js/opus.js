@@ -371,8 +371,6 @@ function init(){
                 return;
             }
 
-            console.log(data,data.length);
-
             // initial sideCommentNode
             for (var i=0;i<totalNumOfPara;i++){
                 var sideCommentNode='<div class="sideCommentNode" id="sideCommentNode'+i+'">';

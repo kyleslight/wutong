@@ -3,10 +3,9 @@
 
 from tornado.escape import to_unicode, xhtml_escape, to_basestring
 from tornado.log import access_log
-from lib import sphinxapi
+from lib import sphinxapi, util
 from base import BaseHandler, catch_exception
 from model import search
-from pprint import pprint
 
 
 class SearchBaseHandler(BaseHandler):
@@ -51,7 +50,6 @@ class SearchBaseHandler(BaseHandler):
         self.client.SetMatchMode(sphinxapi.SPH_MATCH_EXTENDED2)
         self.client.SetSortMode(sphinxapi.SPH_SORT_RELEVANCE)
 
-        query = '@tags 学科'
         result = self.client.Query(query, index=index)
         if result is None:
             errmsg = self.client.GetLastError()
@@ -79,86 +77,80 @@ class SearchBaseHandler(BaseHandler):
 
 
 class SearchHandler(SearchBaseHandler):
-    """
-    /search?type=article&tag=xxx
-    /search?q=xxx
-    """
     def get_item_from_db(self, doc_id, doc_type):
-        article = self.marticle.get_article(doc_id)
-        item = {
-            'url': '/a/' + str(doc_id),
-            'title': article['title'],
-            'type': 'article',
-            'nickname': article['author'],
-            'avatar': article['author_avatar'],
-            'intro': article['intro'],
-            'tags': article['tags'],
-            'time': article['modify_time']
-        }
+        if doc_type == 'article':
+            article = self.msearch.get_article_item(doc_id)
+            item = {
+                'url': '/a/' + str(doc_id),
+                'title': article['title'],
+                'type': 'article',
+                'nickname': article['author'],
+                'avatar': article['author_avatar'],
+                'intro': article['intro'] or '',
+                'tags': article['tags'],
+                'time': article['modify_time']
+            }
+        elif doc_type == 'group':
+            group = self.msearch.get_group_item(doc_id)
+            item = {
+                'url': '/g/' + str(doc_id),
+                'title': group['name'],
+                'type': 'group',
+                'nickname': group['creater'],
+                'avatar': group['avatar'],
+                'intro': group['intro'] or '',
+                'tags': group['tags'],
+                'time': group['create_time']
+            }
+        elif doc_type == 'user':
+            user = self.msearch.get_user_item(doc_id)
+            item = {
+                'url': '/user/' + user['nickname'],
+                'type': 'user',
+                'title': user['nickname'],
+                'nickname': user['nickname'],
+                'avatar': user['avatar'],
+                'intro': user['intro'] or '',
+                'time': user['register_time']
+            }
+        elif doc_type == 'topic':
+            topic = self.msearch.get_topic_item(doc_id)
+            item = {
+                'url': '/t/' + str(doc_id),
+                'title': topic['title'],
+                'type': 'topic',
+                'nickname': topic['creater'],
+                'avatar': topic['creater_avatar'],
+                'intro': util.get_abstract_str(topic['content'], 100),
+                'time': topic['create_time']
+            }
+        else:
+            raise Exception('invalid query type')
         return item
 
     @catch_exception
     def get(self):
         query = self.get_argument('q', '')
-        index = self.get_argument('type', '*')
+        if not query:
+            entry = {
+                'query': '',
+                'time': 0,
+                'total_found': 0,
+                'words': [],
+                'results': [],
+            }
+            self.render('search.html', entry=entry)
+
+        index = self.get_argument('type', 'article')
+        index = to_unicode(index).encode('utf-8')
         page = int(self.get_argument('page', 1))
         size = int(self.get_argument('size', 10))
         tag = self.get_argument('tag')
 
+        # TODO: 增加对tag的支持
         entry = self.search(query, index, page, size)
         self.render('search.html', entry=entry)
 
 
 class AutoCompleHandler(SearchBaseHandler):
-    def do_search(self, query, **kwargs):
-        page = int(kwargs['page'])
-        size = int(kwargs['size'])
-        offset = (page - 1) * size
-        search_type = kwargs['search_type']
-
-        if search_type == 'user':
-            index = 'opus'
-            func = 'get_search_opus'
-            sortmode = sphinxapi.SPH_SORT_RELEVANCE
-            clause = ''
-        elif search_type == 'article_tag':
-            sortmode = sphinxapi.SPH_SORT_ATTR_DESC
-            clause = 'times'
-        elif search_type == 'group_tag':
-            sortmode = sphinxapi.SPH_SORT_ATTR_DESC
-            clause = 'times'
-        else:
-            return {'error': 'invalid search type'}
-
-        client = sphinxapi.SphinxClient()
-        client.SetMatchMode(sphinxapi.SPH_MATCH_ALL)
-        client.SetLimits(offset, size)
-        client.SetSortMode(sortmode, caluse)
-        result = client.Query(query, index=index)
-
-        if result is None:
-            access_log.error(client.GetLastError())
-            return {'error': 'search server fault'}
-
-        ids = [d['id'] for d in result['matches']]
-        entry = {
-            'results': self._get_items_from_db(ids, index),
-        }
-        return entry
-
-    def get(self):
-        query = self.get_argument('q', '')
-        search_type = self.get_argument('type', 'user')
-        page = self.get_argument('page', 1)
-        size = self.get_argument('size', 10)
-
-        entry = self.search(
-            query,
-            search_type=search_type,
-            page=page,
-            size=size
-        )
-        if entry['error']:
-            self.write('!: %s' % entry['error'])
-        else:
-            self.write('search.html', query=query, **entry)
+    pass

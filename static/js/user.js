@@ -23,13 +23,6 @@ $(document).ready(function(){
         // 更改头像需将图像上传修复了才能做
     });
 
-    // 关注
-    $("#follow").click(function(){
-        if (!checkLogin) {
-            showError("请先登录",2000);
-            return false;
-        };
-    });
     // 会话
     $("#chat").click(function(){
         if (!checkLogin) {
@@ -196,6 +189,35 @@ $(document).ready(function(){
             $("#"+parentName).next().show();
         },2000);
         return false;
+    });
+
+    // 关注
+    var nickname = location.pathname.replace('/user/', '');
+    $("#follow").click(function(){
+        if (!checkLogin) {
+            showError("请先登录",2000);
+            return false;
+        };
+        $.post('/u/star', {'nickname': nickname}, function(data) {
+            var err = getError(data);
+            if (err) {
+                console.log(err);
+                return;
+            }
+            var html = $("#follow").html();
+            var msg = (html == '关注') ? '取消关注' : '关注';
+            $("#follow").html(msg);
+        });
+    });
+
+    $.getJSON('/u/star', {'nickname': nickname}, function(data) {
+        var err = getError(data);
+        if (err) {
+            console.log(err);
+            return;
+        }
+        var msg = data.msg ? '取消关注' : '关注';
+        $("#follow").html(msg);
     });
 });
 

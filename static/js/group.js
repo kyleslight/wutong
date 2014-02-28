@@ -306,9 +306,8 @@ $(document).ready(function() {
             if (err) {
                 console.log(err);
                 return;
-            }     
+            }
             data = JSON.parse(data);
-            console.log(data);
             for (var i = 0; i < data.length; i++) {
                 if (data[i].title)
                     renderTemplateAppend("#topic-template", data[i], "#communication");

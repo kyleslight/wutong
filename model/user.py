@@ -129,3 +129,11 @@ class UserModel(object):
         limit = size
         offset = (page - 1) * limit
         return self.db.calljson('get_mygroups', uid, limit, offset)
+
+    def is_stared(self, uid, star_name):
+        return self.db.callfirstfield('is_user_stared', uid, star_name)
+
+    def update_star_user(self, uid, star_name):
+        res = self.db.call('update_user_star', uid, star_name)
+        if not res:
+            raise Exception('update user star failed')

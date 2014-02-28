@@ -284,3 +284,18 @@ class MessageHandler(BaseHandler):
         Do not post message in here, you should create message after event
         """
         self.write_error(403)
+
+
+class StarHandler(BaseHandler):
+    @catch_exception
+    @authenticated
+    def get(self):
+        star_name = self.get_argument('nickname')
+        res = self.muser.is_stared(self.user_id, star_name)
+        self.write_result(res)
+
+    @catch_exception
+    @authenticated
+    def post(self):
+        star_name = self.get_argument('nickname')
+        self.muser.update_star_user(self.user_id, star_name)

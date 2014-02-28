@@ -249,12 +249,12 @@ class CommentHandler(BaseHandler):
 
     def notify_user(self, aid, comment, comment_type):
         article = self.marticle.get_article_baseinfo(aid)
-        title = """<a href="/a/{aid}">{title}</a> --{type}""".format(
+        title = u"""<a href="/a/{aid}">{title}</a> --{type}""".format(
             aid=aid,
             title=article['title'],
-            type='底评' if comment_type == 'bottom' else '测评'
+            type=u'底评' if comment_type == u'bottom' else u'测评'
         )
-        brief = """<a href="/a/{aid}">{comment}</a>""".format(
+        brief = u"""<a href="/a/{aid}">{comment}</a>""".format(
             aid=aid,
             comment=util.get_abstract_str(comment['content'])
         )

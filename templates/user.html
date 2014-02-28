@@ -102,9 +102,11 @@
 	 			<div class="userEmail">
 	 				邮箱：<span class="userEmailAddress">{{ user['email'] }}</span>
 	 			</div>
+	 			{% if user['score'] is not None %}
 	 			<div class="userHonourAndWarn">
 	 				<li class="userGrade">积分：<span>{{ user['score'] }}</span></li>
 	 			</div>
+	 			{% end %}
 	 		</div>
 	 		<div class="followInfo">
 				<div class="followOther">
@@ -159,9 +161,9 @@
 							{% for article in user['articles'] %}
 								<li class="opusShow article">
 								    <div class="opusBasicInfo">
-								        <a href="/a/{{ article['aid'] }}" class="opusTitle" >article['title']</a>
+								        <a href="/a/{{ article['aid'] }}" class="opusTitle" >{{ article['title'] }}</a>
 								        <br/>
-								        <div class="opusTime">创作时间： <span>{{ article['create_time'] }}</span></div>
+								        <div class="opusTime">创作时间： <span>{{ prettytime(article['create_time']) }}</span></div>
 								        <div class="opusGrade">得分： <span>{{ article['avg_score'] }}</span></div>
 								        <div class="opusViewed">浏览：<span>{{ article['view_num'] }}</span></div>
 								        <div class="opusCollected">收藏：<span>{{ article['collected_num'] }}</span></div>
@@ -170,9 +172,12 @@
 							{% end %}
 					</div>
 					{% end %}
+					{% if len(user['articles']) > 5 %}
 					<div class="forMore"><a href="#">查看更多作品</a></div>
+					{% end %}
 				</div>
 
+				<!--
 				<div class="myOpusSeriesList opusPart">
 					<div id="myOpusSeriesList">
 						<span href="#" class="opusPartButton">作品系列列表</span>
@@ -244,57 +249,32 @@
 					</div>
 					<div class="forMore"><a href="#">查看更多作品系列</a></div>
 				</div>
+				-->
 
+				{% if user['comments'] %}
 				<div class="opusComment opusPart">
 					<span href="#" class="opusPartButton">回复</span>
-					<div class="opusCommentFirstLine"><a href="#" id="sideCommentReply" class="opusCommentButton activeOpusCommentButton">侧评回复</a><a href="#" class="opusCommentButton">底评回复</a></div>
-					<div class="sideComment opusCommentPart activeOpusCommentPart">
-						<div id="sideComment">
-							<div class="timeDivision">今天</div>
-							<li class="sideCommentList">
-								<div class="sideCommentListFirstLine">
-								<a href="#" class="replyAuthor">monsterdog</a>
-								<span>来自 <a href="#">此间的少年</a></span><span>1-12 20:30</span></div>
-								<a href="#" class="sideCommentContent">
-									“心”者，是众生之本源。一切诸法，同归于心。万法是心之异名，分为八万四千，广则无穷无尽。心生，种种法生；心灭，种种法灭。所以道：“众星皆拱北，无水不朝东。”
-								</a>
-							</li>
-							<div class="timeDivision">本周</div>
-							<li class="sideCommentList">
-								<div class="sideCommentListFirstLine">
-								<a href="#" class="replyAuthor">monsterdog</a>
-								<span>来自 <a href="#">此间的少年</a></span><span>1-12 20:30</span></div>
-								<a href="#" class="sideCommentContent">
-									“心”者，是众生之本源。一切诸法，同归于心。万法是心之异名，分为八万四千，广则无穷无尽。心生，种种法生；心灭，种种法灭。所以道：“众星皆拱北，无水不朝东。”
-								</a>
-							</li>
-						</div>
-						<div class="forMore"><a href="#">查看更多侧评回复</a></div>
-					</div>
-					<div class="bottomComment opusCommentPart">
-						<div id="bottomComment">
-							<div class="timeDivision">今天</div>
-							<li class="bottomCommentList">
-								<div class="bottomCommentListFirstLine">
-								<a href="#" class="replyAuthor">monstercat</a>
-								<span>来自 <a href="#">彼间的老年</a></span><span>1-12 20:30</span></div>
-								<a href="#" class="bottomCommentContent">
-									“心”者，是众生之本源。一切诸法，同归于心。万法是心之异名，分为八万四千，广则无穷无尽。心生，种种法生；心灭，种种法灭。所以道：“众星皆拱北，无水不朝东。”
-								</a>
-							</li>
-							<div class="timeDivision">本周</div>
-							<li class="bottomCommentList">
-								<div class="bottomCommentListFirstLine">
-								<a href="#" class="replyAuthor">monstercat</a>
-								<span>来自 <a href="#">彼间的老年</a></span><span>1-12 20:30</span></div>
-								<a href="#" class="bottomCommentContent">
-									“心”者，是众生之本源。一切诸法，同归于心。万法是心之异名，分为八万四千，广则无穷无尽。心生，种种法生；心灭，种种法灭。所以道：“众星皆拱北，无水不朝东。”
-								</a>
-							</li>
-						</div>
-						<div class="forMore"><a href="#">查看更多底评回复</a></div>
+					<div class="opusCommentPart activeOpusCommentPart">
+						{% for comment in user['comments'] %}
+						<li class="sideCommentList">
+							<div class="sideCommentListFirstLine">
+								<a href="/user/{{ comment['nickname'] }}" class="replyAuthor">{{ comment['nickname'] }}</a>
+								<span>来自
+									<a href="/a/{{ comment['aid'] }}">{{ comment['title'] }}</a>
+								</span>
+								<span>{{ prettytime(comment['create_time']) }}</span>
+							</div>
+							<a href="/a/{{ comment['aid'] }}">
+								{{ comment['content'] }}
+							</a>
+						</li>
+						{% end %}
+						{% if len(user['comments']) > 5 %}
+						<div class="forMore"><a href="#">查看更多回复</a></div>
+						{% end %}
 					</div>
 				</div>
+				{% end %}
 				{% if user['viewed_articles'] %}
 				<div class="recentOpusView opusPart">
 					<div id="recentOpusView">
@@ -309,49 +289,51 @@
 						</li>
 						{% end %}
 					</div>
+					{% if len(user['viewed_articles']) > 5 %}
 					<div class="forMore"><a href="#">查看更多最近浏览</a></div>
+					{% end %}
 				</div>
 				{% end %}
 			</div>
 			<div class="myGroup">
+				{% if user.get('groups') %}
 				<div class="myExtendPartFirstline">小组</div>
+				{% end %}
 				<div class="groupList groupPart">
+					{% if user['groups'] %}
 					<div id="groupList">
 						<span href="#" class="groupPartButton">小组列表</span>
-						<a href="#" class="groupName">Test_Group_1</a>
-						<a href="#" class="groupName">Test_Group_2</a>
-						<a href="#" class="groupName">Test_Group_3</a>
-						<a href="#" class="groupName">Test_Group_4</a>
+						{% for group in user['groups'] %}
+							<a href="/g/{{ group['gid'] }}" class="groupName">{{ group['title'] }}</a>
+						{% end %}
 					</div>
+					{% if len(user['groups']) > 10 %}
 					<div class="forMore"><a href="#">查看更多小组</a></div>
+					{% end %}
+					{% end %}
 				</div>
+				<!--
+				{% if user.get('topic_replys') %}
 				<div class="groupReply groupPart">
 					<div id="groupReply">
 						<span href="#" class="groupPartButton">回复</span>
+						{% for reply in user['topic_replys'] %}
 						<li class="groupReplyList">
-							<a href="#" class="replyAuthor">monsterdog</a>
-							<a href="#" class="groupReplyListContent">
-								“心”者，是众生之本源。一切诸法，同归于心。万法是心之异名，分为八万四千，广则无穷无尽。心生，种种法生；心灭，种种法灭。所以道：“众星皆拱北，无水不朝东。”
+							<a href="/user/{{ reply['creater'] }}" class="replyAuthor">{{ reply['creater'] }}</a>
+							<a href="/t/{{ reply['tid'] }}" class="groupReplyListContent">
+								{{ reply['content'] }}
 							</a>
-							<span>来自 <a href="#">此间的少年</a></span> <span> 1-12 20:30</span>
+							<span>来自
+								<a href="/t/{{ reply['tid'] }}">{{ reply['title'] }}</a>
+							</span>
+							<span>{{ prettytime(reply['reply_time']) }}</span>
 						</li>
-						<li class="groupReplyList">
-							<a href="#" class="replyAuthor">monsterdog</a>
-							<a href="#" class="groupReplyListContent">
-								“心”者，是众生之本源。一切诸法，同归于心。万法是心之异名，分为八万四千，广则无穷无尽。心生，种种法生；心灭，种种法灭。所以道：“众星皆拱北，无水不朝东。”
-							</a>
-							<span>来自 <a href="#">此间的少年</a></span> <span> 1-12 20:30</span>
-						</li>
-						<li class="groupReplyList">
-							<a href="#" class="replyAuthor">monsterdog</a>
-							<a href="#" class="groupReplyListContent">
-								“心”者，是众生之本源。一切诸法，同归于心。万法是心之异名，分为八万四千，广则无穷无尽。心生，种种法生；心灭，种种法灭。所以道：“众星皆拱北，无水不朝东。”
-							</a>
-							<span>来自 <a href="#">此间的少年</a></span> <span> 1-12 20:30</span>
-						</li>
+						{% end %}
 					</div>
 					<div class="forMore"><a href="#">查看更多小组回复</a></div>
 				</div>
+				{% end %}
+				-->
 			</div>
 		</div>
 	</div>

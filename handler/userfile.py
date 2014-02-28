@@ -180,9 +180,13 @@ class UserAvatarHandler(PictureHandler):
     max_file_size = 500000
 
     def save_data_as_file(self, data, target=None):
+        x1 = int(self.get_argument('x1', 0))
+        x2 = int(self.get_argument('x2', 0))
+        y1 = int(self.get_argument('y1', 200))
+        y2 = int(self.get_argument('y2', 200))
         filename = util.add_suffix(self.current_user['nickname'], 'png')
         filepath = os.path.join(self.settings['avatar_path'], filename)
-        filepath = genavatar(data, filepath, x1=0, x2=0)
+        filepath = genavatar(data, filepath, x1=x1, x2=x2, y1=y1, y2=y2)
         md5str = md5(data).hexdigest()
         with open(filepath, 'w') as fp:
             fp.write(data)

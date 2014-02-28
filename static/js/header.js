@@ -772,12 +772,16 @@ function unsycUser() {
                 return;
             } else {
                 user = data;
-                var replynum = user.msg_count.reply;
-                var pushnum = user.msg_count.push;
+                var msgs_cnt = user.msg_count;
+                var sum = 0;
+                for (var i = 0; i < msgs_cnt.length; i++) {
+                    sum += msgs_cnt[i].sum;
+                }
 
-                $("#replyNum").html(replynum);
-                $("#opusPushNum").html(pushnum);
-                $("#msgNum").html(replynum + pushnum);
+                // TODO
+                // $("#replyNum").html(replynum);
+                // $("#opusPushNum").html(pushnum);
+                $("#msgNum").html(sum);
                 $(".navrightoff").fadeOut(10,function(){
                     $(".navrighton").fadeIn(10);
                     $("#username").children().val(user.nickname);

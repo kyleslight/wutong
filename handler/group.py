@@ -58,8 +58,8 @@ class CreateHandler(BaseHandler):
         return tags
 
     def notify_user(self, group_id, group_name):
-        title = "创建小组"
-        brief = """
+        title = u"创建小组"
+        brief = u"""
             您已创建小组<a href="/g/{gid}">{name}</a>，
             系统默认指定您为该小组第一任组长。
         """.format(gid=group_id, name=group_name)
@@ -79,8 +79,8 @@ class JoinHandler(BaseHandler):
     def notify_user(self, group_id):
         nickname = self.current_user['nickname']
         group = self.mgroup.get_group_baseinfo(group_id)
-        title = "申请加入小组"
-        brief = """
+        title = u"申请加入小组"
+        brief = u"""
             <a href="/u/{nickname}">{nickname}</a>
             申请加入您的<a href="/g/{gid}">{group_name}</a>小组,
             <a href="#"> 同意 </a> | <a href="#"> 拒绝 </a>

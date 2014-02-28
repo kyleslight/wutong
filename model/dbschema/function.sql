@@ -163,6 +163,55 @@ end;
 $$ language plpgsql;
 
 create or replace function
+is_user_stared(_uid int, _star_nickname text) returns bool
+as $$
+begin
+  perform *
+     from user_star
+    where uid = _uid
+      and nickname = _star_nickname
+      and relate_level = '2';
+
+  if FOUND then
+    return true;
+  else
+    return false;
+  end if;
+end;
+$$ language plpgsql;
+
+create or replace function
+update_user_star(_uid int, _star_nickname text) returns void
+as $$
+declare
+  _tmp int;
+begin
+  select uid
+    from myuser
+   where nickname = _star_nickname
+    into _tmp;
+
+  perform *
+     from user_relationship
+    where uid = _uid
+      and another_uid = _tmp
+      and relate_level = '2';
+
+  if FOUND then
+    delete from user_relationship
+          where uid = _uid
+            and another_uid = _tmp
+            and relate_level = '2';
+  else
+    insert into user_relationship
+        (uid, relate_level, another_uid)
+    values
+        (_uid, '2', _tmp);
+  end if;
+end;
+$$ language plpgsql;
+
+create or replace function
 get_user_msgs(_uid int, _type sort, _limit int, _offset int) returns json
 as $$
   select array_to_json(array_agg(aj))
@@ -272,6 +321,7 @@ get_user_homepage(_nickname text) returns json
 as $$
 declare
   _uid int;
+  _comments json;
   _tmp json;
 begin
   select uid
@@ -282,14 +332,34 @@ begin
   select row_to_json(j.*)
     from
       (
+         select a.aid,
+                a.title,
+                u.nickname,
+                c.create_time,
+                c.content
+           from article a,
+                base_article_comment c,
+                myuser u
+          where a.uid = _uid
+            and a.aid = c.aid
+            and u.uid = c.uid
+          limit 5
+      ) j
+   into _comments;
+
+  select row_to_json(j.*)
+    from
+      (
          select *,
-                0 as "score",
+                null as "score",
                 (select name from user_honor where uid = _uid) as "user_titles",
                 (select count(id) from user_relationship where relate_level = '2' and uid = _uid) as "star_num",
                 (select count(id) from user_relationship where relate_level = '2' and another_uid = _uid) as "follower_num",
                 (select get_user_stars(_uid, 8, 0)) as "stars",
                 (select get_user_followers(_uid, 8, 0)) as "followers",
                 (select get_user_article_list(_uid, 10, 0)) as "articles",
+                (select _comments) as "comments",
+                (select get_user_groups(_uid, 10, 0)) as "groups",
                 (select get_user_viewed_articles(_uid, 10, 0)) as "viewed_articles"
            from user_show
           where nickname = _nickname
@@ -1064,20 +1134,20 @@ as $$
 declare
   _tmp int;
 begin
-    insert into group_message
-        (gid, uid, content, tid)
-    values
-        (_gid, _uid, _content, _tid)
-    returning id into _tmp;
-    if _tid is not null then
-      update group_topic
-         set reply_time = now()
-       where tid = _tid;
-    end if;
+  insert into group_message
+      (gid, uid, content, tid)
+  values
+      (_gid, _uid, _content, _tid)
+  returning id into _tmp;
+  if _tid is not null then
+    update group_topic
+       set reply_time = now()
+     where tid = _tid;
+  end if;
 
-    return (select row_to_json(j.*)
-              from group_message_show j
-             where id = _tmp);
+  return (select row_to_json(j.*)
+            from group_message_show j
+           where id = _tmp);
 end;
 $$ language plpgsql;
 
@@ -1087,22 +1157,93 @@ as $$
 declare
   _tmp int;
 begin
-    insert into group_topic
-        (gid, uid, title, content, father_id, ancestor_id)
-    values
-        (_gid, _uid, _title, _content, _father_id, (select father_id
-                                                      from group_topic
-                                                     where gid = _gid
-                                                       and tid = _father_id))
-    returning tid into _tmp;
-    if _tmp is not null then
-      update group_topic
-         set reply_time = now()
-       where tid = _father_id;
-    end if;
+  insert into group_topic
+      (gid, uid, title, content, father_id, ancestor_id)
+  values
+      (_gid, _uid, _title, _content, _father_id, (select father_id
+                                                    from group_topic
+                                                   where gid = _gid
+                                                     and tid = _father_id))
+  returning tid into _tmp;
+  if _tmp is not null then
+    update group_topic
+       set reply_time = now()
+     where tid = _father_id;
+  end if;
 
-    return (select row_to_json(j.*)
-              from group_topic_base j
-             where tid = _tmp);
+  return (select row_to_json(j.*)
+            from group_topic_base j
+           where tid = _tmp);
 end;
 $$ language plpgsql;
+
+
+create or replace function
+get_article_search_item(_aid int) returns json
+as $$
+  select row_to_json(j.*)
+    from
+      (
+         select aid,
+                title,
+                intro,
+                modify_time,
+                tags,
+                author,
+                author_avatar
+           from article_search
+          where aid = _aid
+      ) j;
+$$ language sql;
+
+create or replace function
+get_group_search_item(_gid int) returns json
+as $$
+  select row_to_json(j.*)
+    from
+      (
+         select gid,
+                name,
+                intro,
+                create_time,
+                tags,
+                creater,
+                avatar
+           from group_search
+          where gid = _gid
+      ) j;
+$$ language sql;
+
+create or replace function
+get_topic_search_item(_tid int) returns json
+as $$
+  select row_to_json(j.*)
+    from
+      (
+         select tid,
+                title,
+                content,
+                create_time,
+                creater,
+                creater_avatar
+           from topic_search
+          where tid = _tid
+      ) j;
+$$ language sql;
+
+create or replace function
+get_user_search_item(_uid int) returns json
+as $$
+  select row_to_json(j.*)
+    from
+      (
+         select uid,
+                nickname,
+                intro,
+                motto,
+                register_time,
+                avatar
+           from user_search
+          where uid = _uid
+      ) j;
+$$ language sql;

@@ -6,15 +6,16 @@
     <div class="searchWrap">
         <div class="search">
             <div class="searchTypeFliter">
-                <a href="#" class="searchType activeSearchType">综合</a>
-                <a href="#" class="searchType">作品</a>
-                <a href="#" class="searchType">成员</a>
-                <a href="#" class="searchType">小组</a>
-                <a href="#" class="searchType">话题</a>
+                <!-- <a href="#" class="searchType activeSearchType">综合</a> -->
+                <a href="#" id="search_article" class="searchType">作品</a>
+                <a href="#" id="search_user" class="searchType">成员</a>
+                <a href="#" id="search_group" class="searchType">小组</a>
+                <a href="#" id="search_topic" class="searchType">话题</a>
             </div>
             <div class="searchBox">
                 <form id="mainSearchData" action="/search" name="searchData" target="_blank">
                     <input name="q" type="text" class="input" id="mainSearchBox" autocomplete="off" accesskey="s" placeholder="寻找作品，成员，小组，话题" x-webkit-speech x-webkit-grammar="builtin:translate" value="{{ entry['query'] }}" />
+                    <input name="type" type="hidden" id="mainSearchType" value='article' />
                     <a href="#" type="submit" id="mainSearchSubmitButton" class="formButton">搜索</a>
                     <!-- <a href="#" id="searchAdvancedButton">高级选项</a> -->
                 </form>
@@ -62,7 +63,7 @@
                                {% raw result["intro"] %}
                            </div>
                            <div class="resultAttached">
-                               {% if result['type'] != 'user' %}
+                               {% if result['type'] in ('article', 'group') %}
                                <span class="resultTag">
                                    {% for tag in result['tags'] %}
                                    <a href="/search?type={{ result['type'] }}&tag={{ tag }}">{{ tag }}</a>

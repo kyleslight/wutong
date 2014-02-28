@@ -371,6 +371,16 @@ create view user_show
 select u.*
   from myuser u;
 
+drop view if exists user_star cascade;
+create view user_star
+  as
+select r.*,
+       u.nickname
+  from user_relationship r,
+       myuser u
+ where r.relate_level = '2'
+   and r.another_uid = u.uid;
+
 drop view if exists article_tag_base cascade;
 create view article_tag_base
   as
@@ -599,12 +609,31 @@ select gid,
        create_time,
        tags,
        creater,
+       leader,
        avatar
   from group_show
  where public_level > '1';
 
+drop view if exists topic_search cascade;
+create view topic_search
+  as
+select tid,
+       title,
+       content,
+       create_time,
+       creater,
+       creater_avatar
+  from group_topic_base;
+
 drop view if exists user_search cascade;
 create view user_search
   as
-select *
-  from user_show;
+select uid,
+       nickname,
+       intro,
+       motto,
+       avatar,
+       register_time
+  from user_show
+ where not is_deleted
+   and not is_forbid;

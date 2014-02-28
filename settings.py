@@ -27,6 +27,7 @@ urls = [
     (r"/u/memo", user.MemoHandler),
     (r"/u/message", user.MessageHandler),
     (r"/u/collection", user.CollectionHandler),
+    (r"/u/star", user.StarHandler),
     (r"/a/browse", article.BrowseHandler),
     (r"/a/create", article.CreateHandler),
     (r"/a/(\d+)", article.ArticleHandler),
